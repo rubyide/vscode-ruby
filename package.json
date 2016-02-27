@@ -1,0 +1,80 @@
+{
+	"name": "Ruby",
+	"displayName": "Ruby",
+	"version": "0.1.0",
+	"publisher": "rebornix",
+	"description": "Provides Ruby language and debugging support for Visual Studio Code",
+	"author": {
+		"name": "Peng Lv"
+	},
+	"engines": {
+		"vscode": "^0.10.1"
+	},
+	"license": "MIT",
+	"icon": "images/ruby.png",
+	"categories": [
+		"Debuggers"
+	],
+	"private": false,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rebornix/vscode-ruby.git"
+	},
+	"bugs": {
+		"url": "https://github.com/rebornix/vscode-ruby/issues"
+	},
+	"dependencies": {
+		"vscode-debugprotocol": "~1.6.0-pre4",
+		"vscode-debugadapter": "~1.6.0-pre8",
+		"xmldom": "^0.1.19"
+	},
+	"devDependencies": {
+		"typescript": "^1.6.2"
+	},
+	"scripts": {
+		"prepublish": "tsc -p ./src",
+		"compile": "tsc -p ./src",
+		"watch": "tsc -w -p ./src"
+	},
+	"contributes": {
+		"debuggers": [
+			{
+				"type": "Ruby",
+				"label": "Ruby Debugger",
+
+				"enableBreakpointsFor": { "languageIds": [ "ruby" ] },
+
+				"program": "./out/main.js",
+				"runtime": "node",
+
+				"configurationAttributes": {
+					"launch": {
+						"required": [ "program" ],
+						"properties": {
+							"program": {
+								"type": "string",
+								"description": "Workspace relative path to a text file.",
+								"default": "test.rb"
+							},
+							"stopOnEntry": {
+								"type": "boolean",
+								"description": "Automatically stop after launch.",
+								"default": true
+							}
+						}
+					}
+				},
+
+				"initialConfigurations": [
+					{
+						"name": "Ruby Debugger",
+						"type": "Ruby",
+						"request": "launch",
+						"program": "main.rb",
+						"stopOnEntry": true
+					}
+				]
+			}
+		]
+	}
+}

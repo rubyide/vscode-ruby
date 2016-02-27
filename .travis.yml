@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - "5.5"
+  - "4.2.1"
+  - "0.12.9"
+sudo: false
