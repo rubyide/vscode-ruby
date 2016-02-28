@@ -1,4 +1,4 @@
-# PowerShell Language Support for Visual Studio Code
+# Ruby Language Support for Visual Studio Code
 
 This extension provides rich Ruby language support for Visual Studio Code.
 It's still in progress and not useful yet, please expect frequent updates with breaking changes before 1.0.
