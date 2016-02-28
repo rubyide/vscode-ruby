@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -32,7 +32,7 @@
 		"typescript": "^1.6.2"
 	},
 	"scripts": {
-		"prepublish": "tsc -p ./src",
+		"vscode:prepublish": "tsc -p ./src",
 		"compile": "tsc -p ./src",
 		"watch": "tsc -w -p ./src"
 	},

@@ -2,5 +2,5 @@
 .gitignore
 src/**/*
 out/tests/**/*
-node_modules/**/*
 **/*.js.map
+*.vsix

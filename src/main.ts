@@ -265,6 +265,9 @@ class MockDebugSession extends DebugSession {
 	}
 
 	// Called by VS Code after a StoppedEvent
+	/** StackTrace request; value of command field is "stackTrace".
+		The request returns a stacktrace from the current execution state.
+	*/
 	protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
 		this.stackFrameLoaded = new Promise(resolve => {
             this.stackFrameLoadedPromiseResolve = resolve;
@@ -307,13 +310,14 @@ class MockDebugSession extends DebugSession {
 		this.debugSocketServer.write("where\n");
 	}
 
+    /** Scopes request; value of command field is "scopes".
+	   The request returns the variable scopes for a given stackframe ID.
+	*/
 	protected scopesRequest(response: DebugProtocol.ScopesResponse, args: DebugProtocol.ScopesArguments): void {
 
 		const frameReference = args.frameId;
 		const scopes = new Array<Scope>();
 		scopes.push(new Scope("Local", this._variableHandles.create("local_" + frameReference), false));
-		//scopes.push(new Scope("Closure", this._variableHandles.create("closure_" + frameReference), false));
-		//scopes.push(new Scope("Global", this._variableHandles.create("global_" + frameReference), true));
 
 		response.body = {
 			scopes: scopes
@@ -321,6 +325,9 @@ class MockDebugSession extends DebugSession {
 		this.sendResponse(response);
 	}
 
+	/** Variables request; value of command field is "variables".
+		Retrieves all children for the given variable reference.
+	*/
 	protected variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments): void {
 		this.variableLoaded = new Promise(resolve => {
 			this.variableLoadedPromiseResolve = resolve;
@@ -372,6 +379,10 @@ class MockDebugSession extends DebugSession {
         //this.debugSocketServer.write("\n");
     }
 
+	/** Evaluate request; value of command field is "evaluate".
+		Evaluates the given expression in the context of the top most stack frame.
+		The expression has access to any variables and arguments that are in scope.
+	*/
 	protected evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): void {
 		response.body = {
 			result: `evaluate(${args.expression})`,
