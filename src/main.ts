@@ -28,6 +28,7 @@ interface IRubyEvaluationResult {
 	Id: string;
 	Name: string;
 	Value: string;
+	Kind: string;
 }
 
 interface IDebugVariable {
@@ -357,12 +358,14 @@ class MockDebugSession extends DebugSession {
 				var value = varNode.attributes.getNamedItem("value");
 				var hasChildren = varNode.attributes.getNamedItem("hasChildren");
 				var objectId = varNode.attributes.getNamedItem("objectId");
+				var kind = varNode.attributes.getNamedItem("kind");
 
 				variables.push({
 					Name: name.value,
 					IsExpandable: hasChildren == undefined ? false : hasChildren.value === 'true',
 					Id: objectId == undefined ? null : objectId.value,
-					Value: value == undefined ? 'undefined' : value.value
+					Value: value == undefined ? 'undefined' : value.value,
+					Kind: kind.value
 				});
 			}
 
@@ -424,12 +427,14 @@ class MockDebugSession extends DebugSession {
 				var value = varNode.attributes.getNamedItem("value");
 				var hasChildren = varNode.attributes.getNamedItem("hasChildren");
 				var objectId = varNode.attributes.getNamedItem("objectId");
+				var kind = varNode.attributes.getNamedItem("kind");
 
 				variables.push({
 					Name: name.value,
 					IsExpandable: hasChildren == undefined ? false : hasChildren.value === 'true',
 					Id: objectId == undefined ? null : objectId.value,
-					Value: value == undefined ? 'undefined' : value.value
+					Value: value == undefined ? 'undefined' : value.value,
+					Kind: kind.value
 				});
 			}
 
