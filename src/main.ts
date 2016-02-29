@@ -142,7 +142,6 @@ class MockDebugSession extends DebugSession {
 		});
 		this.debugSocketServer.on('end', (ex) => {
 			var msg = "Debugger client disconneced, " + ex;
-			//that.debugSession.sendEvent(new OutputEvent(msg + "\n", "stderr"));
 			console.log(msg);
         });
         this.debugSocketServer.on("data", (buffer: Buffer) => {
@@ -295,6 +294,8 @@ class MockDebugSession extends DebugSession {
             this.stackFrameLoadedPromiseResolve = resolve;
         });
 
+		var that = this;
+
 		this.stackFrameLoaded.then((xml: XMLDocument) => {
 			if (xml.documentElement.nodeName !== 'frames') {
 				return;
@@ -312,13 +313,13 @@ class MockDebugSession extends DebugSession {
 					break;
 				}
 
-				var code = this._sourceLines[this.convertDebuggerLineToClient(+line.value)-1].trim();
+				var code = that._sourceLines[that.convertDebuggerLineToClient(+line.value)-1].trim();
 				frames.push(new StackFrame(
 					i,
 					`${code}`,
-					new Source(basename(this._sourceFile),
-					this.convertDebuggerPathToClient(this._sourceFile)),
-					this.convertDebuggerLineToClient(+line.value),
+					new Source(basename(that._sourceFile),
+					that.convertDebuggerPathToClient(that._sourceFile)),
+					that.convertDebuggerLineToClient(+line.value),
 					0
 			    ));
 			}
@@ -326,7 +327,7 @@ class MockDebugSession extends DebugSession {
 			response.body = {
 				stackFrames: frames
 			};
-			this.sendResponse(response);
+			that.sendResponse(response);
 		});
 
 		this.debugSocketServer.write("where\n");
@@ -358,10 +359,10 @@ class MockDebugSession extends DebugSession {
 				var objectId = varNode.attributes.getNamedItem("objectId");
 
 				variables.push({
-					IsExpandable: hasChildren.value === 'true',
-					Id: objectId.value,
 					Name: name.value,
-					Value: value.value
+					IsExpandable: hasChildren == undefined ? false : hasChildren.value === 'true',
+					Id: objectId == undefined ? null : objectId.value,
+					Value: value == undefined ? 'undefined' : value.value
 				});
 			}
 
@@ -425,10 +426,10 @@ class MockDebugSession extends DebugSession {
 				var objectId = varNode.attributes.getNamedItem("objectId");
 
 				variables.push({
-					IsExpandable: hasChildren.value === 'true',
-					Id: objectId.value,
 					Name: name.value,
-					Value: value.value
+					IsExpandable: hasChildren == undefined ? false : hasChildren.value === 'true',
+					Id: objectId == undefined ? null : objectId.value,
+					Value: value == undefined ? 'undefined' : value.value
 				});
 			}
 
