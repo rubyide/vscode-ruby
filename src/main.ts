@@ -95,7 +95,7 @@ class MockDebugSession extends DebugSession {
 			if (/^Fast Debugger/.test(data.toString())) {
 				this.debugSocketServer.connect(1234);
 			}
-			this.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
+			//this.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
 		});
 		this.debugprocess.on('exit', () => {
 			this.sendEvent(new TerminatedEvent());

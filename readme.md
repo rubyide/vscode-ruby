@@ -1,6 +1,6 @@
-# Ruby Language Support for Visual Studio Code
+# Ruby Language and Debugging Support for Visual Studio Code
 
-This extension provides rich Ruby language support for Visual Studio Code.
+This extension provides rich Ruby language and debugging support for Visual Studio Code.
 It's still in progress ( hosted in [GitHub](https://github.com/rebornix/vscode-ruby.git) ) and not useful yet, please expect frequent updates with breaking changes before 1.0.
 
 ![Demo GIF](images/debug-ruby-script.gif)
