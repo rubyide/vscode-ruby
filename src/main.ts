@@ -23,6 +23,18 @@ export interface LaunchRequestArguments {
 	stopOnEntry?: boolean;
 }
 
+interface IRubyEvaluationResult {
+	IsExpandable: boolean;
+	Id: string;
+	Name: string;
+	Value: string;
+}
+
+interface IDebugVariable {
+    variables: IRubyEvaluationResult[];
+    evaluateChildren?: Boolean;
+}
+
 class MockDebugSession extends DebugSession {
 
 	// we don't support multiple threads, so we can use a hardcoded ID for the default thread
@@ -39,13 +51,17 @@ class MockDebugSession extends DebugSession {
 	// maps from sourceFile to array of Breakpoints
 	private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
 
-	private _variableHandles = new Handles<string>();
+	private _variableHandles: Handles<IDebugVariable>;
 
 	private debugSocketServer : net.Socket = null;
+
 	private stackFrameLoaded: Promise<any>;
 	private stackFrameLoadedPromiseResolve: (xml: XMLDocument) => void;
 	private variableLoaded: Promise<any>;
 	private variableLoadedPromiseResolve: (xml: XMLDocument) => void;
+	private variableInstanceLoaded: Promise<any>;
+	private variableInstanceLoadedPromiseResolve: (xml: XMLDocument) => void;
+
 	private buffer: string;
 	private parser: DOMParser;
 	private debugprocess: childProcess.ChildProcess;
@@ -62,6 +78,8 @@ class MockDebugSession extends DebugSession {
 
 		this.setDebuggerLinesStartAt1(true);
 		this.setDebuggerColumnsStartAt1(false);
+
+		this._variableHandles = new Handles<IDebugVariable>();
 	}
 
 	/**
@@ -269,6 +287,10 @@ class MockDebugSession extends DebugSession {
 		The request returns a stacktrace from the current execution state.
 	*/
 	protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
+
+		if (!args.levels) {
+			args.levels = 0;
+		}
 		this.stackFrameLoaded = new Promise(resolve => {
             this.stackFrameLoadedPromiseResolve = resolve;
         });
@@ -279,7 +301,7 @@ class MockDebugSession extends DebugSession {
 			}
 
 			const frames = new Array<StackFrame>();
-			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
+			for(let i= 0; i < xml.documentElement.childNodes.length && i < args.levels; i++) {
 				var frameNode = xml.documentElement.childNodes.item(i);
 				var file = frameNode.attributes.getNamedItem("file");
 				var line = frameNode.attributes.getNamedItem("line");
@@ -317,43 +339,124 @@ class MockDebugSession extends DebugSession {
 
 		const frameReference = args.frameId;
 		const scopes = new Array<Scope>();
-		scopes.push(new Scope("Local", this._variableHandles.create("local_" + frameReference), false));
+		var frameCmd = ["frame", frameReference + 1, "\n"];
+		this.debugSocketServer.write(frameCmd.join(" "));
+		var variablesCmd = ["var", "local", "\n"];
+		this.debugSocketServer.write(variablesCmd.join(" "));
 
-		response.body = {
-			scopes: scopes
-		};
-		this.sendResponse(response);
+		this.variableLoaded = new Promise(resolve => {
+			this.variableLoadedPromiseResolve = resolve;
+		});
+
+		this.variableLoaded.then((xml: XMLDocument) => {
+			let variables: IRubyEvaluationResult[] = [];
+			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
+				var varNode = xml.documentElement.childNodes.item(i);
+				var name = varNode.attributes.getNamedItem("name");
+				var value = varNode.attributes.getNamedItem("value");
+				var hasChildren = varNode.attributes.getNamedItem("hasChildren");
+				var objectId = varNode.attributes.getNamedItem("objectId");
+
+				variables.push({
+					IsExpandable: hasChildren.value === 'true',
+					Id: objectId.value,
+					Name: name.value,
+					Value: value.value
+				});
+			}
+
+			let localVar: IDebugVariable = { variables: variables };
+			scopes.push(new Scope("Local", this._variableHandles.create(localVar), false));
+
+			response.body = {
+				scopes: scopes
+			};
+			this.sendResponse(response);
+		});
 	}
 
 	/** Variables request; value of command field is "variables".
 		Retrieves all children for the given variable reference.
 	*/
 	protected variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments): void {
+		var varRef = this._variableHandles.get(args.variablesReference);
+
+        if (varRef.evaluateChildren !== true) {
+            let variables = [];
+            varRef.variables.forEach(variable=> {
+                let variablesReference = 0;
+                //If this value can be expanded, then create a vars ref for user to expand it
+                if (variable.IsExpandable) {
+                    const parentVariable: IDebugVariable = {
+                        variables: [variable],
+                        evaluateChildren: true
+                    };
+                    variablesReference = this._variableHandles.create(parentVariable);
+                }
+
+                variables.push({
+                    name: variable.Name,
+                    value: variable.Value,
+                    variablesReference: variablesReference
+                });
+            });
+
+            response.body = {
+                variables: variables
+            };
+
+            return this.sendResponse(response);
+        }
+
+		var varInstanceCmd = ["var", "instance", varRef.variables[0].Id];
+		this.debugSocketServer.write(varInstanceCmd.join(" ").concat("\n"));
 		this.variableLoaded = new Promise(resolve => {
 			this.variableLoadedPromiseResolve = resolve;
 		});
 
 		this.variableLoaded.then((xml: XMLDocument) => {
-			const variables = [];
+			let children = [];
+			let variables: IRubyEvaluationResult[] = [];
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
 				var varNode = xml.documentElement.childNodes.item(i);
 				var name = varNode.attributes.getNamedItem("name");
 				var value = varNode.attributes.getNamedItem("value");
+				var hasChildren = varNode.attributes.getNamedItem("hasChildren");
+				var objectId = varNode.attributes.getNamedItem("objectId");
 
 				variables.push({
-					name: name.value,
-					value: value.value,
-					variablesReference: args.variablesReference
+					IsExpandable: hasChildren.value === 'true',
+					Id: objectId.value,
+					Name: name.value,
+					Value: value.value
 				});
 			}
 
+			variables.forEach(child => {
+				let variablesReference = 0;
+				//If this value can be expanded, then create a vars ref for user to expand it
+				if (child.IsExpandable) {
+					const childVariable: IDebugVariable = {
+						variables: [child],
+						evaluateChildren: true
+					};
+					variablesReference = this._variableHandles.create(childVariable);
+				}
+
+				children.push({
+					name: child.Name,
+					value: child.Value,
+					variablesReference: variablesReference
+				});
+			});
+
 			response.body = {
-				variables: variables
+				variables: children
 			};
+
 			this.sendResponse(response);
 		});
 
-		this.debugSocketServer.write("var local\n");
 	}
 
 	protected continueRequest(response: DebugProtocol.ContinueResponse, args: DebugProtocol.ContinueArguments): void {
