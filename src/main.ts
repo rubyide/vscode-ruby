@@ -12,29 +12,9 @@ import * as net from 'net';
 import * as childProcess from 'child_process';
 import {DOMParser} from 'xmldom';
 import {Terminal} from './terminal';
+import {RubyProcess} from './ruby';
+import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
 
-/**
- * This interface should always match the schema found in the mock-debug extension manifest.
- */
-export interface LaunchRequestArguments {
-	/** An absolute path to the program to debug. */
-	program: string;
-	/** Automatically stop target after launch. If not specified, target does not stop. */
-	stopOnEntry?: boolean;
-}
-
-interface IRubyEvaluationResult {
-	IsExpandable: boolean;
-	Id: string;
-	Name: string;
-	Value: string;
-	Kind: string;
-}
-
-interface IDebugVariable {
-    variables: IRubyEvaluationResult[];
-    evaluateChildren?: Boolean;
-}
 
 class MockDebugSession extends DebugSession {
 
@@ -54,20 +34,7 @@ class MockDebugSession extends DebugSession {
 
 	private _variableHandles: Handles<IDebugVariable>;
 
-	private debugSocketServer : net.Socket = null;
-
-	private stackFrameLoaded: Promise<any>;
-	private stackFrameLoadedPromiseResolve: (xml: XMLDocument) => void;
-	private variableLoaded: Promise<any>;
-	private variableLoadedPromiseResolve: (xml: XMLDocument) => void;
-	private variableInstanceLoaded: Promise<any>;
-	private variableInstanceLoadedPromiseResolve: (xml: XMLDocument) => void;
-
-	private buffer: string;
-	private parser: DOMParser;
-	private debugprocess: childProcess.ChildProcess;
-
-	private launchArgs: LaunchRequestArguments;
+	private rubyProcess: RubyProcess;
 
 	/**
 	 * Creates a new debug adapter.
@@ -97,121 +64,8 @@ class MockDebugSession extends DebugSession {
 	protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
 		this._sourceFile = args.program;
 		this._sourceLines = readFileSync(this._sourceFile).toString().split('\n');
-		this.launchArgs = args;
-		var that = this;
 
-		var runtimeArgs = [];
-		var runtimeExecutable = 'rdebug-ide';
-		var programArgs = [];
-		var processCwd = dirname(args.program);
-
-		this.debugprocess = childProcess.spawn(runtimeExecutable, [args.program, "-xd"], {cwd: processCwd});
-		// redirect output to debug console
-		this.debugprocess.stdout.on('data', (data: Buffer) => {
-			this.sendEvent(new OutputEvent(data.toString() + '', 'stdout'));
-		});
-		this.debugprocess.stderr.on('data', (data: Buffer) => {
-			if (/^Fast Debugger/.test(data.toString())) {
-				this.debugSocketServer.connect(1234);
-			}
-			//this.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
-		});
-		this.debugprocess.on('exit', () => {
-			this.sendEvent(new TerminatedEvent());
-		});
-		this.debugprocess.on('error', (error: Error) => {
-			this.sendEvent(new OutputEvent(error.message, 'stderr'));
-		});
-
-		this.stackFrameLoaded = new Promise(resolve => {
-            this.stackFrameLoadedPromiseResolve = resolve;
-        });
-
-		this.variableLoaded = new Promise(resolve => {
-			this.variableLoadedPromiseResolve = resolve;
-		});
-
-		this.buffer = "";
-		this.parser = new DOMParser();
-
-		this.debugSocketServer = new net.Socket( {
-			type: "tcp4"
-		});
-		this.debugSocketServer.on('connect', (buffer: Buffer) => {
-			that.sendEvent(new InitializedEvent());
-			that.sendResponse(response);
-		});
-		this.debugSocketServer.on('end', (ex) => {
-			var msg = "Debugger client disconneced, " + ex;
-			console.log(msg);
-        });
-        this.debugSocketServer.on("data", (buffer: Buffer) => {
-			var chunk = buffer.toString();
-
-			if (/^<breakpoint .*?\/>$/.test(chunk)) {
-				that.sendEvent(new StoppedEvent('breakpoint', MockDebugSession.THREAD_ID));
-				return;
-			}
-
-			if (/^<suspended .*?\/>$/.test(chunk)) {
-				this.sendEvent(new StoppedEvent("step", MockDebugSession.THREAD_ID));
-				return;
-			}
-
-			if (
-				(/^<frames>/.test(chunk) && !/<\/frames>$/.test(chunk)) ||
-				(/^<frame .*?\/>$/.test(chunk) && this.buffer !== "") ||
-				(/^<variables>/.test(chunk) && !/<\/variables>$/.test(chunk)) ||
-				(/^<variable .*?\/>$/.test(chunk) && this.buffer !== "") ||
-				(/^<breakpoints>/.test(chunk) && !/<\/breakpoints>$/.test(chunk)) ||
-				(/^<breakpoint .*?\/>$/.test(chunk) && this.buffer !== "")
-			) {
-				that.buffer += chunk;
-				return;
-			} else if (
-				(/^<variable .*?>$/.test(chunk) && !/<\/variables>$/.test(chunk)) ||
-				/<\/variable>$/.test(chunk)
-			) {
-				that.buffer += chunk;
-				return;
-			}
-			else if (
-				/<\/frames>$/.test(chunk) ||
-				/<\/variables>$/.test(chunk) ||
-				/<\/breakpoints>$/.test(chunk)
-			) {
-				that.buffer = that.buffer + chunk;
-				if (/<\/frames>$/.test(chunk)) {
-					var document = that.parser.parseFromString(that.buffer, 'application/xml');
-					that.stackFrameLoadedPromiseResolve(document);
-				}
-				else if (/<\/variables>$/.test(chunk)) {
-					console.log("variables\n");
-					console.log(that.buffer);
-					var document = that.parser.parseFromString(that.buffer, 'application/xml');
-					that.variableLoadedPromiseResolve(document);
-				}
-				that.buffer = "";
-			}
-		});
-        this.debugSocketServer.on("close", d=> {
-			var msg = "Debugger client closed, " + d;
-			this.sendEvent(new OutputEvent(msg));
-			this.sendEvent(new TerminatedEvent());
-		});
-		this.debugSocketServer.on("error", d=> {
-			// var msg = "Debugger client error, " + d;
-			// that.sendEvent(new OutputEvent(msg + "\n", "Python"));
-			// console.log(msg);
-			// // that.onDetachDebugger();
-			var msg = "Debugger client error, " + d;
-			this.sendEvent(new OutputEvent(msg));
-		});
-		this.debugSocketServer.on("timeout", d=> {
-			var msg = "Debugger client timedout, " + d;
-			that.sendEvent(new OutputEvent(msg + "\n", "stderr"));
-			console.log(msg);
-		});
+		this.rubyProcess = new RubyProcess(this, args, response);
 
 		if (args.stopOnEntry) {
 			this.sendResponse(response);
@@ -225,7 +79,7 @@ class MockDebugSession extends DebugSession {
 	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneRequest, args:
 	DebugProtocol.ConfigurationDoneArguments): void {
 		var command = ["start"];
-		this.debugSocketServer.write(command.join(" ") + "\n");
+		this.rubyProcess.Run(command.join(" ") + "\n");
 	}
 
 	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
@@ -259,7 +113,7 @@ class MockDebugSession extends DebugSession {
 			const bp = <DebugProtocol.Breakpoint> new Breakpoint(verified, this.convertDebuggerLineToClient(l));
 			bp.id = this._breakpointId++;
 			var command = ["break", "test.rb:"+bp.line];
-			this.debugSocketServer.write(command.join(" ") + "\n");
+			this.rubyProcess.Run(command.join(" ") + "\n");
 			breakpoints.push(bp);
 		}
 		this._breakPoints[path] = breakpoints;
@@ -291,13 +145,10 @@ class MockDebugSession extends DebugSession {
 		if (!args.levels) {
 			args.levels = 0;
 		}
-		this.stackFrameLoaded = new Promise(resolve => {
-            this.stackFrameLoadedPromiseResolve = resolve;
-        });
 
 		var that = this;
 
-		this.stackFrameLoaded.then((xml: XMLDocument) => {
+		this.rubyProcess.Enqueue("where\n").then((xml: XMLDocument) => {
 			if (xml.documentElement.nodeName !== 'frames') {
 				return;
 			}
@@ -330,8 +181,6 @@ class MockDebugSession extends DebugSession {
 			};
 			that.sendResponse(response);
 		});
-
-		this.debugSocketServer.write("where\n");
 	}
 
     /** Scopes request; value of command field is "scopes".
@@ -342,15 +191,9 @@ class MockDebugSession extends DebugSession {
 		const frameReference = args.frameId;
 		const scopes = new Array<Scope>();
 		var frameCmd = ["frame", frameReference + 1, "\n"];
-		this.debugSocketServer.write(frameCmd.join(" "));
+		this.rubyProcess.Run(frameCmd.join(" "));
 		var variablesCmd = ["var", "local", "\n"];
-		this.debugSocketServer.write(variablesCmd.join(" "));
-
-		this.variableLoaded = new Promise(resolve => {
-			this.variableLoadedPromiseResolve = resolve;
-		});
-
-		this.variableLoaded.then((xml: XMLDocument) => {
+		this.rubyProcess.Enqueue(variablesCmd.join(" ")).then((xml: XMLDocument) => {
 			let variables: IRubyEvaluationResult[] = [];
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
 				var varNode = xml.documentElement.childNodes.item(i);
@@ -413,12 +256,7 @@ class MockDebugSession extends DebugSession {
         }
 
 		var varInstanceCmd = ["var", "instance", varRef.variables[0].Id];
-		this.debugSocketServer.write(varInstanceCmd.join(" ").concat("\n"));
-		this.variableLoaded = new Promise(resolve => {
-			this.variableLoadedPromiseResolve = resolve;
-		});
-
-		this.variableLoaded.then((xml: XMLDocument) => {
+		this.rubyProcess.Enqueue(varInstanceCmd.join(" ").concat("\n")).then((xml: XMLDocument) => {
 			let children = [];
 			let variables: IRubyEvaluationResult[] = [];
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
@@ -462,24 +300,23 @@ class MockDebugSession extends DebugSession {
 
 			this.sendResponse(response);
 		});
-
 	}
 
 	protected continueRequest(response: DebugProtocol.ContinueResponse, args: DebugProtocol.ContinueArguments): void {
 
 		this.sendResponse(response);
-		this.debugSocketServer.write("c\n");
+		this.rubyProcess.Run("c\n");
 	}
 
 	protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
 
 		this.sendResponse(response);
-		this.debugSocketServer.write("next\n");
+		this.rubyProcess.Run("next\n");
 	}
 
 	protected stepInRequest(response: DebugProtocol.StepInResponse): void {
         this.sendResponse(response);
-        this.debugSocketServer.write("step\n");
+        this.rubyProcess.Run("step\n");
     }
     protected stepOutRequest(response: DebugProtocol.StepInResponse): void {
         this.sendResponse(response);
@@ -501,7 +338,7 @@ class MockDebugSession extends DebugSession {
 	}
 
 	protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
-        this.debugSocketServer.write("quit\n");
+        this.rubyProcess.Run("quit\n");
         this.sendResponse(response);
     }
 }
