@@ -113,20 +113,11 @@ class MockDebugSession extends DebugSession {
 		for (var i = 0; i < clientLines.length; i++) {
 			var l = this.convertClientLineToDebugger(clientLines[i]);
 			var verified = false;
+
 			if (l < lines.length) {
-				const line = lines[l-1].trim();
-				// if a line is empty or starts with '+' we don't allow to set a breakpoint but move the breakpoint down
-				if (line.length == 0 || line.indexOf("+") == 0)
-					l++;
-				// if a line starts with '-' we don't allow to set a breakpoint but move the breakpoint up
-				if (line.indexOf("-") == 0)
-					l--;
-				// don't set 'verified' to true if the line contains the word 'lazy'
-				// in this case the breakpoint will be verified 'lazy' after hitting it once.
-				if (line.indexOf("lazy") < 0) {
-					verified = true;    // this breakpoint has been validated
-				}
+				verified = true;    // this breakpoint has been validated
 			}
+
 			const bp = <DebugProtocol.Breakpoint> new Breakpoint(verified, this.convertDebuggerLineToClient(l));
 			bp.id = this._breakpointId++;
 			var command = ["break", "test.rb:"+bp.line];
@@ -144,13 +135,23 @@ class MockDebugSession extends DebugSession {
 
 	protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
 
-		// return the default thread
-		response.body = {
-			threads: [
-				new Thread(MockDebugSession.THREAD_ID, "thread 1")
-			]
-		};
-		this.sendResponse(response);
+		this.rubyProcess.Enqueue("thread list\n").then((xml: XMLDocument) => {
+			if (xml.documentElement.nodeName !== "threads") {
+				return;
+			}
+
+			var threads = new Array<Thread>();
+			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
+				var threadNode = xml.documentElement.childNodes.item(i);
+				var threadId = threadNode.attributes.getNamedItem("id");
+
+				threads.push(new Thread(+threadId.value, "thread_"+threadId.value));
+			}
+			response.body = {
+				threads: threads
+			};
+			this.sendResponse(response);
+		});
 	}
 
 	// Called by VS Code after a StoppedEvent
