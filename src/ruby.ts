@@ -4,8 +4,6 @@
 
 "use strict";
 
-import {DebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
-import {DebugProtocol} from 'vscode-debugprotocol';
 import {basename, dirname} from 'path';
 import * as net from 'net';
 import * as childProcess from 'child_process';
