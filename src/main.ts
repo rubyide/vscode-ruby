@@ -19,7 +19,7 @@ import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './i
 class MockDebugSession extends DebugSession {
 
 	// we don't support multiple threads, so we can use a hardcoded ID for the default thread
-	private static THREAD_ID = 1;
+	private static THREAD_ID = 2;
 
 	private _breakpointId = 1000;
 
@@ -56,8 +56,33 @@ class MockDebugSession extends DebugSession {
 	}
 
 	protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
+		var that = this;
+		this.rubyProcess = new RubyProcess(args);
 
-		this.rubyProcess = new RubyProcess(this, args, response);
+		this.rubyProcess.on("debuggerConnect", () => {
+			that.sendEvent(new InitializedEvent());
+			that.sendResponse(response);
+		}).on("exeutableOutput", (data: Buffer) => {
+			that.sendEvent(new OutputEvent(data.toString() + '', 'stdout'));
+		}).on("debuggerOutput", (data: Buffer) => {
+			that.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
+		}).on("debuggerProcessExit", () => {
+			that.sendEvent(new TerminatedEvent());
+		}).on("debuggerProcessError", (error: Error) => {
+			that.sendEvent(new OutputEvent(error.message, 'stderr'));
+		}).on("breakpointHit", (threadId: number) => {
+			that.sendEvent(new StoppedEvent('breakpoint', threadId));
+		}).on("suspended", (threadId: number) => {
+			that.sendEvent(new StoppedEvent("step", +threadId));
+		}).on("exception", (threadId: number, exceptionMsg: string) => {
+			that.sendEvent(new StoppedEvent("exception", threadId, exceptionMsg));
+		}).on("debuggerClientClose", () => {
+			that.sendEvent(new TerminatedEvent());
+		}).on("debuggerClientError", (msg: string) => {
+			that.sendEvent(new OutputEvent(msg));
+		}).on("debuggerClientTimeout", (msg: string) => {
+			that.sendEvent(new OutputEvent(msg + "\n", "stderr"));
+		});
 
 		if (args.stopOnEntry) {
 			this.sendResponse(response);
