@@ -121,15 +121,29 @@ class MockDebugSession extends DebugSession {
         });
         this.debugSocketServer.on("data", (buffer: Buffer) => {
 			var chunk = buffer.toString();
+			var threadId: any;
+			var document: XMLDocument;
 
 			if (/^<breakpoint .*?\/>$/.test(chunk)) {
-				that.sendEvent(new StoppedEvent('breakpoint', MockDebugSession.THREAD_ID));
+				document = that.parser.parseFromString(chunk, 'application/xml');
+				threadId = document.documentElement.attributes.getNamedItem(threadId);
+				that.sendEvent(new StoppedEvent('breakpoint', threadId.value));
 				return;
 			}
 
 			if (/^<suspended .*?\/>$/.test(chunk)) {
-				this.sendEvent(new StoppedEvent("step", MockDebugSession.THREAD_ID));
+				document = that.parser.parseFromString(chunk, 'application/xml');
+				threadId = document.documentElement.attributes.getNamedItem(threadId);
+				this.sendEvent(new StoppedEvent("step", threadId.value));
 				return;
+			}
+
+			if(/^<exception .*?\/>$/.test(chunk)) {
+				document = that.parser.parseFromString(chunk, 'application/xml');
+				var exceptionType = document.documentElement.attributes.getNamedItem("type");
+				var exceptionMessage = document.documentElement.attributes.getNamedItem("message");
+				threadId = document.documentElement.attributes.getNamedItem(threadId);
+				this.sendEvent(new StoppedEvent("exception", threadId.value, exceptionType.value + ": " +exceptionMessage.value));
 			}
 
 			if (
@@ -156,13 +170,13 @@ class MockDebugSession extends DebugSession {
 			) {
 				that.buffer = that.buffer + chunk;
 				if (/<\/frames>$/.test(chunk)) {
-					var document = that.parser.parseFromString(that.buffer, 'application/xml');
+					document = that.parser.parseFromString(that.buffer, 'application/xml');
 					that.stackFrameLoadedPromiseResolve(document);
 				}
 				else if (/<\/variables>$/.test(chunk)) {
 					console.log("variables\n");
 					console.log(that.buffer);
-					var document = that.parser.parseFromString(that.buffer, 'application/xml');
+					document = that.parser.parseFromString(that.buffer, 'application/xml');
 					that.variableLoadedPromiseResolve(document);
 				}
 				that.buffer = "";
