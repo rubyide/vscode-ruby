@@ -9,23 +9,23 @@ import {DebugProtocol} from 'vscode-debugprotocol';
 import {basename, dirname} from 'path';
 import * as net from 'net';
 import * as childProcess from 'child_process';
+import {EventEmitter} from 'events';
 import {DOMParser} from 'xmldom';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable, ICommand} from './interface';
 
-export class RubyProcess {
+export class RubyProcess extends EventEmitter {
 	private debugSocketServer : net.Socket = null;
 
 	private buffer: string;
 	private parser: DOMParser;
 	private debugprocess: childProcess.ChildProcess;
-	private debugSession: DebugSession;
 
 	private launchArgs: LaunchRequestArguments;
 
 	private pendingCommands: ICommand[];
 
-	public constructor(debugSession: DebugSession, args: LaunchRequestArguments, response: DebugProtocol.LaunchResponse) {
-		this.debugSession = debugSession;
+	public constructor(args: LaunchRequestArguments) {
+		super();
 		this.launchArgs = args;
 		this.pendingCommands = [];
 
@@ -38,19 +38,19 @@ export class RubyProcess {
 		this.debugprocess = childProcess.spawn(runtimeExecutable, [args.program, "-xd"], {cwd: processCwd});
 		// redirect output to debug console
 		this.debugprocess.stdout.on('data', (data: Buffer) => {
-			this.debugSession.sendEvent(new OutputEvent(data.toString() + '', 'stdout'));
+			that.emit("exeutableOutput", data);
 		});
 		this.debugprocess.stderr.on('data', (data: Buffer) => {
 			if (/^Fast Debugger/.test(data.toString())) {
-				this.debugSocketServer.connect(1234);
+				that.debugSocketServer.connect(1234);
 			}
-			this.debugSession.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
+			that.emit("debuggerOutput", data)
 		});
 		this.debugprocess.on('exit', () => {
-			this.debugSession.sendEvent(new TerminatedEvent());
+			that.emit("debuggerProcessExit");
 		});
 		this.debugprocess.on('error', (error: Error) => {
-			this.debugSession.sendEvent(new OutputEvent(error.message, 'stderr'));
+			that.emit("debuggerProcessError", error);
 		});
 
 		this.buffer = "";
@@ -60,8 +60,7 @@ export class RubyProcess {
 			type: "tcp4"
 		});
 		this.debugSocketServer.on('connect', (buffer: Buffer) => {
-			this.debugSession.sendEvent(new InitializedEvent());
-			this.debugSession.sendResponse(response);
+			that.emit("debuggerConnect");
 		});
 		this.debugSocketServer.on('end', (ex) => {
 			var msg = "Debugger client disconneced, " + ex;
@@ -69,16 +68,30 @@ export class RubyProcess {
         });
         this.debugSocketServer.on("data", (buffer: Buffer) => {
 			var chunk = buffer.toString();
+			var threadId: any;
+ 			var document: XMLDocument;
 
 			if (/^<breakpoint .*?\/>$/.test(chunk)) {
-				this.debugSession.sendEvent(new StoppedEvent('breakpoint', 1));
+				document = that.parser.parseFromString(chunk, 'application/xml');
+  				threadId = document.documentElement.attributes.getNamedItem('threadId');
+				that.emit("breakpointHit", +threadId.value);
 				return;
 			}
 
 			if (/^<suspended .*?\/>$/.test(chunk)) {
-				this.debugSession.sendEvent(new StoppedEvent("step", 1));
+				document = that.parser.parseFromString(chunk, 'application/xml');
+ 				threadId = document.documentElement.attributes.getNamedItem('threadId');
+				that.emit("suspended", +threadId.value);
 				return;
 			}
+
+			if(/^<exception .*?\/>$/.test(chunk)) {
+ 				document = that.parser.parseFromString(chunk, 'application/xml');
+ 				var exceptionType = document.documentElement.attributes.getNamedItem("type");
+ 				var exceptionMessage = document.documentElement.attributes.getNamedItem("message");
+ 				threadId = document.documentElement.attributes.getNamedItem('threadId');
+				that.emit("exception", +threadId.value, exceptionType.value + ": " + exceptionMessage.value);
+ 			}
 
 			if (
 				(/^<frames>/.test(chunk) && !/<\/frames>$/.test(chunk)) ||
@@ -104,13 +117,11 @@ export class RubyProcess {
 			) {
 				that.buffer = that.buffer + chunk;
 				if (/<\/frames>$/.test(chunk)) {
-					var document = that.parser.parseFromString(that.buffer, 'application/xml');
+					document = that.parser.parseFromString(that.buffer, 'application/xml');
 					that.FinishCmd(document);
 				}
 				else if (/<\/variables>$/.test(chunk)) {
-					console.log("variables\n");
-					console.log(that.buffer);
-					var document = that.parser.parseFromString(that.buffer, 'application/xml');
+					document = that.parser.parseFromString(that.buffer, 'application/xml');
 					that.FinishCmd(document);
 				}
 				that.buffer = "";
@@ -118,17 +129,15 @@ export class RubyProcess {
 		});
         this.debugSocketServer.on("close", d=> {
 			var msg = "Debugger client closed, " + d;
-			this.debugSession.sendEvent(new OutputEvent(msg));
-			this.debugSession.sendEvent(new TerminatedEvent());
+			that.emit("debuggerClientClose");
 		});
 		this.debugSocketServer.on("error", d=> {
 			var msg = "Debugger client error, " + d;
-			this.debugSession.sendEvent(new OutputEvent(msg));
+			that.emit("debuggerClientError", msg);
 		});
 		this.debugSocketServer.on("timeout", d=> {
 			var msg = "Debugger client timedout, " + d;
-			this.debugSession.sendEvent(new OutputEvent(msg + "\n", "stderr"));
-			console.log(msg);
+			that.emit("debuggerClientTimeout", msg);
 		});
 	}
 
