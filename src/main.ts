@@ -30,12 +30,6 @@ class MockDebugSession extends DebugSession {
 
 	private _breakpointId = 1000;
 
-	// the initial (and one and only) file we are debugging
-	private _sourceFile: string;
-
-	// the contents (= lines) of the one and only file
-	private _sourceLines = new Array<string>();
-
 	// maps from sourceFile to array of Breakpoints
 	private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
 
@@ -76,8 +70,6 @@ class MockDebugSession extends DebugSession {
 	}
 
 	protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
-		this._sourceFile = args.program;
-		this._sourceLines = readFileSync(this._sourceFile).toString().split('\n');
 		this.launchArgs = args;
 		var that = this;
 
@@ -289,13 +281,13 @@ class MockDebugSession extends DebugSession {
 				if (bn === 'ruby-debug-ide.rb' || bn === 'rdebug-ide') {
 					break;
 				}
-
-				var code = this._sourceLines[this.convertDebuggerLineToClient(+line.value)-1].trim();
+				var sourcesInFile = readFileSync(file.value).toString().split('\n');
+				var code = sourcesInFile[this.convertDebuggerLineToClient(+line.value)-1].trim();
 				frames.push(new StackFrame(
 					i,
 					`${code}`,
-					new Source(basename(this._sourceFile),
-					this.convertDebuggerPathToClient(this._sourceFile)),
+					new Source(basename(file.value),
+					this.convertDebuggerPathToClient(file.value)),
 					this.convertDebuggerLineToClient(+line.value),
 					0
 			    ));
