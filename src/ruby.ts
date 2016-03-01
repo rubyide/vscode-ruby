@@ -99,7 +99,8 @@ export class RubyProcess extends EventEmitter {
 				(/^<variables>/.test(chunk) && !/<\/variables>$/.test(chunk)) ||
 				(/^<variable .*?\/>$/.test(chunk) && this.buffer !== "") ||
 				(/^<breakpoints>/.test(chunk) && !/<\/breakpoints>$/.test(chunk)) ||
-				(/^<breakpoint .*?\/>$/.test(chunk) && this.buffer !== "")
+				(/^<breakpoint .*?\/>$/.test(chunk) && this.buffer !== "") ||
+				(/^<threads>/.test(chunk) && !/\/threads>$/.test(chunk))
 			) {
 				that.buffer += chunk;
 				return;
@@ -111,9 +112,16 @@ export class RubyProcess extends EventEmitter {
 				return;
 			}
 			else if (
+				(/^<thread .*?>$/.test(chunk) && !/<\/threads>$/.test(chunk)) ||
+				/<\/thread>$/.test(chunk)
+			) {
+				that.buffer += chunk;
+			}
+			else if (
 				/<\/frames>$/.test(chunk) ||
 				/<\/variables>$/.test(chunk) ||
-				/<\/breakpoints>$/.test(chunk)
+				/<\/breakpoints>$/.test(chunk) ||
+				/<\/threads>$/.test(chunk)
 			) {
 				that.buffer = that.buffer + chunk;
 				if (/<\/frames>$/.test(chunk)) {
@@ -121,6 +129,10 @@ export class RubyProcess extends EventEmitter {
 					that.FinishCmd(document);
 				}
 				else if (/<\/variables>$/.test(chunk)) {
+					document = that.parser.parseFromString(that.buffer, 'application/xml');
+					that.FinishCmd(document);
+				}
+				else if (/<\/threads>$/.test(chunk)) {
 					document = that.parser.parseFromString(that.buffer, 'application/xml');
 					that.FinishCmd(document);
 				}
