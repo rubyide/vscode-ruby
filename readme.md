@@ -1,19 +1,22 @@
 # Ruby Language and Debugging Support for Visual Studio Code
 
 This extension provides rich Ruby language and debugging support for Visual Studio Code.
-It's still in progress ( hosted in [GitHub](https://github.com/rebornix/vscode-ruby.git) ) and not useful yet, please expect frequent updates with breaking changes before 1.0.
-
-![Demo GIF](images/debug-ruby-script.gif)
+It's still in progress ( [GitHub](https://github.com/rebornix/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0.
 
 ## Install
 ### Install Extension
 Press `F1`, type `ext install ruby`.
 
 ### Install Ruby Dependencies
-In this extension, we implement [ruby debug ide protocol](http://debug-commons.rubyforge.org/protocol-spec.html) to allow VS Code to communicate with ruby debug. This is also how RubyMine does in default.
+In this extension, we implement [ruby debug ide protocol](http://debug-commons.rubyforge.org/protocol-spec.html) to allow VS Code to communicate with ruby debug, it requires `ruby-debug-ide` to be installed on your machine. This is also how RubyMine/NetBeans does by default.
 
-- `gem install ruby-debug-ide`
-- `gem install ruby-debug-base19x`
+- If you are using JRuby or Ruby v1.8.x (`jruby`, `ruby_18`, `mingw_18`)
+  * `gem install ruby-debug-ide`, the latest version is `0.6.0`. Make sure `ruby-debug-base` is installed together with ruby-debug-ide`.
+- If you are using Ruby v1.9.x (`ruby_19`, `mingw_19`)
+  * `gem install ruby-debug-ide`, the latest version is `0.6.0`. Make sure `ruby-debug-base19x` is installed together with `ruby-debug-ide`.
+- If you are using Ruby v2.0.x
+  * `gem install ruby-debug-ide -v 0.4.32` or higher versions
+  * `gem install debase -v 0.2.1` or higher versions
 
 ### Add VS Code config to your project
 - create `.vscode` folder under the root directory of your project
@@ -26,7 +29,7 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
 			"name": "Ruby Debug",
 			"type": "Ruby",
 			"request": "launch",
-			"program": "${workspaceRoot}/test.rb",
+			"program": "${workspaceRoot}/main.rb",
 			"stopOnEntry": false
 		}
 	]
@@ -35,15 +38,27 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
 
 ## Features
 
-- Local script debugging (currently it only supports single file)
+- Ruby scripts debugging
+  * Line breakpoints
+  * Step over, step in, step out, continue
+  * Multiple, parallel threads
+  * Call stack
+  * Scope variables
 
 ## TODO
-- Full support for Continue/StepIn/StepOut/Next
-- Variables Inspect and Stack Frame support
-- Multithread
-- Rails support
-- IntelliSense
+- Ruby scripts debugging
+  * Conditional breakpoints
+  * Break on entry
+  * Breaking on uncaught exceptions and errors
+  * Debug console
+  * Watch window
+  * Variables evaluate/inspect
+  * Attach requests
+- IntelliSense and autocomplete
 - Linting
+- Unit/Integration tests debugging
+- Rails support
+- Remote hosting debug
 
 ## License
 
