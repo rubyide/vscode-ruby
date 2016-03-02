@@ -248,11 +248,11 @@ class MacTerminalService extends DefaultTerminalService {
 
 function extendObject<T> (objectCopy: T, object: T): T {
 
-    for (let key in object) {
-        if (object.hasOwnProperty(key)) {
-            objectCopy[key] = object[key];
-        }
-    }
+	for (let key in object) {
+		if (object.hasOwnProperty(key)) {
+			objectCopy[key] = object[key];
+		}
+	}
 
-    return objectCopy;
+	return objectCopy;
 }
