@@ -17,8 +17,8 @@ export interface IRubyEvaluationResult {
 }
 
 export interface IDebugVariable {
-    variables: IRubyEvaluationResult[];
-    evaluateChildren?: Boolean;
+	variables: IRubyEvaluationResult[];
+	evaluateChildren?: Boolean;
 }
 
 export interface ICommand {

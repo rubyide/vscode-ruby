@@ -2,7 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-"use strict";
+'use strict';
 
 import {basename, dirname} from 'path';
 import * as net from 'net';
@@ -33,38 +33,39 @@ export class RubyProcess extends EventEmitter {
 		var programArgs = [];
 		var processCwd = dirname(this.launchArgs.program);
 
-		this.debugprocess = childProcess.spawn(runtimeExecutable, [args.program, "-xd"], {cwd: processCwd});
+		this.debugprocess = childProcess.spawn(runtimeExecutable, [args.program, '-xd'], {cwd: processCwd});
 		// redirect output to debug console
 		this.debugprocess.stdout.on('data', (data: Buffer) => {
-			that.emit("exeutableOutput", data);
+			that.emit('exeutableOutput', data);
 		});
 		this.debugprocess.stderr.on('data', (data: Buffer) => {
 			if (/^Fast Debugger/.test(data.toString())) {
 				that.debugSocketServer.connect(1234);
 			}
-			that.emit("debuggerOutput", data)
+			that.emit('debuggerOutput', data)
 		});
 		this.debugprocess.on('exit', () => {
-			that.emit("debuggerProcessExit");
+			that.emit('debuggerProcessExit');
 		});
 		this.debugprocess.on('error', (error: Error) => {
-			that.emit("debuggerProcessError", error);
+			that.emit('debuggerProcessError', error);
 		});
 
-		this.buffer = "";
+		this.buffer = '';
 		this.parser = new DOMParser();
 
 		this.debugSocketServer = new net.Socket( {
-			type: "tcp4"
+			type: 'tcp4'
 		});
 		this.debugSocketServer.on('connect', (buffer: Buffer) => {
-			that.emit("debuggerConnect");
+			that.emit('debuggerConnect');
 		});
 		this.debugSocketServer.on('end', (ex) => {
-			var msg = "Debugger client disconneced, " + ex;
+			var msg = 'Debugger client disconneced, ' + ex;
 			console.log(msg);
-        });
-        this.debugSocketServer.on("data", (buffer: Buffer) => {
+		});
+
+		this.debugSocketServer.on('data', (buffer: Buffer) => {
 			var chunk = buffer.toString();
 			var threadId: any;
  			var document: XMLDocument;
@@ -72,32 +73,32 @@ export class RubyProcess extends EventEmitter {
 			if (/^<breakpoint .*?\/>$/.test(chunk)) {
 				document = that.parser.parseFromString(chunk, 'application/xml');
   				threadId = document.documentElement.attributes.getNamedItem('threadId');
-				that.emit("breakpointHit", +threadId.value);
+				that.emit('breakpointHit', +threadId.value);
 				return;
 			}
 
 			if (/^<suspended .*?\/>$/.test(chunk)) {
 				document = that.parser.parseFromString(chunk, 'application/xml');
  				threadId = document.documentElement.attributes.getNamedItem('threadId');
-				that.emit("suspended", +threadId.value);
+				that.emit('suspended', +threadId.value);
 				return;
 			}
 
 			if(/^<exception .*?\/>$/.test(chunk)) {
  				document = that.parser.parseFromString(chunk, 'application/xml');
- 				var exceptionType = document.documentElement.attributes.getNamedItem("type");
- 				var exceptionMessage = document.documentElement.attributes.getNamedItem("message");
+ 				var exceptionType = document.documentElement.attributes.getNamedItem('type');
+ 				var exceptionMessage = document.documentElement.attributes.getNamedItem('message');
  				threadId = document.documentElement.attributes.getNamedItem('threadId');
-				that.emit("exception", +threadId.value, exceptionType.value + ": " + exceptionMessage.value);
+				that.emit('exception', +threadId.value, exceptionType.value + ': ' + exceptionMessage.value);
  			}
 
 			if (
 				(/^<frames>/.test(chunk) && !/<\/frames>$/.test(chunk)) ||
-				(/^<frame .*?\/>$/.test(chunk) && this.buffer !== "") ||
+				(/^<frame .*?\/>$/.test(chunk) && this.buffer !== '') ||
 				(/^<variables>/.test(chunk) && !/<\/variables>$/.test(chunk)) ||
-				(/^<variable .*?\/>$/.test(chunk) && this.buffer !== "") ||
+				(/^<variable .*?\/>$/.test(chunk) && this.buffer !== '') ||
 				(/^<breakpoints>/.test(chunk) && !/<\/breakpoints>$/.test(chunk)) ||
-				(/^<breakpoint .*?\/>$/.test(chunk) && this.buffer !== "") ||
+				(/^<breakpoint .*?\/>$/.test(chunk) && this.buffer !== '') ||
 				(/^<threads>/.test(chunk) && !/\/threads>$/.test(chunk))
 			) {
 				that.buffer += chunk;
@@ -134,20 +135,23 @@ export class RubyProcess extends EventEmitter {
 					document = that.parser.parseFromString(that.buffer, 'application/xml');
 					that.FinishCmd(document);
 				}
-				that.buffer = "";
+				that.buffer = '';
 			}
 		});
-        this.debugSocketServer.on("close", d=> {
-			var msg = "Debugger client closed, " + d;
-			that.emit("debuggerClientClose");
+
+        this.debugSocketServer.on('close', d=> {
+			var msg = 'Debugger client closed, ' + d;
+			that.emit('debuggerClientClose');
 		});
-		this.debugSocketServer.on("error", d=> {
-			var msg = "Debugger client error, " + d;
-			that.emit("debuggerClientError", msg);
+
+		this.debugSocketServer.on('error', d=> {
+			var msg = 'Debugger client error, ' + d;
+			that.emit('debuggerClientError', msg);
 		});
-		this.debugSocketServer.on("timeout", d=> {
-			var msg = "Debugger client timedout, " + d;
-			that.emit("debuggerClientTimeout", msg);
+
+		this.debugSocketServer.on('timeout', d=> {
+			var msg = 'Debugger client timedout, ' + d;
+			that.emit('debuggerClientTimeout', msg);
 		});
 	}
 

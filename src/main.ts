@@ -2,7 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-"use strict";
+'use strict';
 
 import {DebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
 import {DebugProtocol} from 'vscode-debugprotocol';
@@ -59,44 +59,44 @@ class MockDebugSession extends DebugSession {
 		var that = this;
 		this.rubyProcess = new RubyProcess(args);
 
-		this.rubyProcess.on("debuggerConnect", () => {
+		this.rubyProcess.on('debuggerConnect', () => {
 			that.sendEvent(new InitializedEvent());
 			that.sendResponse(response);
-		}).on("exeutableOutput", (data: Buffer) => {
+		}).on('exeutableOutput', (data: Buffer) => {
 			that.sendEvent(new OutputEvent(data.toString() + '', 'stdout'));
-		}).on("debuggerOutput", (data: Buffer) => {
+		}).on('debuggerOutput', (data: Buffer) => {
 			that.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
-		}).on("debuggerProcessExit", () => {
+		}).on('debuggerProcessExit', () => {
 			that.sendEvent(new TerminatedEvent());
-		}).on("debuggerProcessError", (error: Error) => {
+		}).on('debuggerProcessError', (error: Error) => {
 			that.sendEvent(new OutputEvent(error.message, 'stderr'));
-		}).on("breakpointHit", (threadId: number) => {
+		}).on('breakpointHit', (threadId: number) => {
 			that.sendEvent(new StoppedEvent('breakpoint', threadId));
-		}).on("suspended", (threadId: number) => {
-			that.sendEvent(new StoppedEvent("step", +threadId));
-		}).on("exception", (threadId: number, exceptionMsg: string) => {
-			that.sendEvent(new StoppedEvent("exception", threadId, exceptionMsg));
-		}).on("debuggerClientClose", () => {
+		}).on('suspended', (threadId: number) => {
+			that.sendEvent(new StoppedEvent('step', +threadId));
+		}).on('exception', (threadId: number, exceptionMsg: string) => {
+			that.sendEvent(new StoppedEvent('exception', threadId, exceptionMsg));
+		}).on('debuggerClientClose', () => {
 			that.sendEvent(new TerminatedEvent());
-		}).on("debuggerClientError", (msg: string) => {
+		}).on('debuggerClientError', (msg: string) => {
 			that.sendEvent(new OutputEvent(msg));
-		}).on("debuggerClientTimeout", (msg: string) => {
-			that.sendEvent(new OutputEvent(msg + "\n", "stderr"));
+		}).on('debuggerClientTimeout', (msg: string) => {
+			that.sendEvent(new OutputEvent(msg + '\n', 'stderr'));
 		});
 
 		if (args.stopOnEntry) {
 			this.sendResponse(response);
 
 			// we stop on the first line
-			this.sendEvent(new StoppedEvent("entry", MockDebugSession.THREAD_ID));
+			this.sendEvent(new StoppedEvent('entry', MockDebugSession.THREAD_ID));
 		}
 	}
 
 	// Executed after all breakpints have been set by VS Code
 	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneRequest, args:
 	DebugProtocol.ConfigurationDoneArguments): void {
-		var command = ["start"];
-		this.rubyProcess.Run(command.join(" ") + "\n");
+		var command = ['start'];
+		this.rubyProcess.Run(command.join(' ') + '\n');
 	}
 
 	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
@@ -120,8 +120,8 @@ class MockDebugSession extends DebugSession {
 
 			const bp = <DebugProtocol.Breakpoint> new Breakpoint(verified, this.convertDebuggerLineToClient(l));
 			bp.id = this._breakpointId++;
-			var command = ["break", "test.rb:"+bp.line];
-			this.rubyProcess.Run(command.join(" ") + "\n");
+			var command = ['break', 'test.rb:'+bp.line];
+			this.rubyProcess.Run(command.join(' ') + '\n');
 			breakpoints.push(bp);
 		}
 		this._breakPoints[path] = breakpoints;
@@ -135,17 +135,17 @@ class MockDebugSession extends DebugSession {
 
 	protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
 
-		this.rubyProcess.Enqueue("thread list\n").then((xml: XMLDocument) => {
-			if (xml.documentElement.nodeName !== "threads") {
+		this.rubyProcess.Enqueue('thread list\n').then((xml: XMLDocument) => {
+			if (xml.documentElement.nodeName !== 'threads') {
 				return;
 			}
 
 			var threads = new Array<Thread>();
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
 				var threadNode = xml.documentElement.childNodes.item(i);
-				var threadId = threadNode.attributes.getNamedItem("id");
+				var threadId = threadNode.attributes.getNamedItem('id');
 
-				threads.push(new Thread(+threadId.value, "thread_"+threadId.value));
+				threads.push(new Thread(+threadId.value, 'thread_'+threadId.value));
 			}
 			response.body = {
 				threads: threads
@@ -155,7 +155,7 @@ class MockDebugSession extends DebugSession {
 	}
 
 	// Called by VS Code after a StoppedEvent
-	/** StackTrace request; value of command field is "stackTrace".
+	/** StackTrace request; value of command field is 'stackTrace'.
 		The request returns a stacktrace from the current execution state.
 	*/
 	protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
@@ -166,7 +166,7 @@ class MockDebugSession extends DebugSession {
 
 		var that = this;
 
-		this.rubyProcess.Enqueue("where\n").then((xml: XMLDocument) => {
+		this.rubyProcess.Enqueue('where\n').then((xml: XMLDocument) => {
 			if (xml.documentElement.nodeName !== 'frames') {
 				return;
 			}
@@ -174,8 +174,8 @@ class MockDebugSession extends DebugSession {
 			const frames = new Array<StackFrame>();
 			for(let i= 0; i < xml.documentElement.childNodes.length && i < args.levels; i++) {
 				var frameNode = xml.documentElement.childNodes.item(i);
-				var file = frameNode.attributes.getNamedItem("file");
-				var line = frameNode.attributes.getNamedItem("line");
+				var file = frameNode.attributes.getNamedItem('file');
+				var line = frameNode.attributes.getNamedItem('line');
 				var bn = basename(file.value);
 
 				//TODO: acutally we should check the workspace
@@ -202,25 +202,25 @@ class MockDebugSession extends DebugSession {
 		});
 	}
 
-    /** Scopes request; value of command field is "scopes".
+    /** Scopes request; value of command field is 'scopes'.
 	   The request returns the variable scopes for a given stackframe ID.
 	*/
 	protected scopesRequest(response: DebugProtocol.ScopesResponse, args: DebugProtocol.ScopesArguments): void {
 
 		const frameReference = args.frameId;
 		const scopes = new Array<Scope>();
-		var frameCmd = ["frame", frameReference + 1, "\n"];
-		this.rubyProcess.Run(frameCmd.join(" "));
-		var variablesCmd = ["var", "local", "\n"];
-		this.rubyProcess.Enqueue(variablesCmd.join(" ")).then((xml: XMLDocument) => {
+		var frameCmd = ['frame', frameReference + 1, '\n'];
+		this.rubyProcess.Run(frameCmd.join(' '));
+		var variablesCmd = ['var', 'local', '\n'];
+		this.rubyProcess.Enqueue(variablesCmd.join(' ')).then((xml: XMLDocument) => {
 			let variables: IRubyEvaluationResult[] = [];
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
 				var varNode = xml.documentElement.childNodes.item(i);
-				var name = varNode.attributes.getNamedItem("name");
-				var value = varNode.attributes.getNamedItem("value");
-				var hasChildren = varNode.attributes.getNamedItem("hasChildren");
-				var objectId = varNode.attributes.getNamedItem("objectId");
-				var kind = varNode.attributes.getNamedItem("kind");
+				var name = varNode.attributes.getNamedItem('name');
+				var value = varNode.attributes.getNamedItem('value');
+				var hasChildren = varNode.attributes.getNamedItem('hasChildren');
+				var objectId = varNode.attributes.getNamedItem('objectId');
+				var kind = varNode.attributes.getNamedItem('kind');
 
 				variables.push({
 					Name: name.value,
@@ -232,7 +232,7 @@ class MockDebugSession extends DebugSession {
 			}
 
 			let localVar: IDebugVariable = { variables: variables };
-			scopes.push(new Scope("Local", this._variableHandles.create(localVar), false));
+			scopes.push(new Scope('Local', this._variableHandles.create(localVar), false));
 
 			response.body = {
 				scopes: scopes
@@ -241,50 +241,50 @@ class MockDebugSession extends DebugSession {
 		});
 	}
 
-	/** Variables request; value of command field is "variables".
+	/** Variables request; value of command field is 'variables'.
 		Retrieves all children for the given variable reference.
 	*/
 	protected variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments): void {
 		var varRef = this._variableHandles.get(args.variablesReference);
 
-        if (varRef.evaluateChildren !== true) {
-            let variables = [];
-            varRef.variables.forEach(variable=> {
-                let variablesReference = 0;
-                //If this value can be expanded, then create a vars ref for user to expand it
-                if (variable.IsExpandable) {
-                    const parentVariable: IDebugVariable = {
-                        variables: [variable],
-                        evaluateChildren: true
-                    };
-                    variablesReference = this._variableHandles.create(parentVariable);
-                }
+		if (varRef.evaluateChildren !== true) {
+			let variables = [];
+			varRef.variables.forEach(variable=> {
+			let variablesReference = 0;
+			//If this value can be expanded, then create a vars ref for user to expand it
+			if (variable.IsExpandable) {
+				const parentVariable: IDebugVariable = {
+					variables: [variable],
+					evaluateChildren: true
+				};
+				variablesReference = this._variableHandles.create(parentVariable);
+			}
 
-                variables.push({
-                    name: variable.Name,
-                    value: variable.Value,
-                    variablesReference: variablesReference
-                });
-            });
+			variables.push({
+				name: variable.Name,
+				value: variable.Value,
+				variablesReference: variablesReference
+			});
+		});
 
-            response.body = {
-                variables: variables
-            };
+		response.body = {
+			variables: variables
+		};
 
-            return this.sendResponse(response);
-        }
+		return this.sendResponse(response);
+	}
 
-		var varInstanceCmd = ["var", "instance", varRef.variables[0].Id];
-		this.rubyProcess.Enqueue(varInstanceCmd.join(" ").concat("\n")).then((xml: XMLDocument) => {
+		var varInstanceCmd = ['var', 'instance', varRef.variables[0].Id];
+		this.rubyProcess.Enqueue(varInstanceCmd.join(' ').concat('\n')).then((xml: XMLDocument) => {
 			let children = [];
 			let variables: IRubyEvaluationResult[] = [];
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
 				var varNode = xml.documentElement.childNodes.item(i);
-				var name = varNode.attributes.getNamedItem("name");
-				var value = varNode.attributes.getNamedItem("value");
-				var hasChildren = varNode.attributes.getNamedItem("hasChildren");
-				var objectId = varNode.attributes.getNamedItem("objectId");
-				var kind = varNode.attributes.getNamedItem("kind");
+				var name = varNode.attributes.getNamedItem('name');
+				var value = varNode.attributes.getNamedItem('value');
+				var hasChildren = varNode.attributes.getNamedItem('hasChildren');
+				var objectId = varNode.attributes.getNamedItem('objectId');
+				var kind = varNode.attributes.getNamedItem('kind');
 
 				variables.push({
 					Name: name.value,
@@ -324,27 +324,28 @@ class MockDebugSession extends DebugSession {
 	protected continueRequest(response: DebugProtocol.ContinueResponse, args: DebugProtocol.ContinueArguments): void {
 
 		this.sendResponse(response);
-		this.rubyProcess.Run("c\n");
+		this.rubyProcess.Run('c\n');
 	}
 
 	protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
 
 		this.sendResponse(response);
-		this.rubyProcess.Run("next\n");
+		this.rubyProcess.Run('next\n');
 	}
 
 	protected stepInRequest(response: DebugProtocol.StepInResponse): void {
-        this.sendResponse(response);
-        this.rubyProcess.Run("step\n");
-    }
-    protected stepOutRequest(response: DebugProtocol.StepInResponse): void {
-        this.sendResponse(response);
+		this.sendResponse(response);
+		this.rubyProcess.Run('step\n');
+	}
+
+	protected stepOutRequest(response: DebugProtocol.StepInResponse): void {
+		this.sendResponse(response);
 
 		//Not sure which command we should use, `finish` will execute all frames.
-        //this.debugSocketServer.write("\n");
-    }
+		//this.debugSocketServer.write('\n');
+	}
 
-	/** Evaluate request; value of command field is "evaluate".
+	/** Evaluate request; value of command field is 'evaluate'.
 		Evaluates the given expression in the context of the top most stack frame.
 		The expression has access to any variables and arguments that are in scope.
 	*/
@@ -357,9 +358,9 @@ class MockDebugSession extends DebugSession {
 	}
 
 	protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
-        this.rubyProcess.Run("quit\n");
-        this.sendResponse(response);
-    }
+		this.rubyProcess.Run('quit\n');
+		this.sendResponse(response);
+	}
 }
 
 DebugSession.run(MockDebugSession);
