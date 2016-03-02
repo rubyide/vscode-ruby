@@ -10,22 +10,30 @@ import * as childProcess from 'child_process';
 import {EventEmitter} from 'events';
 import {DOMParser} from 'xmldom';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable, ICommand} from './interface';
+import {SocketClientState} from './common';
 
 export class RubyProcess extends EventEmitter {
-	private debugSocketServer : net.Socket = null;
-
+	private debugSocketClient : net.Socket = null;
 	private buffer: string;
 	private parser: DOMParser;
 	private debugprocess: childProcess.ChildProcess;
-
 	private launchArgs: LaunchRequestArguments;
-
 	private pendingCommands: ICommand[];
+	private _state: SocketClientState;
+
+	get state(): SocketClientState {
+		return this.state;
+	}
+
+	set state(newState: SocketClientState) {
+		this._state = newState;
+	}
 
 	public constructor(args: LaunchRequestArguments) {
 		super();
 		this.launchArgs = args;
 		this.pendingCommands = [];
+		this.state = SocketClientState.ready;
 
 		var that = this;
 		var runtimeArgs = [];
@@ -40,7 +48,7 @@ export class RubyProcess extends EventEmitter {
 		});
 		this.debugprocess.stderr.on('data', (data: Buffer) => {
 			if (/^Fast Debugger/.test(data.toString())) {
-				that.debugSocketServer.connect(1234);
+				that.debugSocketClient.connect(1234);
 			}
 			that.emit('debuggerOutput', data)
 		});
@@ -54,18 +62,33 @@ export class RubyProcess extends EventEmitter {
 		this.buffer = '';
 		this.parser = new DOMParser();
 
-		this.debugSocketServer = new net.Socket( {
+		this.debugSocketClient = new net.Socket( {
 			type: 'tcp4'
 		});
-		this.debugSocketServer.on('connect', (buffer: Buffer) => {
+		this.debugSocketClient.on('connect', (buffer: Buffer) => {
+			that.state = SocketClientState.connected;
 			that.emit('debuggerConnect');
 		});
-		this.debugSocketServer.on('end', (ex) => {
-			var msg = 'Debugger client disconneced, ' + ex;
-			console.log(msg);
+		this.debugSocketClient.on('end', (ex) => {
+			// Emitted when the other end of the socket sends a FIN packet.
 		});
 
-		this.debugSocketServer.on('data', (buffer: Buffer) => {
+		this.debugSocketClient.on('close', d=> {
+			that.state = SocketClientState.closed;
+			that.emit('debuggerClientClose');
+		});
+
+		this.debugSocketClient.on('error', d=> {
+			var msg = 'Debugger client error, ' + d;
+			that.emit('debuggerClientError', msg);
+		});
+
+		this.debugSocketClient.on('timeout', d=> {
+			var msg = 'Debugger client timedout, ' + d;
+			that.emit('debuggerClientTimeout', msg);
+		});
+
+		this.debugSocketClient.on('data', (buffer: Buffer) => {
 			var chunk = buffer.toString();
 			var threadId: any;
  			var document: XMLDocument;
@@ -138,25 +161,10 @@ export class RubyProcess extends EventEmitter {
 				that.buffer = '';
 			}
 		});
-
-        this.debugSocketServer.on('close', d=> {
-			var msg = 'Debugger client closed, ' + d;
-			that.emit('debuggerClientClose');
-		});
-
-		this.debugSocketServer.on('error', d=> {
-			var msg = 'Debugger client error, ' + d;
-			that.emit('debuggerClientError', msg);
-		});
-
-		this.debugSocketServer.on('timeout', d=> {
-			var msg = 'Debugger client timedout, ' + d;
-			that.emit('debuggerClientTimeout', msg);
-		});
 	}
 
 	public Run(cmd: string): void {
-		this.debugSocketServer.write(cmd);
+		this.debugSocketClient.write(cmd);
 	}
 
 	public Enqueue(cmd: string): Promise<any> {
@@ -167,7 +175,7 @@ export class RubyProcess extends EventEmitter {
 				reject: reject
 			};
 			this.pendingCommands.push(newCommand);
-			this.debugSocketServer.write(newCommand.command);
+			this.debugSocketClient.write(newCommand.command);
 		});
 	}
 

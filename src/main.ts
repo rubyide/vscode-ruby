@@ -14,7 +14,7 @@ import {DOMParser} from 'xmldom';
 import {Terminal} from './terminal';
 import {RubyProcess} from './ruby';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
-
+import {SocketClientState} from './common';
 
 class MockDebugSession extends DebugSession {
 
@@ -64,10 +64,6 @@ class MockDebugSession extends DebugSession {
 			that.sendResponse(response);
 		}).on('exeutableOutput', (data: Buffer) => {
 			that.sendEvent(new OutputEvent(data.toString() + '', 'stdout'));
-		}).on('debuggerOutput', (data: Buffer) => {
-			that.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
-		}).on('debuggerProcessExit', () => {
-			that.sendEvent(new TerminatedEvent());
 		}).on('debuggerProcessError', (error: Error) => {
 			that.sendEvent(new OutputEvent(error.message, 'stderr'));
 		}).on('breakpointHit', (threadId: number) => {
@@ -80,9 +76,17 @@ class MockDebugSession extends DebugSession {
 			that.sendEvent(new TerminatedEvent());
 		}).on('debuggerClientError', (msg: string) => {
 			that.sendEvent(new OutputEvent(msg));
+			that.sendEvent(new TerminatedEvent());
 		}).on('debuggerClientTimeout', (msg: string) => {
 			that.sendEvent(new OutputEvent(msg + '\n', 'stderr'));
+			that.sendEvent(new TerminatedEvent());
 		});
+
+		if (args.showDebuggerOutput) {
+			this.rubyProcess.on('debuggerOutput', (data: Buffer) => {
+				that.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
+			});
+		}
 
 		if (args.stopOnEntry) {
 			this.sendResponse(response);
@@ -361,7 +365,9 @@ class MockDebugSession extends DebugSession {
 	}
 
 	protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
-		this.rubyProcess.Run('quit\n');
+		if (this.rubyProcess.state == SocketClientState.connected) {
+			this.rubyProcess.Run('quit\n');
+		}
 		this.sendResponse(response);
 	}
 }

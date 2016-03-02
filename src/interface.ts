@@ -6,6 +6,8 @@ export interface LaunchRequestArguments {
 	program: string;
 	/** Automatically stop target after launch. If not specified, target does not stop. */
 	stopOnEntry?: boolean;
+	/** Show debugger process output. If not specified, there will only be executable output */
+	showDebuggerOutput?: boolean;
 }
 
 export interface IRubyEvaluationResult {
