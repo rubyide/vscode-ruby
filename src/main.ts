@@ -109,6 +109,9 @@ class MockDebugSession extends DebugSession {
 
 		var breakpoints = new Array<Breakpoint>();
 
+		// First clear all breakpoints
+		this.rubyProcess.Run("del\n");
+
 		// verify breakpoint locations
 		for (var i = 0; i < clientLines.length; i++) {
 			var l = this.convertClientLineToDebugger(clientLines[i]);
