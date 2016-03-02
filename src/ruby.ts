@@ -22,7 +22,7 @@ export class RubyProcess extends EventEmitter {
 	private _state: SocketClientState;
 
 	get state(): SocketClientState {
-		return this.state;
+		return this._state;
 	}
 
 	set state(newState: SocketClientState) {
@@ -113,7 +113,26 @@ export class RubyProcess extends EventEmitter {
  				var exceptionMessage = document.documentElement.attributes.getNamedItem('message');
  				threadId = document.documentElement.attributes.getNamedItem('threadId');
 				that.emit('exception', +threadId.value, exceptionType.value + ': ' + exceptionMessage.value);
- 			}
+ 				return;
+			}
+
+			if(/^<breakpointAdded .*\/>$/.test(chunk)) {
+ 				let re = /<breakpointAdded\s+no="(\d+)"\s+location="(.*?)"\s*?\/>/g;
+				chunk.match(re).forEach(m => {
+					document = that.parser.parseFromString(m, 'application/xml');
+					that.FinishCmd(document);
+				});
+				return;
+			}
+
+			if(/^<breakpointDeleted .*\/>$/.test(chunk)) {
+				let re = /<breakpointDeleted\s+no="(\d+)"\s*\/>/g;
+				chunk.match(re).forEach(m => {
+					document = that.parser.parseFromString(m, 'application/xml');
+					that.FinishCmd(document);
+				});
+				return;
+			}
 
 			if (
 				(/^<frames>/.test(chunk) && !/<\/frames>$/.test(chunk)) ||
@@ -168,15 +187,17 @@ export class RubyProcess extends EventEmitter {
 	}
 
 	public Enqueue(cmd: string): Promise<any> {
-		return new Promise<any>((resolve, reject) => {
+		var that = this;
+		var pro =  new Promise<any>((resolve, reject) => {
 			var newCommand = {
 				command: cmd,
 				resolve: resolve,
 				reject: reject
 			};
-			this.pendingCommands.push(newCommand);
-			this.debugSocketClient.write(newCommand.command);
+			that.pendingCommands.push(newCommand);
+			that.debugSocketClient.write(newCommand.command);
 		});
+		return pro;
 	}
 
 	private FinishCmd(xml: XMLDocument): void {

@@ -16,7 +16,7 @@ import {RubyProcess} from './ruby';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
 import {SocketClientState} from './common';
 
-class MockDebugSession extends DebugSession {
+class RubyDebugSession extends DebugSession {
 
 	// we don't support multiple threads, so we can use a hardcoded ID for the default thread
 	private static THREAD_ID = 2;
@@ -92,7 +92,7 @@ class MockDebugSession extends DebugSession {
 			this.sendResponse(response);
 
 			// we stop on the first line
-			this.sendEvent(new StoppedEvent('entry', MockDebugSession.THREAD_ID));
+			this.sendEvent(new StoppedEvent('entry', RubyDebugSession.THREAD_ID));
 		}
 	}
 
@@ -105,39 +105,52 @@ class MockDebugSession extends DebugSession {
 
 	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
 
+		var that = this;
 		var path = args.source.path;
 		var clientLines = args.lines;
 
 		// read file contents into array for direct access
 		var lines = readFileSync(path).toString().split('\n');
 
-		var breakpoints = new Array<Breakpoint>();
+		var linesToAdd = args.breakpoints.map(b => b.line);
+		var registeredBks = this._breakPoints.get(path);
+		var linesToRemove: number[] = [];
+		var linesToUpdate: number[] = linesToAdd;
 
-		// First clear all breakpoints
-		this.rubyProcess.Run("del\n");
-
-		// verify breakpoint locations
-		for (var i = 0; i < clientLines.length; i++) {
-			var l = this.convertClientLineToDebugger(clientLines[i]);
-			var verified = false;
-
-			if (l < lines.length) {
-				verified = true;    // this breakpoint has been validated
-			}
-
-			const bp = <DebugProtocol.Breakpoint> new Breakpoint(verified, this.convertDebuggerLineToClient(l));
-			bp.id = this._breakpointId++;
-			var command = ['break', 'test.rb:'+bp.line];
-			this.rubyProcess.Run(command.join(' ') + '\n');
-			breakpoints.push(bp);
+		if (registeredBks) {
+			linesToRemove = registeredBks.map(b => b.line).filter(oldLine => linesToAdd.indexOf(oldLine) === -1);
+		    linesToUpdate = registeredBks.map(b => b.line).filter(oldLine => linesToAdd.indexOf(oldLine) >= 0);
 		}
-		this._breakPoints[path] = breakpoints;
 
-		// send back the actual breakpoint positions
-		response.body = {
-			breakpoints: breakpoints
-		};
-		this.sendResponse(response);
+		var linesToRemovePromise = linesToRemove.map(line => {
+			var bk = registeredBks.filter(b=> b.line === line)[0];
+			return that.rubyProcess.Enqueue('delete ' + bk.id + '\n');
+		});
+
+		Promise.all(linesToRemovePromise).then(() => {
+			var linesToUpdatePromise = linesToUpdate.map(line =>
+				that.rubyProcess.Enqueue('break ' + path + ":" + line + '\n')
+			);
+
+			var breakpoints = new Array<Breakpoint>();
+
+			Promise.all(linesToUpdatePromise).then((values) => {
+				values.map(xml => {
+ 					var no = (<XMLDocument>xml).documentElement.attributes.getNamedItem('no');
+					var location = (<XMLDocument>xml).documentElement.attributes.getNamedItem('location');
+					var bp = <DebugProtocol.Breakpoint> new Breakpoint(true, that.convertDebuggerLineToClient(+location.value.split(':')[1]));
+					bp.id = +no.value;
+					breakpoints.push(bp);
+				});
+
+				that._breakPoints.set(path, breakpoints);
+
+				response.body = {
+					breakpoints: breakpoints
+				};
+				that.sendResponse(response);
+			});
+		});
 	}
 
 	protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
@@ -200,6 +213,11 @@ class MockDebugSession extends DebugSession {
 					this.convertDebuggerLineToClient(+line.value),
 					0
 			    ));
+			}
+
+			if (frames.length == 0) {
+				that.sendEvent(new TerminatedEvent());
+				return;
 			}
 
 			response.body = {
@@ -349,7 +367,7 @@ class MockDebugSession extends DebugSession {
 		this.sendResponse(response);
 
 		//Not sure which command we should use, `finish` will execute all frames.
-		//this.debugSocketServer.write('\n');
+		this.rubyProcess.Run('finish\n');
 	}
 
 	/** Evaluate request; value of command field is 'evaluate'.
@@ -365,11 +383,11 @@ class MockDebugSession extends DebugSession {
 	}
 
 	protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
-		if (this.rubyProcess.state == SocketClientState.connected) {
+		if (this.rubyProcess.state !== SocketClientState.closed) {
 			this.rubyProcess.Run('quit\n');
 		}
 		this.sendResponse(response);
 	}
 }
 
-DebugSession.run(MockDebugSession);
+DebugSession.run(RubyDebugSession);
