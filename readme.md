@@ -1,5 +1,7 @@
 # Ruby Language and Debugging Support for Visual Studio Code
 
+[![Join the chat at https://gitter.im/rebornix/vscode-ruby](https://badges.gitter.im/rebornix/vscode-ruby.svg)](https://gitter.im/rebornix/vscode-ruby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This extension provides rich Ruby language and debugging support for Visual Studio Code.
 It's still in progress ( [GitHub](https://github.com/rebornix/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0.
 
