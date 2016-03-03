@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -60,6 +60,14 @@
 								"type": "boolean",
 								"description": "Automatically stop after launch.",
 								"default": true
+							},
+							"runtimeArgs": {
+								"type": "array",
+								"description": "Optional arguments passed to the runtime executable.",
+								"items": {
+								"type": "string"
+								},
+								"default": []
 							}
 						}
 					}
@@ -70,8 +78,7 @@
 						"name": "Ruby Debugger",
 						"type": "Ruby",
 						"request": "launch",
-						"program": "main.rb",
-						"stopOnEntry": true
+						"program": "main.rb"
 					}
 				]
 			}

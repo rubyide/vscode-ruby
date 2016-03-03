@@ -39,26 +39,35 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
 ## Features
 
 - Ruby scripts debugging
-  * Line breakpoints
+  * Line breakpoints (add, delete, disable, enable)
   * Step over, step in, step out, continue
   * Multiple, parallel threads
   * Call stack
   * Scope variables
+  * Debug console
+  * Watch window
+  * Variables evaluate/inspect
 
 ## TODO
 - Ruby scripts debugging
   * Conditional breakpoints
   * Break on entry
   * Breaking on uncaught exceptions and errors
-  * Debug console
-  * Watch window
-  * Variables evaluate/inspect
   * Attach requests
+- Ruby remote debug
+- Unit/Integration tests debugging
+  * RSpec
+  * Cucumber
+  * Shoulda
+  * Test::Unit
+- Rack
+- Rails
+- Rake
+- Gem
+- IRB console
 - IntelliSense and autocomplete
 - Linting
-- Unit/Integration tests debugging
-- Rails support
-- Remote hosting debug
+
 
 ## License
 
