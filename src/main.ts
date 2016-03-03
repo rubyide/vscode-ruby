@@ -198,11 +198,6 @@ class RubyDebugSession extends DebugSession {
 				var line = frameNode.attributes.getNamedItem('line');
 				var bn = basename(file.value);
 
-				//TODO: acutally we should check the workspace
-				if (bn === 'ruby-debug-ide.rb' || bn === 'rdebug-ide') {
-					break;
-				}
-
 				var sourcesInFile = readFileSync(file.value).toString().split('\n');
 				var code = sourcesInFile[this.convertDebuggerLineToClient(+line.value)-1].trim();
 				frames.push(new StackFrame(

@@ -8,6 +8,8 @@ export interface LaunchRequestArguments {
 	stopOnEntry?: boolean;
 	/** Show debugger process output. If not specified, there will only be executable output */
 	showDebuggerOutput?: boolean;
+	/** Optional arguments passed to the runtime executable. */
+	runtimeArgs?: string[];
 }
 
 export interface IRubyEvaluationResult {

@@ -36,12 +36,12 @@ export class RubyProcess extends EventEmitter {
 		this.state = SocketClientState.ready;
 
 		var that = this;
-		var runtimeArgs = [];
+		var runtimeArgs = ['--evaluation-timeout', '10'];
 		var runtimeExecutable = 'rdebug-ide';
 		var programArgs = [];
 		var processCwd = dirname(this.launchArgs.program);
 
-		this.debugprocess = childProcess.spawn(runtimeExecutable, [args.program, '-xd'], {cwd: processCwd});
+		this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, '-xd'], {cwd: processCwd});
 		// redirect output to debug console
 		this.debugprocess.stdout.on('data', (data: Buffer) => {
 			that.emit('exeutableOutput', data);
