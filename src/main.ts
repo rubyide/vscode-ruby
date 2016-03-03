@@ -375,11 +375,13 @@ class RubyDebugSession extends DebugSession {
 		The expression has access to any variables and arguments that are in scope.
 	*/
 	protected evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): void {
-		response.body = {
-			result: `evaluate(${args.expression})`,
-			variablesReference: 0
-		};
-		this.sendResponse(response);
+		this.rubyProcess.Enqueue("eval " + args.expression + "\n").then((value: any) => {
+			response.body = {
+				result: value,
+				variablesReference: 0
+			};
+			this.sendResponse(response);
+		});
 	}
 
 	protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {

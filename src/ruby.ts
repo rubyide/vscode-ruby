@@ -134,6 +134,16 @@ export class RubyProcess extends EventEmitter {
 				return;
 			}
 
+			if(/^<eval .*?\/>$/.test(chunk)) {
+				var re = /^<eval\s+expression="(.*)"\s+value="(.*)"\s*\/>/;
+				var match = re.exec(chunk);
+
+				if (match) {
+					that.FinishCmd(match[2]);
+				}
+				return;
+			}
+
 			if (
 				(/^<frames>/.test(chunk) && !/<\/frames>$/.test(chunk)) ||
 				(/^<frame .*?\/>$/.test(chunk) && this.buffer !== '') ||
@@ -200,9 +210,9 @@ export class RubyProcess extends EventEmitter {
 		return pro;
 	}
 
-	private FinishCmd(xml: XMLDocument): void {
+	private FinishCmd(result: any): void {
 		if (this.pendingCommands.length > 0) {
-			this.pendingCommands[0].resolve(xml);
+			this.pendingCommands[0].resolve(result);
 			this.pendingCommands.shift();
 		}
 	}
