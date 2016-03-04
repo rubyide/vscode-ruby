@@ -37,7 +37,19 @@ export class RubyProcess extends EventEmitter {
 
 		var that = this;
 		var runtimeArgs = ['--evaluation-timeout', '10'];
-		var runtimeExecutable = 'rdebug-ide';
+		var runtimeExecutable: string;
+
+		if (process.platform === 'win32') {
+			runtimeExecutable = 'rdebug-ide.bat';
+		}
+		else if (process.platform === 'darwin') {
+			runtimeExecutable = 'rdebug-ide';
+		}
+		else {
+			// platform: linux
+			runtimeExecutable = 'rdebug-ide';
+		}
+
 		var programArgs = [];
 		var processCwd = dirname(this.launchArgs.program);
 
