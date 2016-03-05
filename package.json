@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -29,12 +29,14 @@
 		"xmldom": "^0.1.19"
 	},
 	"devDependencies": {
-		"typescript": "^1.6.2"
+		"typescript": "^1.6.2",
+		"mocha": "^2.4.5"
 	},
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./src",
 		"compile": "tsc -p ./src",
-		"watch": "tsc -w -p ./src"
+		"watch": "tsc -w -p ./src",
+		"test": "node ./node_modules/mocha/bin/mocha -u tdd ./out/tests/"
 	},
 	"contributes": {
 		"debuggers": [

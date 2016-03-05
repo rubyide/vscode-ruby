@@ -77,12 +77,12 @@ export class RubyProcess extends EventEmitter {
 		this.debugSocketClient = new net.Socket( {
 			type: 'tcp4'
 		});
+
 		this.debugSocketClient.on('connect', (buffer: Buffer) => {
 			that.state = SocketClientState.connected;
 			that.emit('debuggerConnect');
 		});
 		this.debugSocketClient.on('end', (ex) => {
-			// Emitted when the other end of the socket sends a FIN packet.
 		});
 
 		this.debugSocketClient.on('close', d=> {

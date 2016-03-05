@@ -60,6 +60,7 @@ class RubyDebugSession extends DebugSession {
 		this.rubyProcess = new RubyProcess(args);
 
 		this.rubyProcess.on('debuggerConnect', () => {
+			// request breakpoints from VS Code
 			that.sendEvent(new InitializedEvent());
 			that.sendResponse(response);
 		}).on('exeutableOutput', (data: Buffer) => {
@@ -88,6 +89,8 @@ class RubyDebugSession extends DebugSession {
 			});
 		}
 
+		//this.sendResponse(response);
+
 		if (args.stopOnEntry) {
 			this.sendResponse(response);
 
@@ -97,10 +100,11 @@ class RubyDebugSession extends DebugSession {
 	}
 
 	// Executed after all breakpints have been set by VS Code
-	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneRequest, args:
+	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args:
 	DebugProtocol.ConfigurationDoneArguments): void {
 		var command = ['start'];
 		this.rubyProcess.Run(command.join(' ') + '\n');
+		this.sendResponse(response);
 	}
 
 	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
@@ -179,11 +183,6 @@ class RubyDebugSession extends DebugSession {
 		The request returns a stacktrace from the current execution state.
 	*/
 	protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
-
-		if (!args.levels) {
-			args.levels = 0;
-		}
-
 		var that = this;
 
 		this.rubyProcess.Enqueue('where\n').then((xml: XMLDocument) => {
@@ -192,7 +191,12 @@ class RubyDebugSession extends DebugSession {
 			}
 
 			const frames = new Array<StackFrame>();
-			for(let i= 0; i < xml.documentElement.childNodes.length && i < args.levels; i++) {
+
+			if (!args.levels || args.levels === 0) {
+				args.levels = xml.documentElement.childNodes.length;
+			}
+
+ 			for(let i= 0; i < xml.documentElement.childNodes.length && i < args.levels; i++) {
 				var frameNode = xml.documentElement.childNodes.item(i);
 				var file = frameNode.attributes.getNamedItem('file');
 				var line = frameNode.attributes.getNamedItem('line');
@@ -209,11 +213,12 @@ class RubyDebugSession extends DebugSession {
 					0
 			    ));
 			}
-
+			/*
 			if (frames.length == 0) {
 				that.sendEvent(new TerminatedEvent());
 				return;
 			}
+			*/
 
 			response.body = {
 				stackFrames: frames
