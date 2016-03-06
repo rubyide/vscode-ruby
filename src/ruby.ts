@@ -93,7 +93,7 @@ export class RubyProcess extends EventEmitter {
 			this.emit('debuggerProcessExit');
 		});
 		this.debugprocess.on('error', (error: Error) => {
-			this.emit('terminalError', "Process failed: "+ error.message);
+			this.emit('terminalError', "Process failed: " + error.message);
 		});
 
 		this.buffer = '';
@@ -149,7 +149,7 @@ export class RubyProcess extends EventEmitter {
 					this.domErrors[0].error.includes('attribute space is required') ||
 					this.domErrors[0].error.includes("elements closed character '/' and '>' must be connected")
 					))
-					this.emit('debuggerOutput','Debugger failed to parse: '+ this.domErrors[0].error + "\nFor: "+this.buffer.slice(0,20));
+					this.emit('debuggerOutput','Debugger failed to parse: ' + this.domErrors[0].error + "\nFor: " + this.buffer.slice(0,20));
 				if ( this.buffer.includes('<eval ') &&
 					(this.domErrors[0].error.includes('attribute space is required') ||
 					this.domErrors[0].error.includes("elements closed character '/' and '>' must be connected"))){
@@ -161,7 +161,7 @@ export class RubyProcess extends EventEmitter {
 					if ( start < 0 ) return; //not the right structure
 					start += 8;
 					let inner = this.buffer.slice(start,end).replace(/\"/g,'&quot;');
-					this.buffer = this.buffer.slice(0,start)+inner+this.buffer.slice(end);
+					this.buffer = this.buffer.slice(0,start) + inner + this.buffer.slice(end);
 					this.domErrors = [];
 					document = this.parser.parseFromString(this.buffer,'application/xml');
 				} else return; //one of the xml elements is incomplete

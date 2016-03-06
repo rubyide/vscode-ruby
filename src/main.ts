@@ -71,7 +71,7 @@ class RubyDebugSession extends DebugSession {
 		}).on('executableStdErr', (error: Buffer) => {
 			this.sendEvent(new OutputEvent(error.toString(), 'stderr'));
 		}).on('nonTerminalError', (error: string) => {
-			this.sendEvent(new OutputEvent("Debugger error: "+error+ '\n', 'stderr'));
+			this.sendEvent(new OutputEvent("Debugger error: " + error + '\n', 'stderr'));
 		}).on('breakpoint', result => {
 			this.sendEvent(new StoppedEvent('breakpoint', result.threadId));
 		}).on('suspended', result => {
@@ -81,10 +81,10 @@ class RubyDebugSession extends DebugSession {
 				this.sendEvent(new StoppedEvent('step', result.threadId));
 			this._firstSuspendReceived = true;
 		}).on('exception', result => {
-			this.sendEvent(new OutputEvent("\nException raised: ["+result.type+"]: "+result.message+"\n",'stderr'));
-			this.sendEvent(new StoppedEvent('exception', result.threadId, result.type+": "+result.message));
+			this.sendEvent(new OutputEvent("\nException raised: [" + result.type + "]: " + result.message + "\n",'stderr'));
+			this.sendEvent(new StoppedEvent('exception', result.threadId, result.type + ": " + result.message));
 		}).on('terminalError', (error: string) => {
-			this.sendEvent(new OutputEvent("Debugger terminal error: "+ error))
+			this.sendEvent(new OutputEvent("Debugger terminal error: " + error))
 			this.sendEvent(new TerminatedEvent());
 		});
 
@@ -129,9 +129,9 @@ class RubyDebugSession extends DebugSession {
 			Promise.all(deletePromises).then(() => this._breakPoints.delete(path));
 		}
 		var breakpointAddPromises = args.breakpoints.map(b=>{
-			//let conditionString =  b.condition ? ' if '+b.condition : '';
-			//return this.rubyProcess.Enqueue('break '+ path+':'+b.line+conditionString);
-			return this.rubyProcess.Enqueue('break '+ path+':'+b.line);
+			//let conditionString =  b.condition ? ' if ' + b.condition : '';
+			//return this.rubyProcess.Enqueue('break ' + path + ':' + b.line + conditionString);
+			return this.rubyProcess.Enqueue('break ' + path + ':' + b.line);
 		});
 		Promise.all(breakpointAddPromises).then( values => {
 			let breakpoints = values.map(attributes => {
@@ -199,15 +199,15 @@ class RubyDebugSession extends DebugSession {
 	protected switchFrame(frameId) {
 		if (frameId === this._frameId) return;
 		this._frameId = frameId;
-		this.rubyProcess.Run('frame '+frameId)
+		this.rubyProcess.Run('frame ' + frameId)
 	}
 
 	protected varyVariable(variable){
 		if (variable.type === 'String') {
 			variable.hasChildren = false;
-			variable.value = "'"+variable.value.replace(/'/g,"\\'")+"'";
+			variable.value = "'" + variable.value.replace(/'/g,"\\'") + "'";
 		}
-		else if ( variable.value && variable.value.startsWith('#<'+variable.type)){
+		else if ( variable.value && variable.value.startsWith('#<' + variable.type)){
 			variable.value = variable.type;
 		}
 		return variable;
@@ -249,7 +249,7 @@ class RubyDebugSession extends DebugSession {
 		var varRef = this._variableHandles.get(args.variablesReference);
 		let varPromise;
 		if ( varRef.objectId ){
-			varPromise = this.rubyProcess.Enqueue('var i '+varRef.objectId).then(results => this.createVariableReference(results));
+			varPromise = this.rubyProcess.Enqueue('var i ' + varRef.objectId).then(results => this.createVariableReference(results));
 		}
 		else varPromise = Promise.resolve(varRef.variables);
 
