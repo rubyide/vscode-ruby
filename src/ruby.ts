@@ -52,7 +52,16 @@ export class RubyProcess extends EventEmitter {
 		this.state = SocketClientState.ready;
 
 		var runtimeArgs = ['--evaluation-timeout', '10'];
-		var runtimeExecutable = 'rdebug-ide';
+		var runtimeExecutable: string;
+
+		if (process.platform === 'win32') {
+			runtimeExecutable = 'rdebug-ide.bat';
+		}
+		else {
+			// platform: linux
+			runtimeExecutable = 'rdebug-ide';
+		}
+
 		var processCwd = dirname(this.launchArgs.program);
 		//xd only if showDebuggerOutput is set - it is also a runtime arg, not a program arg
 		if (args.showDebuggerOutput){

@@ -16,18 +16,14 @@ import {RubyProcess} from './ruby';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
 import {SocketClientState} from './common';
 
-
-
-
-
-
 class RubyDebugSession extends DebugSession {
 
-	private _activeFileData = new Map<string, string[]>();
 	private _breakpointId = 1000;
 	private _threadId = 2;
 	private _frameId = 0;
 	private _hasStopped = false;
+
+	private _activeFileData = new Map<string, string[]>();
 	// maps from sourceFile to array of Breakpoints
 	private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
 
