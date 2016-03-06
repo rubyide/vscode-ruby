@@ -76,7 +76,7 @@ export class RubyProcess extends EventEmitter {
 
 		// redirect output to debug console
 		this.debugprocess.stdout.on('data', (data: Buffer) => {
-			this.emit('exeutableOutput', data);
+			this.emit('executableOutput', data);
 		});
 		this.debugprocess.stderr.on('data', (data: Buffer) => {
 			if (/^Fast Debugger/.test(data.toString())) {
@@ -109,12 +109,11 @@ export class RubyProcess extends EventEmitter {
 			this.state = SocketClientState.connected;
 			//first thing we have to send is the start - if stopOnEntry is
 			//selected, rdebug-ide stops on the first executable line
-			this.Run('start');
-			this.emit('debuggerConnect');
 			this.pendingCommands.forEach( cmd => {
 				this.pendingResponses.push(cmd);
 				this.debugSocketClient.write(cmd.command + '\n');
 			});
+			this.emit('debuggerConnect');
 			this.pendingCommands = [];
 		});
 		this.debugSocketClient.on('end', (ex) => {

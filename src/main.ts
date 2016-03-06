@@ -63,11 +63,11 @@ class RubyDebugSession extends DebugSession {
 		this.rubyProcess = new RubyProcess(args);
 
 		this.rubyProcess.on('debuggerConnect', () => {
-			this.sendEvent(new InitializedEvent());
 			this.sendResponse(response);
+			this.sendEvent(new InitializedEvent());
 		}).on('debuggerComplete', () => {
 			this.sendEvent(new TerminatedEvent());
-		}).on('exeutableOutput', (data: Buffer) => {
+		}).on('executableOutput', (data: Buffer) => {
 			this.sendEvent(new OutputEvent(data.toString(), 'stdout'));
 		}).on('executableStdErr', (error: Buffer) => {
 			this.sendEvent(new OutputEvent(error.toString(), 'stderr'));
@@ -82,7 +82,8 @@ class RubyDebugSession extends DebugSession {
 				this.sendEvent(new StoppedEvent('step', result.threadId));
 			this._hasStopped = true;
 		}).on('exception', result => {
-			this.sendEvent(new StoppedEvent('exception', result.threadId, result.messsage));
+			this.sendEvent(new OutputEvent("\nException raised: ["+result.type+"]: "+result.message+"\n",'stderr'));
+			this.sendEvent(new StoppedEvent('exception', result.threadId, result.type+": "+result.message));
 		}).on('terminalError', (error: string) => {
 			this.sendEvent(new OutputEvent("Debugger terminal error: "+ error))
 			this.sendEvent(new TerminatedEvent());
@@ -98,8 +99,24 @@ class RubyDebugSession extends DebugSession {
 	// Executed after all breakpints have been set by VS Code
 	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneRequest, args:
 	DebugProtocol.ConfigurationDoneArguments): void {
+		this.rubyProcess.Run('start');
 	}
+	protected setExceptionBreakPointsRequest(response: DebugProtocol.SetExceptionBreakpointsResponse, args: DebugProtocol.SetExceptionBreakpointsArguments): void {
+		if (args.filters.indexOf('all') >=0){
+			//Exception is the root of all (Ruby) exceptions - this is the best we can do
+			//If someone makes their own exception class and doesn't inherit from
+			//Exception, then they really didn't expect things to work properly
+			//anyway.
 
+			//We don't do anything with the return from this, but we
+			//have to add an expectation for the output.
+			this.rubyProcess.Enqueue('catch Exception').then(()=>1);
+		}
+		else {
+			this.rubyProcess.Run('catch off');
+		}
+		this.sendResponse(response);
+	}
 	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
 		var path = args.source.path;
 
