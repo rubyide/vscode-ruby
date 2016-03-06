@@ -102,7 +102,7 @@ class RubyDebugSession extends DebugSession {
 	// Executed after all breakpints have been set by VS Code
 	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args:
 	DebugProtocol.ConfigurationDoneArguments): void {
-		var command = ['start'];
+		let command = ['start'];
 		this.rubyProcess.Run(command.join(' ') + '\n');
 		this.sendResponse(response);
 	}
@@ -127,22 +127,22 @@ class RubyDebugSession extends DebugSession {
 		}
 
 		var linesToRemovePromise = linesToRemove.map(line => {
-			var bk = registeredBks.filter(b=> b.line === line)[0];
+			let bk = registeredBks.filter(b=> b.line === line)[0];
 			return that.rubyProcess.Enqueue('delete ' + bk.id + '\n');
 		});
 
 		Promise.all(linesToRemovePromise).then(() => {
-			var linesToUpdatePromise = linesToUpdate.map(line =>
+			let linesToUpdatePromise = linesToUpdate.map(line =>
 				that.rubyProcess.Enqueue('break ' + path + ":" + line + '\n')
 			);
 
-			var breakpoints = new Array<Breakpoint>();
+			let breakpoints = new Array<Breakpoint>();
 
 			Promise.all(linesToUpdatePromise).then((values) => {
 				values.map(xml => {
- 					var no = (<XMLDocument>xml).documentElement.attributes.getNamedItem('no');
-					var location = (<XMLDocument>xml).documentElement.attributes.getNamedItem('location');
-					var bp = <DebugProtocol.Breakpoint> new Breakpoint(true, that.convertDebuggerLineToClient(+location.value.split(':')[1]));
+ 					let no = (<XMLDocument>xml).documentElement.attributes.getNamedItem('no');
+					let location = (<XMLDocument>xml).documentElement.attributes.getNamedItem('location');
+					let bp = <DebugProtocol.Breakpoint> new Breakpoint(true, that.convertDebuggerLineToClient(+location.value.split(':')[1]));
 					bp.id = +no.value;
 					breakpoints.push(bp);
 				});
@@ -164,10 +164,10 @@ class RubyDebugSession extends DebugSession {
 				return;
 			}
 
-			var threads = new Array<Thread>();
+			let threads = new Array<Thread>();
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
-				var threadNode = xml.documentElement.childNodes.item(i);
-				var threadId = threadNode.attributes.getNamedItem('id');
+				let threadNode = xml.documentElement.childNodes.item(i);
+				let threadId = threadNode.attributes.getNamedItem('id');
 
 				threads.push(new Thread(+threadId.value, 'thread_'+threadId.value));
 			}
@@ -197,13 +197,13 @@ class RubyDebugSession extends DebugSession {
 			}
 
  			for(let i= 0; i < xml.documentElement.childNodes.length && i < args.levels; i++) {
-				var frameNode = xml.documentElement.childNodes.item(i);
-				var file = frameNode.attributes.getNamedItem('file');
-				var line = frameNode.attributes.getNamedItem('line');
-				var bn = basename(file.value);
+				let frameNode = xml.documentElement.childNodes.item(i);
+				let file = frameNode.attributes.getNamedItem('file');
+				let line = frameNode.attributes.getNamedItem('line');
+				let bn = basename(file.value);
 
-				var sourcesInFile = readFileSync(file.value).toString().split('\n');
-				var code = sourcesInFile[this.convertDebuggerLineToClient(+line.value)-1].trim();
+				let sourcesInFile = readFileSync(file.value).toString().split('\n');
+				let code = sourcesInFile[this.convertDebuggerLineToClient(+line.value)-1].trim();
 				frames.push(new StackFrame(
 					i,
 					`${code}`,
@@ -240,12 +240,12 @@ class RubyDebugSession extends DebugSession {
 		this.rubyProcess.Enqueue(variablesCmd.join(' ')).then((xml: XMLDocument) => {
 			let variables: IRubyEvaluationResult[] = [];
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
-				var varNode = xml.documentElement.childNodes.item(i);
-				var name = varNode.attributes.getNamedItem('name');
-				var value = varNode.attributes.getNamedItem('value');
-				var hasChildren = varNode.attributes.getNamedItem('hasChildren');
-				var objectId = varNode.attributes.getNamedItem('objectId');
-				var kind = varNode.attributes.getNamedItem('kind');
+				let varNode = xml.documentElement.childNodes.item(i);
+				let name = varNode.attributes.getNamedItem('name');
+				let value = varNode.attributes.getNamedItem('value');
+				let hasChildren = varNode.attributes.getNamedItem('hasChildren');
+				let objectId = varNode.attributes.getNamedItem('objectId');
+				let kind = varNode.attributes.getNamedItem('kind');
 
 				variables.push({
 					Name: name.value,
@@ -275,41 +275,41 @@ class RubyDebugSession extends DebugSession {
 		if (varRef.evaluateChildren !== true) {
 			let variables = [];
 			varRef.variables.forEach(variable=> {
-			let variablesReference = 0;
-			//If this value can be expanded, then create a vars ref for user to expand it
-			if (variable.IsExpandable) {
-				const parentVariable: IDebugVariable = {
-					variables: [variable],
-					evaluateChildren: true
-				};
-				variablesReference = this._variableHandles.create(parentVariable);
-			}
+				let variablesReference = 0;
+				//If this value can be expanded, then create a vars ref for user to expand it
+				if (variable.IsExpandable) {
+					const parentVariable: IDebugVariable = {
+						variables: [variable],
+						evaluateChildren: true
+					};
+					variablesReference = this._variableHandles.create(parentVariable);
+				}
 
-			variables.push({
-				name: variable.Name,
-				value: variable.Value,
-				variablesReference: variablesReference
+				variables.push({
+					name: variable.Name,
+					value: variable.Value,
+					variablesReference: variablesReference
+				});
 			});
-		});
 
-		response.body = {
-			variables: variables
-		};
+			response.body = {
+				variables: variables
+			};
 
-		return this.sendResponse(response);
-	}
+			return this.sendResponse(response);
+		}
 
 		var varInstanceCmd = ['var', 'instance', varRef.variables[0].Id];
 		this.rubyProcess.Enqueue(varInstanceCmd.join(' ').concat('\n')).then((xml: XMLDocument) => {
 			let children = [];
 			let variables: IRubyEvaluationResult[] = [];
 			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
-				var varNode = xml.documentElement.childNodes.item(i);
-				var name = varNode.attributes.getNamedItem('name');
-				var value = varNode.attributes.getNamedItem('value');
-				var hasChildren = varNode.attributes.getNamedItem('hasChildren');
-				var objectId = varNode.attributes.getNamedItem('objectId');
-				var kind = varNode.attributes.getNamedItem('kind');
+				let varNode = xml.documentElement.childNodes.item(i);
+				let name = varNode.attributes.getNamedItem('name');
+				let value = varNode.attributes.getNamedItem('value');
+				let hasChildren = varNode.attributes.getNamedItem('hasChildren');
+				let objectId = varNode.attributes.getNamedItem('objectId');
+				let kind = varNode.attributes.getNamedItem('kind');
 
 				variables.push({
 					Name: name.value,

@@ -91,19 +91,19 @@ export class RubyProcess extends EventEmitter {
 		});
 
 		this.debugSocketClient.on('error', d=> {
-			var msg = 'Debugger client error, ' + d;
+			let msg = 'Debugger client error, ' + d;
 			that.emit('debuggerClientError', msg);
 		});
 
 		this.debugSocketClient.on('timeout', d=> {
-			var msg = 'Debugger client timedout, ' + d;
+			let msg = 'Debugger client timedout, ' + d;
 			that.emit('debuggerClientTimeout', msg);
 		});
 
 		this.debugSocketClient.on('data', (buffer: Buffer) => {
-			var chunk = buffer.toString();
-			var threadId: any;
- 			var document: XMLDocument;
+			let chunk = buffer.toString();
+			let threadId: any;
+ 			let document: XMLDocument;
 
 			if (/^<breakpoint .*?\/>$/.test(chunk)) {
 				document = that.parser.parseFromString(chunk, 'application/xml');
@@ -121,8 +121,8 @@ export class RubyProcess extends EventEmitter {
 
 			if(/^<exception .*?\/>$/.test(chunk)) {
  				document = that.parser.parseFromString(chunk, 'application/xml');
- 				var exceptionType = document.documentElement.attributes.getNamedItem('type');
- 				var exceptionMessage = document.documentElement.attributes.getNamedItem('message');
+ 				let exceptionType = document.documentElement.attributes.getNamedItem('type');
+ 				let exceptionMessage = document.documentElement.attributes.getNamedItem('message');
  				threadId = document.documentElement.attributes.getNamedItem('threadId');
 				that.emit('exception', +threadId.value, exceptionType.value + ': ' + exceptionMessage.value);
  				return;
@@ -147,8 +147,8 @@ export class RubyProcess extends EventEmitter {
 			}
 
 			if(/^<eval .*?\/>$/.test(chunk)) {
-				var re = /^<eval\s+expression="(.*)"\s+value="(.*)"\s*\/>/;
-				var match = re.exec(chunk);
+				let re = /^<eval\s+expression="(.*)"\s+value="(.*)"\s*\/>/;
+				let match = re.exec(chunk);
 
 				if (match) {
 					that.FinishCmd(match[2]);
@@ -210,8 +210,8 @@ export class RubyProcess extends EventEmitter {
 
 	public Enqueue(cmd: string): Promise<any> {
 		var that = this;
-		var pro =  new Promise<any>((resolve, reject) => {
-			var newCommand = {
+		var pro = new Promise<any>((resolve, reject) => {
+			let newCommand = {
 				command: cmd,
 				resolve: resolve,
 				reject: reject
