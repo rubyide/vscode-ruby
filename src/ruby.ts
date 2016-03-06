@@ -63,7 +63,7 @@ export class RubyProcess extends EventEmitter {
 		}
 
 		var processCwd = dirname(this.launchArgs.program);
-		//xd only if showDebuggerOutput is set - it is also a runtime arg, not a program arg
+		// `-x` only if showDebuggerOutput is set - it is also a runtime (debugger) arg, not a program arg (ie, it can't go after the filename that we're debugging)
 		if (args.showDebuggerOutput){
 			runtimeArgs.push('-x');
 		}

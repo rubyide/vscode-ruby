@@ -21,8 +21,7 @@ class RubyDebugSession extends DebugSession {
 	private _breakpointId = 1000;
 	private _threadId = 2;
 	private _frameId = 0;
-	private _hasStopped = false;
-
+	private _firstSuspendReceived = false;
 	private _activeFileData = new Map<string, string[]>();
 	// maps from sourceFile to array of Breakpoints
 	private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
@@ -76,11 +75,11 @@ class RubyDebugSession extends DebugSession {
 		}).on('breakpoint', result => {
 			this.sendEvent(new StoppedEvent('breakpoint', result.threadId));
 		}).on('suspended', result => {
-			if ( args.stopOnEntry && !this._hasStopped )
+			if ( args.stopOnEntry && !this._firstSuspendReceived )
 				this.sendEvent(new StoppedEvent('entry', result.threadId));
 			else
 				this.sendEvent(new StoppedEvent('step', result.threadId));
-			this._hasStopped = true;
+			this._firstSuspendReceived = true;
 		}).on('exception', result => {
 			this.sendEvent(new OutputEvent("\nException raised: ["+result.type+"]: "+result.message+"\n",'stderr'));
 			this.sendEvent(new StoppedEvent('exception', result.threadId, result.type+": "+result.message));
@@ -97,9 +96,10 @@ class RubyDebugSession extends DebugSession {
 	}
 
 	// Executed after all breakpints have been set by VS Code
-	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneRequest, args:
+	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args:
 	DebugProtocol.ConfigurationDoneArguments): void {
 		this.rubyProcess.Run('start');
+		this.sendResponse(response);
 	}
 	protected setExceptionBreakPointsRequest(response: DebugProtocol.SetExceptionBreakpointsResponse, args: DebugProtocol.SetExceptionBreakpointsArguments): void {
 		if (args.filters.indexOf('all') >=0){
@@ -122,14 +122,18 @@ class RubyDebugSession extends DebugSession {
 
 		//to ensure that breakpoints with altered conditions are set, it is
 		//best to remove all and add them back.
+		//In preperation for when they're working.
 		if (this._breakPoints.get(path)) {
-			this.rubyProcess.Run('delete');
+			let deletePromises = this._breakPoints.get(path).map(bp => this.rubyProcess.Enqueue('delete ' + bp.id));
+			//this will return before the adding (if any) completes
+			Promise.all(deletePromises).then(() => this._breakPoints.delete(path));
 		}
-		var linesToUpdatePromise = args.breakpoints.map(b=>{
-			let conditionString =  b.condition ? ' if '+b.condition : '';
-			return this.rubyProcess.Enqueue('break '+ path+':'+b.line+conditionString);
+		var breakpointAddPromises = args.breakpoints.map(b=>{
+			//let conditionString =  b.condition ? ' if '+b.condition : '';
+			//return this.rubyProcess.Enqueue('break '+ path+':'+b.line+conditionString);
+			return this.rubyProcess.Enqueue('break '+ path+':'+b.line);
 		});
-		Promise.all(linesToUpdatePromise).then( values => {
+		Promise.all(breakpointAddPromises).then( values => {
 			let breakpoints = values.map(attributes => {
 				let bp = <DebugProtocol.Breakpoint> new Breakpoint(true, this.convertDebuggerLineToClient(+attributes.location.split(':')[1]));
 				bp.id = +attributes.no;
@@ -147,7 +151,7 @@ class RubyDebugSession extends DebugSession {
 
 	protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
 
-		this.rubyProcess.Enqueue('thread list\n').then(results => {
+		this.rubyProcess.Enqueue('thread list').then(results => {
 			this._threadId = results[0].id;
 			response.body = {
 				threads: results.map(thread => new Thread(+thread.id,'Thread ' + thread.id))
@@ -161,7 +165,7 @@ class RubyDebugSession extends DebugSession {
 		The request returns a stacktrace from the current execution state.
 	*/
 	protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
-		this.rubyProcess.Enqueue('where\n').then(results => {
+		this.rubyProcess.Enqueue('where').then(results => {
 			//drop rdbug frames
 			results = results.filter(stack=>!(stack.file.endsWith('/rdebug-ide')||stack.file.endsWith('/ruby-debug-ide.rb')));
 
