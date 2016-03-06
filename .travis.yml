@@ -6,7 +6,12 @@ rvm:
   #- jruby-19mode # JRuby in 1.9 mode
   #- 1.8.7
 
-before_install: gem install ruby-debug-ide
+before_install:
+ - gem install ruby-debug-ide
+ - nvm install v0.12.7
+ - nvm use v0.12.7
 before_script:
+  - npm install -g typescript
   - npm install
+  - tsc -p ./src
 script: npm test
