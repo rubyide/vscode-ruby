@@ -142,7 +142,7 @@ suite('Node Debug Adapter', () => {
 						assert.equal(response.body.variables[2].name, "c");
 						assert.equal(response.body.variables[2].value, "undefined");
 						dc.disconnectRequest({});
-						return response;
+						done();
 					})
 					.catch(err => {
 						// error expected
