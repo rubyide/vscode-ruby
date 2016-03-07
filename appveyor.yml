@@ -8,11 +8,11 @@ install:
   - ruby --version
   - gem --version
   - gem install ruby-debug-ide --no-ri --no-rdoc
-  - Install-Product node '0.12.7'
-  - npm install -g typescript
+  - ps: Install-Product node '0.12.7'
+  - npm install -g gulp
   - npm install
 build_script:
-  - tsc -p ./src
+  - gulp
 test_script:
   - npm test
 
