@@ -12,14 +12,28 @@ import {DOMParser} from 'xmldom';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable, ICommand} from './interface';
 import {SocketClientState} from './common';
 
+var domErrorLocator: any = {};
+
 export class RubyProcess extends EventEmitter {
 	private debugSocketClient : net.Socket = null;
 	private buffer: string;
+	private socketConnected: boolean;
 	private parser: DOMParser;
 	private debugprocess: childProcess.ChildProcess;
 	private launchArgs: LaunchRequestArguments;
-	private pendingCommands: ICommand[];
+	private pendingResponses: ICommand[];
+	private pendingCommands: any[];
 	private _state: SocketClientState;
+
+	private domErrors: any;
+	private domErrorHandler(type: string, error: string){
+		this.domErrors.push({
+			lineNumber: domErrorLocator.lineNumber,
+			columnNumber: domErrorLocator.columnNumber,
+			error: error,
+			type: type
+		});
+	}
 
 	get state(): SocketClientState {
 		return this._state;
@@ -32,200 +46,199 @@ export class RubyProcess extends EventEmitter {
 	public constructor(args: LaunchRequestArguments) {
 		super();
 		this.launchArgs = args;
+		this.pendingResponses = [];
 		this.pendingCommands = [];
+		this.socketConnected = false;
 		this.state = SocketClientState.ready;
 
-		var that = this;
 		var runtimeArgs = ['--evaluation-timeout', '10'];
 		var runtimeExecutable: string;
 
 		if (process.platform === 'win32') {
 			runtimeExecutable = 'rdebug-ide.bat';
 		}
-		else if (process.platform === 'darwin') {
-			runtimeExecutable = 'rdebug-ide';
-		}
 		else {
 			// platform: linux
 			runtimeExecutable = 'rdebug-ide';
 		}
 
-		var programArgs = [];
 		var processCwd = dirname(this.launchArgs.program);
+		// `-x` only if showDebuggerOutput is set - it is also a runtime (debugger) arg, not a program arg (ie, it can't go after the filename that we're debugging)
+		if (args.showDebuggerOutput){
+			runtimeArgs.push('-x');
+		}
+		if (args.stopOnEntry){
+			runtimeArgs.push('--stop');
+		}
+		//the program is also required
+		var spawnArgs = runtimeArgs.concat(args.program, ...(args.args||[]));
+		this.debugprocess = childProcess.spawn(runtimeExecutable, spawnArgs, {cwd: processCwd});
 
-		this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, '-xd'], {cwd: processCwd});
 		// redirect output to debug console
 		this.debugprocess.stdout.on('data', (data: Buffer) => {
-			that.emit('exeutableOutput', data);
+			this.emit('executableOutput', data);
 		});
 		this.debugprocess.stderr.on('data', (data: Buffer) => {
 			if (/^Fast Debugger/.test(data.toString())) {
-				that.debugSocketClient.connect(1234);
+				this.debugSocketClient.connect(1234);
+				if (args.showDebuggerOutput) {
+					this.emit('debuggerOutput', data);
+				}
 			}
-			that.emit('debuggerOutput', data)
+			else {
+				this.emit('executableStdErr', data);
+			}
 		});
 		this.debugprocess.on('exit', () => {
-			that.emit('debuggerProcessExit');
+			this.emit('debuggerProcessExit');
 		});
 		this.debugprocess.on('error', (error: Error) => {
-			that.emit('debuggerProcessError', error);
+			this.emit('terminalError', "Process failed: " + error.message);
 		});
 
 		this.buffer = '';
-		this.parser = new DOMParser();
+		this.parser = new DOMParser({
+			errorHandler: (type,msg)=>this.domErrorHandler(type,msg),
+			locator: domErrorLocator
+		});
 
 		this.debugSocketClient = new net.Socket( {
 			type: 'tcp4'
 		});
-
 		this.debugSocketClient.on('connect', (buffer: Buffer) => {
-			that.state = SocketClientState.connected;
-			that.emit('debuggerConnect');
+			this.state = SocketClientState.connected;
+			//first thing we have to send is the start - if stopOnEntry is
+			//selected, rdebug-ide stops on the first executable line
+			this.pendingCommands.forEach( cmd => {
+				this.pendingResponses.push(cmd);
+				this.debugSocketClient.write(cmd.command + '\n');
+			});
+			this.emit('debuggerConnect');
+			this.pendingCommands = [];
 		});
 		this.debugSocketClient.on('end', (ex) => {
+			this.state = SocketClientState.closed;
+			// Emitted when the other end of the socket sends a FIN packet.
+			this.emit('debuggerComplete');
 		});
 
 		this.debugSocketClient.on('close', d=> {
-			that.state = SocketClientState.closed;
-			that.emit('debuggerClientClose');
+			this.state = SocketClientState.closed;
 		});
 
 		this.debugSocketClient.on('error', d=> {
-			let msg = 'Debugger client error, ' + d;
-			that.emit('debuggerClientError', msg);
+			var msg = 'Client: ' + d;
+			this.emit('nonTerminalError', msg);
 		});
 
 		this.debugSocketClient.on('timeout', d=> {
-			let msg = 'Debugger client timedout, ' + d;
-			that.emit('debuggerClientTimeout', msg);
+			var msg = 'Timeout: ' + d;
+			this.emit('nonTerminalError', msg);
 		});
 
 		this.debugSocketClient.on('data', (buffer: Buffer) => {
-			let chunk = buffer.toString();
-			let threadId: any;
- 			let document: XMLDocument;
-
-			if (/^<breakpoint .*?\/>$/.test(chunk)) {
-				document = that.parser.parseFromString(chunk, 'application/xml');
-  				threadId = document.documentElement.attributes.getNamedItem('threadId');
-				that.emit('breakpointHit', +threadId.value);
-				return;
+			this.buffer += buffer.toString();
+			var threadId: any;
+			//ensure the dom is stable (complete)
+			this.domErrors = [];
+			var document: XMLDocument = this.parser.parseFromString(this.buffer,'application/xml');
+			if ( this.domErrors.length ){
+				//don't report stuff we can deal with happily
+				if ( !(
+					this.domErrors[0].error.includes('unclosed xml attribute')||
+					this.domErrors[0].error.includes('attribute space is required') ||
+					this.domErrors[0].error.includes("elements closed character '/' and '>' must be connected")
+					))
+					this.emit('debuggerOutput','Debugger failed to parse: ' + this.domErrors[0].error + "\nFor: " + this.buffer.slice(0,20));
+				if ( this.buffer.indexOf('<eval ') >= 0 &&
+					(this.domErrors[0].error.includes('attribute space is required') ||
+					this.domErrors[0].error.includes("elements closed character '/' and '>' must be connected"))){
+					//potentially an issue with the 'eval' tagName
+					let start = this.buffer.indexOf('<eval ');
+					let end = this.buffer.indexOf('" />',start);
+					if ( end < 0 ) return; //perhaps not all in yet
+					start = this.buffer.indexOf(' value="',start);
+					if ( start < 0 ) return; //not the right structure
+					start += 8;
+					let inner = this.buffer.slice(start,end).replace(/\"/g,'&quot;');
+					this.buffer = this.buffer.slice(0,start) + inner + this.buffer.slice(end);
+					this.domErrors = [];
+					document = this.parser.parseFromString(this.buffer,'application/xml');
+				} else return; //one of the xml elements is incomplete
 			}
+			//if it's still bad: - we need to do something else with this
+			if ( this.domErrors.length ) return;
 
-			if (/^<suspended .*?\/>$/.test(chunk)) {
-				document = that.parser.parseFromString(chunk, 'application/xml');
- 				threadId = document.documentElement.attributes.getNamedItem('threadId');
-				that.emit('suspended', +threadId.value);
-				return;
-			}
-
-			if(/^<exception .*?\/>$/.test(chunk)) {
- 				document = that.parser.parseFromString(chunk, 'application/xml');
- 				let exceptionType = document.documentElement.attributes.getNamedItem('type');
- 				let exceptionMessage = document.documentElement.attributes.getNamedItem('message');
- 				threadId = document.documentElement.attributes.getNamedItem('threadId');
-				that.emit('exception', +threadId.value, exceptionType.value + ': ' + exceptionMessage.value);
- 				return;
-			}
-
-			if(/^<breakpointAdded .*\/>$/.test(chunk)) {
- 				let re = /<breakpointAdded\s+no="(\d+)"\s+location="(.*?)"\s*?\/>/g;
-				chunk.match(re).forEach(m => {
-					document = that.parser.parseFromString(m, 'application/xml');
-					that.FinishCmd(document);
-				});
-				return;
-			}
-
-			if(/^<breakpointDeleted .*\/>$/.test(chunk)) {
-				let re = /<breakpointDeleted\s+no="(\d+)"\s*\/>/g;
-				chunk.match(re).forEach(m => {
-					document = that.parser.parseFromString(m, 'application/xml');
-					that.FinishCmd(document);
-				});
-				return;
-			}
-
-			if(/^<eval .*?\/>$/.test(chunk)) {
-				let re = /^<eval\s+expression="(.*)"\s+value="(.*)"\s*\/>/;
-				let match = re.exec(chunk);
-
-				if (match) {
-					that.FinishCmd(match[2]);
+			for (let idx = 0; idx < document.childNodes.length; idx++){
+				let node: any = document.childNodes[idx];
+				let attributes: any = {};
+				if (node.attributes && node.attributes.length){
+					for (let attrIdx = 0; attrIdx < node.attributes.length; attrIdx++){
+						attributes[node.attributes[attrIdx].name] = node.attributes[attrIdx].value;
+					}
+					if ( attributes.threadId ) attributes.threadId = +attributes.threadId;
 				}
-				return;
-			}
-
-			if (
-				(/^<frames>/.test(chunk) && !/<\/frames>$/.test(chunk)) ||
-				(/^<frame .*?\/>$/.test(chunk) && this.buffer !== '') ||
-				(/^<variables>/.test(chunk) && !/<\/variables>$/.test(chunk)) ||
-				(/^<variable .*?\/>$/.test(chunk) && this.buffer !== '') ||
-				(/^<breakpoints>/.test(chunk) && !/<\/breakpoints>$/.test(chunk)) ||
-				(/^<breakpoint .*?\/>$/.test(chunk) && this.buffer !== '') ||
-				(/^<threads>/.test(chunk) && !/\/threads>$/.test(chunk))
-			) {
-				that.buffer += chunk;
-				return;
-			} else if (
-				(/^<variable .*?>$/.test(chunk) && !/<\/variables>$/.test(chunk)) ||
-				/<\/variable>$/.test(chunk)
-			) {
-				that.buffer += chunk;
-				return;
-			}
-			else if (
-				(/^<thread .*?>$/.test(chunk) && !/<\/threads>$/.test(chunk)) ||
-				/<\/thread>$/.test(chunk)
-			) {
-				that.buffer += chunk;
-			}
-			else if (
-				/<\/frames>$/.test(chunk) ||
-				/<\/variables>$/.test(chunk) ||
-				/<\/breakpoints>$/.test(chunk) ||
-				/<\/threads>$/.test(chunk)
-			) {
-				that.buffer = that.buffer + chunk;
-				if (/<\/frames>$/.test(chunk)) {
-					document = that.parser.parseFromString(that.buffer, 'application/xml');
-					that.FinishCmd(document);
+				//the structure here only has one or the other
+				if (node.childNodes && node.childNodes.length){
+					let finalAttributes = [];
+					//all of the child nodes are the same type in our responses
+					for (let nodeIdx = 0; nodeIdx < node.childNodes.length; nodeIdx++){
+						let childNode = node.childNodes[nodeIdx];
+						attributes = {}
+						if ( childNode.attributes && childNode.attributes.length ){
+							for (let attrIdx = 0; attrIdx < childNode.attributes.length; attrIdx++){
+								attributes[childNode.attributes[attrIdx].name] = childNode.attributes[attrIdx].value;
+							}
+						}
+						finalAttributes.push(attributes);
+					}
+					attributes = finalAttributes;
 				}
-				else if (/<\/variables>$/.test(chunk)) {
-					document = that.parser.parseFromString(that.buffer, 'application/xml');
-					that.FinishCmd(document);
+				if ( ['breakpoint','suspended','exception'].indexOf(node.tagName) >= 0){
+					this.emit(node.tagName, attributes );
 				}
-				else if (/<\/threads>$/.test(chunk)) {
-					document = that.parser.parseFromString(that.buffer, 'application/xml');
-					that.FinishCmd(document);
-				}
-				that.buffer = '';
+				//this just assumes we don't get anything in between
+				else this.FinishCmd(attributes);
 			}
+			this.buffer = "";
 		});
 	}
 
 	public Run(cmd: string): void {
-		this.debugSocketClient.write(cmd);
+		if (this.state !== SocketClientState.connected) {
+			var newCommand = {
+				command: cmd,
+				resolve: ()=>0,
+				reject: ()=>0
+			};
+			this.pendingCommands.push(newCommand);
+		}
+		else this.debugSocketClient.write(cmd + '\n');
 	}
 
 	public Enqueue(cmd: string): Promise<any> {
-		var that = this;
-		var pro = new Promise<any>((resolve, reject) => {
-			let newCommand = {
+		var pro =  new Promise<any>((resolve, reject) => {
+
+			var newCommand = {
 				command: cmd,
 				resolve: resolve,
 				reject: reject
 			};
-			that.pendingCommands.push(newCommand);
-			that.debugSocketClient.write(newCommand.command);
+			if (this.state !== SocketClientState.connected) {
+				this.pendingCommands.push(newCommand);
+			}
+			else {
+				this.pendingResponses.push(newCommand);
+				this.debugSocketClient.write(newCommand.command + '\n');
+			}
 		});
 		return pro;
 	}
 
 	private FinishCmd(result: any): void {
-		if (this.pendingCommands.length > 0) {
-			this.pendingCommands[0].resolve(result);
-			this.pendingCommands.shift();
+		if (this.pendingResponses.length > 0) {
+			this.pendingResponses[0].resolve(result);
+			this.pendingResponses.shift();
 		}
 	}
 }

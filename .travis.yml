@@ -1,5 +1,6 @@
 language: ruby
 rvm:
+  - 2.3.0
   - 2.0.0
   - 1.9.3
   #- jruby-18mode # JRuby in 1.8 mode
@@ -8,8 +9,10 @@ rvm:
 
 before_install:
  - gem install ruby-debug-ide
- - nvm install v0.12.7
- - nvm use v0.12.7
+ - nvm install v4.1.1
+ - nvm use v4.1.1
+# - nvm install v0.12.7
+# - nvm use v0.12.7
 before_script:
   - npm install -g typescript
   - npm install

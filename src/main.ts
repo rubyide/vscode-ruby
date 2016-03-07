@@ -18,11 +18,11 @@ import {SocketClientState} from './common';
 
 class RubyDebugSession extends DebugSession {
 
-	// we don't support multiple threads, so we can use a hardcoded ID for the default thread
-	private static THREAD_ID = 2;
-
 	private _breakpointId = 1000;
-
+	private _threadId = 2;
+	private _frameId = 0;
+	private _firstSuspendReceived = false;
+	private _activeFileData = new Map<string, string[]>();
 	// maps from sourceFile to array of Breakpoints
 	private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
 
@@ -33,7 +33,7 @@ class RubyDebugSession extends DebugSession {
 	/**
 	 * Creates a new debug adapter.
 	 * We configure the default implementation of a debug adapter here
-	 * by specifying that this 'debugger' uses zero-based lines and columns.
+	 * by specifying this this 'debugger' uses zero-based lines and columns.
 	 */
 	public constructor() {
 		super();
@@ -51,128 +51,110 @@ class RubyDebugSession extends DebugSession {
 	protected initializeRequest(response: DebugProtocol.InitializeResponse, args: DebugProtocol.InitializeRequestArguments): void {
 		// This debug adapter implements the configurationDoneRequest.
 		response.body.supportsConfigurationDoneRequest = true;
-
+		//response.body.supportsFunctionBreakpoints = true;
+		//currently cond bp doesn't work - but that doesn't really matter, because neither does this call
+		response.body.supportsConditionalBreakpoints = false;
 		this.sendResponse(response);
 	}
 
 	protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
-		var that = this;
+
 		this.rubyProcess = new RubyProcess(args);
 
 		this.rubyProcess.on('debuggerConnect', () => {
-			// request breakpoints from VS Code
-			that.sendEvent(new InitializedEvent());
-			that.sendResponse(response);
-		}).on('exeutableOutput', (data: Buffer) => {
-			that.sendEvent(new OutputEvent(data.toString() + '', 'stdout'));
-		}).on('debuggerProcessError', (error: Error) => {
-			that.sendEvent(new OutputEvent(error.message, 'stderr'));
-		}).on('breakpointHit', (threadId: number) => {
-			that.sendEvent(new StoppedEvent('breakpoint', threadId));
-		}).on('suspended', (threadId: number) => {
-			that.sendEvent(new StoppedEvent('step', +threadId));
-		}).on('exception', (threadId: number, exceptionMsg: string) => {
-			that.sendEvent(new StoppedEvent('exception', threadId, exceptionMsg));
-		}).on('debuggerClientClose', () => {
-			that.sendEvent(new TerminatedEvent());
-		}).on('debuggerClientError', (msg: string) => {
-			that.sendEvent(new OutputEvent(msg));
-			that.sendEvent(new TerminatedEvent());
-		}).on('debuggerClientTimeout', (msg: string) => {
-			that.sendEvent(new OutputEvent(msg + '\n', 'stderr'));
-			that.sendEvent(new TerminatedEvent());
+			this.sendEvent(new InitializedEvent());
+			this.sendResponse(response);
+		}).on('debuggerComplete', () => {
+			this.sendEvent(new TerminatedEvent());
+		}).on('executableOutput', (data: Buffer) => {
+			this.sendEvent(new OutputEvent(data.toString(), 'stdout'));
+		}).on('executableStdErr', (error: Buffer) => {
+			this.sendEvent(new OutputEvent(error.toString(), 'stderr'));
+		}).on('nonTerminalError', (error: string) => {
+			this.sendEvent(new OutputEvent("Debugger error: " + error + '\n', 'stderr'));
+		}).on('breakpoint', result => {
+			this.sendEvent(new StoppedEvent('breakpoint', result.threadId));
+		}).on('suspended', result => {
+			if ( args.stopOnEntry && !this._firstSuspendReceived )
+				this.sendEvent(new StoppedEvent('entry', result.threadId));
+			else
+				this.sendEvent(new StoppedEvent('step', result.threadId));
+			this._firstSuspendReceived = true;
+		}).on('exception', result => {
+			this.sendEvent(new OutputEvent("\nException raised: [" + result.type + "]: " + result.message + "\n",'stderr'));
+			this.sendEvent(new StoppedEvent('exception', result.threadId, result.type + ": " + result.message));
+		}).on('terminalError', (error: string) => {
+			this.sendEvent(new OutputEvent("Debugger terminal error: " + error))
+			this.sendEvent(new TerminatedEvent());
 		});
 
 		if (args.showDebuggerOutput) {
 			this.rubyProcess.on('debuggerOutput', (data: Buffer) => {
-				that.sendEvent(new OutputEvent(data.toString() + '', 'stderr'));
+				this.sendEvent(new OutputEvent(data.toString() + '\n', 'console'));
 			});
-		}
-
-		//this.sendResponse(response);
-
-		if (args.stopOnEntry) {
-			this.sendResponse(response);
-
-			// we stop on the first line
-			this.sendEvent(new StoppedEvent('entry', RubyDebugSession.THREAD_ID));
 		}
 	}
 
 	// Executed after all breakpints have been set by VS Code
 	protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args:
 	DebugProtocol.ConfigurationDoneArguments): void {
-		let command = ['start'];
-		this.rubyProcess.Run(command.join(' ') + '\n');
+		this.rubyProcess.Run('start');
 		this.sendResponse(response);
 	}
+	protected setExceptionBreakPointsRequest(response: DebugProtocol.SetExceptionBreakpointsResponse, args: DebugProtocol.SetExceptionBreakpointsArguments): void {
+		if (args.filters.indexOf('all') >=0){
+			//Exception is the root of all (Ruby) exceptions - this is the best we can do
+			//If someone makes their own exception class and doesn't inherit from
+			//Exception, then they really didn't expect things to work properly
+			//anyway.
 
-	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
-
-		var that = this;
-		var path = args.source.path;
-		var clientLines = args.lines;
-
-		// read file contents into array for direct access
-		var lines = readFileSync(path).toString().split('\n');
-
-		var linesToAdd = args.breakpoints.map(b => b.line);
-		var registeredBks = this._breakPoints.get(path);
-		var linesToRemove: number[] = [];
-		var linesToUpdate: number[] = linesToAdd;
-
-		if (registeredBks) {
-			linesToRemove = registeredBks.map(b => b.line).filter(oldLine => linesToAdd.indexOf(oldLine) === -1);
-		    linesToUpdate = registeredBks.map(b => b.line).filter(oldLine => linesToAdd.indexOf(oldLine) >= 0);
+			//We don't do anything with the return from this, but we
+			//have to add an expectation for the output.
+			this.rubyProcess.Enqueue('catch Exception').then(()=>1);
 		}
+		else {
+			this.rubyProcess.Run('catch off');
+		}
+		this.sendResponse(response);
+	}
+	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
+		var path = args.source.path;
 
-		var linesToRemovePromise = linesToRemove.map(line => {
-			let bk = registeredBks.filter(b=> b.line === line)[0];
-			return that.rubyProcess.Enqueue('delete ' + bk.id + '\n');
+		//to ensure that breakpoints with altered conditions are set, it is
+		//best to remove all and add them back.
+		//In preperation for when they're working.
+		if (this._breakPoints.get(path)) {
+			let deletePromises = this._breakPoints.get(path).map(bp => this.rubyProcess.Enqueue('delete ' + bp.id));
+			//this will return before the adding (if any) completes
+			Promise.all(deletePromises).then(() => this._breakPoints.delete(path));
+		}
+		var breakpointAddPromises = args.breakpoints.map(b=>{
+			//let conditionString =  b.condition ? ' if ' + b.condition : '';
+			//return this.rubyProcess.Enqueue('break ' + path + ':' + b.line + conditionString);
+			return this.rubyProcess.Enqueue('break ' + path + ':' + b.line);
 		});
-
-		Promise.all(linesToRemovePromise).then(() => {
-			let linesToUpdatePromise = linesToUpdate.map(line =>
-				that.rubyProcess.Enqueue('break ' + path + ":" + line + '\n')
-			);
-
-			let breakpoints = new Array<Breakpoint>();
-
-			Promise.all(linesToUpdatePromise).then((values) => {
-				values.map(xml => {
- 					let no = (<XMLDocument>xml).documentElement.attributes.getNamedItem('no');
-					let location = (<XMLDocument>xml).documentElement.attributes.getNamedItem('location');
-					let bp = <DebugProtocol.Breakpoint> new Breakpoint(true, that.convertDebuggerLineToClient(+location.value.split(':')[1]));
-					bp.id = +no.value;
-					breakpoints.push(bp);
-				});
-
-				that._breakPoints.set(path, breakpoints);
-
-				response.body = {
-					breakpoints: breakpoints
-				};
-				that.sendResponse(response);
+		Promise.all(breakpointAddPromises).then( values => {
+			let breakpoints = values.map(attributes => {
+				let bp = <DebugProtocol.Breakpoint> new Breakpoint(true, this.convertDebuggerLineToClient(+attributes.location.split(':')[1]));
+				bp.id = +attributes.no;
+				return bp;
 			});
+
+			this._breakPoints.set(path, breakpoints);
+
+			response.body = {
+				breakpoints: breakpoints
+			};
+			this.sendResponse(response);
 		});
 	}
 
 	protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
 
-		this.rubyProcess.Enqueue('thread list\n').then((xml: XMLDocument) => {
-			if (xml.documentElement.nodeName !== 'threads') {
-				return;
-			}
-
-			let threads = new Array<Thread>();
-			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
-				let threadNode = xml.documentElement.childNodes.item(i);
-				let threadId = threadNode.attributes.getNamedItem('id');
-
-				threads.push(new Thread(+threadId.value, 'thread_'+threadId.value));
-			}
+		this.rubyProcess.Enqueue('thread list').then(results => {
+			this._threadId = results[0].id;
 			response.body = {
-				threads: threads
+				threads: results.map(thread => new Thread(+thread.id,'Thread ' + thread.id))
 			};
 			this.sendResponse(response);
 		});
@@ -183,82 +165,79 @@ class RubyDebugSession extends DebugSession {
 		The request returns a stacktrace from the current execution state.
 	*/
 	protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
-		var that = this;
+		this.rubyProcess.Enqueue('where').then(results => {
+			//drop rdbug frames
+			results = results.filter(stack=>!(stack.file.endsWith('/rdebug-ide')||stack.file.endsWith('/ruby-debug-ide.rb')));
 
-		this.rubyProcess.Enqueue('where\n').then((xml: XMLDocument) => {
-			if (xml.documentElement.nodeName !== 'frames') {
-				return;
-			}
+			//get the current frame
+			results.some(stack=> stack.current ? this._frameId = +stack.no: 0);
 
-			const frames = new Array<StackFrame>();
-
-			if (!args.levels || args.levels === 0) {
-				args.levels = xml.documentElement.childNodes.length;
-			}
-
- 			for(let i= 0; i < xml.documentElement.childNodes.length && i < args.levels; i++) {
-				let frameNode = xml.documentElement.childNodes.item(i);
-				let file = frameNode.attributes.getNamedItem('file');
-				let line = frameNode.attributes.getNamedItem('line');
-				let bn = basename(file.value);
-
-				let sourcesInFile = readFileSync(file.value).toString().split('\n');
-				let code = sourcesInFile[this.convertDebuggerLineToClient(+line.value)-1].trim();
-				frames.push(new StackFrame(
-					i,
-					`${code}`,
-					new Source(basename(file.value),
-					this.convertDebuggerPathToClient(file.value)),
-					this.convertDebuggerLineToClient(+line.value),
-					0
-			    ));
-			}
-			/*
-			if (frames.length == 0) {
-				that.sendEvent(new TerminatedEvent());
-				return;
-			}
-			*/
+			//only read the file if we don't have it already
+			results.forEach(stack=>{
+				if (!this._activeFileData.has(stack.file)){
+					this._activeFileData.set(stack.file,readFileSync(stack.file,'utf8').split('\n'))
+				}
+			});
 
 			response.body = {
-				stackFrames: frames
+				stackFrames: results.filter(stack=>stack.file.indexOf('debug-ide')<0)
+					.map(stack=> new StackFrame(+stack.no,
+					this._activeFileData.get(stack.file)[+stack.line-1].trim(),
+					new Source(basename(stack.file),stack.file),
+					this.convertDebuggerLineToClient(+stack.line),0))
 			};
-			that.sendResponse(response);
+			if (response.body.stackFrames.length){
+				this.sendResponse(response);
+			}
+			else {
+				this.sendEvent(new TerminatedEvent());
+			}
+			return;
 		});
 	}
 
+	protected switchFrame(frameId) {
+		if (frameId === this._frameId) return;
+		this._frameId = frameId;
+		this.rubyProcess.Run('frame ' + frameId)
+	}
+
+	protected varyVariable(variable){
+		if (variable.type === 'String') {
+			variable.hasChildren = false;
+			variable.value = "'" + variable.value.replace(/'/g,"\\'") + "'";
+		}
+		else if ( variable.value && variable.value.startsWith('#<' + variable.type)){
+			variable.value = variable.type;
+		}
+		return variable;
+	}
+	protected createVariableReference(variables): IRubyEvaluationResult[]{
+		return variables.map(this.varyVariable).map(variable=>({
+			name: variable.name,
+			kind: variable.kind,
+			type: variable.type,
+			value: variable.value === undefined ? 'undefined' : variable.value,
+			id: variable.objectId,
+			variablesReference: variable.hasChildren === 'true' ? this._variableHandles.create({objectId:variable.objectId}):0
+		}));
+	}
     /** Scopes request; value of command field is 'scopes'.
 	   The request returns the variable scopes for a given stackframe ID.
 	*/
 	protected scopesRequest(response: DebugProtocol.ScopesResponse, args: DebugProtocol.ScopesArguments): void {
 
-		const frameReference = args.frameId;
-		const scopes = new Array<Scope>();
-		var frameCmd = ['frame', frameReference + 1, '\n'];
-		this.rubyProcess.Run(frameCmd.join(' '));
-		var variablesCmd = ['var', 'local', '\n'];
-		this.rubyProcess.Enqueue(variablesCmd.join(' ')).then((xml: XMLDocument) => {
-			let variables: IRubyEvaluationResult[] = [];
-			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
-				let varNode = xml.documentElement.childNodes.item(i);
-				let name = varNode.attributes.getNamedItem('name');
-				let value = varNode.attributes.getNamedItem('value');
-				let hasChildren = varNode.attributes.getNamedItem('hasChildren');
-				let objectId = varNode.attributes.getNamedItem('objectId');
-				let kind = varNode.attributes.getNamedItem('kind');
+		//this doesn't work properly across threads.
 
-				variables.push({
-					Name: name.value,
-					IsExpandable: hasChildren == undefined ? false : hasChildren.value === 'true',
-					Id: objectId == undefined ? null : objectId.value,
-					Value: value == undefined ? 'undefined' : value.value,
-					Kind: kind.value
-				});
-			}
-
-			let localVar: IDebugVariable = { variables: variables };
-			scopes.push(new Scope('Local', this._variableHandles.create(localVar), false));
-
+		this.switchFrame(args.frameId);
+		Promise.all([
+			this.rubyProcess.Enqueue('var local'),
+			this.rubyProcess.Enqueue('var global')
+		])
+		.then( results =>{
+			const scopes = new Array<Scope>();
+			scopes.push(new Scope('Local',this._variableHandles.create({variables:this.createVariableReference(results[0])}),false));
+			scopes.push(new Scope('Global',this._variableHandles.create({variables:this.createVariableReference(results[1])}),false));
 			response.body = {
 				scopes: scopes
 			};
@@ -266,118 +245,65 @@ class RubyDebugSession extends DebugSession {
 		});
 	}
 
-	/** Variables request; value of command field is 'variables'.
-		Retrieves all children for the given variable reference.
-	*/
 	protected variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments): void {
 		var varRef = this._variableHandles.get(args.variablesReference);
+		let varPromise;
+		if ( varRef.objectId ){
+			varPromise = this.rubyProcess.Enqueue('var i ' + varRef.objectId).then(results => this.createVariableReference(results));
+		}
+		else varPromise = Promise.resolve(varRef.variables);
 
-		if (varRef.evaluateChildren !== true) {
-			let variables = [];
-			varRef.variables.forEach(variable=> {
-				let variablesReference = 0;
-				//If this value can be expanded, then create a vars ref for user to expand it
-				if (variable.IsExpandable) {
-					const parentVariable: IDebugVariable = {
-						variables: [variable],
-						evaluateChildren: true
-					};
-					variablesReference = this._variableHandles.create(parentVariable);
-				}
-
-				variables.push({
-					name: variable.Name,
-					value: variable.Value,
-					variablesReference: variablesReference
-				});
-			});
-
+		varPromise.then(variables =>{
 			response.body = {
 				variables: variables
 			};
-
-			return this.sendResponse(response);
-		}
-
-		var varInstanceCmd = ['var', 'instance', varRef.variables[0].Id];
-		this.rubyProcess.Enqueue(varInstanceCmd.join(' ').concat('\n')).then((xml: XMLDocument) => {
-			let children = [];
-			let variables: IRubyEvaluationResult[] = [];
-			for(let i= 0; i < xml.documentElement.childNodes.length; i++) {
-				let varNode = xml.documentElement.childNodes.item(i);
-				let name = varNode.attributes.getNamedItem('name');
-				let value = varNode.attributes.getNamedItem('value');
-				let hasChildren = varNode.attributes.getNamedItem('hasChildren');
-				let objectId = varNode.attributes.getNamedItem('objectId');
-				let kind = varNode.attributes.getNamedItem('kind');
-
-				variables.push({
-					Name: name.value,
-					IsExpandable: hasChildren == undefined ? false : hasChildren.value === 'true',
-					Id: objectId == undefined ? null : objectId.value,
-					Value: value == undefined ? 'undefined' : value.value,
-					Kind: kind.value
-				});
-			}
-
-			variables.forEach(child => {
-				let variablesReference = 0;
-				//If this value can be expanded, then create a vars ref for user to expand it
-				if (child.IsExpandable) {
-					const childVariable: IDebugVariable = {
-						variables: [child],
-						evaluateChildren: true
-					};
-					variablesReference = this._variableHandles.create(childVariable);
-				}
-
-				children.push({
-					name: child.Name,
-					value: child.Value,
-					variablesReference: variablesReference
-				});
-			});
-
-			response.body = {
-				variables: children
-			};
-
 			this.sendResponse(response);
 		});
 	}
 
 	protected continueRequest(response: DebugProtocol.ContinueResponse, args: DebugProtocol.ContinueArguments): void {
-
 		this.sendResponse(response);
-		this.rubyProcess.Run('c\n');
+		this.rubyProcess.Run('c');
 	}
 
 	protected nextRequest(response: DebugProtocol.NextResponse, args: DebugProtocol.NextArguments): void {
-
 		this.sendResponse(response);
-		this.rubyProcess.Run('next\n');
+		this.rubyProcess.Run('next');
 	}
 
 	protected stepInRequest(response: DebugProtocol.StepInResponse): void {
 		this.sendResponse(response);
-		this.rubyProcess.Run('step\n');
+		this.rubyProcess.Run('step');
 	}
 
-	protected stepOutRequest(response: DebugProtocol.StepInResponse): void {
+	protected pauseRequest(response: DebugProtocol.PauseResponse): void{
 		this.sendResponse(response);
+		this.rubyProcess.Run('pause');
+	}
+	protected stepOutRequest(response: DebugProtocol.StepInResponse): void {
 
+		this.sendResponse(response);
 		//Not sure which command we should use, `finish` will execute all frames.
-		this.rubyProcess.Run('finish\n');
+		this.rubyProcess.Run('finish');
 	}
 
 	/** Evaluate request; value of command field is 'evaluate'.
 		Evaluates the given expression in the context of the top most stack frame.
-		The expression has access to any variables and arguments that are in scope.
+		The expression has access to any variables and arguments this are in scope.
 	*/
 	protected evaluateRequest(response: DebugProtocol.EvaluateResponse, args: DebugProtocol.EvaluateArguments): void {
-		this.rubyProcess.Enqueue("eval " + args.expression + "\n").then((value: any) => {
+		// TODO: this will often not work. Will try to call
+		// Class.@variable which doesn't work.
+		// need to tie it to the existing variablesReference set
+		// That will required having ALL variables stored, which will also (hopefully) fix
+		// the variable value mismatch between threads
+		this.rubyProcess.Enqueue("eval " + args.expression).then(result => {
+			if ( result.value.startsWith('#<')){
+				//is an object
+
+			}
 			response.body = {
-				result: value,
+				result: result.value,
 				variablesReference: 0
 			};
 			this.sendResponse(response);
@@ -386,7 +312,7 @@ class RubyDebugSession extends DebugSession {
 
 	protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
 		if (this.rubyProcess.state !== SocketClientState.closed) {
-			this.rubyProcess.Run('quit\n');
+			this.rubyProcess.Run('quit');
 		}
 		this.sendResponse(response);
 	}
