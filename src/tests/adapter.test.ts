@@ -113,7 +113,7 @@ suite('Node Debug Adapter', () => {
 				dc.waitForEvent('terminated')]);
 		});
 
-		test('should get correct variables on a breakpoint', () => {
+		test('should get correct variables on a breakpoint', done => {
 			const PROGRAM = Path.join(DATA_ROOT, 'basic.rb');
 			const BREAKPOINT_LINE = 3;
 
@@ -143,6 +143,11 @@ suite('Node Debug Adapter', () => {
 						assert.equal(response.body.variables[2].value, "undefined");
 						dc.disconnectRequest({});
 						return response;
+					})
+					.catch(err => {
+						// error expected
+						dc.disconnectRequest({});
+						done(new Error(err));
 					})
 			]);
 		})

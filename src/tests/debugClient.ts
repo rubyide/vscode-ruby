@@ -8,6 +8,7 @@
 import cp = require('child_process');
 import assert = require('assert');
 import net = require('net');
+import path = require('path');
 import {DebugProtocol} from 'vscode-debugprotocol';
 import {ProtocolClient} from './protocolClient';
 
@@ -265,7 +266,7 @@ export class DebugClient extends ProtocolClient {
 		}).then(response => {
 			const frame = response.body.stackFrames[0];
 			if (typeof expected.path === 'string') {
-				assert.equal(frame.source.path, expected.path, "stopped location: path mismatch");
+				assert.equal(path.normalize(frame.source.path), path.normalize(expected.path), "stopped location: path mismatch");
 			}
 			if (typeof expected.line === 'number') {
 				assert.equal(frame.line, expected.line, "stopped location: line mismatch");
@@ -331,7 +332,7 @@ export class DebugClient extends ProtocolClient {
 				assert.equal(bp.verified, verified, "breakpoint verification mismatch: verified");
 
 				if (bp.source && bp.source.path) {
-					assert.equal(bp.source.path, location.path, "breakpoint verification mismatch: path");
+					assert.equal(path.normalize(bp.source.path), path.normalize(location.path), "breakpoint verification mismatch: path");
 				}
 				if (typeof bp.line === 'number') {
 					assert.equal(bp.line, location.line, "breakpoint verification mismatch: line");
