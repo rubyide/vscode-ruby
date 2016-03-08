@@ -75,10 +75,13 @@ class RubyDebugSession extends DebugSession {
 		}).on('breakpoint', result => {
 			this.sendEvent(new StoppedEvent('breakpoint', result.threadId));
 		}).on('suspended', result => {
-			if ( args.stopOnEntry && !this._firstSuspendReceived )
+			if ( args.stopOnEntry && !this._firstSuspendReceived ) {
 				this.sendEvent(new StoppedEvent('entry', result.threadId));
-			else
+			}
+			else {
 				this.sendEvent(new StoppedEvent('step', result.threadId));
+			}
+
 			this._firstSuspendReceived = true;
 		}).on('exception', result => {
 			this.sendEvent(new OutputEvent("\nException raised: [" + result.type + "]: " + result.message + "\n",'stderr'));
@@ -101,6 +104,7 @@ class RubyDebugSession extends DebugSession {
 		this.rubyProcess.Run('start');
 		this.sendResponse(response);
 	}
+
 	protected setExceptionBreakPointsRequest(response: DebugProtocol.SetExceptionBreakpointsResponse, args: DebugProtocol.SetExceptionBreakpointsArguments): void {
 		if (args.filters.indexOf('all') >=0){
 			//Exception is the root of all (Ruby) exceptions - this is the best we can do
@@ -117,6 +121,7 @@ class RubyDebugSession extends DebugSession {
 		}
 		this.sendResponse(response);
 	}
+
 	protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
 		var path = args.source.path;
 
@@ -212,6 +217,7 @@ class RubyDebugSession extends DebugSession {
 		}
 		return variable;
 	}
+
 	protected createVariableReference(variables): IRubyEvaluationResult[]{
 		return variables.map(this.varyVariable).map(variable=>({
 			name: variable.name,
@@ -222,6 +228,7 @@ class RubyDebugSession extends DebugSession {
 			variablesReference: variable.hasChildren === 'true' ? this._variableHandles.create({objectId:variable.objectId}):0
 		}));
 	}
+
     /** Scopes request; value of command field is 'scopes'.
 	   The request returns the variable scopes for a given stackframe ID.
 	*/
@@ -251,7 +258,9 @@ class RubyDebugSession extends DebugSession {
 		if ( varRef.objectId ){
 			varPromise = this.rubyProcess.Enqueue('var i ' + varRef.objectId).then(results => this.createVariableReference(results));
 		}
-		else varPromise = Promise.resolve(varRef.variables);
+		else {
+			varPromise = Promise.resolve(varRef.variables);
+		}
 
 		varPromise.then(variables =>{
 			response.body = {

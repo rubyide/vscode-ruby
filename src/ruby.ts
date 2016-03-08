@@ -58,7 +58,7 @@ export class RubyProcess extends EventEmitter {
 			runtimeExecutable = 'rdebug-ide.bat';
 		}
 		else {
-			// platform: linux
+			// platform: linux or darwin
 			runtimeExecutable = 'rdebug-ide';
 		}
 
@@ -67,17 +67,18 @@ export class RubyProcess extends EventEmitter {
 		if (args.showDebuggerOutput){
 			runtimeArgs.push('-x');
 		}
+
 		if (args.stopOnEntry){
 			runtimeArgs.push('--stop');
 		}
-		//the program is also required
-		var spawnArgs = runtimeArgs.concat(args.program, ...(args.args||[]));
-		this.debugprocess = childProcess.spawn(runtimeExecutable, spawnArgs, {cwd: processCwd});
+
+		this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args], {cwd: processCwd});
 
 		// redirect output to debug console
 		this.debugprocess.stdout.on('data', (data: Buffer) => {
 			this.emit('executableOutput', data);
 		});
+
 		this.debugprocess.stderr.on('data', (data: Buffer) => {
 			if (/^Fast Debugger/.test(data.toString())) {
 				this.debugSocketClient.connect(1234);
@@ -89,9 +90,11 @@ export class RubyProcess extends EventEmitter {
 				this.emit('executableStdErr', data);
 			}
 		});
+
 		this.debugprocess.on('exit', () => {
 			this.emit('debuggerProcessExit');
 		});
+
 		this.debugprocess.on('error', (error: Error) => {
 			this.emit('terminalError', "Process failed: " + error.message);
 		});
@@ -105,6 +108,7 @@ export class RubyProcess extends EventEmitter {
 		this.debugSocketClient = new net.Socket( {
 			type: 'tcp4'
 		});
+
 		this.debugSocketClient.on('connect', (buffer: Buffer) => {
 			this.state = SocketClientState.connected;
 			//first thing we have to send is the start - if stopOnEntry is
@@ -116,6 +120,7 @@ export class RubyProcess extends EventEmitter {
 			this.emit('debuggerConnect');
 			this.pendingCommands = [];
 		});
+
 		this.debugSocketClient.on('end', (ex) => {
 			this.state = SocketClientState.closed;
 			// Emitted when the other end of the socket sends a FIN packet.
@@ -208,17 +213,18 @@ export class RubyProcess extends EventEmitter {
 		if (this.state !== SocketClientState.connected) {
 			var newCommand = {
 				command: cmd,
-				resolve: ()=>0,
-				reject: ()=>0
+				resolve: () => 0,
+				reject: () => 0
 			};
 			this.pendingCommands.push(newCommand);
 		}
-		else this.debugSocketClient.write(cmd + '\n');
+		else {
+			this.debugSocketClient.write(cmd + '\n');
+		}
 	}
 
 	public Enqueue(cmd: string): Promise<any> {
 		var pro =  new Promise<any>((resolve, reject) => {
-
 			var newCommand = {
 				command: cmd,
 				resolve: resolve,
@@ -232,6 +238,7 @@ export class RubyProcess extends EventEmitter {
 				this.debugSocketClient.write(newCommand.command + '\n');
 			}
 		});
+
 		return pro;
 	}
 

@@ -1,9 +1,9 @@
 # Ruby Language and Debugging Support for Visual Studio Code
 
-[![Join the chat at https://gitter.im/rebornix/vscode-ruby](https://badges.gitter.im/rebornix/vscode-ruby.svg)](https://gitter.im/rebornix/vscode-ruby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/rebornix/vscode-ruby.svg?branch=master)](https://travis-ci.org/rebornix/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/s4sv1fwpjeqmgnhd?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby) [![GitHub release](https://img.shields.io/github/release/rebornix/vscode-ruby.svg)](https://github.com/rebornix/vscode-ruby)
+[![Join the chat at https://gitter.im/rebornix/vscode-ruby](https://badges.gitter.im/rebornix/vscode-ruby.svg)](https://gitter.im/rebornix/vscode-ruby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/rebornix/vscode-ruby.svg?branch=master)](https://travis-ci.org/rebornix/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/s4sv1fwpjeqmgnhd?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 
 
-This extension provides rich Ruby language and debugging support for Visual Studio Code.
+This extension provides rich Ruby language and debugging support for Visual Studio Code. Fully tested against *inx/Windows and Ruby 1.9.3 to 2.2.0.
 It's still in progress ( [GitHub](https://github.com/rebornix/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0.
 
 ## Install
@@ -50,12 +50,12 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
   * Debug console
   * Watch window
   * Variables evaluate/inspect
+  * Stop on entry
+  * Breaking on uncaught exceptions and errors
 
 ## TODO
 - Ruby scripts debugging
   * Conditional breakpoints
-  * Break on entry
-  * Breaking on uncaught exceptions and errors
   * Attach requests
 - Ruby remote debug
 - Unit/Integration tests debugging
@@ -71,6 +71,10 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
 - IntelliSense and autocomplete
 - Linting
 
+## Main contributors
+
+- [@rebornix](https://github.com/rebornix)
+- [@HookyQR](https://github.com/HookyQR)
 
 ## License
 
