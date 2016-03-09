@@ -11,6 +11,7 @@ import {EventEmitter} from 'events';
 import {DOMParser} from 'xmldom';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable, ICommand} from './interface';
 import {SocketClientState} from './common';
+import {includes} from './helper';
 
 var domErrorLocator: any = {};
 
@@ -102,14 +103,14 @@ export class RubyProcess extends EventEmitter {
             if ( this.domErrors.length ){
                 //don't report stuff we can deal with happily
                 if ( !(
-                    this.domErrors[0].error.includes('unclosed xml attribute')||
-                    this.domErrors[0].error.includes('attribute space is required') ||
-                    this.domErrors[0].error.includes("elements closed character '/' and '>' must be connected")
+                    includes(this.domErrors[0].error, 'unclosed xml attribute', 0)||
+                    includes(this.domErrors[0].error, 'attribute space is required', 0) ||
+                    includes(this.domErrors[0].error, "elements closed character '/' and '>' must be connected", 0)
                     ))
                     this.emit('debuggerOutput','Debugger failed to parse: ' + this.domErrors[0].error + "\nFor: " + this.buffer.slice(0,20));
                 if ( this.buffer.indexOf('<eval ') >= 0 &&
-                    (this.domErrors[0].error.includes('attribute space is required') ||
-                    this.domErrors[0].error.includes("elements closed character '/' and '>' must be connected"))){
+                    (includes(this.domErrors[0].error, 'attribute space is required', 0) ||
+                    includes(this.domErrors[0].error, "elements closed character '/' and '>' must be connected", 0))){
                     //potentially an issue with the 'eval' tagName
                     let start = this.buffer.indexOf('<eval ');
                     let end = this.buffer.indexOf('" />',start);

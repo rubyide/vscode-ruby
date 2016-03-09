@@ -16,9 +16,9 @@ import {Terminal} from './terminal';
 import {RubyProcess} from './ruby';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
 import {SocketClientState} from './common';
+import {endsWith, startsWith} from './helper';
 
 class RubyDebugSession extends DebugSession {
-
     private _breakpointId = 1000;
     private _threadId = 2;
     private _frameId = 0;
@@ -173,8 +173,8 @@ class RubyDebugSession extends DebugSession {
         this.rubyProcess.Enqueue('where').then(results => {
             //drop rdbug frames
             results = results.filter(stack => !(
-				stack.file.endsWith('/rdebug-ide') ||
-				stack.file.endsWith('/ruby-debug-ide.rb') ||
+				endsWith(stack.file, '/rdebug-ide', null) ||
+				endsWith(stack.file, '/ruby-debug-ide.rb', null) ||
 				(this.launchRequestArguments.request === 'remote' &&
 				path.normalize(stack.file).toLocaleLowerCase().indexOf(path.normalize(this.launchRequestArguments.remoteWorkspaceRoot).toLocaleLowerCase()) === -1))
 			);
@@ -248,7 +248,7 @@ class RubyDebugSession extends DebugSession {
             variable.hasChildren = false;
             variable.value = "'" + variable.value.replace(/'/g,"\\'") + "'";
         }
-        else if ( variable.value && variable.value.startsWith('#<' + variable.type)){
+        else if ( variable.value && startsWith(variable.value, '#<' + variable.type, 0)){
             variable.value = variable.type;
         }
         return variable;
@@ -343,7 +343,7 @@ class RubyDebugSession extends DebugSession {
         // That will required having ALL variables stored, which will also (hopefully) fix
         // the variable value mismatch between threads
         this.rubyProcess.Enqueue("eval " + args.expression).then(result => {
-            if ( result.value.startsWith('#<')){
+            if ( startsWith(result.value, '#<', 0)){
                 //is an object
 
             }
