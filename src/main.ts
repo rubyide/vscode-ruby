@@ -12,7 +12,6 @@ import * as net from 'net';
 import * as childProcess from 'child_process';
 import * as path from 'path';
 import {DOMParser} from 'xmldom';
-import {Terminal} from './terminal';
 import {RubyProcess} from './ruby';
 import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
 import {SocketClientState} from './common';
