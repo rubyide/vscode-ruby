@@ -1,5 +1,5 @@
 export enum SocketClientState {
-	ready,
-	connected,
-	closed
+    ready,
+    connected,
+    closed
 }
