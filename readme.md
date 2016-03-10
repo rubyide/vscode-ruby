@@ -4,7 +4,11 @@
 
 
 This extension provides rich Ruby language and debugging support for Visual Studio Code. Fully tested against *inx/Windows and Ruby 1.9.3 to 2.2.0.
-It's still in progress ( [GitHub](https://github.com/rebornix/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0.
+It's still in progress ( [GitHub](https://github.com/rebornix/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0. If you are interested in this project, feel free to
+
+* Subscribe to our [mailing list](http://eepurl.com/bTBAfv), get notified when we release new features or fixing bugs.
+* File GitHub [issues](https://github.com/rebornix/vscode-ruby/issues/new) once you ran into unexpected situations/bugs.
+* Fork [our project](https://github.com/rebornix/vscode-ruby), hack it around and send us PRs!
 
 ## Install
 ### Install Extension
@@ -43,7 +47,7 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
 
 - Ruby scripts debugging
   * Line breakpoints (add, delete, disable, enable)
-  * Step over, step in, step out, continue
+  * Step over, step in, step out, continue, pause
   * Multiple, parallel threads
   * Call stack
   * Scope variables
