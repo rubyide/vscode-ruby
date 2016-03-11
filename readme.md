@@ -38,6 +38,16 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
 			"request": "launch",
 			"program": "${workspaceRoot}/main.rb",
 			"stopOnEntry": false
+		},
+		{
+			"name": "Remote Debug",
+			"type": "Ruby",
+			"request": "remote",
+			"remoteHost": "",
+			"remotePort": "1234",
+			"localPort": "26162",
+			"remoteWorkspaceRoot": "/home/user/code/",
+			"localWorkspaceRoot": "${workspaceRoot}"
 		}
 	]
 }

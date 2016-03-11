@@ -10,6 +10,7 @@ import {readFileSync} from 'fs';
 import {basename, dirname} from 'path';
 import * as net from 'net';
 import * as childProcess from 'child_process';
+import * as path from 'path';
 import {DOMParser} from 'xmldom';
 import {Terminal} from './terminal';
 import {RubyProcess} from './ruby';
@@ -25,10 +26,9 @@ class RubyDebugSession extends DebugSession {
     private _activeFileData = new Map<string, string[]>();
     // maps from sourceFile to array of Breakpoints
     private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
-
     private _variableHandles: Handles<IDebugVariable>;
-
     private rubyProcess: RubyProcess;
+    private launchRequestArguments: LaunchRequestArguments;
 
     /**
      * Creates a new debug adapter.
@@ -58,7 +58,7 @@ class RubyDebugSession extends DebugSession {
     }
 
     protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
-
+		this.launchRequestArguments = args;
         this.rubyProcess = new RubyProcess(args);
 
         this.rubyProcess.on('debuggerConnect', () => {
@@ -123,7 +123,7 @@ class RubyDebugSession extends DebugSession {
     }
 
     protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
-        var path = args.source.path;
+        var path = this.convertClientPathToDebugger(args.source.path);
 
         //to ensure that breakpoints with altered conditions are set, it is
         //best to remove all and add them back.
@@ -172,24 +172,29 @@ class RubyDebugSession extends DebugSession {
     protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
         this.rubyProcess.Enqueue('where').then(results => {
             //drop rdbug frames
-            results = results.filter(stack=>!(stack.file.endsWith('/rdebug-ide')||stack.file.endsWith('/ruby-debug-ide.rb')));
+            results = results.filter(stack => !(
+				stack.file.endsWith('/rdebug-ide') ||
+				stack.file.endsWith('/ruby-debug-ide.rb') ||
+				(this.launchRequestArguments.request === 'remote' &&
+				path.normalize(stack.file).toLocaleLowerCase().indexOf(path.normalize(this.launchRequestArguments.remoteWorkspaceRoot).toLocaleLowerCase()) === -1))
+			);
 
             //get the current frame
             results.some(stack=> stack.current ? this._frameId = +stack.no: 0);
 
             //only read the file if we don't have it already
             results.forEach(stack=>{
-                if (!this._activeFileData.has(stack.file)){
-                    this._activeFileData.set(stack.file,readFileSync(stack.file,'utf8').split('\n'))
+                if (!this._activeFileData.has(this.convertDebuggerPathToClient(stack.file))) {
+                    this._activeFileData.set(this.convertDebuggerPathToClient(stack.file), readFileSync(this.convertDebuggerPathToClient(stack.file),'utf8').split('\n'))
                 }
             });
 
             response.body = {
                 stackFrames: results.filter(stack=>stack.file.indexOf('debug-ide')<0)
-                    .map(stack=> new StackFrame(+stack.no,
-                    this._activeFileData.get(stack.file)[+stack.line-1].trim(),
-                    new Source(basename(stack.file),stack.file),
-                    this.convertDebuggerLineToClient(+stack.line),0))
+                    .map(stack => new StackFrame(+stack.no,
+                    this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1].trim(),
+                    new Source(basename(stack.file), this.convertDebuggerPathToClient(stack.file)),
+                    this.convertDebuggerLineToClient(+stack.line), 0))
             };
             if (response.body.stackFrames.length){
                 this.sendResponse(response);
@@ -200,6 +205,29 @@ class RubyDebugSession extends DebugSession {
             return;
         });
     }
+
+	protected convertClientPathToDebugger(localPath: string): string {
+		var relativePath = path.join(
+			this.launchRequestArguments.remoteWorkspaceRoot, localPath.substring(this.launchRequestArguments.localWorkspaceRoot.length)
+		);
+
+		var sepIndex = this.launchRequestArguments.remoteWorkspaceRoot.lastIndexOf('/');
+
+		if (sepIndex !== -1) {
+			// *inx or darwin
+			relativePath = relativePath.replace(/\\/g, '/');
+		}
+
+		return relativePath;
+	}
+
+	protected convertDebuggerPathToClient(serverPath:string):string{
+		// Path.join will convert the path using local OS preferred separator
+		var relativePath = path.join(
+			this.launchRequestArguments.localWorkspaceRoot, serverPath.substring(this.launchRequestArguments.remoteWorkspaceRoot.length)
+		);
+		return relativePath;
+	}
 
     protected switchFrame(frameId) {
         if (frameId === this._frameId) return;
