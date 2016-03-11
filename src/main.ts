@@ -207,6 +207,10 @@ class RubyDebugSession extends DebugSession {
     }
 
 	protected convertClientPathToDebugger(localPath: string): string {
+		if (!this.launchRequestArguments.request || this.launchRequestArguments.request.toLocaleLowerCase() === 'launch') {
+			return localPath;
+		}
+
 		var relativePath = path.join(
 			this.launchRequestArguments.remoteWorkspaceRoot, localPath.substring(this.launchRequestArguments.localWorkspaceRoot.length)
 		);
@@ -221,7 +225,11 @@ class RubyDebugSession extends DebugSession {
 		return relativePath;
 	}
 
-	protected convertDebuggerPathToClient(serverPath:string):string{
+	protected convertDebuggerPathToClient(serverPath: string):string{
+		if (!this.launchRequestArguments.request || this.launchRequestArguments.request.toLocaleLowerCase() === 'launch') {
+			return serverPath;
+		}
+
 		// Path.join will convert the path using local OS preferred separator
 		var relativePath = path.join(
 			this.launchRequestArguments.localWorkspaceRoot, serverPath.substring(this.launchRequestArguments.remoteWorkspaceRoot.length)

@@ -160,7 +160,7 @@ export class RubyProcess extends EventEmitter {
             this.buffer = "";
         });
 
-		if (args.request.toLowerCase() === 'launch') {
+		if (!args.request || args.request.toLowerCase() === 'launch') {
 			var runtimeArgs = ['--evaluation-timeout', '10'];
 			var runtimeExecutable: string;
 
