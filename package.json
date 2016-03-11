@@ -46,7 +46,7 @@
 	"contributes": {
 		"debuggers": [
 			{
-				"type": "Ruby",
+				"type": "ruby",
 				"label": "Ruby Debugger",
 
 				"enableBreakpointsFor": { "languageIds": [ "ruby" ] },
@@ -60,32 +60,40 @@
 						"properties": {
 							"program": {
 								"type": "string",
-								"description": "Workspace relative path to a text file.",
-								"default": "test.rb"
+								"description": "Absolute path to the program.",
+								"default": "${workspaceRoot}/main.rb"
 							},
 							"stopOnEntry": {
 								"type": "boolean",
 								"description": "Automatically stop after launch.",
 								"default": true
 							},
-							"runtimeArgs": {
+							"showDebuggerOutput": {
+								"type": "boolean",
+								"description": "Show output of the debugger in the console.",
+								"default": false
+							},
+							"args": {
 								"type": "array",
-								"description": "Optional arguments passed to the runtime executable.",
+								"description": "Command line arguments passed to the program.",
 								"items": {
-								"type": "string"
+									"type": "string"
 								},
 								"default": []
+							},
+							"cwd": {
+								"type": "string",
+								"description": "Absolute path to the working directory of the program being debugged."
 							}
 						}
 					}
 				},
-
 				"initialConfigurations": [
 					{
 						"name": "Ruby Debugger",
-						"type": "Ruby",
+						"type": "ruby",
 						"request": "launch",
-						"program": "main.rb"
+						"program": "${workspaceRoot}/main.rb"
 					}
 				]
 			}
