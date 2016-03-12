@@ -52,13 +52,13 @@ export class RubyProcess extends EventEmitter {
         this.socketConnected = false;
         this.state = SocketClientState.ready;
 
-		this.buffer = '';
+        this.buffer = '';
         this.parser = new DOMParser({
             errorHandler: (type,msg)=>this.domErrorHandler(type,msg),
             locator: domErrorLocator
         });
 
-		this.debugSocketClient = new net.Socket( {
+        this.debugSocketClient = new net.Socket( {
             type: 'tcp4'
         });
 
@@ -161,58 +161,57 @@ export class RubyProcess extends EventEmitter {
             this.buffer = "";
         });
 
-		if (!args.request || args.request.toLowerCase() === 'launch') {
-			var runtimeArgs = ['--evaluation-timeout', '10'];
-			var runtimeExecutable: string;
+        if (!args.request || args.request.toLowerCase() === 'launch') {
+            var runtimeArgs = ['--evaluation-timeout', '10'];
+            var runtimeExecutable: string;
 
-			if (process.platform === 'win32') {
-				runtimeExecutable = 'rdebug-ide.bat';
-			}
-			else {
-				// platform: linux or darwin
-				runtimeExecutable = 'rdebug-ide';
-			}
+            if (process.platform === 'win32') {
+                runtimeExecutable = 'rdebug-ide.bat';
+            }
+            else {
+                // platform: linux or darwin
+                runtimeExecutable = 'rdebug-ide';
+            }
 
-			var processCwd = dirname(this.launchArgs.program);
-			// `-x` only if showDebuggerOutput is set - it is also a runtime (debugger) arg, not a program arg (ie, it can't go after the filename that we're debugging)
-			if (args.showDebuggerOutput){
-				runtimeArgs.push('-x');
-			}
+            var processCwd = args.cwd || dirname(this.launchArgs.program);
+            if (args.showDebuggerOutput){
+                runtimeArgs.push('-x');
+            }
 
-			if (args.stopOnEntry){
-				runtimeArgs.push('--stop');
-			}
+            if (args.stopOnEntry){
+                runtimeArgs.push('--stop');
+            }
 
-			this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args], {cwd: processCwd});
+            this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args], {cwd: processCwd});
 
-			// redirect output to debug console
-			this.debugprocess.stdout.on('data', (data: Buffer) => {
-				this.emit('executableOutput', data);
-			});
+            // redirect output to debug console
+            this.debugprocess.stdout.on('data', (data: Buffer) => {
+                this.emit('executableOutput', data);
+            });
 
-			this.debugprocess.stderr.on('data', (data: Buffer) => {
-				if (/^Fast Debugger/.test(data.toString())) {
-					this.debugSocketClient.connect(1234);
-					if (args.showDebuggerOutput) {
-						this.emit('debuggerOutput', data);
-					}
-				}
-				else {
-					this.emit('executableStdErr', data);
-				}
-			});
+            this.debugprocess.stderr.on('data', (data: Buffer) => {
+                if (/^Fast Debugger/.test(data.toString())) {
+                    this.debugSocketClient.connect(1234);
+                    if (args.showDebuggerOutput) {
+                        this.emit('debuggerOutput', data);
+                    }
+                }
+                else {
+                    this.emit('executableStdErr', data);
+                }
+            });
 
-			this.debugprocess.on('exit', () => {
-				this.emit('debuggerProcessExit');
-			});
+            this.debugprocess.on('exit', () => {
+                this.emit('debuggerProcessExit');
+            });
 
-			this.debugprocess.on('error', (error: Error) => {
-				this.emit('terminalError', "Process failed: " + error.message);
-			});
-		}
-		else {
-			this.debugSocketClient.connect(1234, args.remoteHost);
-		}
+            this.debugprocess.on('error', (error: Error) => {
+                this.emit('terminalError', "Process failed: " + error.message);
+            });
+        }
+        else {
+            this.debugSocketClient.connect(1234, args.remoteHost);
+        }
     }
 
     public Run(cmd: string): void {
