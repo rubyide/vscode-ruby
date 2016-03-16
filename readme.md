@@ -26,32 +26,36 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
   * `gem install debase -v 0.2.1` or higher versions
 
 ### Add VS Code config to your project
-- create `.vscode` folder under the root directory of your project
-- create `launch.json` in `.vscode/` like below
+Go to the debugger view of VS COde and hit the gear icon. Choose Ruby or Ruby Debugger from the prompt window, then you'll get the sample launch config in `.vscode/launch.json`
+
 ```
 {
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Ruby Debug",
+			"name": "Debug Local File",
 			"type": "Ruby",
 			"request": "launch",
-			"program": "${workspaceRoot}/main.rb",
-			"stopOnEntry": false
+			"program": "${workspaceRoot}/main.rb"
 		},
 		{
-			"name": "Remote Debug",
+			"name": "Listen for rdebug-ide",
 			"type": "Ruby",
-			"request": "remote",
-			"remoteHost": "",
+			"request": "attach",
+			"cwd": "${workspaceRoot}",
+			"remoteHost": "127.0.0.1",
 			"remotePort": "1234",
-			"localPort": "26162",
-			"remoteWorkspaceRoot": "/home/user/code/",
-			"localWorkspaceRoot": "${workspaceRoot}"
+			"remoteWorkspaceRoot": "${workspaceRoot}"
 		}
 	]
 }
 ```
+
+## Detailed insctrution of debugging Ruby Scripts/Rails/etc
+Read following instructions about how to debug ruby/rails/etc locally or remotely
+- [Debug Ruby Scripts](https://github.com/rebornix/vscode-ruby/wiki/2.-Debug-ruby-scripts)
+- [Debug Rails App](https://github.com/rebornix/vscode-ruby/wiki/3.-Debug-Rails-App)
+- [Attach to process](https://github.com/rebornix/vscode-ruby/wiki/4.-Attach-to-process)
 
 ## Features
 
@@ -66,19 +70,19 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
   * Variables evaluate/inspect
   * Stop on entry
   * Breaking on uncaught exceptions and errors
+  * Attach requests
+- Ruby remote debug
+- Rails
 
 ## TODO
 - Ruby scripts debugging
   * Conditional breakpoints
-  * Attach requests
-- Ruby remote debug
 - Unit/Integration tests debugging
   * RSpec
   * Cucumber
   * Shoulda
   * Test::Unit
 - Rack
-- Rails
 - Rake
 - Gem
 - IRB console

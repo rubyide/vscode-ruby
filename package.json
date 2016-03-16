@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -46,8 +46,8 @@
 	"contributes": {
 		"debuggers": [
 			{
-				"type": "ruby",
-				"label": "Ruby Debugger",
+				"type": "Ruby",
+				"label": "Ruby",
 
 				"enableBreakpointsFor": { "languageIds": [ "ruby" ] },
 
@@ -56,7 +56,7 @@
 
 				"configurationAttributes": {
 					"launch": {
-						"required": [ "program" ],
+						"required": ["program"],
 						"properties": {
 							"program": {
 								"type": "string",
@@ -83,17 +83,57 @@
 							},
 							"cwd": {
 								"type": "string",
-								"description": "Absolute path to the working directory of the program being debugged."
+								"description": "Absolute path to the working directory of the program being debugged.",
+								"default": "${workspaceRoot}"
+							}
+						}
+					},
+					"attach": {
+						"required": ["cwd", "remoteHost", "remotePort", "remoteWorkspaceRoot"],
+						"properties": {
+							"cwd": {
+								"type": "string",
+								"description": "Absolute path to the working directory of the program being debugged.",
+								"default": "${workspaceRoot}"
+							},
+							"remoteHost": {
+								"type": "string",
+								"description": "Host address for remote debugging.",
+								"default": "127.0.0.1"
+							},
+							"remotePort": {
+								"type": "string",
+								"description": "Port for remote debugging.",
+								"default": "1234"
+							},
+							"remoteWorkspaceRoot": {
+								"type": "string",
+								"description": "Remote workspace root, this parameter is required for remote debugging.",
+								"default": "${workspaceRoot}"
+							},
+							"showDebuggerOutput": {
+								"type": "boolean",
+								"description": "Show output of the debugger in the console.",
+								"default": false
 							}
 						}
 					}
 				},
 				"initialConfigurations": [
 					{
-						"name": "Ruby Debugger",
-						"type": "ruby",
+						"name": "Debug Local File",
+						"type": "Ruby",
 						"request": "launch",
 						"program": "${workspaceRoot}/main.rb"
+					},
+					{
+						"name": "Listen for rdebug-ide",
+						"type": "Ruby",
+						"request": "attach",
+						"cwd": "${workspaceRoot}",
+						"remoteHost": "127.0.0.1",
+						"remotePort": "1234",
+						"remoteWorkspaceRoot": "${workspaceRoot}"
 					}
 				]
 			}

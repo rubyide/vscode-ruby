@@ -3,3 +3,8 @@ export enum SocketClientState {
     connected,
     closed
 }
+
+export enum Mode {
+	launch,
+	attach
+}

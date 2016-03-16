@@ -9,8 +9,8 @@ import * as net from 'net';
 import * as childProcess from 'child_process';
 import {EventEmitter} from 'events';
 import {DOMParser} from 'xmldom';
-import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable, ICommand} from './interface';
-import {SocketClientState} from './common';
+import {LaunchRequestArguments, AttachRequestArguments, IRubyEvaluationResult, IDebugVariable, ICommand} from './interface';
+import {SocketClientState, Mode} from './common';
 import {includes} from './helper';
 
 var domErrorLocator: any = {};
@@ -21,7 +21,6 @@ export class RubyProcess extends EventEmitter {
     private socketConnected: boolean;
     private parser: DOMParser;
     private debugprocess: childProcess.ChildProcess;
-    private launchArgs: LaunchRequestArguments;
     private pendingResponses: ICommand[];
     private pendingCommands: any[];
     private _state: SocketClientState;
@@ -44,9 +43,8 @@ export class RubyProcess extends EventEmitter {
         this._state = newState;
     }
 
-    public constructor(args: LaunchRequestArguments) {
+    public constructor(mode: Mode, args: any) {
         super();
-        this.launchArgs = args;
         this.pendingResponses = [];
         this.pendingCommands = [];
         this.socketConnected = false;
@@ -161,7 +159,8 @@ export class RubyProcess extends EventEmitter {
             this.buffer = "";
         });
 
-        if (!args.request || args.request.toLowerCase() === 'launch') {
+
+        if (mode == Mode.launch) {
             var runtimeArgs = ['--evaluation-timeout', '10'];
             var runtimeExecutable: string;
 
@@ -173,7 +172,7 @@ export class RubyProcess extends EventEmitter {
                 runtimeExecutable = 'rdebug-ide';
             }
 
-            var processCwd = args.cwd || dirname(this.launchArgs.program);
+            var processCwd = args.cwd || dirname(args.program);
             if (args.showDebuggerOutput){
                 runtimeArgs.push('-x');
             }

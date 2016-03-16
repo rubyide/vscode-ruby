@@ -13,8 +13,8 @@ import * as childProcess from 'child_process';
 import * as path from 'path';
 import {DOMParser} from 'xmldom';
 import {RubyProcess} from './ruby';
-import {LaunchRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
-import {SocketClientState} from './common';
+import {LaunchRequestArguments, AttachRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
+import {SocketClientState, Mode} from './common';
 import {endsWith, startsWith} from './helper';
 
 class RubyDebugSession extends DebugSession {
@@ -27,7 +27,8 @@ class RubyDebugSession extends DebugSession {
     private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
     private _variableHandles: Handles<IDebugVariable>;
     private rubyProcess: RubyProcess;
-    private launchRequestArguments: LaunchRequestArguments;
+    private requestArguments: any;
+	private debugMode: Mode;
 
     /**
      * Creates a new debug adapter.
@@ -56,14 +57,8 @@ class RubyDebugSession extends DebugSession {
         this.sendResponse(response);
     }
 
-    protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
-		this.launchRequestArguments = args;
-        this.rubyProcess = new RubyProcess(args);
-
-        this.rubyProcess.on('debuggerConnect', () => {
-            this.sendEvent(new InitializedEvent());
-            this.sendResponse(response);
-        }).on('debuggerComplete', () => {
+	protected setupProcessHanlders() {
+		this.rubyProcess.on('debuggerComplete', () => {
             this.sendEvent(new TerminatedEvent());
         }).on('executableOutput', (data: Buffer) => {
             this.sendEvent(new OutputEvent(data.toString(), 'stdout'));
@@ -73,6 +68,24 @@ class RubyDebugSession extends DebugSession {
             this.sendEvent(new OutputEvent("Debugger error: " + error + '\n', 'stderr'));
         }).on('breakpoint', result => {
             this.sendEvent(new StoppedEvent('breakpoint', result.threadId));
+        }).on('exception', result => {
+            this.sendEvent(new OutputEvent("\nException raised: [" + result.type + "]: " + result.message + "\n",'stderr'));
+            this.sendEvent(new StoppedEvent('exception', result.threadId, result.type + ": " + result.message));
+        }).on('terminalError', (error: string) => {
+            this.sendEvent(new OutputEvent("Debugger terminal error: " + error))
+            this.sendEvent(new TerminatedEvent());
+        });
+	}
+
+
+    protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
+		this.debugMode = Mode.launch;
+		this.requestArguments = args;
+        this.rubyProcess = new RubyProcess(Mode.launch, args);
+
+        this.rubyProcess.on('debuggerConnect', () => {
+            this.sendEvent(new InitializedEvent());
+            this.sendResponse(response);
         }).on('suspended', result => {
             if ( args.stopOnEntry && !this._firstSuspendReceived ) {
                 this.sendEvent(new StoppedEvent('entry', result.threadId));
@@ -82,13 +95,9 @@ class RubyDebugSession extends DebugSession {
             }
 
             this._firstSuspendReceived = true;
-        }).on('exception', result => {
-            this.sendEvent(new OutputEvent("\nException raised: [" + result.type + "]: " + result.message + "\n",'stderr'));
-            this.sendEvent(new StoppedEvent('exception', result.threadId, result.type + ": " + result.message));
-        }).on('terminalError', (error: string) => {
-            this.sendEvent(new OutputEvent("Debugger terminal error: " + error))
-            this.sendEvent(new TerminatedEvent());
         });
+
+		this.setupProcessHanlders();
 
         if (args.showDebuggerOutput) {
             this.rubyProcess.on('debuggerOutput', (data: Buffer) => {
@@ -96,6 +105,21 @@ class RubyDebugSession extends DebugSession {
             });
         }
     }
+
+	protected attachRequest(response: DebugProtocol.AttachResponse, args: AttachRequestArguments): void {
+		this.requestArguments = args;
+		this.debugMode = Mode.attach;
+        this.rubyProcess = new RubyProcess(Mode.attach, args);
+
+        this.rubyProcess.on('debuggerConnect', () => {
+            this.sendEvent(new InitializedEvent());
+            this.sendResponse(response);
+        }).on('suspended', result => {
+            this.sendEvent(new StoppedEvent('step', result.threadId));
+        });
+
+		this.setupProcessHanlders();
+	}
 
     // Executed after all breakpints have been set by VS Code
     protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args:
@@ -174,8 +198,8 @@ class RubyDebugSession extends DebugSession {
             results = results.filter(stack => !(
 				endsWith(stack.file, '/rdebug-ide', null) ||
 				endsWith(stack.file, '/ruby-debug-ide.rb', null) ||
-				(this.launchRequestArguments.request === 'remote' &&
-				path.normalize(stack.file).toLocaleLowerCase().indexOf(path.normalize(this.launchRequestArguments.remoteWorkspaceRoot).toLocaleLowerCase()) === -1))
+				(this.debugMode == Mode.attach &&
+				path.normalize(stack.file).toLocaleLowerCase().indexOf(path.normalize(this.requestArguments.remoteWorkspaceRoot).toLocaleLowerCase()) === -1))
 			);
 
             //get the current frame
@@ -206,15 +230,15 @@ class RubyDebugSession extends DebugSession {
     }
 
 	protected convertClientPathToDebugger(localPath: string): string {
-		if (!this.launchRequestArguments.request || this.launchRequestArguments.request.toLocaleLowerCase() === 'launch') {
+		if (this.debugMode == Mode.launch) {
 			return localPath;
 		}
 
 		var relativePath = path.join(
-			this.launchRequestArguments.remoteWorkspaceRoot, localPath.substring(this.launchRequestArguments.localWorkspaceRoot.length)
+			this.requestArguments.remoteWorkspaceRoot, localPath.substring(this.requestArguments.cwd.length)
 		);
 
-		var sepIndex = this.launchRequestArguments.remoteWorkspaceRoot.lastIndexOf('/');
+		var sepIndex = this.requestArguments.remoteWorkspaceRoot.lastIndexOf('/');
 
 		if (sepIndex !== -1) {
 			// *inx or darwin
@@ -225,13 +249,13 @@ class RubyDebugSession extends DebugSession {
 	}
 
 	protected convertDebuggerPathToClient(serverPath: string):string{
-		if (!this.launchRequestArguments.request || this.launchRequestArguments.request.toLocaleLowerCase() === 'launch') {
+		if (this.debugMode == Mode.launch) {
 			return serverPath;
 		}
 
 		// Path.join will convert the path using local OS preferred separator
 		var relativePath = path.join(
-			this.launchRequestArguments.localWorkspaceRoot, serverPath.substring(this.launchRequestArguments.remoteWorkspaceRoot.length)
+			this.requestArguments.cwd, serverPath.substring(this.requestArguments.remoteWorkspaceRoot.length)
 		);
 		return relativePath;
 	}
