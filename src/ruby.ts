@@ -209,7 +209,7 @@ export class RubyProcess extends EventEmitter {
             });
         }
         else {
-            this.debugSocketClient.connect(1234, args.remoteHost);
+            this.debugSocketClient.connect(args.remotePort, args.remoteHost);
         }
     }
 
