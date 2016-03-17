@@ -39,6 +39,14 @@ Go to the debugger view of VS COde and hit the gear icon. Choose Ruby or Ruby De
 			"program": "${workspaceRoot}/main.rb"
 		},
 		{
+			"name": "Rails server",
+			"type": "Ruby",
+			"request": "launch",
+			"cwd": "${workspaceRoot}",
+			"program": "${workspaceRoot}/bin/rails",
+			"args": ["server"]
+		},
+		{
 			"name": "Listen for rdebug-ide",
 			"type": "Ruby",
 			"request": "attach",
