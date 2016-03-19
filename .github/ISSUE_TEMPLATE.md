@@ -1,9 +1,10 @@
 ### Your environment
 
-- `vscode-ruby` version:
-- System:
-- Ruby version:
-- Hardware(optional):
+- `vscode-ruby` version: 
+- Ruby version: 
+- VS Code version: 
+- Operating System: 
+- Hardware (optional): 
 
 Make sure you have `ruby`, `ruby-debug-ide` and `ruby-debug-basex19` installed before submitting your issue -- thank you !
 
@@ -11,5 +12,6 @@ Make sure you have `ruby`, `ruby-debug-ide` and `ruby-debug-basex19` installed b
 
 
 ### Actual behavior
+
 
 ### Steps to reproduce the problem
