@@ -59,7 +59,7 @@ Go to the debugger view of VS COde and hit the gear icon. Choose Ruby or Ruby De
 }
 ```
 
-## Detailed insctrution of debugging Ruby Scripts/Rails/etc
+## Detailed instruction of debugging Ruby Scripts/Rails/etc
 Read following instructions about how to debug ruby/rails/etc locally or remotely
 - [Debug Ruby Scripts](https://github.com/rebornix/vscode-ruby/wiki/2.-Debug-ruby-scripts)
 - [Debug Rails App](https://github.com/rebornix/vscode-ruby/wiki/3.-Debug-Rails-App)
