@@ -180,6 +180,11 @@ export class RubyProcess extends EventEmitter {
             if (args.stopOnEntry){
                 runtimeArgs.push('--stop');
             }
+            if (args.useBundler){
+                runtimeArgs.unshift(runtimeExecutable);
+                runtimeArgs.unshift('exec');
+                runtimeExecutable = 'bundle';
+            }
 
             this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args], {cwd: processCwd});
 
