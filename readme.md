@@ -26,7 +26,7 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
   * `gem install debase -v 0.2.1` or higher versions
 
 ### Add VS Code config to your project
-Go to the debugger view of VS COde and hit the gear icon. Choose Ruby or Ruby Debugger from the prompt window, then you'll get the sample launch config in `.vscode/launch.json`
+Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby Debugger from the prompt window, then you'll get the sample launch config in `.vscode/launch.json`
 
 ```
 {
