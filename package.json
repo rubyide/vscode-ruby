@@ -7,6 +7,10 @@
 	"author": {
 		"name": "Peng Lv"
 	},
+	"contributors": [{
+		"name": "Bryan Hoekstra",
+		"url": "https://github.com/HookyQR"
+		}],
 	"engines": {
 		"vscode": "^0.10.1"
 	},
@@ -49,7 +53,9 @@
 				"type": "Ruby",
 				"label": "Ruby",
 
-				"enableBreakpointsFor": { "languageIds": [ "ruby" ] },
+				"enableBreakpointsFor": {
+					"languageIds": ["ruby"]
+				},
 
 				"program": "./out/main.js",
 				"runtime": "node",
@@ -115,6 +121,21 @@
 								"type": "boolean",
 								"description": "Show output of the debugger in the console.",
 								"default": false
+							},
+							"useBundler": {
+								"type": "boolean",
+								"description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
+								"default": false
+							},
+							"pathToBundle": {
+								"type": "string",
+								"description": "If you use the `useBunder` option, and `bundle` is not in your path, provide the absolute path to `bundle` (eg. \"/usr/bin/bundle\" )",
+								"default": "bundle"
+							},
+							"pathToRDebugIDE": {
+								"type": "string",
+								"description": "If `rdebug-ide` is not in your path, provide the absolute path to `rdebug-ide` (eg. \"c:\\ruby\\rdebug-ide.bat\" )",
+								"default": "rdebug-ide"
 							}
 						}
 					}
