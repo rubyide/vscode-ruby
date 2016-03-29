@@ -172,6 +172,10 @@ export class RubyProcess extends EventEmitter {
                 runtimeExecutable = 'rdebug-ide';
             }
 
+            if (args.pathToRDebugIDE && args.pathToRDebugIDE !== 'rdebug-ide'){
+                runtimeExecutable = args.pathToRDebugIDE;
+            }
+
             var processCwd = args.cwd || dirname(args.program);
             if (args.showDebuggerOutput){
                 runtimeArgs.push('-x');
@@ -180,10 +184,15 @@ export class RubyProcess extends EventEmitter {
             if (args.stopOnEntry){
                 runtimeArgs.push('--stop');
             }
+
             if (args.useBundler){
                 runtimeArgs.unshift(runtimeExecutable);
                 runtimeArgs.unshift('exec');
                 runtimeExecutable = 'bundle';
+
+                if (args.pathToBundler && args.pathToBundler !== 'bundle'){
+                    runtimeExecutable = args.pathToBundler;
+                }
             }
 
             this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args], {cwd: processCwd});
