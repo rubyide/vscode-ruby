@@ -97,7 +97,7 @@
 								"description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
 								"default": false
 							},
-							"pathToBundle": {
+							"pathToBundler": {
 								"type": "string",
 								"description": "If you use the `useBunder` option, and `bundle` is not in your path, provide the absolute path to `bundle` (eg. \"/usr/bin/bundle\" )",
 								"default": "bundle"

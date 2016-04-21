@@ -195,7 +195,7 @@ export class RubyProcess extends EventEmitter {
                 }
             }
 
-            this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args], {cwd: processCwd});
+            this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args || []], {cwd: processCwd});
 
             // redirect output to debug console
             this.debugprocess.stdout.on('data', (data: Buffer) => {
