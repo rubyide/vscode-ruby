@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.3.1",
+	"version": "0.3.4",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -155,6 +155,14 @@
 						"remoteHost": "127.0.0.1",
 						"remotePort": "1234",
 						"remoteWorkspaceRoot": "${workspaceRoot}"
+					},
+					{
+						"name": "Rails server",
+						"type": "Ruby",
+						"request": "launch",
+						"cwd": "${workspaceRoot}",
+						"program": "${workspaceRoot}/bin/rails",
+						"args": ["server"]
 					}
 				]
 			}
