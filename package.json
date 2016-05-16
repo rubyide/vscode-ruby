@@ -7,9 +7,18 @@
 	"author": {
 		"name": "Peng Lv"
 	},
-	"contributors": [{
-		"name": "Bryan Hoekstra",
-		"url": "https://github.com/HookyQR"
+	"contributors": [
+		{
+		    "name": "Bryan Hoekstra",
+		    "url": "https://github.com/HookyQR"
+		},
+		{
+			"name": "Drew Cain",
+			"url": "https://github.com/groksrc"
+		},
+		{
+			"name": "Lex Li",
+			"url": "https://github.com/lextm"
 		}],
 	"engines": {
 		"vscode": "^0.10.1"
@@ -17,7 +26,8 @@
 	"license": "MIT",
 	"icon": "images/ruby.png",
 	"categories": [
-		"Debuggers"
+		"Debuggers",
+		"Languages"
 	],
 	"private": false,
 	"repository": {
@@ -48,6 +58,17 @@
 		"test": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/tests/*.js"
 	},
 	"contributes": {
+		"languages": [{
+			"id": "ruby",
+			"aliases": ["Ruby", "ruby"],
+			"extensions": [".rb",".rbx",".rjs",".Rakefile",".rake",".cgi",".fcgi",".gemspec",".irbrc",".capfile",".ru",".prawn",".Gemfile",".Guardfile",".Vagrantfile"],
+			"configuration": "./ruby.configuration.json"
+		}],
+		"grammars": [{
+			"language": "ruby",
+			"scopeName": "source.ruby",
+			"path": "./syntaxes/ruby.tmLanguage"
+		}],
 		"debuggers": [
 			{
 				"type": "Ruby",
