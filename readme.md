@@ -80,7 +80,8 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
   * Breaking on uncaught exceptions and errors
   * Attach requests
 - Ruby remote debug
-- Rails
+- Rails debugging
+- Language colorization support
 
 ## TODO
 - Ruby scripts debugging
