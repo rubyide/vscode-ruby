@@ -217,7 +217,7 @@
       <key>match</key>
       <string>(?&gt;[a-zA-Z_]\w*(?&gt;[?!])?)(:)(?!:)</string>
       <key>name</key>
-      <string>constant.other.symbol.hashkey.ruby</string>
+      <string>constant.language.symbol.hashkey.ruby</string>
     </dict>
     <dict>
       <key>captures</key>
@@ -233,7 +233,7 @@
       <key>match</key>
       <string>(?&lt;!:)(:)(?&gt;[a-zA-Z_]\w*(?&gt;[?!])?)(?=\s*=&gt;)</string>
       <key>name</key>
-      <string>constant.other.symbol.hashkey.ruby</string>
+      <string>constant.language.symbol.hashkey.ruby</string>
     </dict>
     <dict>
       <key>comment</key>
@@ -598,7 +598,7 @@
       <key>end</key>
       <string>'</string>
       <key>name</key>
-      <string>constant.other.symbol.single-quoted.ruby</string>
+      <string>constant.language.symbol.single-quoted.ruby</string>
       <key>patterns</key>
       <array>
         <dict>
@@ -623,7 +623,7 @@
       <key>end</key>
       <string>"</string>
       <key>name</key>
-      <string>constant.other.symbol.double-quoted.ruby</string>
+      <string>constant.language.symbol.double-quoted.ruby</string>
       <key>patterns</key>
       <array>
         <dict>
@@ -1642,7 +1642,7 @@
       <key>match</key>
       <string>(?&lt;!:)(:)(?&gt;[a-zA-Z_]\w*(?&gt;[?!]|=(?![&gt;=]))?|===?|&gt;[&gt;=]?|&lt;[&lt;=]?|&lt;=&gt;|[%&amp;`/\|]|\*\*?|=?~|[-+]@?|\[\]=?|@@?[a-zA-Z_]\w*)</string>
       <key>name</key>
-      <string>constant.other.symbol.ruby</string>
+      <string>constant.language.symbol.ruby</string>
     </dict>
     <dict>
       <key>captures</key>
@@ -1658,7 +1658,7 @@
       <key>match</key>
       <string>(?&gt;[a-zA-Z_]\w*(?&gt;[?!])?)(:)(?!:)</string>
       <key>name</key>
-      <string>constant.other.symbol.ruby.19syntax</string>
+      <string>constant.language.symbol.ruby.19syntax</string>
     </dict>
     <dict>
       <key>begin</key>
