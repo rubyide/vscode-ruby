@@ -75,7 +75,7 @@
 				"label": "Ruby",
 
 				"enableBreakpointsFor": {
-					"languageIds": ["ruby"]
+					"languageIds": ["ruby", "erb"]
 				},
 
 				"program": "./out/main.js",
