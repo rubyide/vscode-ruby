@@ -31,7 +31,8 @@
 	"icon": "images/ruby.png",
 	"categories": [
 		"Debuggers",
-		"Languages"
+		"Languages",
+		"Linters"
 	],
 	"private": false,
 	"repository": {

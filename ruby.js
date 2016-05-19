@@ -30,7 +30,24 @@ function deferReport(uri, lint, diagnostic) {
 	diagnostic.set(uri, allOf);
 }
 
+const langConfig = {
+	comments: {
+		lineComment: "#",
+		blockComment: ["=begin", "=end"]
+	},
+	brackets: [
+		["{", "}"],
+		["[", "]"],
+		["(", ")"]
+	],
+	indentationRules: {
+		increaseIndentPattern: /^\s*(begin|class|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)\b[^\{;]*$/
+	}
+};
+
 function activate(context) {
+	//add language config
+	vscode.languages.setLanguageConfiguration('ruby', langConfig);
 
 	let activeLinters = {};
 	let linterTimers = {};
@@ -55,7 +72,7 @@ function activate(context) {
 			}
 			linterTimers[doc.fileName] = setTimeout(() => {
 				activeLinters[doc.fileName] = linters.runCollection(lintConfig, doc.fileName, doc.getText(), result => {
-					if (!activeDiagnostics[result.linter]){
+					if (!activeDiagnostics[result.linter]) {
 						activeDiagnostics[result.linter] = vscode.languages.createDiagnosticCollection(result.linter);
 						context.subscriptions.push(activeDiagnostics[result.linter]);
 					}
