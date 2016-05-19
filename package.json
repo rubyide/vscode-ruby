@@ -1,13 +1,17 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.4.0",
+	"version": "0.4.1",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
 		"name": "Peng Lv"
 	},
 	"contributors": [
+		{
+		    "name": "Peng Lyu",
+		    "url": "https://github.com/rebornix"
+		},
 		{
 		    "name": "Bryan Hoekstra",
 		    "url": "https://github.com/HookyQR"
@@ -32,10 +36,10 @@
 	"private": false,
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/rebornix/vscode-ruby.git"
+		"url": "https://github.com/rubyide/vscode-ruby.git"
 	},
 	"bugs": {
-		"url": "https://github.com/rebornix/vscode-ruby/issues"
+		"url": "https://github.com/rubyide/vscode-ruby/issues"
 	},
 	"dependencies": {
 		"vscode-debugprotocol": "~1.6.0-pre4",
