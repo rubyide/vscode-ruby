@@ -1644,10 +1644,6 @@
       <key>name</key>
       <string>constant.language.symbol.ruby</string>
     </dict>
-
-
-
-
     <dict>
       <key>begin</key>
       <string>%I\{</string>
@@ -2041,10 +2037,6 @@
         </dict>
       </array>
     </dict>
-
-
-
-
     <dict>
       <key>captures</key>
       <dict>
