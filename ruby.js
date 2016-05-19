@@ -41,8 +41,9 @@ const langConfig = {
 		["(", ")"]
 	],
 	indentationRules: {
-		increaseIndentPattern: /^\s*(begin|class|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)\b[^\{;]*$/
-	}
+		increaseIndentPattern: /^\s*(begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)\b[^\{;]*$/
+	},
+	wordPattern: /(-?\d+\.\d\w*)|([:]?[^\`\~\@\#\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s\!\?]+[\!\?]?)/
 };
 
 function activate(context) {
