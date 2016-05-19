@@ -14,6 +14,7 @@ It's still in progress ( [GitHub](https://github.com/rebornix/vscode-ruby.git) )
 ### Install Extension
 Press `F1`, type `ext install ruby`.
 
+## Debugger
 ### Install Ruby Dependencies
 In this extension, we implement [ruby debug ide protocol](http://debug-commons.rubyforge.org/protocol-spec.html) to allow VS Code to communicate with ruby debug, it requires `ruby-debug-ide` to be installed on your machine. This is also how RubyMine/NetBeans does by default.
 
@@ -65,6 +66,79 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
 - [Debug Rails App](https://github.com/rebornix/vscode-ruby/wiki/3.-Debug-Rails-App)
 - [Attach to process](https://github.com/rebornix/vscode-ruby/wiki/4.-Attach-to-process)
 
+## Linters
+### Available Linter hooks
+You will need to install the ruby gem for eacy of these for linting to work (except ruby -wc of course)
+
+* ruby -wc
+* rubocop
+* ruby-lint
+* reek
+* fasterer
+* debride
+
+
+Enable each one in your workspace or user settings:
+
+```javascript
+// Basic settings: turn linter(s) on
+"ruby.lint": {
+	"reek": true,
+	"rubocop": true,
+	"ruby": true, //Runs ruby -wc
+	"fasterer": true,
+	"debride": true,
+	"ruby-lint": true
+}
+
+//advanced: set command line options for some linters:
+"ruby.lint": {
+	"rubocop": {
+		"only": ["SpaceInsideBlockBraces", "LeadingCommentSpace"],
+		"lint": true,
+		"rails": true
+	},
+	"reek": true
+}
+```
+
+By default no linters are turned on.
+
+Each linter runs only on the newly opened or edited file. This excludes some of the linters functionality, and makes some overly chatty - such as ruby-lint reporting undefined methods. The usual configuration file for each linter will be use as they would be when running from the command line, however settings that include/exclude files will not likely be followed.
+
+Relevant configuration files:
+* debride: _none_
+* ruby: _none_
+* reek: [*.reek](https://github.com/troessner/reek)
+* fasterer: [.fasterer.yml](https://github.com/DamirSvrtan/fasterer)
+* ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/1d036ca52d91256b1cf0f1d84dc025fdefe5e58a/doc/configuration.md#configuration)
+* rubocop: [.rubocop.yml](https://github.com/bbatsov/rubocop#configuration)
+
+Settings available (in your VSCode workspace) for each of the linters:
+
+```javascript
+"debride": {
+	"rails": true //Add some rails call conversions.
+}
+
+"ruby"//no settings
+"reek" //no settings
+"fasterer" //no settings
+
+"ruby-lint": {
+	"levels": [/* a subset of these */ "error","warning","info"],
+	"classes":[ /* a subset of these */ "argument_amount", "loop_keywords", "pedantics", "shadowing_variables", "undefined_methods", "undefined_variables", "unused_variables", "useless_equality_checks" ]
+}
+
+"rubocop": {
+	"lint": true, //enable all lint cops.
+	"only": [/* array: Run only the specified cop(s) and/or cops in the specified departments. */],
+	"except": [/* array: Run all cops enabled by configuration except the specified cop(s) and/or departments. */],
+	"require": [/* array: Require Ruby files. */],
+	"rails": true //Run extra rails cops
+}
+```
+
 ## Features
 
 - Ruby scripts debugging
@@ -82,6 +156,7 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
 - Ruby remote debug
 - Rails debugging
 - Language colorization support
+- Linting
 
 ## TODO
 - Ruby scripts debugging
@@ -96,7 +171,6 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
 - Gem
 - IRB console
 - IntelliSense and autocomplete
-- Linting
 
 ## Main contributors
 
