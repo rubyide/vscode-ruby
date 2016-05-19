@@ -9,6 +9,11 @@
 	},
 	"contributors": [
 		{
+		    "name": "Peng Lyu",
+		    "url": "https://github.com/rebornix"
+		},
+		}
+		{
 		    "name": "Bryan Hoekstra",
 		    "url": "https://github.com/HookyQR"
 		},
@@ -32,10 +37,10 @@
 	"private": false,
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/rebornix/vscode-ruby.git"
+		"url": "https://github.com/rubyide/vscode-ruby.git"
 	},
 	"bugs": {
-		"url": "https://github.com/rebornix/vscode-ruby/issues"
+		"url": "https://github.com/rubyide/vscode-ruby/issues"
 	},
 	"dependencies": {
 		"vscode-debugprotocol": "~1.6.0-pre4",
