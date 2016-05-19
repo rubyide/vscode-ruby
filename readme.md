@@ -23,7 +23,7 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
   * `gem install ruby-debug-ide`, the latest version is `0.6.0`. Make sure `ruby-debug-base` is installed together with ruby-debug-ide`.
 - If you are using Ruby v1.9.x (`ruby_19`, `mingw_19`)
   * `gem install ruby-debug-ide`, the latest version is `0.6.0`. Make sure `ruby-debug-base19x` is installed together with `ruby-debug-ide`.
-- If you are using Ruby v2.0.x
+- If you are using Ruby v2.x
   * `gem install ruby-debug-ide -v 0.4.32` or higher versions
   * `gem install debase -v 0.2.1` or higher versions
 
