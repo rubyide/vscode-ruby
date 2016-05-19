@@ -1201,7 +1201,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>%[QWSR]?\(</string>
+      <string>%[QWR]?\(</string>
       <key>beginCaptures</key>
       <dict>
         <key>0</key>
@@ -1242,7 +1242,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>%[QWSR]?\[</string>
+      <string>%[QWR]?\[</string>
       <key>beginCaptures</key>
       <dict>
         <key>0</key>
@@ -1283,7 +1283,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>%[QWSR]?\&lt;</string>
+      <string>%[QWR]?\&lt;</string>
       <key>beginCaptures</key>
       <dict>
         <key>0</key>
@@ -1324,7 +1324,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>%[QWSR]?\{</string>
+      <string>%[QWR]?\{</string>
       <key>beginCaptures</key>
       <dict>
         <key>0</key>
@@ -1365,7 +1365,7 @@
     </dict>
     <dict>
       <key>begin</key>
-      <string>%[QWSR]([^\w])</string>
+      <string>%[QWR]([^\w])</string>
       <key>beginCaptures</key>
       <dict>
         <key>0</key>
@@ -1643,6 +1643,398 @@
       <string>(?&lt;!:)(:)(?&gt;[a-zA-Z_]\w*(?&gt;[?!]|=(?![&gt;=]))?|===?|&gt;[&gt;=]?|&lt;[&lt;=]?|&lt;=&gt;|[%&amp;`/\|]|\*\*?|=?~|[-+]@?|\[\]=?|@@?[a-zA-Z_]\w*)</string>
       <key>name</key>
       <string>constant.language.symbol.ruby</string>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%I\{</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>array of symbols (allow for interpolation)</string>
+      <key>end</key>
+      <string>\}</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#interpolated_ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#escaped_char</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_curly_i</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%I\(</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>array of symbols (allow for interpolation)</string>
+      <key>end</key>
+      <string>\)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#interpolated_ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#escaped_char</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_parens_i</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%I\[</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>array of symbols (allow for interpolation)</string>
+      <key>end</key>
+      <string>\]</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#interpolated_ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#escaped_char</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_brackets_i</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%I\&lt;</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>array of symbols (allow for interpolation)</string>
+      <key>end</key>
+      <string>\&gt;</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#interpolated_ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#escaped_char</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_ltgt_i</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%I([^\w])</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>array of symbols (allow for interpolation)</string>
+      <key>end</key>
+      <string>\1</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.constant.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>include</key>
+          <string>#interpolated_ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#escaped_char</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%i\(</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>literal incapable of interpolation -- ()</string>
+      <key>end</key>
+      <string>\)</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>\\\)|\\\\</string>
+          <key>name</key>
+          <string>constant.character.escape.ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_parens</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%i\&lt;</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>literal incapable of interpolation -- &lt;&gt;</string>
+      <key>end</key>
+      <string>\&gt;</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>\\\&gt;|\\\\</string>
+          <key>name</key>
+          <string>constant.character.escape.ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_ltgt</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%i\[</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>literal incapable of interpolation -- []</string>
+      <key>end</key>
+      <string>\]</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>\\\]|\\\\</string>
+          <key>name</key>
+          <string>constant.character.escape.ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_brackets</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%i\{</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>literal incapable of interpolation -- {}</string>
+      <key>end</key>
+      <string>\}</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>match</key>
+          <string>\\\}|\\\\</string>
+          <key>name</key>
+          <string>constant.character.escape.ruby</string>
+        </dict>
+        <dict>
+          <key>include</key>
+          <string>#nest_curly</string>
+        </dict>
+      </array>
+    </dict>
+    <dict>
+      <key>begin</key>
+      <string>%i([^\w])</string>
+      <key>beginCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.begin.ruby</string>
+        </dict>
+      </dict>
+      <key>comment</key>
+      <string>array of symbols incapable of interpolation -- wildcard</string>
+      <key>end</key>
+      <string>\1</string>
+      <key>endCaptures</key>
+      <dict>
+        <key>0</key>
+        <dict>
+          <key>name</key>
+          <string>punctuation.definition.symbol.end.ruby</string>
+        </dict>
+      </dict>
+      <key>name</key>
+      <string>constant.language.symbol.ruby</string>
+      <key>patterns</key>
+      <array>
+        <dict>
+          <key>comment</key>
+          <string>Cant be named because its not neccesarily an escape.</string>
+          <key>match</key>
+          <string>\\.</string>
+        </dict>
+      </array>
     </dict>
     <dict>
       <key>captures</key>

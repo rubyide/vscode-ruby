@@ -57,7 +57,112 @@
 		"watch": "tsc -w -p ./src",
 		"test": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/tests/*.js"
 	},
+	"activationEvents": [
+		"onLanguage:ruby"
+	],
+	"main": "ruby.js",
+
 	"contributes": {
+
+		"configuration": {
+			"title": "ruby language linting settings",
+			"properties": {
+				"ruby.lint": {
+					"type": "object",
+					"description": "Set individual ruby linters to use",
+					"properties": {
+						"ruby": {
+							"type": "boolean",
+							"default": false,
+							"description": "Use ruby -wc to lint"
+						},
+						"debride": {
+							"type": ["boolean", "object"],
+							"default": false,
+							"properties": {
+								"rails": {
+									"type": "boolean",
+									"default": "true",
+									"description": "Add some rails call conversions"
+								}
+							},
+							"description": "Use debride to lint"
+						},
+						"fasterer": {
+							"type": "boolean",
+							"default": false,
+							"description": "Use fasterer to lint"
+						},
+						"reek": {
+							"type": "boolean",
+							"default": false,
+							"description": "Use reek to lint"
+						},
+						"rubocop": {
+							"type": ["boolean", "object"],
+							"default": false,
+							"description": "Use RuboCop to lint",
+							"properties": {
+								"lint": {
+									"type": "boolean",
+									"default": false,
+									"description": "Enable all lint cops"
+								},
+								"only": {
+									"type": "array",
+									"description": "Run only the specified cop(s) and/or cops in the specified departments",
+									"items": {
+										"type": "string"
+									}
+								},
+								"except": {
+									"type": "array",
+									"description": "Run all cops enabled by configuration except the specified cop(s) and/or departments",
+									"items": {
+										"type": "string"
+									}
+								},
+								"require": {
+									"type": "array",
+									"description": "Require Ruby files",
+									"items": {
+										"type": "string"
+									}
+								},
+								"rails": {
+									"type": "boolean",
+									"default": false
+								}
+							}
+						},
+						"ruby-lint": {
+							"type": ["boolean", "object"],
+							"default": false,
+							"description": "Use ruby-lint to lint",
+							"properties": {
+								"levels": {
+									"type": "array",
+									"description": "Level of offenses to show",
+									"items": {
+										"type": "string",
+										"enum": ["error", "warning", "info"]
+									}
+								},
+								"classes": {
+									"type": "array",
+									"description": "Classes of offenses to show",
+									"items": {
+										"type": "string",
+										"enum": ["argument_amount", "loop_keywords", "pedantics", "shadowing_variables", "undefined_methods",
+											"undefined_variables", "unused_variables", "useless_equality_checks"]
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"languages": [{
 			"id": "ruby",
 			"aliases": ["Ruby", "ruby"],
@@ -75,7 +180,7 @@
 				"label": "Ruby",
 
 				"enableBreakpointsFor": {
-					"languageIds": ["ruby"]
+					"languageIds": ["ruby", "erb"]
 				},
 
 				"program": "./out/main.js",
