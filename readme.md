@@ -2,8 +2,6 @@
 
 [![Join the chat at https://gitter.im/rebornix/vscode-ruby](https://badges.gitter.im/rebornix/vscode-ruby.svg)](https://gitter.im/rebornix/vscode-ruby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/s4sv1fwpjeqmgnhd?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 
-#**This extension is now actively developed under [rubyide](https://github.com/rubyide/vscode-ruby)**
-
 This extension provides rich Ruby language and debugging support for Visual Studio Code. Fully tested against *nix/Windows and Ruby 1.9.3 to 2.2.0.
 It's still in progress ( [GitHub](https://github.com/rubyide/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0. If you are interested in this project, feel free to
 
@@ -61,7 +59,7 @@ Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby De
 }
 ```
 
-## Detailed instruction of debugging Ruby Scripts/Rails/etc
+### Detailed instruction of debugging Ruby Scripts/Rails/etc
 Read following instructions about how to debug ruby/rails/etc locally or remotely
 - [Debug Ruby Scripts](https://github.com/rebornix/vscode-ruby/wiki/2.-Debug-ruby-scripts)
 - [Debug Rails App](https://github.com/rebornix/vscode-ruby/wiki/3.-Debug-Rails-App)
