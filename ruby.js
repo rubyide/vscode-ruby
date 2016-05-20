@@ -46,6 +46,68 @@ const langConfig = {
 	wordPattern: /(-?\d+\.\d\w*)|([:]?[^\`\~\@\#\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s\!\?]+[\!\?]?)/
 };
 
+let pairedEnds = [];
+
+const highligher = {
+	provideDocumentHighlights: (doc, pos) => {
+		const word = doc.getText(doc.getWordRangeAtPosition(pos));
+		let result;
+		if (
+			(/\b(begin|class|def|for|if|module|unless|until|case|while|do)\b/.test(doc.lineAt(pos.line)
+					.text) &&
+				pairedEnds.some(pair => (result = (pair.entry.start.line === pos.line) ? pair : null))) ||
+			(word === 'end' && pairedEnds.some(pair => (result = (pair.end.start.line === pos.line) ? pair : null)))
+		) {
+			return [new vscode.DocumentHighlight(result.entry), new vscode.DocumentHighlight(result.end)];
+		}
+	}
+};
+
+function getEnd(line) {
+	//end must be on a line by itself, or followed directly by a dot
+	let match = line.text.match(/^(\s*)(end|(end\..*))\s*$/);
+	if (match) {
+		return new vscode.Range(line.lineNumber, match[1].length, line.lineNumber, match[1].length + 3);
+	}
+}
+
+function getEntry(line) {
+	//only lines that start with the entry
+	let match = line.text.match(/^(\s*)(begin|class|def|for|if|module|unless|until|case|while)\b[^\{;]*$/);
+	if (match) {
+		return new vscode.Range(line.lineNumber, match[1].length, line.lineNumber, match[1].length + match[2].length);
+	} else {
+		//check for do
+		match = line.text.match(/\b(do)\b\s*(\|.*\|[^;]*)?$/);
+		if (match) {
+			return new vscode.Range(line.lineNumber, match.index, line.lineNumber, match.index + 2);
+		}
+	}
+}
+
+function balancePairs(doc) {
+	pairedEnds = [];
+	if (doc.languageId !== 'ruby') return;
+
+	let waitingEntries = [];
+	let entry, end;
+	for (let i = 0; i < doc.lineCount; i++) {
+		if ((entry = getEntry(doc.lineAt(i)))) {
+			waitingEntries.push(entry);
+		} else if (waitingEntries.length && (end = getEnd(doc.lineAt(i)))) {
+			pairedEnds.push({
+				entry: waitingEntries.pop(),
+				end: end
+			});
+		}
+	}
+}
+
+function balanceEvent(event) {
+	pairedEnds = [];
+	if (event && event.document) balancePairs(event.document);
+}
+
 function activate(context) {
 	//add language config
 	vscode.languages.setLanguageConfiguration('ruby', langConfig);
@@ -83,11 +145,20 @@ function activate(context) {
 			}, 200);
 		}
 	}
+	context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider('ruby', highligher));
+
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(changeTrigger));
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(changeTrigger));
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(
 		() => vscode.window.visibleTextEditors.forEach(changeTrigger)));
 	vscode.window.visibleTextEditors.forEach(changeTrigger);
+
+	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
+	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
+	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(balancePairs));
+
+	balancePairs(vscode.window.activeTextEditor);
+
 }
 
 exports.activate = activate;
