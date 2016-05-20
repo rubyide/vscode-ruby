@@ -9,12 +9,12 @@
 	},
 	"contributors": [
 		{
-		    "name": "Peng Lyu",
-		    "url": "https://github.com/rebornix"
+			"name": "Peng Lyu",
+			"url": "https://github.com/rebornix"
 		},
 		{
-		    "name": "Bryan Hoekstra",
-		    "url": "https://github.com/HookyQR"
+			"name": "Bryan Hoekstra",
+			"url": "https://github.com/HookyQR"
 		},
 		{
 			"name": "Drew Cain",
@@ -32,7 +32,8 @@
 	"categories": [
 		"Debuggers",
 		"Languages",
-		"Linters"
+		"Linters",
+		"Snippets"
 	],
 	"private": false,
 	"repository": {
@@ -68,7 +69,12 @@
 	"main": "ruby.js",
 
 	"contributes": {
-
+		"snippets": [
+			{
+				"language": "ruby",
+				"path": "./snippets/ruby.json"
+			}
+		],
 		"configuration": {
 			"title": "ruby language linting settings",
 			"properties": {
@@ -171,8 +177,8 @@
 		"languages": [{
 			"id": "ruby",
 			"aliases": ["Ruby", "ruby"],
-			"extensions": [".rb",".rbx",".rjs",".Rakefile",".rake",".cgi",".fcgi",".gemspec",".irbrc",".capfile",".ru",".prawn",".Gemfile",".Guardfile",".Vagrantfile"],
-			"configuration": "./ruby.configuration.json"
+			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
+				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"]
 		}],
 		"grammars": [{
 			"language": "ruby",

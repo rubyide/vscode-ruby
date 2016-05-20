@@ -61,9 +61,9 @@ Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby De
 
 ### Detailed instruction of debugging Ruby Scripts/Rails/etc
 Read following instructions about how to debug ruby/rails/etc locally or remotely
-- [Debug Ruby Scripts](https://github.com/rebornix/vscode-ruby/wiki/2.-Debug-ruby-scripts)
-- [Debug Rails App](https://github.com/rebornix/vscode-ruby/wiki/3.-Debug-Rails-App)
-- [Attach to process](https://github.com/rebornix/vscode-ruby/wiki/4.-Attach-to-process)
+- [Debug Ruby Scripts](https://github.com/rubyide/vscode-ruby/wiki/2.-Debug-ruby-scripts)
+- [Debug Rails App](https://github.com/rubyide/vscode-ruby/wiki/3.-Debug-Rails-App)
+- [Attach to process](https://github.com/rubyide/vscode-ruby/wiki/4.-Attach-to-process)
 
 ## Linters
 ### Available Linter hooks
@@ -110,7 +110,7 @@ Relevant configuration files:
 * ruby: _none_
 * reek: [*.reek](https://github.com/troessner/reek)
 * fasterer: [.fasterer.yml](https://github.com/DamirSvrtan/fasterer)
-* ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/1d036ca52d91256b1cf0f1d84dc025fdefe5e58a/doc/configuration.md#configuration)
+* ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/master/doc/configuration.md)
 * rubocop: [.rubocop.yml](https://github.com/bbatsov/rubocop#configuration)
 
 Settings available (in your VSCode workspace) for each of the linters:
