@@ -178,8 +178,7 @@
 			"id": "ruby",
 			"aliases": ["Ruby", "ruby"],
 			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
-				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"],
-			"configuration": "./ruby.configuration.json"
+				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"]
 		}],
 		"grammars": [{
 			"language": "ruby",
