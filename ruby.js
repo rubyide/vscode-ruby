@@ -41,9 +41,9 @@ const langConfig = {
 		["(", ")"]
 	],
 	indentationRules: {
-		increaseIndentPattern: /^\s*(begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)\b[^\{;]*$/
+		increaseIndentPattern: /^\s*((begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)|(.*\sdo\b))\b[^\{;]*$/
 	},
-	wordPattern: /(-?\d+\.\d\w*)|([:]?[^\`\~\@\#\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\s\!\?]+[\!\?]?)/
+	wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/\]\.\*\s\\!?]+[!?]?)/
 };
 
 let pairedEnds = [];
