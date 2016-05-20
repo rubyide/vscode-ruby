@@ -142,7 +142,8 @@ function run(opts) {
 
 let stop = () => {
 	for (let proc in activeProcesses) {
-		activeProcesses[proc].kill();
+		if (activeProcesses[proc].connected)
+			activeProcesses[proc].kill();
 		delete activeProcesses[proc];
 	}
 	process.exit();

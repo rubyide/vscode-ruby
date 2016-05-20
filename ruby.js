@@ -43,29 +43,25 @@ const langConfig = {
 	indentationRules: {
 		increaseIndentPattern: /^\s*((begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)|(.*\sdo\b))\b[^\{;]*$/
 	},
-	wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/\]\.\*\s\\!?]+[!?]?)/
+	wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/.*\]\s\\!?]*[!?]?)/
 };
 
 let pairedEnds = [];
 
 const highligher = {
 	provideDocumentHighlights: (doc, pos) => {
-		const word = doc.getText(doc.getWordRangeAtPosition(pos));
-		let result;
-		if (
-			(/\b(begin|class|def|for|if|module|unless|until|case|while|do)\b/.test(doc.lineAt(pos.line)
-					.text) &&
-				pairedEnds.some(pair => (result = (pair.entry.start.line === pos.line) ? pair : null))) ||
-			(word === 'end' && pairedEnds.some(pair => (result = (pair.end.start.line === pos.line) ? pair : null)))
-		) {
-			return [new vscode.DocumentHighlight(result.entry,2), new vscode.DocumentHighlight(result.end,2)];
+		let result = pairedEnds.find(pair => (
+			pair.entry.start.line === pos.line ||
+			pair.end.start.line === pos.line));
+		if (result) {
+			return [new vscode.DocumentHighlight(result.entry, 2), new vscode.DocumentHighlight(result.end, 2)];
 		}
 	}
 };
 
 function getEnd(line) {
 	//end must be on a line by itself, or followed directly by a dot
-	let match = line.text.match(/^(\s*)(end|(end\..*))\s*$/);
+	let match = line.text.match(/^(\s*)end\b[\.\s#]?\s*$/);
 	if (match) {
 		return new vscode.Range(line.lineNumber, match[1].length, line.lineNumber, match[1].length + 3);
 	}
@@ -157,8 +153,9 @@ function activate(context) {
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(balancePairs));
-
-	balancePairs(vscode.window.activeTextEditor.document);
+	if (vscode.window && vscode.window.activeTextEditor) {
+		balancePairs(vscode.window.activeTextEditor.document);
+	}
 
 }
 
