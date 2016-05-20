@@ -151,13 +151,14 @@ function activate(context) {
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(changeTrigger));
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(
 		() => vscode.window.visibleTextEditors.forEach(changeTrigger)));
+
 	vscode.window.visibleTextEditors.forEach(changeTrigger);
 
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(balancePairs));
 
-	balancePairs(vscode.window.activeTextEditor);
+	balancePairs(vscode.window.activeTextEditor.document);
 
 }
 
