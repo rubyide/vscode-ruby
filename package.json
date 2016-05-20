@@ -30,7 +30,9 @@
 	"dependencies": {
 		"vscode-debugprotocol": "~1.6.0-pre4",
 		"vscode-debugadapter": "~1.6.0-pre8",
-		"xmldom": "^0.1.19"
+		"xmldom": "^0.1.19",
+		"vscode-languageclient": "^1.1.0",
+    "vscode-languageserver": "^1.1.0"
 	},
 	"devDependencies": {
 		"gulp": "^3.9.0",
@@ -39,14 +41,20 @@
 		"gulp-sourcemaps": "^1.6.0",
 		"run-sequence": "*",
 		"mocha": "^2.4.5",
-		"typescript": "1.8.2"
+		"typescript": "1.8.2",
+		"vscode": "^0.11.0"
 	},
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./src",
 		"compile": "tsc -p ./src",
 		"watch": "tsc -w -p ./src",
-		"test": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/tests/*.js"
+		"test": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/tests/*.js",
+		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
+	"activationEvents": [
+    "onLanguage:ruby"
+	],
+  "main": "./out/client/extension.js",
 	"contributes": {
 		"debuggers": [
 			{
@@ -57,7 +65,7 @@
 					"languageIds": ["ruby"]
 				},
 
-				"program": "./out/main.js",
+				"program": "./out/client/debugger/main.js",
 				"runtime": "node",
 
 				"configurationAttributes": {
