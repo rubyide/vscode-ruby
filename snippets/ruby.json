@@ -68,7 +68,7 @@
 	"for loop": {
 		"prefix": "for",
 		"body": [
-			"for ${value} in #{enumerable} do",
+			"for ${value} in ${enumerable} do",
 			"\t$0",
 			"end"
 		]
@@ -132,7 +132,7 @@
 	"unless": {
 		"prefix": "unless",
 		"body": [
-			"unless #{test}",
+			"unless ${test}",
 			"\t$0",
 			"end"
 		]
