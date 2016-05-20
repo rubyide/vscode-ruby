@@ -58,7 +58,7 @@ const highligher = {
 				pairedEnds.some(pair => (result = (pair.entry.start.line === pos.line) ? pair : null))) ||
 			(word === 'end' && pairedEnds.some(pair => (result = (pair.end.start.line === pos.line) ? pair : null)))
 		) {
-			return [new vscode.DocumentHighlight(result.entry), new vscode.DocumentHighlight(result.end)];
+			return [new vscode.DocumentHighlight(result.entry,2), new vscode.DocumentHighlight(result.end,2)];
 		}
 	}
 };
