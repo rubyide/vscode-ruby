@@ -140,7 +140,7 @@
 	"until loop": {
 		"prefix": "until",
 		"body": [
-			"until ${test} do",
+			"until ${test}",
 			"\t$0",
 			"end"
 		]
@@ -148,7 +148,7 @@
 	"while loop": {
 		"prefix": "while",
 		"body": [
-			"while ${test} do",
+			"while ${test}",
 			"\t$0",
 			"end"
 		]
