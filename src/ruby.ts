@@ -177,6 +177,17 @@ export class RubyProcess extends EventEmitter {
             }
 
             var processCwd = args.cwd || dirname(args.program);
+
+            var processEnv = {};
+            //use process environment
+            for( var env in process.env) {
+                processEnv[env] = process.env[env];
+            }
+            //merge supplied environment
+            for( var env in args.env) {
+                processEnv[env] = args.env[env];
+            }
+
             if (args.showDebuggerOutput){
                 runtimeArgs.push('-x');
             }
@@ -194,8 +205,8 @@ export class RubyProcess extends EventEmitter {
                     runtimeExecutable = args.pathToBundler;
                 }
             }
-
-            this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, args.program, ...args.args || []], {cwd: processCwd});
+            // '--' forces process arguments (args.args) not to be swollowed by rdebug-ide
+            this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, '--', args.program, ...args.args || []], {cwd: processCwd, env: processEnv});
 
             // redirect output to debug console
             this.debugprocess.stdout.on('data', (data: Buffer) => {

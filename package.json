@@ -224,6 +224,11 @@
 								},
 								"default": []
 							},
+							"env": {
+								"type": "object",
+								"description": "Additional environment variables to pass to the debugging (and debugged) process.",
+								"default": {}
+							},
 							"cwd": {
 								"type": "string",
 								"description": "Absolute path to the working directory of the program being debugged.",
@@ -282,6 +287,7 @@
 						"name": "Debug Local File",
 						"type": "Ruby",
 						"request": "launch",
+						"cwd": "${workspaceRoot}",
 						"program": "${workspaceRoot}/main.rb"
 					},
 					{
@@ -300,6 +306,29 @@
 						"cwd": "${workspaceRoot}",
 						"program": "${workspaceRoot}/bin/rails",
 						"args": ["server"]
+					},
+					{
+						"name": "RSpec - all",
+						"type": "Ruby",
+						"request": "launch",
+						"cwd": "${workspaceRoot}",
+						"program": "${workspaceRoot}/bin/rspec",
+						"args": ["-I","${workspaceRoot}"]
+					},
+					{
+						"name": "RSpec - active spec file only",
+						"type": "Ruby",
+						"request": "launch",
+						"cwd": "${workspaceRoot}",
+						"program": "${workspaceRoot}/bin/rspec",
+						"args": ["-I","${workspaceRoot}","${file}"]
+					},
+					{
+						"name": "Cucumber",
+						"type": "Ruby",
+						"request": "launch",
+						"cwd": "${workspaceRoot}",
+						"program": "${workspaceRoot}/bin/cucumber"
 					}
 				]
 			}
