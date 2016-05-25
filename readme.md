@@ -26,40 +26,9 @@ In this extension, we implement [ruby debug ide protocol](http://debug-commons.r
   * `gem install debase -v 0.2.1` or higher versions
 
 ### Add VS Code config to your project
-Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby Debugger from the prompt window, then you'll get the sample launch config in `.vscode/launch.json`
+Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby Debugger from the prompt window, then you'll get the sample launch config in `.vscode/launch.json`. The sample launch configurations include debuggers for RSpec (complete, and active spec file) and Cucumber runs. These examples expect that `bundle install --binstubs` has been called.
 
-```
-{
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"name": "Debug Local File",
-			"type": "Ruby",
-			"request": "launch",
-			"program": "${workspaceRoot}/main.rb"
-		},
-		{
-			"name": "Rails server",
-			"type": "Ruby",
-			"request": "launch",
-			"cwd": "${workspaceRoot}",
-			"program": "${workspaceRoot}/bin/rails",
-			"args": ["server"]
-		},
-		{
-			"name": "Listen for rdebug-ide",
-			"type": "Ruby",
-			"request": "attach",
-			"cwd": "${workspaceRoot}",
-			"remoteHost": "127.0.0.1",
-			"remotePort": "1234",
-			"remoteWorkspaceRoot": "${workspaceRoot}"
-		}
-	]
-}
-```
-
-### Detailed instruction of debugging Ruby Scripts/Rails/etc
+### Detailed instruction for debugging Ruby Scripts/Rails/etc
 Read following instructions about how to debug ruby/rails/etc locally or remotely
 - [Debug Ruby Scripts](https://github.com/rubyide/vscode-ruby/wiki/2.-Debug-ruby-scripts)
 - [Debug Rails App](https://github.com/rubyide/vscode-ruby/wiki/3.-Debug-Rails-App)
@@ -152,6 +121,12 @@ Settings available (in your VSCode workspace) for each of the linters:
   * Stop on entry
   * Breaking on uncaught exceptions and errors
   * Attach requests
+  * Breakpoints can also be set in `.erb` files
+
+- Unit/Integration tests debugging
+  * RSpec
+  * Cucumber
+
 - Ruby remote debug
 - Rails debugging
 - Language colorization support
@@ -161,8 +136,6 @@ Settings available (in your VSCode workspace) for each of the linters:
 - Ruby scripts debugging
   * Conditional breakpoints
 - Unit/Integration tests debugging
-  * RSpec
-  * Cucumber
   * Shoulda
   * Test::Unit
 - Rack
