@@ -46,7 +46,8 @@
 	"dependencies": {
 		"vscode-debugprotocol": "~1.6.0-pre4",
 		"vscode-debugadapter": "~1.6.0-pre8",
-		"xmldom": "^0.1.19"
+		"xmldom": "^0.1.19",
+		"which": "^1.2.10"
 	},
 	"devDependencies": {
 		"gulp": "^3.9.0",
