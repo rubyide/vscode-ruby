@@ -111,8 +111,6 @@ function completionProvider(document, position, token) {
 	return new Promise((resolve, reject) => {
 		const line = position.line + 1;
 		const column = position.character;
-		console.log("line=" , line);
-		console.log("column=" , column);
 
 		var sh, flag;
 		if (process.platform === 'win32') {
