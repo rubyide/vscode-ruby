@@ -128,7 +128,7 @@ function completionProvider(document, position, token) {
 			var completionItems = [];
 			data.toString().split('\n').forEach(function(elem) {
 				var items = elem.split('\t');
-			    if (/^[^\w]/.test(items[0])) return;
+				if (/^[^\w]/.test(items[0])) return;
 				var completionItem = new vscode.CompletionItem(items[0]);
 				completionItem.detail = items[1];
 				completionItem.documentation = items[1];
