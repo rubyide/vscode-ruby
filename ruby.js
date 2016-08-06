@@ -119,14 +119,16 @@ function completionProvider(document, position, token) {
 			'--dev',
 			'--fork',
 			'--line='+line,
-			'--column='+column], { detached: false });
-		child.stderr.on('data', (data) => {
-			console.log("stderr:", data.toString());
-			reject(data);
-		});
-		child.stdout.on('data', (data) => {
+			'--column='+column]);
+
+		var outbuf = [], errbuf = [];
+		child.stderr.on('data', (data) => errbuf.push(data.toString()));
+		child.stdout.on('data', (data) => outbuf.push(data.toString()));
+		child.stdout.on('end', () => {
+			if (errbuf.length > 0) reject(errbuf.join(''));
+
 			var completionItems = [];
-			data.toString().split('\n').forEach(function(elem) {
+			outbuf.join('').split('\n').forEach(function(elem) {
 				var items = elem.split('\t');
 				if (/^[^\w]/.test(items[0])) return;
 				var completionItem = new vscode.CompletionItem(items[0]);
@@ -142,8 +144,7 @@ function completionProvider(document, position, token) {
 				return reject([]);
 			return resolve(completionItems);
 		});
-		child.stdin.write(document.getText());
-		child.stdin.end();
+		child.stdin.end(document.getText());
 	});
 }
 
