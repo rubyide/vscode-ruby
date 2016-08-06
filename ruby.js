@@ -2,7 +2,6 @@
 let vscode = require('vscode');
 let linters = require('./lint/lint');
 let cp = require('child_process');
-let which = require('which');
 
 const severities = {
 	refactor: vscode.DiagnosticSeverity.Hint,
@@ -107,14 +106,18 @@ function balanceEvent(event) {
 	if (event && event.document) balancePairs(event.document);
 }
 
-var completeCmd;
+function completeCommand(args) {
+	if (process.platform == 'win32')
+		return cp.spawn('cmd', ['/c', 'rct-complete'].concat(args));
+	return cp.spawn('rct-complete', args);
+}
 
 function completionProvider(document, position, token) {
 	return new Promise((resolve, reject) => {
 		const line = position.line + 1;
 		const column = position.character;
 
-		var child = cp.spawn(completeCmd, [
+		var child = completeCommand([
 			'--completion-class-info',
 			'--dev',
 			'--fork',
@@ -201,14 +204,12 @@ function activate(context) {
 		balancePairs(vscode.window.activeTextEditor.document);
 	}
 
-	which("rct-complete", function(err, found) {
-		if (!err && found) {
-			completeCmd = found;
-			vscode.languages.registerCompletionItemProvider('ruby', {
-				provideCompletionItems: completionProvider
-			});
-		}
-	});
+	try {
+		completeCommand(['--help']).kill();
+		vscode.languages.registerCompletionItemProvider('ruby', {
+			provideCompletionItems: completionProvider
+		});
+	} catch (e) {}
 }
 
 exports.activate = activate;
