@@ -130,6 +130,7 @@ To enable method completion in ruby: `gem install rcodetools`. You may need to r
   * Breaking on uncaught exceptions and errors
   * Attach requests
   * Breakpoints can also be set in `.erb` files
+  * IntelliSense and autocomplete
 
 - Unit/Integration tests debugging
   * RSpec
@@ -150,7 +151,6 @@ To enable method completion in ruby: `gem install rcodetools`. You may need to r
 - Rake
 - Gem
 - IRB console
-- IntelliSense and autocomplete
 
 ## Main contributors
 
