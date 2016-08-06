@@ -107,16 +107,12 @@ Settings available (in your VSCode workspace) for each of the linters:
 }
 ```
 
-## Completion
+## Autocomplete
 
-You will need to install the ruby gem for Intellisense/Completion.
-
-* rcodetools
-
-You need to restart vscode after installation of rcodetools. Then type CTRL-Space after the leading words like below.
+To enable method completion in ruby: `gem install rcodetools`. You may need to restart Visual Studio Code the first time.
 
 ```ruby
-[1,2,3].e #<= Type CTRL-Space at here
+[1, 2, 3].e #<= Press CTRL-Space here
 ```
 
 ## Features
