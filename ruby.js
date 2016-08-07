@@ -125,13 +125,13 @@ function completionProvider(document, position, token) {
 			'--column='+column]);
 
 		var outbuf = [], errbuf = [];
-		child.stderr.on('data', (data) => errbuf.push(data.toString()));
-		child.stdout.on('data', (data) => outbuf.push(data.toString()));
+		child.stderr.on('data', (data) => errbuf.push(data));
+		child.stdout.on('data', (data) => outbuf.push(data));
 		child.stdout.on('end', () => {
-			if (errbuf.length > 0) reject(errbuf.join(''));
+			if (errbuf.length > 0) return reject(Buffer.concat(errbuf).toString());
 
 			var completionItems = [];
-			outbuf.join('').split('\n').forEach(function(elem) {
+			Buffer.concat(outbuf).toString().split('\n').forEach(function(elem) {
 				var items = elem.split('\t');
 				if (/^[^\w]/.test(items[0])) return;
 				var completionItem = new vscode.CompletionItem(items[0]);
