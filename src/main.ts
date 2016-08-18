@@ -28,7 +28,7 @@ class RubyDebugSession extends DebugSession {
     private _variableHandles: Handles<IDebugVariable>;
     private rubyProcess: RubyProcess;
     private requestArguments: any;
-	private debugMode: Mode;
+    private debugMode: Mode;
 
     /**
      * Creates a new debug adapter.

@@ -107,6 +107,14 @@ Settings available (in your VSCode workspace) for each of the linters:
 }
 ```
 
+## Autocomplete
+
+To enable method completion in ruby: `gem install rcodetools`. You may need to restart Visual Studio Code the first time.
+
+```ruby
+[1, 2, 3].e #<= Press CTRL-Space here
+```
+
 ## Features
 
 - Ruby scripts debugging
@@ -122,6 +130,7 @@ Settings available (in your VSCode workspace) for each of the linters:
   * Breaking on uncaught exceptions and errors
   * Attach requests
   * Breakpoints can also be set in `.erb` files
+  * IntelliSense and autocomplete
 
 - Unit/Integration tests debugging
   * RSpec
@@ -142,7 +151,6 @@ Settings available (in your VSCode workspace) for each of the linters:
 - Rake
 - Gem
 - IRB console
-- IntelliSense and autocomplete
 
 ## Main contributors
 

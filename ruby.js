@@ -1,6 +1,8 @@
 "use strict";
 let vscode = require('vscode');
 let linters = require('./lint/lint');
+let cp = require('child_process');
+
 const severities = {
 	refactor: vscode.DiagnosticSeverity.Hint,
 	convention: vscode.DiagnosticSeverity.Information,
@@ -104,6 +106,51 @@ function balanceEvent(event) {
 	if (event && event.document) balancePairs(event.document);
 }
 
+function completeCommand(args) {
+	if (process.platform == 'win32')
+		return cp.spawn('cmd', ['/c', 'rct-complete'].concat(args));
+	return cp.spawn('rct-complete', args);
+}
+
+function completionProvider(document, position, token) {
+	return new Promise((resolve, reject) => {
+		const line = position.line + 1;
+		const column = position.character;
+
+		var child = completeCommand([
+			'--completion-class-info',
+			'--dev',
+			'--fork',
+			'--line='+line,
+			'--column='+column]);
+
+		var outbuf = [], errbuf = [];
+		child.stderr.on('data', (data) => errbuf.push(data));
+		child.stdout.on('data', (data) => outbuf.push(data));
+		child.stdout.on('end', () => {
+			if (errbuf.length > 0) return reject(Buffer.concat(errbuf).toString());
+
+			var completionItems = [];
+			Buffer.concat(outbuf).toString().split('\n').forEach(function(elem) {
+				var items = elem.split('\t');
+				if (/^[^\w]/.test(items[0])) return;
+				var completionItem = new vscode.CompletionItem(items[0]);
+				completionItem.detail = items[1];
+				completionItem.documentation = items[1];
+				completionItem.filterText = items[0];
+				completionItem.insertText = items[0];
+				completionItem.label = items[0];
+				completionItem.kind = vscode.CompletionItemKind.Method;
+				completionItems.push(completionItem);
+			}, this);
+			if (completionItems.length == 0)
+				return reject([]);
+			return resolve(completionItems);
+		});
+		child.stdin.end(document.getText());
+	});
+}
+
 function activate(context) {
 	//add language config
 	vscode.languages.setLanguageConfiguration('ruby', langConfig);
@@ -157,6 +204,12 @@ function activate(context) {
 		balancePairs(vscode.window.activeTextEditor.document);
 	}
 
+	try {
+		completeCommand(['--help']).kill();
+		vscode.languages.registerCompletionItemProvider('ruby', {
+			provideCompletionItems: completionProvider
+		});
+	} catch (e) {}
 }
 
 exports.activate = activate;
