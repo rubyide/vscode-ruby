@@ -59,8 +59,7 @@ const langConfig = {
 		["`", "`"]
 	],
 	indentationRules: {
-		increaseIndentPattern: /^\s*((after|before|begin|class|context|def|describe|else|elsif|ensure|for|if|it|module|rescue|unless|until|when|while)|(.*\sdo\b))\b[^\{;]*$/,
-		decreaseIndentPattern: /^\\s*([}\\]](,?\\s*(#|$)|\\.[a-zA-Z_]\\w*\\b)|(end|rescue|ensure|else|elsif|when)\\b)/
+		increaseIndentPattern: /^\s*((begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)|(.*\sdo\b))\b[^\{;]*$/
 	},
 	wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/.*\]\s\\!?]*[!?]?)/
 };
