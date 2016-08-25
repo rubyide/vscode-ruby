@@ -47,7 +47,7 @@ const langConfig = {
 		["[", "]"],
 		["(", ")"],
 		["\"", "\""],
-		["'", "'"],
+		{ "open": "'", "close": "'", "notIn": ["string", "comment"] },
 		["`", "`"]
 	],
 	surroundingPairs: [
