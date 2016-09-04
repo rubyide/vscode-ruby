@@ -30,9 +30,11 @@ Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby De
 
 ### Detailed instruction for debugging Ruby Scripts/Rails/etc
 Read following instructions about how to debug ruby/rails/etc locally or remotely
-- [Debug Ruby Scripts](https://github.com/rubyide/vscode-ruby/wiki/2.-Debug-ruby-scripts)
-- [Debug Rails App](https://github.com/rubyide/vscode-ruby/wiki/3.-Debug-Rails-App)
-- [Attach to process](https://github.com/rubyide/vscode-ruby/wiki/4.-Attach-to-process)
+- [Debugger installation](https://github.com/rubyide/vscode-ruby/wiki/1.-Debugger-Installation)
+- [Launching from VS Code](https://github.com/rubyide/vscode-ruby/wiki/2.-Launching-from-VS-Code)
+- [Attaching to a debugger](https://github.com/rubyide/vscode-ruby/wiki/3.-Attaching-to-a-debugger)
+- [Running gem scripts](https://github.com/rubyide/vscode-ruby/wiki/4.-Running-gem-scripts)
+- [Example configurations](https://github.com/rubyide/vscode-ruby/wiki/5.-Example-configurations)
 
 ## Linters
 ### Available Linter hooks
