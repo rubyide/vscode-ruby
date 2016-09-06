@@ -76,8 +76,18 @@
 			}
 		],
 		"configuration": {
-			"title": "ruby language linting settings",
+			"title": "ruby language settings",
 			"properties": {
+				"ruby.interpreter.commandPath": {
+					"type": "string",
+					"default": "ruby",
+					"description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions."
+				},
+				"ruby.rctComplete.commandPath": {
+					"type": "string",
+					"default": "rct-complete",
+					"description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions."
+				},
 				"ruby.lint": {
 					"type": "object",
 					"description": "Set individual ruby linters to use",

@@ -123,9 +123,12 @@ function balanceEvent(event) {
 }
 
 function completeCommand(args) {
+	let rctCompletePath = vscode.workspace.getConfiguration('ruby.rctComplete').get('commandPath', 'rct-complete');
+	args.push('--interpreter');
+	args.push(vscode.workspace.getConfiguration('ruby.interpreter').get('commandPath', 'ruby'));
 	if (process.platform == 'win32')
-		return cp.spawn('cmd', ['/c', 'rct-complete'].concat(args));
-	return cp.spawn('rct-complete', args);
+		return cp.spawn('cmd', ['/c', rctCompletePath].concat(args));
+	return cp.spawn(rctCompletePath, args);
 }
 
 function completionProvider(document, position, token) {
