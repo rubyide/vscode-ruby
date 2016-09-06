@@ -11,7 +11,7 @@ It's still in progress ( [GitHub](https://github.com/rubyide/vscode-ruby.git) ),
 
 ## Install
 ### Install Extension
-Press `F1`, type `ext install ruby`.
+Press `F1`, type `ext install` then search for `ruby`.
 
 ## Debugger
 ### Install Ruby Dependencies
