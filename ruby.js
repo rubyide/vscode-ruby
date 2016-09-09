@@ -42,14 +42,14 @@ const langConfig = {
 		["[", "]"],
 		["(", ")"]
 	],
-	autoClosingPairs: [
-		["{", "}"],
-		["[", "]"],
-		["(", ")"],
-		["\"", "\""],
-		{ "open": "'", "close": "'", "notIn": ["string", "comment"] },
-		["`", "`"]
-	],
+	// autoClosingPairs: [
+	// 	["{", "}"],
+	// 	["[", "]"],
+	// 	["(", ")"],
+	// 	["\"", "\""],
+	// 	//{ "open": "'", "close": "'", "notIn": ["string", "comment"] },
+	// 	["`", "`"]
+	// ],
 	surroundingPairs: [
 		["{", "}"],
 		["[", "]"],
