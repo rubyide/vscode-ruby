@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.5.5",
+	"version": "0.5.6",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -188,7 +188,8 @@
 			"id": "ruby",
 			"aliases": ["Ruby", "ruby"],
 			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
-				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"]
+				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"],
+			"configuration": "./language-configuration.json"
 		}],
 		"grammars": [{
 			"language": "ruby",

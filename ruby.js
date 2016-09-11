@@ -33,31 +33,6 @@ function deferReport(uri, lint, diagnostic) {
 }
 
 const langConfig = {
-	comments: {
-		lineComment: "#",
-		blockComment: ["=begin", "=end"]
-	},
-	brackets: [
-		["{", "}"],
-		["[", "]"],
-		["(", ")"]
-	],
-	autoClosingPairs: [
-		["{", "}"],
-		["[", "]"],
-		["(", ")"],
-		["\"", "\""],
-		{ "open": "'", "close": "'", "notIn": ["string", "comment"] },
-		["`", "`"]
-	],
-	surroundingPairs: [
-		["{", "}"],
-		["[", "]"],
-		["(", ")"],
-		["\"", "\""],
-		["'", "'"],
-		["`", "`"]
-	],
 	indentationRules: {
 		increaseIndentPattern: /^\s*((begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)|(.*\sdo\b))\b[^\{;]*$/
 	},
