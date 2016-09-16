@@ -4,24 +4,29 @@ const locator = require('ruby-method-locate'),
 const fs = require('fs'),
 	path = require('path');
 
-function find(name, tree, result) {
+function find(name, tree, prefix, result) {
 	if (typeof tree === 'number' || typeof tree === 'string') return;
+	prefix = prefix || [];
+	result = result || [];
 	let block;
 	let set;
 	for (let b in tree) {
+		if (b === 'posn' || b === 'args' || b === 'inherit') continue;
 		block = tree[b];
+		if (name in block && block[name].posn) {
+			result.push({
+					[prefix.concat(name)
+					.join('::')]: {
+						line: block[name].posn.line,
+						char: block[name].posn.char
+			}});
+		}
 		for (let n in block) {
-			if (n === name) {
-				result.push({
-					[n]: block[n]
-				});
-			}
 			set = block[n];
-			let myRes = [];
-			find(name, set, myRes);
-			result = result.concat(myRes.map(r => n +  ))
+			find(name, set, prefix.concat(n), result);
 		}
 	}
+	return result;
 }
 module.exports = class Locate {
 	constructor(root, settings) {
@@ -29,20 +34,30 @@ module.exports = class Locate {
 		this.root = root;
 		this.tree = {};
 		// begin the build ...
+		this.walk(this.root);
 		// add edit hooks
-		// always: do this file now (if it's in the root)
+		// always: do this file now (if it's in the tree)
 		// add lookup hooks
 	}
 	find(name) {
-		const result = [];
+		let result = [];
 		let tree;
+		let inner;
 		for (let file in this.tree) {
 			tree = this.tree[file];
 			// every second step may be the thing we want
+			inner = find(name, tree);
+			// jshint -W083
+			result = result.concat(inner.map(i => {
+				for (let a in i) i[a].file = file;
+				return i;
+			}));
+			// jshint +W083
 		}
+		return result;
 	}
 	walk(root) {
-		fs.readDir(root, (err, files) => {
+		fs.readdir(root, (err, files) => {
 			if (err) return;
 			files.forEach(file => {
 				const absPath = path.join(root, file);
@@ -67,14 +82,11 @@ module.exports = class Locate {
 								if (!minimatch(relPath, this.settings.include)) return;
 							} else if (!this.settings.include.some(pattern => minimatch(relPath, pattern))) return;
 						}
-						fs.readFile(absPath, (err, buffer) => {
-							if (err) return;
-							locator(buffer.toString(), absPath)
-								.then(result => {
-									if (!result) return;
-									this.tree[relPath] = result;
-								}, err => 0);
-						});
+						locator(absPath)
+							.then(result => {
+								if (!result) return;
+								this.tree[absPath] = result;
+							}, (err) => console.log(err));
 					}
 				});
 			});

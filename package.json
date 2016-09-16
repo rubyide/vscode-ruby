@@ -80,6 +80,26 @@
 		"configuration": {
 			"title": "ruby language settings",
 			"properties": {
+				"ruby.locate": {
+					"type": "object",
+					"description": "Defines where the Ruby extension will look to find Modules, Classes and methods. Note that the `ignore` paths are matched before any `include`s",
+					"properties": {
+						"include": {
+							"type": ["string", "array"],
+							"description": "glob pattern(s) to match against FILES that will be parsed.",
+							"default": "*.rb"
+						},
+						"includeDirectory": {
+							"type": ["string", "array"],
+							"description": "glob pattern(s) to match against FOLDERS that will be traversed for parsing."
+						},
+						"ignore": {
+							"type": ["string", "array"],
+							"description": "glob pattern(s) to match against FILES and DIRECTORIES that will not be parsed or traversed.",
+							"default": ["*_spec.rb", "spec/**", "assets"]
+						}
+					}
+				},
 				"ruby.interpreter.commandPath": {
 					"type": "string",
 					"default": "ruby",
