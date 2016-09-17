@@ -4,6 +4,25 @@ const locator = require('ruby-method-locate'),
 const fs = require('fs'),
 	path = require('path');
 
+function flatten(tree, result) {
+	let t;
+	for (let a in tree) {
+		t = tree[a];
+		if (typeof t === 'string' || typeof t === 'number') continue;
+		if (t.posn) {
+			if (a in result) result[a].push({
+				line: t.posn.line,
+				char: t.posn.char
+			});
+			else result[a] = [{
+				line: t.posn.line,
+				char: t.posn.char
+			}];
+		}
+		flatten(t, result);
+	}
+}
+
 function find(name, tree, prefix, result) {
 	if (typeof tree === 'number' || typeof tree === 'string') return;
 	prefix = prefix || [];
@@ -17,9 +36,10 @@ function find(name, tree, prefix, result) {
 			result.push({
 					[prefix.concat(name)
 					.join('::')]: {
-						line: block[name].posn.line,
-						char: block[name].posn.char
-			}});
+					line: block[name].posn.line,
+					char: block[name].posn.char
+				}
+			});
 		}
 		for (let n in block) {
 			set = block[n];
@@ -42,19 +62,39 @@ module.exports = class Locate {
 	find(name) {
 		let result = [];
 		let tree;
-		let inner;
 		for (let file in this.tree) {
 			tree = this.tree[file];
-			// every second step may be the thing we want
-			inner = find(name, tree);
-			// jshint -W083
-			result = result.concat(inner.map(i => {
-				for (let a in i) i[a].file = file;
-				return i;
-			}));
-			// jshint +W083
+			//jshint -W083
+			const extract = obj => ({
+				file: file,
+				line: obj.line,
+				char: obj.char
+			});
+			//jshint +W083
+			for (let n in tree) {
+				// because our word pattern is designed to match symbols
+				// things like Gem::RequestSet may request a search for ':RequestSet'
+				if (n === name || n === name + '=' || ':' + n === name) {
+					result = result.concat(tree[n].map(extract));
+				}
+			}
 		}
 		return result;
+	}
+	rm(absPath) {
+		if (absPath in this.tree) delete this.tree[absPath];
+	}
+	parse(absPath) {
+		const relPath = path.relative(this.root, absPath);
+		if (this.settings.exclude && minimatch(relPath, this.settings.exclude)) return;
+		if (this.settings.include && !minimatch(relPath, this.settings.include)) return;
+		this.rm(absPath);
+		locator(absPath)
+			.then(result => {
+				if (!result) return;
+				this.tree[absPath] = {};
+				flatten(result, this.tree[absPath]);
+			}, err => console.log(err));
 	}
 	walk(root) {
 		fs.readdir(root, (err, files) => {
@@ -62,31 +102,13 @@ module.exports = class Locate {
 			files.forEach(file => {
 				const absPath = path.join(root, file);
 				const relPath = path.relative(this.root, absPath);
-				if (this.settings.ignore) {
-					if (typeof this.settings.ignore === "string") {
-						if (minimatch(relPath, this.settings.ignore)) return;
-					} else if (this.settings.ignore.some(pattern => minimatch(relPath, pattern))) return;
-				}
 				fs.stat(absPath, (err, stats) => {
 					if (err) return;
 					if (stats.isDirectory()) {
-						if (this.settings.includeDirectory) {
-							if (typeof this.settings.includeDirectory === "string") {
-								if (!minimatch(relPath, this.settings.includeDirectory)) return;
-							} else if (!this.settings.includeDirectory.some(pattern => minimatch(relPath, pattern))) return;
-						}
+						if (this.settings.exclude && minimatch(relPath, this.settings.exclude)) return;
 						this.walk(absPath);
 					} else {
-						if (this.settings.include) {
-							if (typeof this.settings.include === "string") {
-								if (!minimatch(relPath, this.settings.include)) return;
-							} else if (!this.settings.include.some(pattern => minimatch(relPath, pattern))) return;
-						}
-						locator(absPath)
-							.then(result => {
-								if (!result) return;
-								this.tree[absPath] = result;
-							}, (err) => console.log(err));
+						this.parse(absPath);
 					}
 				});
 			});

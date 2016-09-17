@@ -140,7 +140,6 @@ function completionProvider(document, position, token) {
 }
 
 function activate(context) {
-	console.log("STARTING RUBY SERVICES");
 	//add language config
 	vscode.languages.setLanguageConfiguration('ruby', langConfig);
 	let activeLinters = {};
@@ -181,23 +180,17 @@ function activate(context) {
 	//if it's a project, use the root, othewise, don't bother
 	let locate;
 	if (vscode.workspace.rootPath) {
-		let hr = process.hrtime();
-		const settings = {
-			ignore: ["**/spec", "**/.git", "**/tmp"],
-			include: "**/*.rb"
-		};
+		const settings = vscode.workspace.getConfiguration("ruby.locate") || {};
 		locate = new Locate(vscode.workspace.rootPath, settings);
+		const watch = vscode.workspace.createFileSystemWatcher(settings.include);
+		watch.onDidChange(uri=>locate.parse(uri.fsPath));
+		watch.onDidCreate(uri=>locate.parse(uri.fsPath));
+		watch.onDidDelete(uri=>locate.rm(uri.fsPath));
 		const defProvider = {
 			provideDefinition: (doc, pos) => {
 				const txt = doc.getText(doc.getWordRangeAtPosition(pos));
 				const matches = locate.find(txt);
-				const results = [];
-				matches.forEach(m => {
-					for (let a in m) {
-						results.push(new vscode.Location(vscode.Uri.file(m[a].file), new vscode.Position(m[a].line, m[a].char)));
-					}
-				});
-				return results;
+				return matches.map(m => new vscode.Location(vscode.Uri.file(m.file), new vscode.Position(m.line, m.char)));
 			}
 		};
 		context.subscriptions.push(vscode.languages.registerDefinitionProvider('ruby', defProvider));
