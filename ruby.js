@@ -1,8 +1,8 @@
 "use strict";
 let vscode = require('vscode');
 let linters = require('./lint/lint');
+let Locate = require('./locate/locate');
 let cp = require('child_process');
-
 const severities = {
 	refactor: vscode.DiagnosticSeverity.Hint,
 	convention: vscode.DiagnosticSeverity.Information,
@@ -40,7 +40,6 @@ const langConfig = {
 };
 
 let pairedEnds = [];
-
 const highligher = {
 	provideDocumentHighlights: (doc, pos) => {
 		let result = pairedEnds.find(pair => (
@@ -101,43 +100,43 @@ function completeCommand(args) {
 	let rctCompletePath = vscode.workspace.getConfiguration('ruby.rctComplete').get('commandPath', 'rct-complete');
 	args.push('--interpreter');
 	args.push(vscode.workspace.getConfiguration('ruby.interpreter').get('commandPath', 'ruby'));
-	if (process.platform == 'win32')
+	if (process.platform === 'win32')
 		return cp.spawn('cmd', ['/c', rctCompletePath].concat(args));
 	return cp.spawn(rctCompletePath, args);
 }
 
-function completionProvider(document, position, token) {
+function completionProvider(document, position) {
 	return new Promise((resolve, reject) => {
 		const line = position.line + 1;
 		const column = position.character;
-
-		var child = completeCommand([
+		let child = completeCommand([
 			'--completion-class-info',
 			'--dev',
 			'--fork',
-			'--line='+line,
-			'--column='+column]);
-
-		var outbuf = [], errbuf = [];
+			'--line=' + line,
+			'--column=' + column]);
+		let outbuf = [],
+			errbuf = [];
 		child.stderr.on('data', (data) => errbuf.push(data));
 		child.stdout.on('data', (data) => outbuf.push(data));
 		child.stdout.on('end', () => {
-			if (errbuf.length > 0) return reject(Buffer.concat(errbuf).toString());
+			if (errbuf.length > 0) return reject(Buffer.concat(errbuf)
+				.toString());
+			let completionItems = [];
 
-			var completionItems = [];
 			Buffer.concat(outbuf).toString().split('\n').forEach(function(elem) {
-				var items = elem.split('\t');
-				if (/^[^\w]/.test(items[0])) return;
-				var completionItem = new vscode.CompletionItem(items[0]);
-				completionItem.detail = items[1];
-				completionItem.documentation = items[1];
-				completionItem.filterText = items[0];
-				completionItem.insertText = items[0];
-				completionItem.label = items[0];
-				completionItem.kind = vscode.CompletionItemKind.Method;
-				completionItems.push(completionItem);
-			}, this);
-			if (completionItems.length == 0)
+					let items = elem.split('\t');
+					if (/^[^\w]/.test(items[0])) return;
+					let completionItem = new vscode.CompletionItem(items[0]);
+					completionItem.detail = items[1];
+					completionItem.documentation = items[1];
+					completionItem.filterText = items[0];
+					completionItem.insertText = items[0];
+					completionItem.label = items[0];
+					completionItem.kind = vscode.CompletionItemKind.Method;
+					completionItems.push(completionItem);
+				}, this);
+			if (completionItems.length === 0)
 				return reject([]);
 			return resolve(completionItems);
 		});
@@ -188,16 +187,31 @@ function activate(context) {
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(changeTrigger));
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(
 		() => vscode.window.visibleTextEditors.forEach(changeTrigger)));
-
+	//if it's a project, use the root, othewise, don't bother
+	let locate;
+	if (vscode.workspace.rootPath) {
+		const settings = vscode.workspace.getConfiguration("ruby.locate") || {};
+		locate = new Locate(vscode.workspace.rootPath, settings);
+		const watch = vscode.workspace.createFileSystemWatcher(settings.include);
+		watch.onDidChange(uri=>locate.parse(uri.fsPath));
+		watch.onDidCreate(uri=>locate.parse(uri.fsPath));
+		watch.onDidDelete(uri=>locate.rm(uri.fsPath));
+		const defProvider = {
+			provideDefinition: (doc, pos) => {
+				const txt = doc.getText(doc.getWordRangeAtPosition(pos));
+				const matches = locate.find(txt);
+				return matches.map(m => new vscode.Location(vscode.Uri.file(m.file), new vscode.Position(m.line, m.char)));
+			}
+		};
+		context.subscriptions.push(vscode.languages.registerDefinitionProvider('ruby', defProvider));
+	}
 	vscode.window.visibleTextEditors.forEach(changeTrigger);
-
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(balancePairs));
 	if (vscode.window && vscode.window.activeTextEditor) {
 		balancePairs(vscode.window.activeTextEditor.document);
 	}
-
 	try {
 		completeCommand(['--help']).kill();
 		vscode.languages.registerCompletionItemProvider('ruby', {
