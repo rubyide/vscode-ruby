@@ -22,32 +22,6 @@ function flatten(tree, result) {
 		flatten(t, result);
 	}
 }
-
-function find(name, tree, prefix, result) {
-	if (typeof tree === 'number' || typeof tree === 'string') return;
-	prefix = prefix || [];
-	result = result || [];
-	let block;
-	let set;
-	for (let b in tree) {
-		if (b === 'posn' || b === 'args' || b === 'inherit') continue;
-		block = tree[b];
-		if (name in block && block[name].posn) {
-			result.push({
-					[prefix.concat(name)
-					.join('::')]: {
-					line: block[name].posn.line,
-					char: block[name].posn.char
-				}
-			});
-		}
-		for (let n in block) {
-			set = block[n];
-			find(name, set, prefix.concat(n), result);
-		}
-	}
-	return result;
-}
 module.exports = class Locate {
 	constructor(root, settings) {
 		this.settings = settings;
@@ -94,7 +68,16 @@ module.exports = class Locate {
 				if (!result) return;
 				this.tree[absPath] = {};
 				flatten(result, this.tree[absPath]);
-			}, err => console.log(err));
+			}, err => {
+				if (err.code === 'EMFILE') {
+					// if there are too many open files
+					// try again after somewhere between 0 & 5 milliseconds
+					setTimeout(this.parse.bind(this, absPath), Math.random() * 5);
+				} else {
+					// otherwise, report it
+					console.log(err);
+				}
+			});
 	}
 	walk(root) {
 		fs.readdir(root, (err, files) => {
