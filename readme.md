@@ -119,7 +119,7 @@ To enable method completion in ruby: `gem install rcodetools`. You may need to r
 
 ## Go to definition
 
-Now includes workspace parsing functionality. Allows VS Code to `go definition` and `peak definition` for modules, classes, and methods defined within the same workspace. You can set glob patterns to match including and excluding particular files. The exclude match also runs against directories on initial load, to reduce latency.
+Now includes workspace parsing functionality. Allows VS Code to `go to definition` and `peak definition` for modules, classes, and methods defined within the same workspace. You can set glob patterns to match including and excluding particular files. The exclude match also runs against directories on initial load, to reduce latency.
 
 The default settings are:
 
@@ -133,6 +133,8 @@ The default settings are:
 The defaults will include all files with the `rb` extension, but avoids searching within the `test`, `spec`, `tmp` directories, as well as any directories begining with a `.`, AND any files ending with `_spec.rb`.
 
 If you change these settings, currently you will need to reload your workspace.
+
+We now provide go to definition within `erb` files, as well as syntax highlighting for `erb`.
 
 ## Features
 
@@ -158,6 +160,7 @@ If you change these settings, currently you will need to reload your workspace.
 
 - IntelliSense and autocomplete
 - Go to definition
+  * Including within `.erb` files
 
 - Language colorization support
 - Linting
