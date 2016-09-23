@@ -203,7 +203,7 @@ function activate(context) {
 				return matches.map(m => new vscode.Location(vscode.Uri.file(m.file), new vscode.Position(m.line, m.char)));
 			}
 		};
-		context.subscriptions.push(vscode.languages.registerDefinitionProvider('ruby', defProvider));
+		context.subscriptions.push(vscode.languages.registerDefinitionProvider(['ruby','erb'], defProvider));
 	}
 	vscode.window.visibleTextEditors.forEach(changeTrigger);
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));

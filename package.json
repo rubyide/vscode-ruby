@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.6.0",
+	"version": "0.7.0",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -66,7 +66,8 @@
 		"test": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/tests/*.js"
 	},
 	"activationEvents": [
-		"onLanguage:ruby"
+		"onLanguage:ruby",
+		"onLanguage:erb"
 	],
 	"main": "ruby.js",
 
@@ -212,11 +213,21 @@
 			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
 				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"],
 			"configuration": "./language-configuration.json"
+		},
+		{
+			"id": "erb",
+			"aliases": ["erb", "Encapsulated Ruby"],
+			"extensions": [".erb", ".rhtml", ".rhtm"]
 		}],
 		"grammars": [{
 			"language": "ruby",
 			"scopeName": "source.ruby",
 			"path": "./syntaxes/ruby.tmLanguage"
+		},
+		{
+			"language": "erb",
+			"scopeName": "text.html.erb",
+			"path": "./syntaxes/erb.tmLanguage"
 		}],
 		"debuggers": [
 			{
