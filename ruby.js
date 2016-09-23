@@ -3,6 +3,10 @@ let vscode = require('vscode');
 let linters = require('./lint/lint');
 let Locate = require('./locate/locate');
 let cp = require('child_process');
+let path = require('path');
+
+let rubocopFormatter = require('./format/RuboCop');
+
 const severities = {
 	refactor: vscode.DiagnosticSeverity.Hint,
 	convention: vscode.DiagnosticSeverity.Information,
@@ -144,6 +148,21 @@ function completionProvider(document, position) {
 	});
 }
 
+const formatter = {
+	provideDocumentFormattingEdits: function(doc) {
+		const f = vscode.workspace.getConfiguration("ruby");
+		if (f.format === 'rubocop') {
+			let opts = vscode.workspace.getConfiguration("ruby.lint.rubocop");
+			if (!opts || opts === true) opts = {};
+			const root = vscode.workspace.rootPath || path.dirname(doc.fileName);
+			const input = doc.getText();
+			console.log("Formatting:", root, input.length);
+			console.log(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)));
+			return rubocopFormatter(input, root, opts).then(result => [new vscode.TextEdit(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)), result)]).catch(err => console.log("Failed to format:", err));
+		}
+	}
+};
+
 function activate(context) {
 	//add language config
 	vscode.languages.setLanguageConfiguration('ruby', langConfig);
@@ -205,6 +224,7 @@ function activate(context) {
 		};
 		context.subscriptions.push(vscode.languages.registerDefinitionProvider(['ruby','erb'], defProvider));
 	}
+	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('ruby',formatter));
 	vscode.window.visibleTextEditors.forEach(changeTrigger);
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
