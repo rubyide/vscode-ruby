@@ -1,7 +1,7 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.7.0",
+	"version": "0.8.0",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
@@ -110,6 +110,11 @@
 					"type": "string",
 					"default": "rct-complete",
 					"description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions."
+				},
+				"ruby.format": {
+					"type": "string",
+					"description": "Select the type of formatter to use. If 'rubocop' is selected, the ruby.lint.rubocop options will be passed to the formatter.",
+					"enum": ["rubocop"]
 				},
 				"ruby.lint": {
 					"type": "object",

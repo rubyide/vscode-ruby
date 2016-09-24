@@ -3,6 +3,10 @@ let vscode = require('vscode');
 let linters = require('./lint/lint');
 let Locate = require('./locate/locate');
 let cp = require('child_process');
+let path = require('path');
+
+let rubocopFormatter = require('./format/RuboCop');
+
 const severities = {
 	refactor: vscode.DiagnosticSeverity.Hint,
 	convention: vscode.DiagnosticSeverity.Information,
@@ -105,44 +109,56 @@ function completeCommand(args) {
 	return cp.spawn(rctCompletePath, args);
 }
 
-function completionProvider(document, position) {
-	return new Promise((resolve, reject) => {
-		const line = position.line + 1;
-		const column = position.character;
-		let child = completeCommand([
-			'--completion-class-info',
-			'--dev',
-			'--fork',
-			'--line=' + line,
-			'--column=' + column]);
-		let outbuf = [],
-			errbuf = [];
-		child.stderr.on('data', (data) => errbuf.push(data));
-		child.stdout.on('data', (data) => outbuf.push(data));
-		child.stdout.on('end', () => {
-			if (errbuf.length > 0) return reject(Buffer.concat(errbuf)
-				.toString());
-			let completionItems = [];
+const completionProvider = {
+	provideCompletionItems: function completionProvider(document, position) {
+		return new Promise((resolve, reject) => {
+			const line = position.line + 1;
+			const column = position.character;
+			let child = completeCommand([
+				'--completion-class-info',
+				'--dev',
+				'--fork',
+				'--line=' + line,
+				'--column=' + column]);
+			let outbuf = [],
+				errbuf = [];
+			child.stderr.on('data', (data) => errbuf.push(data));
+			child.stdout.on('data', (data) => outbuf.push(data));
+			child.stdout.on('end', () => {
+				if (errbuf.length > 0) return reject(Buffer.concat(errbuf)
+					.toString());
+				let completionItems = [];
 
-			Buffer.concat(outbuf).toString().split('\n').forEach(function(elem) {
-					let items = elem.split('\t');
-					if (/^[^\w]/.test(items[0])) return;
-					let completionItem = new vscode.CompletionItem(items[0]);
-					completionItem.detail = items[1];
-					completionItem.documentation = items[1];
-					completionItem.filterText = items[0];
-					completionItem.insertText = items[0];
-					completionItem.label = items[0];
-					completionItem.kind = vscode.CompletionItemKind.Method;
-					completionItems.push(completionItem);
-				}, this);
-			if (completionItems.length === 0)
-				return reject([]);
-			return resolve(completionItems);
+				Buffer.concat(outbuf).toString().split('\n').forEach(function(elem) {
+						let items = elem.split('\t');
+						if (/^[^\w]/.test(items[0])) return;
+						let completionItem = new vscode.CompletionItem(items[0]);
+						completionItem.detail = items[1];
+						completionItem.documentation = items[1];
+						completionItem.filterText = items[0];
+						completionItem.insertText = items[0];
+						completionItem.label = items[0];
+						completionItem.kind = vscode.CompletionItemKind.Method;
+						completionItems.push(completionItem);
+					}, this);
+				if (completionItems.length === 0)
+					return reject([]);
+				return resolve(completionItems);
+			});
+			child.stdin.end(document.getText());
 		});
-		child.stdin.end(document.getText());
-	});
-}
+	}
+};
+
+const formatter = {
+	provideDocumentFormattingEdits: function(doc) {
+		let opts = vscode.workspace.getConfiguration("ruby.lint.rubocop");
+		if (!opts || opts === true) opts = {};
+		const root = vscode.workspace.rootPath || path.dirname(doc.fileName);
+		const input = doc.getText();
+		return rubocopFormatter(input, root, opts).then(result => [new vscode.TextEdit(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)), result)]).catch(err => console.log("Failed to format:", err));
+	}
+};
 
 function activate(context) {
 	//add language config
@@ -205,6 +221,7 @@ function activate(context) {
 		};
 		context.subscriptions.push(vscode.languages.registerDefinitionProvider(['ruby','erb'], defProvider));
 	}
+
 	vscode.window.visibleTextEditors.forEach(changeTrigger);
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
 	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
@@ -212,12 +229,15 @@ function activate(context) {
 	if (vscode.window && vscode.window.activeTextEditor) {
 		balancePairs(vscode.window.activeTextEditor.document);
 	}
-	try {
-		completeCommand(['--help']).kill();
-		vscode.languages.registerCompletionItemProvider('ruby', {
-			provideCompletionItems: completionProvider
-		});
-	} catch (e) {}
+
+	const formatTest = cp.spawn('rubocop',['-h']);
+	formatTest.on('exit', ()=> context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('ruby',formatter)));
+	formatTest.on('error',()=> console.log("Rubocop not installed"));
+
+	const completeTest = completeCommand(['--help']);
+	completeTest.on('exit', ()=> context.subscriptions.push(vscode.languages.registerCompletionItemProvider('ruby', completionProvider)));
+	completeTest.on('error',()=>0);
+
 }
 
 exports.activate = activate;
