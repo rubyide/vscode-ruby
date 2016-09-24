@@ -6,8 +6,8 @@ function RubyLint(opts) {
 	this.path = opts.path;
 	this.responsePath = "stdout";
 	this.args = ['{path}', '-p', 'json'];
-	if (opts.levels) this.args = this.args.concat('-l', '"' + opts.levels.join(',') + '"'); //info,warning,error
-	if (opts.classes) this.args = this.args.concat('-a', '"' + opts.classes.join(',') + '"'); //argument_amount, pedantics, shadowing_variables, undefined_methods, undefined_variables, unused_variables, useless_equality_checks
+	if (opts.levels) this.args = this.args.concat('-l', opts.levels.join(',')); //info,warning,error
+	if (opts.classes) this.args = this.args.concat('-a', opts.classes.join(',')); //argument_amount, pedantics, shadowing_variables, undefined_methods, undefined_variables, unused_variables, useless_equality_checks
 	this.settings = "ruby-lint.yml";
 	this.temp = true;
 }

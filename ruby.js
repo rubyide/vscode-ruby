@@ -150,16 +150,11 @@ function completionProvider(document, position) {
 
 const formatter = {
 	provideDocumentFormattingEdits: function(doc) {
-		const f = vscode.workspace.getConfiguration("ruby");
-		if (f.format === 'rubocop') {
-			let opts = vscode.workspace.getConfiguration("ruby.lint.rubocop");
-			if (!opts || opts === true) opts = {};
-			const root = vscode.workspace.rootPath || path.dirname(doc.fileName);
-			const input = doc.getText();
-			console.log("Formatting:", root, input.length);
-			console.log(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)));
-			return rubocopFormatter(input, root, opts).then(result => [new vscode.TextEdit(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)), result)]).catch(err => console.log("Failed to format:", err));
-		}
+		let opts = vscode.workspace.getConfiguration("ruby.lint.rubocop");
+		if (!opts || opts === true) opts = {};
+		const root = vscode.workspace.rootPath || path.dirname(doc.fileName);
+		const input = doc.getText();
+		return rubocopFormatter(input, root, opts).then(result => [new vscode.TextEdit(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)), result)]).catch(err => console.log("Failed to format:", err));
 	}
 };
 
@@ -233,10 +228,11 @@ function activate(context) {
 		balancePairs(vscode.window.activeTextEditor.document);
 	}
 	try {
-		completeCommand(['--help']).kill();
-		vscode.languages.registerCompletionItemProvider('ruby', {
+		const cmdTest = completeCommand(['--help']);
+		cmdTest.on('exit', ()=>	vscode.languages.registerCompletionItemProvider('ruby', {
 			provideCompletionItems: completionProvider
-		});
+		}));
+		cmdTest.on('error',()=>0);
 	} catch (e) {}
 }
 
