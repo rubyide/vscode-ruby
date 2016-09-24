@@ -108,6 +108,8 @@ Settings available (in your VSCode workspace) for each of the linters:
 	"rails": true //Run extra rails cops
 }
 ```
+## Formatting
+Formatting requires the rubocop gem to be installed.
 
 ## Autocomplete
 
@@ -164,6 +166,7 @@ We now provide go to definition within `erb` files, as well as syntax highlighti
 
 - Language colorization support
 - Linting
+- Code formatting
 
 ## TODO
 - Ruby scripts debugging
