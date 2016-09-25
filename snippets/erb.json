@@ -1,0 +1,73 @@
+{
+	"if": {
+		"prefix": "if",
+		"body": [
+			"<% if ${true} -%>",
+			"  $2",
+			"<% end %>"
+		],
+		"description": "if .. end"
+	},
+	"else": {
+		"prefix": "else",
+		"body": [
+			"<% else %>"
+		],
+		"description": "else"
+	},
+	"elsif": {
+		"prefix": "elsif",
+		"body": [
+			"<% elsif ${true} %>"
+		],
+		"description": "elsif"
+	},
+	"end": {
+		"prefix": "end",
+		"body": [
+			"<% end %>"
+		],
+		"description": "end"
+	},
+	"ife": {
+		"prefix": "ife",
+		"body": [
+			"<% if ${true} -%>",
+			"  $1",
+			"<% else %>",
+			"  $2",
+			"<% end %>"
+		],
+		"description": "if .. else .. end"
+	},
+	"unless": {
+		"prefix": "unless",
+		"body": [
+			"<% unless ${false} -%>",
+			"  $2",
+			"<% end %>"
+		],
+		"description": "unless .. end"
+	},
+	"unlesse": {
+		"prefix": "unlesse",
+		"body": [
+			"<% unless ${false} -%>",
+			"  $1",
+			"<% else %>",
+			"  $2",
+			"<% end %>"
+		],
+		"description": "unless .. end"
+	},
+	"each": {
+		"prefix": "each",
+		"body": [
+			"<% ${items}.each do |${item}| -%>",
+			"  $1",
+			"<% end %>"
+		],
+		"description": "each do"
+	}
+}
+
