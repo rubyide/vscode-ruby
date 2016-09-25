@@ -76,6 +76,10 @@
 			{
 				"language": "ruby",
 				"path": "./snippets/ruby.json"
+			},
+			{
+				"language": "erb",
+				"path": "./snippets/erb.json"
 			}
 		],
 		"configuration": {
