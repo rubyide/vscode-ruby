@@ -2,7 +2,7 @@
 	"if": {
 		"prefix": "if",
 		"body": [
-			"<% if ${true} -%>",
+			"<% if ${true} %>",
 			"  $2",
 			"<% end %>"
 		],
@@ -32,7 +32,7 @@
 	"ife": {
 		"prefix": "ife",
 		"body": [
-			"<% if ${true} -%>",
+			"<% if ${true} %>",
 			"  $1",
 			"<% else %>",
 			"  $2",
@@ -43,7 +43,7 @@
 	"unless": {
 		"prefix": "unless",
 		"body": [
-			"<% unless ${false} -%>",
+			"<% unless ${false} %>",
 			"  $2",
 			"<% end %>"
 		],
@@ -52,7 +52,7 @@
 	"unlesse": {
 		"prefix": "unlesse",
 		"body": [
-			"<% unless ${false} -%>",
+			"<% unless ${false} %>",
 			"  $1",
 			"<% else %>",
 			"  $2",
@@ -63,7 +63,7 @@
 	"each": {
 		"prefix": "each",
 		"body": [
-			"<% ${items}.each do |${item}| -%>",
+			"<% ${items}.each do |${item}| %>",
 			"  $1",
 			"<% end %>"
 		],
