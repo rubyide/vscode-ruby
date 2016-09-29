@@ -38,7 +38,7 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
 
 ## Linters
 ### Available Linter hooks
-You will need to install the ruby gem for eacy of these for linting to work (except ruby -wc of course)
+You will need to install the ruby gem for each of these for linting to work (except ruby -wc of course)
 
 * ruby -wc
 * rubocop
