@@ -217,12 +217,13 @@
 			"aliases": ["Ruby", "ruby"],
 			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
 				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"],
-			"configuration": "./language-configuration.json"
+			"configuration": "./language-configuration-ruby.json"
 		},
 		{
 			"id": "erb",
 			"aliases": ["erb", "Encapsulated Ruby"],
-			"extensions": [".erb", ".rhtml", ".rhtm"]
+			"extensions": [".erb", ".rhtml", ".rhtm"],
+			"configuration": "./language-configuration-erb.json"
 		}],
 		"grammars": [{
 			"language": "ruby",
