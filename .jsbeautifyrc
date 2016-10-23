@@ -1,0 +1,5 @@
+{
+	"break_chained_methods": false,
+	"indent_with_tabs": true,
+	"space_after_anon_function": true
+}
