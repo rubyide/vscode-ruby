@@ -12,9 +12,19 @@ function RubyLint(opts) {
 	this.temp = true;
 }
 
-//"[{"level":"warning","message":"unused local variable x","line":9,"column":1,"file":"C:/Users/Bryan/AppData/Local/Temp/116127-4472-1g3n731","filename":"116127-4472-1g3n731","node":"(lvasgn :x\n  (int 5))"}]\r\n"
+/*
+[{
+	"level": "warning",
+	"message": "unused local variable x",
+	"line": 9,
+	"column": 1,
+	"file": "C:/Users/Bryan/AppData/Local/Temp/116127-4472-1g3n731",
+	"filename": "116127-4472-1g3n731",
+	"node": "(lvasgn :x\n  (int 5))"
+}]
+*/
 
-RubyLint.prototype.processResult = function(data) {
+RubyLint.prototype.processResult = function (data) {
 	if (!data) return [];
 	let offenses = JSON.parse(data);
 	return offenses.map(offense => ({
