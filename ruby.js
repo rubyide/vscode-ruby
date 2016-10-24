@@ -1,40 +1,12 @@
 "use strict";
 let vscode = require('vscode');
-let linters = require('./lint/lint');
+
 let Locate = require('./locate/locate');
 let cp = require('child_process');
 let path = require('path');
 
+let LintCollection = require('./lint/LintCollection');
 let rubocopFormatter = require('./format/RuboCop');
-
-const severities = {
-	refactor: vscode.DiagnosticSeverity.Hint,
-	convention: vscode.DiagnosticSeverity.Information,
-	info: vscode.DiagnosticSeverity.Information,
-	warning: vscode.DiagnosticSeverity.Warning,
-	error: vscode.DiagnosticSeverity.Error,
-	fatal: vscode.DiagnosticSeverity.Error
-};
-let timer;
-
-function deferReport(uri, lint, diagnostic) {
-	if (lint.error) {
-		console.log("Linter error:", lint.source, lint.error);
-		return;
-	}
-	if ((!lint.result || !lint.result.length) && (!lint.lintError || !lint.lintError.length)) return;
-	let allOf = lint.result.concat(lint.lintError)
-		.map(offense => {
-			let tail = offense.location.column + offense.location.length;
-			let d = new vscode.Diagnostic(new vscode.Range(
-					offense.location.line - 1, offense.location.column - 1,
-					offense.location.line - 1, tail - 1),
-				offense.message, severities[offense.severity] || vscode.DiagnosticSeverity.Error);
-			d.source = offense.cop_name || lint.linter;
-			return d;
-		});
-	diagnostic.set(uri, allOf);
-}
 
 const langConfig = {
 	indentationRules: {
@@ -96,7 +68,6 @@ function balancePairs(doc) {
 }
 
 function balanceEvent(event) {
-	pairedEnds = [];
 	if (event && event.document) balancePairs(event.document);
 }
 
@@ -119,28 +90,28 @@ const completionProvider = {
 				'--dev',
 				'--fork',
 				'--line=' + line,
-				'--column=' + column]);
+				'--column=' + column
+			]);
 			let outbuf = [],
 				errbuf = [];
 			child.stderr.on('data', (data) => errbuf.push(data));
 			child.stdout.on('data', (data) => outbuf.push(data));
 			child.stdout.on('end', () => {
-				if (errbuf.length > 0) return reject(Buffer.concat(errbuf)
-					.toString());
+				if (errbuf.length > 0) return reject(Buffer.concat(errbuf).toString());
 				let completionItems = [];
 
-				Buffer.concat(outbuf).toString().split('\n').forEach(function(elem) {
-						let items = elem.split('\t');
-						if (/^[^\w]/.test(items[0])) return;
-						let completionItem = new vscode.CompletionItem(items[0]);
-						completionItem.detail = items[1];
-						completionItem.documentation = items[1];
-						completionItem.filterText = items[0];
-						completionItem.insertText = items[0];
-						completionItem.label = items[0];
-						completionItem.kind = vscode.CompletionItemKind.Method;
-						completionItems.push(completionItem);
-					}, this);
+				Buffer.concat(outbuf).toString().split('\n').forEach(function (elem) {
+					let items = elem.split('\t');
+					if (/^[^\w]/.test(items[0])) return;
+					let completionItem = new vscode.CompletionItem(items[0]);
+					completionItem.detail = items[1];
+					completionItem.documentation = items[1];
+					completionItem.filterText = items[0];
+					completionItem.insertText = items[0];
+					completionItem.label = items[0];
+					completionItem.kind = vscode.CompletionItemKind.Method;
+					completionItems.push(completionItem);
+				}, this);
 				if (completionItems.length === 0)
 					return reject([]);
 				return resolve(completionItems);
@@ -151,7 +122,7 @@ const completionProvider = {
 };
 
 const formatter = {
-	provideDocumentFormattingEdits: function(doc) {
+	provideDocumentFormattingEdits: function (doc) {
 		let opts = vscode.workspace.getConfiguration("ruby.lint.rubocop");
 		if (!opts || opts === true) opts = {};
 		const root = vscode.workspace.rootPath || path.dirname(doc.fileName);
@@ -161,57 +132,41 @@ const formatter = {
 };
 
 function activate(context) {
+	const subs = context.subscriptions;
 	//add language config
 	vscode.languages.setLanguageConfiguration('ruby', langConfig);
 
-	let activeLinters = {};
-	let linterTimers = {};
-	let activeDiagnostics = {};
+	const linters = new LintCollection(vscode.workspace.getConfiguration("ruby").lint);
+	subs.push(linters);
 
 	function changeTrigger(changed) {
-		timer = process.hrtime();
-		if (!changed || !changed.document) return;
-		if (changed.document.languageId !== 'ruby') return;
-
-		const doc = changed.document;
-		let lintConfig = vscode.workspace.getConfiguration("ruby.lint");
-
-		if (lintConfig) {
-			clearTimeout(linterTimers[doc.fileName]);
-
-			if (activeLinters[doc.fileName]) {
-				try {
-					activeLinters[doc.fileName].send('stop');
-				} catch (e) {}
-				delete activeLinters[doc.fileName];
-			}
-			linterTimers[doc.fileName] = setTimeout(() => {
-				activeLinters[doc.fileName] = linters.runCollection(lintConfig, doc.fileName, doc.getText(), result => {
-					if (!activeDiagnostics[result.linter]) {
-						activeDiagnostics[result.linter] = vscode.languages.createDiagnosticCollection(result.linter);
-						context.subscriptions.push(activeDiagnostics[result.linter]);
-					}
-					activeDiagnostics[result.linter].delete(doc.uri);
-					deferReport(doc.uri, result, activeDiagnostics[result.linter]);
-				});
-			}, 200);
-		}
+		if (!changed) return;
+		linters.run(changed.document);
 	}
-	context.subscriptions.push(vscode.languages.registerDocumentHighlightProvider('ruby', highligher));
 
-	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(changeTrigger));
-	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(changeTrigger));
-	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(
-		() => vscode.window.visibleTextEditors.forEach(changeTrigger)));
-	//if it's a project, use the root, othewise, don't bother
+	subs.push(vscode.languages.registerDocumentHighlightProvider('ruby', highligher));
+
+	subs.push(vscode.window.onDidChangeActiveTextEditor(changeTrigger));
+	subs.push(vscode.workspace.onDidChangeTextDocument(changeTrigger));
+	subs.push(vscode.workspace.onDidChangeConfiguration(() => {
+		const docs = vscode.window.visibleTextEditors.map(editor => editor.document);
+		console.log("Config changed. Should lint:", docs.length);
+		linters.cfg(vscode.workspace.getConfiguration("ruby").lint);
+		docs.forEach(doc => linters.run(doc));
+	}));
+
+	// run against all of the current open files
+	vscode.window.visibleTextEditors.forEach(changeTrigger);
+
+	//for locate: if it's a project, use the root, othewise, don't bother
 	let locate;
 	if (vscode.workspace.rootPath) {
 		const settings = vscode.workspace.getConfiguration("ruby.locate") || {};
 		locate = new Locate(vscode.workspace.rootPath, settings);
 		const watch = vscode.workspace.createFileSystemWatcher(settings.include);
-		watch.onDidChange(uri=>locate.parse(uri.fsPath));
-		watch.onDidCreate(uri=>locate.parse(uri.fsPath));
-		watch.onDidDelete(uri=>locate.rm(uri.fsPath));
+		watch.onDidChange(uri => locate.parse(uri.fsPath));
+		watch.onDidCreate(uri => locate.parse(uri.fsPath));
+		watch.onDidDelete(uri => locate.rm(uri.fsPath));
 		const defProvider = {
 			provideDefinition: (doc, pos) => {
 				const txt = doc.getText(doc.getWordRangeAtPosition(pos));
@@ -219,24 +174,23 @@ function activate(context) {
 				return matches.map(m => new vscode.Location(vscode.Uri.file(m.file), new vscode.Position(m.line, m.char)));
 			}
 		};
-		context.subscriptions.push(vscode.languages.registerDefinitionProvider(['ruby','erb'], defProvider));
+		subs.push(vscode.languages.registerDefinitionProvider(['ruby', 'erb'], defProvider));
 	}
 
-	vscode.window.visibleTextEditors.forEach(changeTrigger);
-	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
-	context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
-	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(balancePairs));
+	subs.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
+	subs.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
+	subs.push(vscode.workspace.onDidOpenTextDocument(balancePairs));
 	if (vscode.window && vscode.window.activeTextEditor) {
 		balancePairs(vscode.window.activeTextEditor.document);
 	}
 
-	const formatTest = cp.spawn('rubocop',['-h']);
-	formatTest.on('exit', ()=> context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('ruby',formatter)));
-	formatTest.on('error',()=> console.log("Rubocop not installed"));
+	const formatTest = cp.spawn('rubocop', ['-h']);
+	formatTest.on('exit', () => subs.push(vscode.languages.registerDocumentFormattingEditProvider('ruby', formatter)));
+	formatTest.on('error', () => console.log("Rubocop not installed"));
 
 	const completeTest = completeCommand(['--help']);
-	completeTest.on('exit', ()=> context.subscriptions.push(vscode.languages.registerCompletionItemProvider('ruby', completionProvider)));
-	completeTest.on('error',()=>0);
+	completeTest.on('exit', () => subs.push(vscode.languages.registerCompletionItemProvider('ruby', completionProvider)));
+	completeTest.on('error', () => 0);
 
 }
 

@@ -4,10 +4,10 @@ let fsCB = require('fs');
 let fs = {};
 
 function wrap(name) {
-	return function() {
+	return function () {
 		let args = Array.prototype.slice.call(arguments);
 		return new Promise((resolve, reject) => {
-			const cb = function(e) {
+			const cb = function (e) {
 				if (e) return reject(e);
 				if (arguments.length === 1) return resolve();
 				if (arguments.length === 2) return resolve(arguments[1]);
@@ -20,9 +20,8 @@ function wrap(name) {
 		});
 	};
 }
-//wrap everything that has a sync version.
 let keys = Object.keys(fsCB);
-//set everything that isn't an async function
+//set everything that isn't an async function - all of the async's have a Sync equiv
 keys.filter(n => !(n + "Sync" in fsCB))
 	.forEach(n => fs[n] = fsCB[n]);
 
