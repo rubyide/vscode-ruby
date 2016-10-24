@@ -27,19 +27,15 @@ class LintCollection {
 		let toRemove = activeLinters.filter(l => !(l in newConfig) || !newConfig[l]);
 		toRemove.forEach(l => {
 			if (this._results[l]) {
-				console.log(4);
 				this._results[l].dispose();
 				delete this._results[l];
 			}
-			console.log(5);
 			delete this._cfg[l];
 		});
-		console.log(6);
 		// we change the config internally, so that the config of any (awaiting) linters will be updated by reference
 		for (let l in newConfig) {
 			if (newConfig[l]) this._cfg[l] = newConfig[l];
 		}
-		console.log("New cfg:", Object.keys(this._cfg).join(', '));
 	}
 	dispose() {
 		for (let l in this._results) this._results[l].dispose();

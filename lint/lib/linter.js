@@ -23,7 +23,6 @@ class Linter {
 	}
 	run(cfg) { // cfg can change over time
 		if (this.timer) clearTimeout(this.timer);
-		console.log("Running:", Object.keys(cfg).join(', '));
 		this.cfg = cfg;
 		for (let l in cfg) {
 			if (!this.linting[l]) this.linting[l] = {};
