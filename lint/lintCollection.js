@@ -1,7 +1,7 @@
 'use strict';
 
 const Linter = require('./lib/linter');
-const LintResults = require('./lib/LintResults');
+const LintResults = require('./lib/lintResults');
 
 class LintCollection {
 	constructor(config) {
