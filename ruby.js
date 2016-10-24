@@ -5,7 +5,7 @@ let Locate = require('./locate/locate');
 let cp = require('child_process');
 let path = require('path');
 
-let LintCollection = require('./lint/LintCollection');
+let LintCollection = require('./lint/lintCollection');
 let rubocopFormatter = require('./format/RuboCop');
 
 const langConfig = {
