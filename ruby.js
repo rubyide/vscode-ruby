@@ -99,10 +99,10 @@ const completionProvider = {
 			child.stdout.on('end', () => {
 				if (errbuf.length > 0) return reject(Buffer.concat(errbuf).toString());
 				let completionItems = [];
-
 				Buffer.concat(outbuf).toString().split('\n').forEach(function (elem) {
 					let items = elem.split('\t');
 					if (/^[^\w]/.test(items[0])) return;
+					if (items[0].trim().length === 0) return;
 					let completionItem = new vscode.CompletionItem(items[0]);
 					completionItem.detail = items[1];
 					completionItem.documentation = items[1];
@@ -189,7 +189,7 @@ function activate(context) {
 	formatTest.on('error', () => console.log("Rubocop not installed"));
 
 	const completeTest = completeCommand(['--help']);
-	completeTest.on('exit', () => subs.push(vscode.languages.registerCompletionItemProvider('ruby', completionProvider)));
+	completeTest.on('exit', () => subs.push(vscode.languages.registerCompletionItemProvider('ruby', completionProvider, ['.'])));
 	completeTest.on('error', () => 0);
 
 }
