@@ -71,8 +71,8 @@ module.exports = class Locate {
 			}, err => {
 				if (err.code === 'EMFILE') {
 					// if there are too many open files
-					// try again after somewhere between 0 & 5 milliseconds
-					setTimeout(this.parse.bind(this, absPath), Math.random() * 5);
+					// try again after somewhere between 0 & 50 milliseconds
+					setTimeout(this.parse.bind(this, absPath), Math.random() * 50);
 				} else {
 					// otherwise, report it
 					console.log(err);
