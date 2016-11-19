@@ -6,7 +6,7 @@ let cp = require('child_process');
 let path = require('path');
 
 let LintCollection = require('./lint/lintCollection');
-let rubocopFormatter = require('./format/RuboCop');
+let AutoCorrect = require('./format/RuboCop');
 
 const langConfig = {
 	indentationRules: {
@@ -121,13 +121,14 @@ const completionProvider = {
 	}
 };
 
+let autoCorrect;
 const formatter = {
 	provideDocumentFormattingEdits: function (doc) {
 		let opts = vscode.workspace.getConfiguration("ruby.lint.rubocop");
 		if (!opts || opts === true) opts = {};
-		const root = vscode.workspace.rootPath || path.dirname(doc.fileName);
+		const root = doc.fileName ? path.dirname(doc.fileName) : vscode.workspace.rootPath;
 		const input = doc.getText();
-		return rubocopFormatter(input, root, opts).then(result => [new vscode.TextEdit(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)), result)]).catch(err => console.log("Failed to format:", err));
+		return autoCorrect.correct(input, root, opts).then(result => [new vscode.TextEdit(doc.validateRange(new vscode.Range(0, 0, Infinity, Infinity)), result)]).catch(err => console.log("Failed to format:", err));
 	}
 };
 
@@ -183,10 +184,10 @@ function activate(context) {
 	if (vscode.window && vscode.window.activeTextEditor) {
 		balancePairs(vscode.window.activeTextEditor.document);
 	}
-
-	const formatTest = cp.spawn('rubocop', ['-h']);
-	formatTest.on('exit', () => subs.push(vscode.languages.registerDocumentFormattingEditProvider('ruby', formatter)));
-	formatTest.on('error', () => console.log("Rubocop not installed"));
+	autoCorrect = new AutoCorrect(vscode.workspace.getConfiguration("ruby").get("lint.rubocop") || {});
+	autoCorrect.test().then(
+		() => subs.push(vscode.languages.registerDocumentFormattingEditProvider('ruby', formatter)),
+		() => console.log("Rubocop not installed"));
 
 	const completeTest = completeCommand(['--help']);
 	completeTest.on('exit', () => subs.push(vscode.languages.registerCompletionItemProvider('ruby', completionProvider, ['.'])));

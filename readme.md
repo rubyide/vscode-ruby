@@ -82,7 +82,7 @@ Relevant configuration files:
 * reek: [*.reek](https://github.com/troessner/reek)
 * fasterer: [.fasterer.yml](https://github.com/DamirSvrtan/fasterer)
 * ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/master/doc/configuration.md)
-* rubocop: [.rubocop.yml](https://github.com/bbatsov/rubocop#configuration)
+* rubocop: [.rubocop.yml](http://rubocop.readthedocs.io/en/latest/configuration/)
 
 Settings available (in your VSCode workspace) for each of the linters:
 
@@ -109,7 +109,7 @@ Settings available (in your VSCode workspace) for each of the linters:
 }
 ```
 ## Formatting
-Formatting requires the rubocop gem to be installed.
+Formatting requires the rubocop gem to be installed. Note that you may have to turn on some of the AutoCorrect functions in your `.rubocop.yml` file. See the [rubocop documentation](http://rubocop.readthedocs.io/en/latest/configuration/).
 
 ## Autocomplete
 

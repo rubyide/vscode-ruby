@@ -1,39 +1,36 @@
 {
 	"name": "Ruby",
 	"displayName": "Ruby",
-	"version": "0.10.2",
+	"version": "0.10.3",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
 		"name": "Peng Lv"
 	},
-	"contributors": [
-		{
-			"name": "Peng Lyu",
-			"url": "https://github.com/rebornix"
-		},
-		{
-			"name": "Bryan Hoekstra",
-			"url": "https://github.com/HookyQR"
-		},
-		{
-			"name": "Drew Cain",
-			"url": "https://github.com/groksrc"
-		},
-		{
-			"name": "Lex Li",
-			"url": "https://github.com/lextm"
-		}],
+	"contributors": [{
+		"name": "Peng Lyu",
+		"url": "https://github.com/rebornix"
+	}, {
+		"name": "Bryan Hoekstra",
+		"url": "https://github.com/HookyQR"
+	}, {
+		"name": "Drew Cain",
+		"url": "https://github.com/groksrc"
+	}, {
+		"name": "Lex Li",
+		"url": "https://github.com/lextm"
+	}],
 	"engines": {
 		"vscode": "^0.10.1"
 	},
 	"license": "MIT",
 	"icon": "images/ruby.png",
 	"categories": [
-		"Debuggers",
 		"Languages",
+		"Debuggers",
 		"Linters",
-		"Snippets"
+		"Snippets",
+		"Formatters"
 	],
 	"private": false,
 	"repository": {
@@ -72,16 +69,13 @@
 	"main": "ruby.js",
 
 	"contributes": {
-		"snippets": [
-			{
-				"language": "ruby",
-				"path": "./snippets/ruby.json"
-			},
-			{
-				"language": "erb",
-				"path": "./snippets/erb.json"
-			}
-		],
+		"snippets": [{
+			"language": "ruby",
+			"path": "./snippets/ruby.json"
+		}, {
+			"language": "erb",
+			"path": "./snippets/erb.json"
+		}],
 		"configuration": {
 			"title": "ruby language settings",
 			"properties": {
@@ -114,11 +108,6 @@
 					"type": "string",
 					"default": "rct-complete",
 					"description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions."
-				},
-				"ruby.format": {
-					"type": "string",
-					"description": "Select the type of formatter to use. If 'rubocop' is selected, the ruby.lint.rubocop options will be passed to the formatter.",
-					"enum": ["rubocop"]
 				},
 				"ruby.lint": {
 					"type": "object",
@@ -207,7 +196,8 @@
 									"items": {
 										"type": "string",
 										"enum": ["argument_amount", "loop_keywords", "pedantics", "shadowing_variables", "undefined_methods",
-											"undefined_variables", "unused_variables", "useless_equality_checks"]
+											"undefined_variables", "unused_variables", "useless_equality_checks"
+										]
 									}
 								}
 							}
@@ -220,10 +210,10 @@
 			"id": "ruby",
 			"aliases": ["Ruby", "ruby"],
 			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
-				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"],
+				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"
+			],
 			"configuration": "./language-configuration-ruby.json"
-		},
-		{
+		}, {
 			"id": "erb",
 			"aliases": ["erb", "Encapsulated Ruby"],
 			"extensions": [".erb", ".rhtml", ".rhtm"],
@@ -233,159 +223,146 @@
 			"language": "ruby",
 			"scopeName": "source.ruby",
 			"path": "./syntaxes/ruby.tmLanguage"
-		},
-		{
+		}, {
 			"language": "erb",
 			"scopeName": "text.html.erb",
 			"path": "./syntaxes/erb.tmLanguage"
 		}],
-		"debuggers": [
-			{
+		"debuggers": [{
+			"type": "Ruby",
+			"label": "Ruby",
+			"enableBreakpointsFor": {
+				"languageIds": ["ruby", "erb"]
+			},
+			"program": "./out/main.js",
+			"runtime": "node",
+			"configurationAttributes": {
+				"launch": {
+					"required": ["program"],
+					"properties": {
+						"program": {
+							"type": "string",
+							"description": "Absolute path to the program.",
+							"default": "${workspaceRoot}/main.rb"
+						},
+						"stopOnEntry": {
+							"type": "boolean",
+							"description": "Automatically stop after launch.",
+							"default": true
+						},
+						"showDebuggerOutput": {
+							"type": "boolean",
+							"description": "Show output of the debugger in the console.",
+							"default": false
+						},
+						"args": {
+							"type": "array",
+							"description": "Command line arguments passed to the program.",
+							"items": {
+								"type": "string"
+							},
+							"default": []
+						},
+						"env": {
+							"type": "object",
+							"description": "Additional environment variables to pass to the debugging (and debugged) process.",
+							"default": {}
+						},
+						"cwd": {
+							"type": "string",
+							"description": "Absolute path to the working directory of the program being debugged.",
+							"default": "${workspaceRoot}"
+						},
+						"useBundler": {
+							"type": "boolean",
+							"description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
+							"default": false
+						},
+						"pathToBundler": {
+							"type": "string",
+							"description": "If you use the `useBunder` option, and `bundle` is not in your path, provide the absolute path to `bundle` (eg. \"/usr/bin/bundle\" )",
+							"default": "bundle"
+						},
+						"pathToRDebugIDE": {
+							"type": "string",
+							"description": "If `rdebug-ide` is not in your path, provide the absolute path to `rdebug-ide` (eg. \"c:\\ruby\\rdebug-ide.bat\" )",
+							"default": "rdebug-ide"
+						}
+					}
+				},
+				"attach": {
+					"required": ["cwd", "remoteHost", "remotePort", "remoteWorkspaceRoot"],
+					"properties": {
+						"cwd": {
+							"type": "string",
+							"description": "Absolute path to the working directory of the program being debugged.",
+							"default": "${workspaceRoot}"
+						},
+						"remoteHost": {
+							"type": "string",
+							"description": "Host address for remote debugging.",
+							"default": "127.0.0.1"
+						},
+						"remotePort": {
+							"type": "string",
+							"description": "Port for remote debugging.",
+							"default": "1234"
+						},
+						"remoteWorkspaceRoot": {
+							"type": "string",
+							"description": "Remote workspace root, this parameter is required for remote debugging.",
+							"default": "${workspaceRoot}"
+						},
+						"showDebuggerOutput": {
+							"type": "boolean",
+							"description": "Show output of the debugger in the console.",
+							"default": false
+						}
+					}
+				}
+			},
+			"initialConfigurations": [{
+				"name": "Debug Local File",
 				"type": "Ruby",
-				"label": "Ruby",
-
-				"enableBreakpointsFor": {
-					"languageIds": ["ruby", "erb"]
-				},
-
-				"program": "./out/main.js",
-				"runtime": "node",
-
-				"configurationAttributes": {
-					"launch": {
-						"required": ["program"],
-						"properties": {
-							"program": {
-								"type": "string",
-								"description": "Absolute path to the program.",
-								"default": "${workspaceRoot}/main.rb"
-							},
-							"stopOnEntry": {
-								"type": "boolean",
-								"description": "Automatically stop after launch.",
-								"default": true
-							},
-							"showDebuggerOutput": {
-								"type": "boolean",
-								"description": "Show output of the debugger in the console.",
-								"default": false
-							},
-							"args": {
-								"type": "array",
-								"description": "Command line arguments passed to the program.",
-								"items": {
-									"type": "string"
-								},
-								"default": []
-							},
-							"env": {
-								"type": "object",
-								"description": "Additional environment variables to pass to the debugging (and debugged) process.",
-								"default": {}
-							},
-							"cwd": {
-								"type": "string",
-								"description": "Absolute path to the working directory of the program being debugged.",
-								"default": "${workspaceRoot}"
-							},
-							"useBundler": {
-								"type": "boolean",
-								"description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
-								"default": false
-							},
-							"pathToBundler": {
-								"type": "string",
-								"description": "If you use the `useBunder` option, and `bundle` is not in your path, provide the absolute path to `bundle` (eg. \"/usr/bin/bundle\" )",
-								"default": "bundle"
-							},
-							"pathToRDebugIDE": {
-								"type": "string",
-								"description": "If `rdebug-ide` is not in your path, provide the absolute path to `rdebug-ide` (eg. \"c:\\ruby\\rdebug-ide.bat\" )",
-								"default": "rdebug-ide"
-							}
-						}
-					},
-					"attach": {
-						"required": ["cwd", "remoteHost", "remotePort", "remoteWorkspaceRoot"],
-						"properties": {
-							"cwd": {
-								"type": "string",
-								"description": "Absolute path to the working directory of the program being debugged.",
-								"default": "${workspaceRoot}"
-							},
-							"remoteHost": {
-								"type": "string",
-								"description": "Host address for remote debugging.",
-								"default": "127.0.0.1"
-							},
-							"remotePort": {
-								"type": "string",
-								"description": "Port for remote debugging.",
-								"default": "1234"
-							},
-							"remoteWorkspaceRoot": {
-								"type": "string",
-								"description": "Remote workspace root, this parameter is required for remote debugging.",
-								"default": "${workspaceRoot}"
-							},
-							"showDebuggerOutput": {
-								"type": "boolean",
-								"description": "Show output of the debugger in the console.",
-								"default": false
-							}
-						}
-					}
-				},
-				"initialConfigurations": [
-					{
-						"name": "Debug Local File",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/main.rb"
-					},
-					{
-						"name": "Listen for rdebug-ide",
-						"type": "Ruby",
-						"request": "attach",
-						"cwd": "${workspaceRoot}",
-						"remoteHost": "127.0.0.1",
-						"remotePort": "1234",
-						"remoteWorkspaceRoot": "${workspaceRoot}"
-					},
-					{
-						"name": "Rails server",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/rails",
-						"args": ["server"]
-					},
-					{
-						"name": "RSpec - all",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/rspec",
-						"args": ["-I","${workspaceRoot}"]
-					},
-					{
-						"name": "RSpec - active spec file only",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/rspec",
-						"args": ["-I","${workspaceRoot}","${file}"]
-					},
-					{
-						"name": "Cucumber",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/cucumber"
-					}
-				]
-			}
-		]
+				"request": "launch",
+				"cwd": "${workspaceRoot}",
+				"program": "${workspaceRoot}/main.rb"
+			}, {
+				"name": "Listen for rdebug-ide",
+				"type": "Ruby",
+				"request": "attach",
+				"cwd": "${workspaceRoot}",
+				"remoteHost": "127.0.0.1",
+				"remotePort": "1234",
+				"remoteWorkspaceRoot": "${workspaceRoot}"
+			}, {
+				"name": "Rails server",
+				"type": "Ruby",
+				"request": "launch",
+				"cwd": "${workspaceRoot}",
+				"program": "${workspaceRoot}/bin/rails",
+				"args": ["server"]
+			}, {
+				"name": "RSpec - all",
+				"type": "Ruby",
+				"request": "launch",
+				"cwd": "${workspaceRoot}",
+				"program": "${workspaceRoot}/bin/rspec",
+				"args": ["-I", "${workspaceRoot}"]
+			}, {
+				"name": "RSpec - active spec file only",
+				"type": "Ruby",
+				"request": "launch",
+				"cwd": "${workspaceRoot}",
+				"program": "${workspaceRoot}/bin/rspec",
+				"args": ["-I", "${workspaceRoot}", "${file}"]
+			}, {
+				"name": "Cucumber",
+				"type": "Ruby",
+				"request": "launch",
+				"cwd": "${workspaceRoot}",
+				"program": "${workspaceRoot}/bin/cucumber"
+			}]
+		}]
 	}
 }
