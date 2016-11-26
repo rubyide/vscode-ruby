@@ -210,7 +210,7 @@
 			"id": "ruby",
 			"aliases": ["Ruby", "ruby"],
 			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
-				".ru", ".prawn", ".Gemfile", ".Guardfile", ".Vagrantfile"
+				".ru", ".prawn", ".jbuilder", ".Gemfile", ".Guardfile", ".Vagrantfile"
 			],
 			"configuration": "./language-configuration-ruby.json"
 		}, {
