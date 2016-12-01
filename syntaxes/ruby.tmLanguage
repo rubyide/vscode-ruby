@@ -59,6 +59,7 @@
     <string>capfile</string>
     <string>ru</string>
     <string>prawn</string>
+    <string>jbuilder</string>
     <string>Gemfile</string>
     <string>Guardfile</string>
     <string>Vagrantfile</string>
