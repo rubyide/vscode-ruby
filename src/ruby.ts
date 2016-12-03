@@ -15,6 +15,8 @@ import {includes} from './helper';
 
 var domErrorLocator: any = {};
 
+const ELEMENT_NODE:number = 1; // Node.ELEMENT_NODE
+
 export class RubyProcess extends EventEmitter {
     private debugSocketClient : net.Socket = null;
     private buffer: string;
@@ -140,6 +142,7 @@ export class RubyProcess extends EventEmitter {
                     //all of the child nodes are the same type in our responses
                     for (let nodeIdx = 0; nodeIdx < node.childNodes.length; nodeIdx++){
                         let childNode = node.childNodes[nodeIdx];
+                        if ( childNode.nodeType !== ELEMENT_NODE ) continue;
                         attributes = {}
                         if ( childNode.attributes && childNode.attributes.length ){
                             for (let attrIdx = 0; attrIdx < childNode.attributes.length; attrIdx++){
