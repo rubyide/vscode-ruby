@@ -55,7 +55,7 @@ gulp.task('internal-compile', function() {
 			// no inlined source
 			includeContent: inlineSource,
 			// Return relative source map root directories per file.
-			sourceRoot: "../../src"
+			sourceRoot: "../src"
 		}));
 	}
 
