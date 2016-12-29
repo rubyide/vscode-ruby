@@ -3,24 +3,28 @@ const locator = require('ruby-method-locate'),
 	minimatch = require('minimatch');
 const fs = require('fs'),
 	path = require('path');
+const _ = require('lodash');
 
-function flatten(tree, result) {
-	let t;
-	for (let a in tree) {
-		t = tree[a];
-		if (typeof t === 'string' || typeof t === 'number') continue;
-		if (t.posn) {
-			if (a in result) result[a].push({
-				line: t.posn.line,
-				char: t.posn.char
-			});
-			else result[a] = [{
-				line: t.posn.line,
-				char: t.posn.char
-			}];
-		}
-		flatten(t, result);
-	}
+function flatten(locateInfo, file, parentName) {
+	return _.flatMap(locateInfo, (symbols, type) => {
+		// TODO: return accessor or other types.
+		// TODO: parse include and inherit to find inherited symbols.
+		if (!_.includes(['module', 'class', 'method', 'classMethod'], type)) return [];
+		return _.flatMap(symbols, (children, name) => {
+			const sep = { method: '#', classMethod: '.' }[type] || '::';
+			const posn = children.posn || { line: 0, char: 0 };
+			const fullName = parentName ? `${parentName}${sep}${name}` : name;
+			const symbolInfo = {
+				// TODO: parse names like 'ActiveRecord::Base'
+				name: name,
+				file: file,
+				line: posn.line,
+				char: posn.char,
+				fullName: fullName
+			};
+			return [symbolInfo].concat(flatten(children, file, fullName));
+		});
+	});
 }
 module.exports = class Locate {
 	constructor(root, settings) {
@@ -34,26 +38,16 @@ module.exports = class Locate {
 		// add lookup hooks
 	}
 	find(name) {
-		let result = [];
-		let tree;
-		for (let file in this.tree) {
-			tree = this.tree[file];
-			//jshint -W083
-			const extract = obj => ({
-				file: file,
-				line: obj.line,
-				char: obj.char
-			});
-			//jshint +W083
-			for (let n in tree) {
-				// because our word pattern is designed to match symbols
-				// things like Gem::RequestSet may request a search for ':RequestSet'
-				if (n === name || n === name + '=' || ':' + n === name) {
-					result = result.concat(tree[n].map(extract));
-				}
-			}
-		}
-		return result;
+		// because our word pattern is designed to match symbols
+		// things like Gem::RequestSet may request a search for ':RequestSet'
+		const escapedName = _.escapeRegExp(_.trimStart(name, ':'));
+		const regexp = new RegExp(`^${escapedName}=?\$`);
+		return _(this.tree)
+			.values()
+			.flatten()
+			.filter(symbol => regexp.test(symbol.name))
+			.map(_.clone)
+			.value();
 	}
 	rm(absPath) {
 		if (absPath in this.tree) delete this.tree[absPath];
@@ -66,8 +60,7 @@ module.exports = class Locate {
 		locator(absPath)
 			.then(result => {
 				if (!result) return;
-				this.tree[absPath] = {};
-				flatten(result, this.tree[absPath]);
+				this.tree[absPath] = flatten(result, absPath);
 			}, err => {
 				if (err.code === 'EMFILE') {
 					// if there are too many open files
