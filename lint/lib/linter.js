@@ -15,8 +15,9 @@ fs.readdirSync(path.join(__dirname, 'linters'))
 	});
 
 class Linter {
-	constructor(doc, cb) {
+	constructor(doc, rootPath, cb) {
 		this.doc = doc;
+		this.rootPath = rootPath;
 		this.cb = cb;
 		this.linting = {};
 		this.cfg = {};
@@ -68,11 +69,16 @@ class Linter {
 				if (svc.errorPath)
 					spawned[svc.errorPath].on("data", d => error += d.toString());
 				spawned.on("exit", () => {
-					resolve({
-						linter: svc.exe,
-						lintError: svc.processError ? svc.processError(error) : [],
-						result: svc.processResult(result)
-					});
+					try {
+						resolve({
+							linter: svc.exe,
+							lintError: svc.processError ? svc.processError(error) : [],
+							result: svc.processResult(result)
+						});
+					} catch (e) {
+						// Exception while parsing result or error
+						reject(e);
+					}
 				});
 				spawned.on("error", e => reject(e));
 				if (cmdOpts.data) spawned.stdin.end(cmdOpts.data);
@@ -128,8 +134,9 @@ class Linter {
 			return prom.then(final);
 		});
 		const noTmpFileSvc = () => toRun.filter(svc => !svc.tmp).map(svc => this._exeLinter(svc, {
-			dir: sourceDir,
-			data: doc.getText()
+			dir: this.rootPath || sourceDir,
+			data: doc.getText(),
+			file: doc.fileName
 		}).then(final));
 
 		let executor = Promise.resolve();
