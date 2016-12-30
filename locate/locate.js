@@ -43,7 +43,8 @@ module.exports = class Locate {
 		// add lookup hooks
 	}
 	listInFile(absPath) {
-		return _.clone(this.tree[absPath] || []);
+		const waitForParse = (absPath in this.tree) ? Promise.resolve() : this.parse(absPath);
+		return waitForParse.then(() => _.clone(this.tree[absPath] || []));
 	}
 	find(name) {
 		// because our word pattern is designed to match symbols
@@ -64,11 +65,9 @@ module.exports = class Locate {
 		const relPath = path.relative(this.root, absPath);
 		if (this.settings.exclude && minimatch(relPath, this.settings.exclude)) return;
 		if (this.settings.include && !minimatch(relPath, this.settings.include)) return;
-		this.rm(absPath);
-		locator(absPath)
+		return locator(absPath)
 			.then(result => {
-				if (!result) return;
-				this.tree[absPath] = flatten(result, absPath);
+				this.tree[absPath] = result ? flatten(result, absPath) : [];
 			}, err => {
 				if (err.code === 'EMFILE') {
 					// if there are too many open files
@@ -77,6 +76,7 @@ module.exports = class Locate {
 				} else {
 					// otherwise, report it
 					console.log(err);
+					this.rm(absPath);
 				}
 			});
 	}
