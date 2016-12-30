@@ -15,7 +15,6 @@ function flatten(locateInfo, file, containerName = '') {
 		}
 		return _.flatMap(symbols, (inner, name) => {
 			const posn = inner.posn || { line: 0, char: 0 };
-			// TODO: parse name with multiple segments, e.g. File.read or ActiveRecord::Base, if necessary.
 			const symbolInfo = {
 				name: name,
 				type: type,
@@ -43,7 +42,7 @@ function camelCaseRegExp(query) {
 		})
 	);
 }
-function filter(symbols, query, stringProvider) {
+function filter(symbols, query, matcher) {
 	// TODO: Ask MS to expose or separate matchesFuzzy method.
 	// https://github.com/Microsoft/vscode/blob/a1d3c8a3006d0a3d68495122ea09a2a37bca69db/src/vs/base/common/filters.ts
 	const isLowerCase = (query.toLowerCase() === query)
@@ -52,7 +51,7 @@ function filter(symbols, query, stringProvider) {
 	const substring = new RegExp(_.escapeRegExp(query), isLowerCase ? 'i' : '');
 	const camelCase = camelCaseRegExp(query);
 	return _([exact, prefix, substring, camelCase])
-		.flatMap(regexp => symbols.filter(symbolInfo => regexp.test(stringProvider(symbolInfo))))
+		.flatMap(regexp => symbols.filter(symbolInfo => matcher(symbolInfo, regexp)))
 		.uniq()
 		.value();
 }
@@ -84,16 +83,28 @@ module.exports = class Locate {
 			.value();
 	}
 	query(query) {
-		const match = query.match(/^(?:(.*)[.#])?([^.#]*)$/);
-		const containerQuery = match[1];
-		const nameQuery = match[2];
-		if (!nameQuery) return [];
-
+		const segmentMatch = query.match(/^(?:([^.#:]+)(.|#|::))([^.#:]+)$/) || [];
+		const containerQuery = segmentMatch[1];
+		const separator = segmentMatch[2];
+		const nameQuery = segmentMatch[3];
+		const separatorToTypesTable = {
+			'.': ['classMethod', 'method'],
+			'#': ['method'],
+			'::': ['class', 'module'],
+		};
+		const segmentTypes = separatorToTypesTable[separator];
 		const symbols = _(this.tree).values().flatten().value();
-		const matchedSymbols = filter(symbols, nameQuery, symbolInfo => symbolInfo.name);
-		if (!containerQuery) return matchedSymbols;
 
-		return filter(matchedSymbols, containerQuery, symbolInfo => symbolInfo.containerName);
+		// query whole name (matches `class Foo::Bar` or `def File.read`)
+		const plainMatches = filter(symbols, query, (symbolInfo, regexp) => regexp.test(symbolInfo.name));
+		if (!containerQuery) return plainMatches;
+
+		// query name and containerName separatedly (matches `def foo` in `class Bar`)
+		const nameMatches = filter(symbols, nameQuery, (symbolInfo, regexp) => {
+			return _.includes(segmentTypes, symbolInfo.type) && regexp.test(symbolInfo.name);
+		});
+		const containerMatches = filter(nameMatches, containerQuery, (symbolInfo, regexp) => regexp.test(symbolInfo.containerName))
+		return _.uniq(plainMatches.concat(containerMatches));
 	}
 	rm(absPath) {
 		if (absPath in this.tree) delete this.tree[absPath];
