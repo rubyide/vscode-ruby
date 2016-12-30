@@ -190,13 +190,14 @@ function activate(context) {
 		};
 		const docSymbolProvider = {
 			provideDocumentSymbols: (document, token) => {
-				return locate.listInFile(document.fileName).map(match => {
-					const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
-					const parentName = match.parent ? match.parent.fullName : '';
-					const uri = vscode.Uri.file(match.file);
-					const location = new Location(uri, new Position(match.line, match.char));
-					return new SymbolInformation(match.name, symbolKind, parentName, location);
-				})
+				return locate.listInFile(document.fileName)
+					.then(matches => matches.map(match => {
+						const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
+						const parentName = match.parent ? match.parent.fullName : '';
+						const uri = vscode.Uri.file(match.file);
+						const location = new Location(uri, new Position(match.line, match.char));
+						return new SymbolInformation(match.name, symbolKind, parentName, location);
+					}));
 			}
 		};
 		subs.push(vscode.languages.registerDocumentSymbolProvider(['ruby', 'erb'], docSymbolProvider));
