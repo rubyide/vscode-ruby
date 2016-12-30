@@ -1,5 +1,6 @@
 "use strict";
-let vscode = require('vscode');
+const vscode = require('vscode');
+const { Location, Position, SymbolKind, SymbolInformation } = vscode;
 
 let Locate = require('./locate/locate');
 let cp = require('child_process');
@@ -177,6 +178,28 @@ function activate(context) {
 			}
 		};
 		subs.push(vscode.languages.registerDefinitionProvider(['ruby', 'erb'], defProvider));
+		const symbolKindTable = {
+			class: () => SymbolKind.Class,
+			module: () => SymbolKind.Module,
+			method: symbolInfo => symbolInfo.name === 'initialize' ? SymbolKind.Constructor : SymbolKind.Method,
+			classMethod: () => SymbolKind.Method,
+		};
+		const defaultSymbolKind = symbolInfo => {
+			console.warn(`Unknown symbol type: ${symbolInfo.type}`);
+			return SymbolKind.Variable;
+		};
+		const docSymbolProvider = {
+			provideDocumentSymbols: (document, token) => {
+				return locate.listInFile(document.fileName).map(match => {
+					const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
+					const parentName = match.parent ? match.parent.fullName : '';
+					const uri = vscode.Uri.file(match.file);
+					const location = new Location(uri, new Position(match.line, match.char));
+					return new SymbolInformation(match.name, symbolKind, parentName, location);
+				})
+			}
+		};
+		subs.push(vscode.languages.registerDocumentSymbolProvider(['ruby', 'erb'], docSymbolProvider));
 	}
 
 	subs.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));

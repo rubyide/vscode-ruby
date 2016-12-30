@@ -5,24 +5,29 @@ const fs = require('fs'),
 	path = require('path');
 const _ = require('lodash');
 
-function flatten(locateInfo, file, parentName) {
+const DECLARATION_TYPES = ['class', 'module', 'method', 'classMethod'];
+
+function flatten(locateInfo, file, parent) {
 	return _.flatMap(locateInfo, (symbols, type) => {
-		// TODO: return accessor or other types.
-		// TODO: parse include and inherit to find inherited symbols.
-		if (!_.includes(['module', 'class', 'method', 'classMethod'], type)) return [];
-		return _.flatMap(symbols, (children, name) => {
+		if (!_.includes(DECLARATION_TYPES, type)) {
+			// Skip top-level include or posn property etc.
+			return [];
+		}
+		return _.flatMap(symbols, (inner, name) => {
 			const sep = { method: '#', classMethod: '.' }[type] || '::';
-			const posn = children.posn || { line: 0, char: 0 };
-			const fullName = parentName ? `${parentName}${sep}${name}` : name;
+			const posn = inner.posn || { line: 0, char: 0 };
+			const fullName = parent ? `${parent.fullName}${sep}${name}` : name;
 			const symbolInfo = {
-				// TODO: parse names like 'ActiveRecord::Base'
 				name: name,
+				type: type,
 				file: file,
 				line: posn.line,
 				char: posn.char,
+				parent: parent,
 				fullName: fullName
 			};
-			return [symbolInfo].concat(flatten(children, file, fullName));
+			_.extend(symbolInfo, _.omit(inner, DECLARATION_TYPES));
+			return [symbolInfo].concat(flatten(inner, file, symbolInfo));
 		});
 	});
 }
@@ -36,6 +41,9 @@ module.exports = class Locate {
 		// add edit hooks
 		// always: do this file now (if it's in the tree)
 		// add lookup hooks
+	}
+	listInFile(absPath) {
+		return _.clone(this.tree[absPath] || []);
 	}
 	find(name) {
 		// because our word pattern is designed to match symbols
