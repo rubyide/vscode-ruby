@@ -188,19 +188,24 @@ function activate(context) {
 			console.warn(`Unknown symbol type: ${symbolInfo.type}`);
 			return SymbolKind.Variable;
 		};
+		const symbolConverter = matches => matches.map(match => {
+			const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
+			const uri = vscode.Uri.file(match.file);
+			const location = new Location(uri, new Position(match.line, match.char));
+			return new SymbolInformation(match.name, symbolKind, match.containerName, location);
+		});
 		const docSymbolProvider = {
 			provideDocumentSymbols: (document, token) => {
-				return locate.listInFile(document.fileName)
-					.then(matches => matches.map(match => {
-						const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
-						const parentName = match.parent ? match.parent.fullName : '';
-						const uri = vscode.Uri.file(match.file);
-						const location = new Location(uri, new Position(match.line, match.char));
-						return new SymbolInformation(match.name, symbolKind, parentName, location);
-					}));
+				return locate.listInFile(document.fileName).then(symbolConverter);
 			}
 		};
 		subs.push(vscode.languages.registerDocumentSymbolProvider(['ruby', 'erb'], docSymbolProvider));
+		const workspaceSymbolProvider = {
+			provideWorkspaceSymbols: (query, token) => {
+				return symbolConverter(locate.query(query));
+			}
+		};
+		subs.push(vscode.languages.registerWorkspaceSymbolProvider(workspaceSymbolProvider));
 	}
 
 	subs.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
