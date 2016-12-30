@@ -188,7 +188,10 @@ function activate(context) {
 			console.warn(`Unknown symbol type: ${symbolInfo.type}`);
 			return SymbolKind.Variable;
 		};
-		const symbolConverter = matches => matches.map(match => {
+		// NOTE: Workaround for high CPU usage on IPC (channel.onread) when too many symbols returned.
+		// For channel.onread see issue like this: https://github.com/Microsoft/vscode/issues/6026
+		const numOfSymbolLimit = 3000;
+		const symbolConverter = matches => matches.slice(0, numOfSymbolLimit).map(match => {
 			const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
 			const uri = vscode.Uri.file(match.file);
 			const location = new Location(uri, new Position(match.line, match.char));
