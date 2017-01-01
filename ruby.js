@@ -139,7 +139,7 @@ function activate(context) {
 	//add language config
 	vscode.languages.setLanguageConfiguration('ruby', langConfig);
 
-	const linters = new LintCollection(vscode.workspace.getConfiguration("ruby").lint);
+	const linters = new LintCollection(vscode.workspace.getConfiguration("ruby").lint, vscode.workspace.rootPath);
 	subs.push(linters);
 
 	function changeTrigger(changed) {

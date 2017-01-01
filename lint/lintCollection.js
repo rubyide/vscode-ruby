@@ -4,16 +4,17 @@ const Linter = require('./lib/linter');
 const LintResults = require('./lib/lintResults');
 
 class LintCollection {
-	constructor(config) {
+	constructor(config, rootPath) {
 		this._results = {};
 		this._docLinters = {};
 		this._cfg = {};
 		this.cfg(config);
+		this._rootPath = rootPath;
 	}
 	run(doc) {
 		if (!doc) return;
 		if (doc.languageId !== 'ruby') return;
-		if (!this._docLinters[doc.fileName]) this._docLinters[doc.fileName] = new Linter(doc, this._update.bind(this, doc));
+		if (!this._docLinters[doc.fileName]) this._docLinters[doc.fileName] = new Linter(doc, this._rootPath, this._update.bind(this, doc));
 		this._docLinters[doc.fileName].run(this._cfg);
 	}
 	_update(doc, result) {
