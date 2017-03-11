@@ -290,6 +290,11 @@
 							"type": "string",
 							"description": "If `rdebug-ide` is not in your path, provide the absolute path to `rdebug-ide` (eg. \"c:\\ruby\\rdebug-ide.bat\" )",
 							"default": "rdebug-ide"
+						},
+						"debuggerPort": {
+							"type": "string",
+							"description": "If you want to run more than one debugger, you can specify the port here.",
+							"default": "1234"
 						}
 					}
 				},
