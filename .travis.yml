@@ -9,7 +9,7 @@ before_install:
  - nvm install v5.10.0
  - nvm use v5.10.0
 before_script:
-  - npm install -g typescript
+  - npm install -g typescript@1.8.2
   - npm install
   - tsc -p ./src
 script: npm test
