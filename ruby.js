@@ -1,5 +1,6 @@
 "use strict";
-let vscode = require('vscode');
+const vscode = require('vscode');
+const { Location, Position, SymbolKind, SymbolInformation } = vscode;
 
 let Locate = require('./locate/locate');
 let cp = require('child_process');
@@ -138,7 +139,7 @@ function activate(context) {
 	//add language config
 	vscode.languages.setLanguageConfiguration('ruby', langConfig);
 
-	const linters = new LintCollection(vscode.workspace.getConfiguration("ruby").lint);
+	const linters = new LintCollection(vscode.workspace.getConfiguration("ruby").lint, vscode.workspace.rootPath);
 	subs.push(linters);
 
 	function changeTrigger(changed) {
@@ -177,6 +178,37 @@ function activate(context) {
 			}
 		};
 		subs.push(vscode.languages.registerDefinitionProvider(['ruby', 'erb'], defProvider));
+		const symbolKindTable = {
+			class: () => SymbolKind.Class,
+			module: () => SymbolKind.Module,
+			method: symbolInfo => symbolInfo.name === 'initialize' ? SymbolKind.Constructor : SymbolKind.Method,
+			classMethod: () => SymbolKind.Method,
+		};
+		const defaultSymbolKind = symbolInfo => {
+			console.warn(`Unknown symbol type: ${symbolInfo.type}`);
+			return SymbolKind.Variable;
+		};
+		// NOTE: Workaround for high CPU usage on IPC (channel.onread) when too many symbols returned.
+		// For channel.onread see issue like this: https://github.com/Microsoft/vscode/issues/6026
+		const numOfSymbolLimit = 3000;
+		const symbolConverter = matches => matches.slice(0, numOfSymbolLimit).map(match => {
+			const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
+			const uri = vscode.Uri.file(match.file);
+			const location = new Location(uri, new Position(match.line, match.char));
+			return new SymbolInformation(match.name, symbolKind, match.containerName, location);
+		});
+		const docSymbolProvider = {
+			provideDocumentSymbols: (document, token) => {
+				return locate.listInFile(document.fileName).then(symbolConverter);
+			}
+		};
+		subs.push(vscode.languages.registerDocumentSymbolProvider(['ruby', 'erb'], docSymbolProvider));
+		const workspaceSymbolProvider = {
+			provideWorkspaceSymbols: (query, token) => {
+				return symbolConverter(locate.query(query));
+			}
+		};
+		subs.push(vscode.languages.registerWorkspaceSymbolProvider(workspaceSymbolProvider));
 	}
 
 	subs.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));

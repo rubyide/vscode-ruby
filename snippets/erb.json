@@ -68,6 +68,19 @@
 			"<% end %>"
 		],
 		"description": "each do"
+	},
+	"render": {
+		"prefix": "pe",
+		"body": [
+			"<%= $1 %>"
+		],
+		"description": "render block pe"
+	},
+	"exec": {
+		"prefix": "er",
+		"body": [
+			"<% $1 %>"
+		],
+		"description": "erb exec block"
 	}
 }
-
