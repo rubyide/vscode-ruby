@@ -8,6 +8,10 @@ function RubyWC(opts) {
 	this.ext = "";
 	this.path = opts.path;
 	this.args = ["-wc"];
+
+	if(opts.unicode) {
+		this.args.push("-Ku");
+	}
 }
 
 RubyWC.prototype.processResult = function(data) {
