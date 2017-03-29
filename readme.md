@@ -63,6 +63,9 @@ Enable each one in your workspace or user settings:
 
 //advanced: set command line options for some linters:
 "ruby.lint": {
+	"ruby": {
+		"unicode": true //Runs ruby -wc -Ku
+	},
 	"rubocop": {
 		"only": ["SpaceInsideBlockBraces", "LeadingCommentSpace"],
 		"lint": true,
