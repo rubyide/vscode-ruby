@@ -6,10 +6,10 @@ rvm:
 
 before_install:
  - gem install ruby-debug-ide
- - nvm install v5.10.0
- - nvm use v5.10.0
+ - nvm install v6.9.1
+ - nvm use v6.9.1
 before_script:
-  - npm install -g typescript
+  - npm install -g typescript -v 1.8.2
   - npm install
   - tsc -p ./src
 script: npm test
