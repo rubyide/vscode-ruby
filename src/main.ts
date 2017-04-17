@@ -52,8 +52,7 @@ class RubyDebugSession extends DebugSession {
         // This debug adapter implements the configurationDoneRequest.
         response.body.supportsConfigurationDoneRequest = true;
         //response.body.supportsFunctionBreakpoints = true;
-        //currently cond bp doesn't work - but that doesn't really matter, because neither does this call
-        response.body.supportsConditionalBreakpoints = false;
+        response.body.supportsConditionalBreakpoints = true;
         this.sendResponse(response);
     }
 
@@ -157,9 +156,8 @@ class RubyDebugSession extends DebugSession {
             Promise.all(deletePromises).then(() => this._breakPoints.delete(path));
         }
         var breakpointAddPromises = args.breakpoints.map(b=>{
-            //let conditionString =  b.condition ? ' if ' + b.condition : '';
-            //return this.rubyProcess.Enqueue('break ' + path + ':' + b.line + conditionString);
-            return this.rubyProcess.Enqueue('break ' + path + ':' + b.line);
+            let conditionString =  b.condition ? ' if ' + b.condition : '';
+            return this.rubyProcess.Enqueue('break ' + path + ':' + b.line + conditionString);
         });
         Promise.all(breakpointAddPromises).then( values => {
             let breakpoints = values.map(attributes => {
