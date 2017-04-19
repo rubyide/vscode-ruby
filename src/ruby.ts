@@ -195,6 +195,10 @@ export class RubyProcess extends EventEmitter {
                 runtimeArgs.push('-x');
             }
 
+            if (args.debuggerPort && args.debuggerPort !== '1234'){
+                runtimeArgs.push(`-p ${args.debuggerPort}`);
+            }
+
             if (args.stopOnEntry){
                 runtimeArgs.push('--stop');
             }
@@ -218,7 +222,7 @@ export class RubyProcess extends EventEmitter {
 
             this.debugprocess.stderr.on('data', (data: Buffer) => {
                 if (/^Fast Debugger/.test(data.toString())) {
-                    this.debugSocketClient.connect(1234);
+                    this.debugSocketClient.connect(args.debuggerPort || '1234');
                     if (args.showDebuggerOutput) {
                         this.emit('debuggerOutput', data);
                     }
