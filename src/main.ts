@@ -17,14 +17,37 @@ import {LaunchRequestArguments, AttachRequestArguments, IRubyEvaluationResult, I
 import {SocketClientState, Mode} from './common';
 import {endsWith, startsWith} from './helper';
 
+class CachedBreakpoint implements DebugProtocol.SourceBreakpoint {
+    public line: number;
+    public column: number;
+    public condition: string;
+    public id: number;
+
+    public constructor(line: number, column?: number, condition?: string, id?: number) {
+        this.line = line;
+        this.column = column;
+        this.condition = condition;
+        this.id = id;
+    }
+
+    public static fromSourceBreakpoint(sourceBreakpoint: DebugProtocol.SourceBreakpoint): CachedBreakpoint {
+        return new CachedBreakpoint(sourceBreakpoint.line, sourceBreakpoint.column, sourceBreakpoint.condition);
+    }
+
+    public convertForResponse(): DebugProtocol.Breakpoint {
+        var result = <DebugProtocol.Breakpoint> new Breakpoint(true, this.line, this.column);
+        result.id = this.id;
+        return result;
+    }
+}
+
 class RubyDebugSession extends DebugSession {
     private _breakpointId = 1000;
     private _threadId = 2;
     private _frameId = 0;
     private _firstSuspendReceived = false;
     private _activeFileData = new Map<string, string[]>();
-    // maps from sourceFile to array of Breakpoints
-    private _breakPoints = new Map<string, DebugProtocol.Breakpoint[]>();
+    private _existingBreakpoints = new Map<string, CachedBreakpoint[]>();
     private _variableHandles: Handles<IDebugVariable>;
     private rubyProcess: RubyProcess;
     private requestArguments: any;
@@ -52,8 +75,7 @@ class RubyDebugSession extends DebugSession {
         // This debug adapter implements the configurationDoneRequest.
         response.body.supportsConfigurationDoneRequest = true;
         //response.body.supportsFunctionBreakpoints = true;
-        //currently cond bp doesn't work - but that doesn't really matter, because neither does this call
-        response.body.supportsConditionalBreakpoints = false;
+        response.body.supportsConditionalBreakpoints = true;
         this.sendResponse(response);
     }
 
@@ -146,41 +168,76 @@ class RubyDebugSession extends DebugSession {
     }
 
     protected setBreakPointsRequest(response: DebugProtocol.SetBreakpointsResponse, args: DebugProtocol.SetBreakpointsArguments): void {
-        var path = this.convertClientPathToDebugger(args.source.path);
+        var key = this.convertClientPathToKey(args.source.path);
+        var existingBreakpoints = this._existingBreakpoints.get(key) || [];
+        var requestedBreakpoints = args.breakpoints.map(bp => CachedBreakpoint.fromSourceBreakpoint(bp));
 
-        //to ensure that breakpoints with altered conditions are set, it is
-        //best to remove all and add them back.
-        //In preperation for when they're working.
-        if (this._breakPoints.get(path)) {
-            let deletePromises = this._breakPoints.get(path).map(bp => this.rubyProcess.Enqueue('delete ' + bp.id));
-            //this will return before the adding (if any) completes
-            Promise.all(deletePromises).then(() => this._breakPoints.delete(path));
-        }
-        var breakpointAddPromises = args.breakpoints.map(b=>{
-            //let conditionString =  b.condition ? ' if ' + b.condition : '';
-            //return this.rubyProcess.Enqueue('break ' + path + ':' + b.line + conditionString);
-            return this.rubyProcess.Enqueue('break ' + path + ':' + b.line);
-        });
-        Promise.all(breakpointAddPromises).then( values => {
-            let breakpoints = values.map(attributes => {
-                let bp = <DebugProtocol.Breakpoint> new Breakpoint(true, this.convertDebuggerLineToClient(+attributes.location.split(':')[1]));
-                bp.id = +attributes.no;
-                return bp;
+        var existingLines = existingBreakpoints.map(bp => bp.line);
+        var requestedLines = requestedBreakpoints.map(bp => bp.line);
+
+        var breakpointsToRemove = existingBreakpoints.filter(bp => requestedLines.indexOf(bp.line) < 0);
+        var breakpointsToAdd = requestedBreakpoints.filter(bp => existingLines.indexOf(bp.line) < 0);
+
+        console.assert(breakpointsToRemove.length > 0 || breakpointsToAdd.length > 0);
+
+        // Handle the removal of old breakpoints.
+        if (breakpointsToRemove.length > 0) {
+            var linesToRemove = breakpointsToRemove.map(bp => bp.line);
+            existingBreakpoints = existingBreakpoints.filter(bp => linesToRemove.indexOf(bp.line) < 0);
+            this._existingBreakpoints.set(key, existingBreakpoints);
+
+            var removePromises = breakpointsToRemove.map(bp => this.rubyProcess.Enqueue('delete ' + bp.id));
+            Promise.all(removePromises).then(results => {
+                let removedIds = results.map(attr => +attr.no);
+                let unremovedBreakpoints = breakpointsToRemove.filter(bp => removedIds.indexOf(bp.id) < 0);
+                console.assert(unremovedBreakpoints.length == 0);
+
+                response.body = {
+                    breakpoints: existingBreakpoints.map(bp => bp.convertForResponse())
+                };
+                this.sendResponse(response);
             });
+        }
 
-            this._breakPoints.set(path, breakpoints);
+        // Handle the addition of new breakpoints.
+        if (breakpointsToAdd.length > 0) {
+            var path = this.convertClientPathToDebugger(args.source.path);
 
-            response.body = {
-                breakpoints: breakpoints
-            };
-            this.sendResponse(response);
-        });
+            var addPromises = breakpointsToAdd.map(bp => {
+                let command = 'break ' + path + ':' + bp.line;
+                if (bp.condition) command += ' if ' + bp.condition;
+                return this.rubyProcess.Enqueue(command);
+            });
+            Promise.all(addPromises).then(results => {
+                var addedBreakpoints = results.map(attr => {
+                    var line = +(attr.location + '').split(':').pop();
+                    var id = +attr.no;
+                    return new CachedBreakpoint(line, null, null, id);
+                });
+
+                console.assert(addedBreakpoints.length == breakpointsToAdd.length);
+                for (let index = 0; index < addedBreakpoints.length; ++index) {
+                    console.assert(addedBreakpoints[index].line == breakpointsToAdd[index].line);
+                    breakpointsToAdd[index].id = addedBreakpoints[index].id;
+                }
+
+                existingBreakpoints = existingBreakpoints.concat(breakpointsToAdd);
+                this._existingBreakpoints.set(key, existingBreakpoints);
+
+                response.body = {
+                    breakpoints: existingBreakpoints.map(bp => bp.convertForResponse())
+                };
+                this.sendResponse(response);
+            });
+        }
     }
 
     protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
 
         this.rubyProcess.Enqueue('thread list').then(results => {
-            this._threadId = results[0].id;
+            if (results && results.length > 0) {
+                this._threadId = results[0].id;
+            }
             response.body = {
                 threads: results.map(thread => new Thread(+thread.id,'Thread ' + thread.id))
             };
@@ -227,6 +284,10 @@ class RubyDebugSession extends DebugSession {
             }
             return;
         });
+    }
+
+    protected convertClientPathToKey(localPath: string): string {
+        return localPath.replace(/\\/g, '/');
     }
 
 	protected convertClientPathToDebugger(localPath: string): string {
@@ -278,6 +339,7 @@ class RubyDebugSession extends DebugSession {
     }
 
     protected createVariableReference(variables): IRubyEvaluationResult[]{
+        if (!Array.isArray(variables)) { variables = []; }
         return variables.map(this.varyVariable).map(variable=>({
             name: variable.name,
             kind: variable.kind,
@@ -366,13 +428,13 @@ class RubyDebugSession extends DebugSession {
         // That will required having ALL variables stored, which will also (hopefully) fix
         // the variable value mismatch between threads
         this.rubyProcess.Enqueue("eval " + args.expression).then(result => {
-            if ( startsWith(result.value, '#<', 0)){
-                //is an object
-
-            }
             response.body = {
-                result: result.value,
-                variablesReference: 0
+                result: result.value
+                    ? result.value
+                    : (result.length > 0 && result[0].value
+                        ? result[0].value
+                        : "Not available"),
+                variablesReference: 0,
             };
             this.sendResponse(response);
         });
