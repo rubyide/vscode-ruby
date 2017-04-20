@@ -2,12 +2,12 @@
 These pages are primarily intended for rubyist who wish to use Visual Studio Code as their Ruby IDE to improve their productivity in their daily development life.
 
 * [Debugger Installation](#debugger-installation)
-  * Install Ruby Dependencies
-  * Add VS Code config to your project
-* Debugging from VS Code
-  * Setting up your launcher
-  * Available settings
-  * Available VS Code defined variables
+  * [Install Ruby Dependencies](#install-ruby-dependencies)
+  * [Add VS Code config to your project](#add-vs-code-config-to-your-project)
+* [Debugging from VS Code](#debugging-from-vs-code)
+  * [Setting up your launcher](#setting-up-your-laucher)
+  * [Available settings](#available-settings)
+  * [Available VS Code defined variables](#available-vs-code-defined-variables)
 
 ## Debugger Installation
 ### Install Ruby Dependencies
