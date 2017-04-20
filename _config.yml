@@ -1,0 +1,8 @@
+title: vscode-ruby
+description: Provides Ruby language and debugging support for Visual Studio Code
+google_analytics: UA-75073057-1
+show_downloads: true
+theme: jekyll-theme-minimal
+
+gems:
+  - jekyll-mentions
