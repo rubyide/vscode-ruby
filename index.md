@@ -1,6 +1,13 @@
 # Welcome to the VSCode-Ruby Guide
 These pages are primarily intended for rubyist who wish to use Visual Studio Code as their Ruby IDE to improve their productivity in their daily development life.
 
+* [Debugger Installation](#debugger-installation)
+  * Install Ruby Dependencies
+  * Add VS Code config to your project
+* Debugging from VS Code
+  * Setting up your launcher
+  * Available settings
+  * Available VS Code defined variables
 
 ## Debugger Installation
 ### Install Ruby Dependencies
@@ -45,35 +52,35 @@ This has just one configuration in the `configurations` array. You can add as ma
 
 Pressing the debug start button (the play icon) will start the debugger and load the file `main.rb` from the base directory of the workspace as the executable script. All environment variables set when VS Code was executed will be passed to the provided `program`. By default, the folder the `program` is in is set as the current working directory.
 
-### Available settings:
-#### "name"
+### Available settings
+**"name"**
 You can set this to what ever you want. It will need to be unique within the `configurations` array. This is the string that will be shown in the drop-down selector on the debug side bar.
 
-#### "type"
+**"type"**
 Must be `"Ruby"`. This tells VS Code what debugger to run.
 
-#### "request"
+**"request"**
 Either `"launch"` - which enables launching the provided program directly from VS Code - or `"attach"` - which allows you to attach to a remote debug session.
 
-#### "program"
+**"program"**
 [*variable substitution available*](#available-vs-code-defined-variables)
 
 This is the ruby script that will first be launched when debugging is started. You should not rely on relative paths working. If the file is in your workspace (which is usually is) this string should have the structure `"${workspaceRoot}/path/to/script.rb"`.
 
 You could debug the current open file with just `"program": "${file}"`.
 
-#### "cwd"
+**"cwd"**
 [*variable substitution available*](#available-vs-code-defined-variables)
 
 By default, the working directory is set to the location of the file provided in the `program` string. It is common for this value to be set to `"cwd": "${workspaceRoot}"`.
 
-#### "stopOnEntry"
+**"stopOnEntry"**
 Stop program execution on the first line always. Note that all active breakpoints are set before the debugger starts even if this field is not set. Valid options are `true` and `false` (default).
 
-#### "showDebuggerOutput"
+**"showDebuggerOutput"**
 Provide some extra output to the debug terminal, specifically about the running of `rdebug-ide`. Valid options are `true` and `false` (default).
 
-#### "args"
+**"args"**
 [*variable substitution available*](#available-vs-code-defined-variables)
 
 An array of arguments to provide to the script under debug. Each string in the array is sent as a seperate argument, so if you would call the script from a terminal as:
@@ -88,7 +95,7 @@ this setting should read:
 
 There is no need to include the quotes around the second argument. Doing so would actually result in the string *WITH* the quotes being passed to the script.
 
-#### "env"
+**"env"**
 [*variable substitution available*](#available-vs-code-defined-variables)
 
 Provide a hash of environment variable to set before launching the program. For example:
@@ -100,13 +107,13 @@ Provide a hash of environment variable to set before launching the program. For 
 	}
 ```
 
-#### "pathToRDebugIDE"
+**"pathToRDebugIDE"**
 Set the absolute path to `rdebug-ide` if it's not in your `PATH`. On windows you need to provide the `.bat` file.
 
-#### "useBundler"
+**"useBundler"**
 Run `rdebug-ide` within `bundler exec`. You may need to do this if you've installed the `ruby-debug-ide` gem within your project. Valid options are `true` and `false` (default).
 
-#### "pathToBundler"
+**"pathToBundler"**
 If you have `useBundler` set, and `bundler` isn't in your `PATH`, set the absolute path here. If you're wrapping in bundler, you shouldn't need to provide a `pathToRDebugIDE` setting. On windows you need to provide the `.bat` file.
 
 Also, if you've installed with the `bundler install --binstubs` you should be able to skip the bundler related settings and use `"pathToRDebugIDE": "${workspaceRoot}/bin/rdebug-ide"`. 
