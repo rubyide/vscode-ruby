@@ -8,6 +8,7 @@ let path = require('path');
 
 let LintCollection = require('./lint/lintCollection');
 let AutoCorrect = require('./format/RuboCop');
+let ErbTag = require("./tool/ErbTag");
 
 const langConfig = {
 	indentationRules: {
@@ -157,6 +158,16 @@ function activate(context) {
 		linters.cfg(vscode.workspace.getConfiguration("ruby").lint);
 		docs.forEach(doc => linters.run(doc));
 	}));
+	const erbTag = new ErbTag();
+
+	subs.push(vscode.commands.registerCommand("erb.toggleTags", () => {
+		let editor = vscode.window.activeTextEditor;
+		if (editor || editor.document.languageId === "erb") {
+			erbTag.toggleTags(editor);
+		}
+	})
+);
+
 
 	// run against all of the current open files
 	vscode.window.visibleTextEditors.forEach(changeTrigger);

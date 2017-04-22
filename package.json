@@ -371,6 +371,15 @@
 				"cwd": "${workspaceRoot}",
 				"program": "${workspaceRoot}/bin/cucumber"
 			}]
+		}],
+		"commands": [{
+			"command": "erb.toggleTags",
+			"title": "Toggle between ERB Tag blocks"
+		}],
+		"keybindings": [{
+			"command": "erb.toggleTags",
+			"key": "ctrl+shift+`",
+			"when": "editorTextFocus && editorLangId == erb"
 		}]
 	}
 }
