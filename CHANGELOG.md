@@ -1,3 +1,6 @@
+### 0.12.1 - April 25 2017
+Fix rubocop linter regression :)
+
 ### 0.12.0 - April 17 2017
 It has been quite a while since our latest release but we are back with Conditional Breakpoint, Multiple Ruby processes debugging and more!
 

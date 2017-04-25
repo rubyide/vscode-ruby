@@ -6,7 +6,7 @@ function RuboCop(opts) {
 	this.path = opts.path;
 	this.responsePath = "stdout";
 
-	this.args = ["-s", "-f", "json", "--force-exclusion", "{path}"];
+	this.args = ["-s", "{path}", "-f", "json", "--force-exclusion"] ;
 
 	if (opts.lint) this.args.push("-l");
 	if (opts.only) this.args = this.args.concat("--only", opts.only.join(','));
@@ -16,6 +16,9 @@ function RuboCop(opts) {
 }
 
 RuboCop.prototype.processResult = function (data) {
+	if (data == '') {
+		return [];
+	}
 	let offenses = JSON.parse(data);
 	return (offenses.files || [{
 		offenses: []
