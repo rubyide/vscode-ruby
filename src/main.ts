@@ -272,7 +272,7 @@ class RubyDebugSession extends DebugSession {
 
             response.body = {
                 stackFrames: results.map(stack => new StackFrame(+stack.no,
-                    his._activeFileData.has(this.convertDebuggerPathToClient(stack.file)) && this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1] ?
+                    this._activeFileData.has(this.convertDebuggerPathToClient(stack.file)) && this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1] ?
 						this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1].trim()
 						: "<Source not available>",
                     new Source(basename(stack.file), this.convertDebuggerPathToClient(stack.file)),
