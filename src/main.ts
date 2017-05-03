@@ -6,7 +6,7 @@
 
 import {DebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
 import {DebugProtocol} from 'vscode-debugprotocol';
-import {readFileSync} from 'fs';
+import {readFileSync, existsSync} from 'fs';
 import {basename, dirname} from 'path';
 import * as net from 'net';
 import * as childProcess from 'child_process';
@@ -255,6 +255,7 @@ class RubyDebugSession extends DebugSession {
             results = results.filter(stack => !(
 				endsWith(stack.file, '/rdebug-ide', null) ||
 				endsWith(stack.file, '/ruby-debug-ide.rb', null) ||
+				stack.file.indexOf('debug-ide') >= 0 ||
 				(this.debugMode == Mode.attach &&
 				path.normalize(stack.file).toLocaleLowerCase().indexOf(path.normalize(this.requestArguments.remoteWorkspaceRoot).toLocaleLowerCase()) === -1))
 			);
@@ -264,17 +265,19 @@ class RubyDebugSession extends DebugSession {
 
             //only read the file if we don't have it already
             results.forEach(stack=>{
-                if (!this._activeFileData.has(this.convertDebuggerPathToClient(stack.file))) {
+                if (!this._activeFileData.has(this.convertDebuggerPathToClient(stack.file)) && existsSync(this.convertDebuggerPathToClient(stack.file))) {
                     this._activeFileData.set(this.convertDebuggerPathToClient(stack.file), readFileSync(this.convertDebuggerPathToClient(stack.file),'utf8').split('\n'))
                 }
             });
 
             response.body = {
-                stackFrames: results.filter(stack=>stack.file.indexOf('debug-ide')<0)
-                    .map(stack => new StackFrame(+stack.no,
-                    this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1].trim(),
+                stackFrames: results.map(stack => new StackFrame(+stack.no,
+                    his._activeFileData.has(this.convertDebuggerPathToClient(stack.file)) && this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1] ?
+						this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1].trim()
+						: "<Source not available>",
                     new Source(basename(stack.file), this.convertDebuggerPathToClient(stack.file)),
-                    this.convertDebuggerLineToClient(+stack.line), 0))
+                    this.convertDebuggerLineToClient(+stack.line), 0)
+				)
             };
             if (response.body.stackFrames.length){
                 this.sendResponse(response);
