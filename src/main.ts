@@ -6,7 +6,7 @@
 
 import {DebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
 import {DebugProtocol} from 'vscode-debugprotocol';
-import {readFileSync} from 'fs';
+import {readFileSync,existsSync} from 'fs';
 import {basename, dirname} from 'path';
 import * as net from 'net';
 import * as childProcess from 'child_process';
@@ -254,9 +254,7 @@ class RubyDebugSession extends DebugSession {
             //drop rdbug frames
             results = results.filter(stack => !(
 				endsWith(stack.file, '/rdebug-ide', null) ||
-				endsWith(stack.file, '/ruby-debug-ide.rb', null) ||
-				(this.debugMode == Mode.attach &&
-				path.normalize(stack.file).toLocaleLowerCase().indexOf(path.normalize(this.requestArguments.remoteWorkspaceRoot).toLocaleLowerCase()) === -1))
+				endsWith(stack.file, '/ruby-debug-ide.rb', null))
 			);
 
             //get the current frame
@@ -264,17 +262,24 @@ class RubyDebugSession extends DebugSession {
 
             //only read the file if we don't have it already
             results.forEach(stack=>{
-                if (!this._activeFileData.has(this.convertDebuggerPathToClient(stack.file))) {
-                    this._activeFileData.set(this.convertDebuggerPathToClient(stack.file), readFileSync(this.convertDebuggerPathToClient(stack.file),'utf8').split('\n'))
+                const filePath = this.convertDebuggerPathToClient(stack.file);
+                if (!this._activeFileData.has(filePath) && existsSync(filePath)) {
+                    this._activeFileData.set(filePath, readFileSync(filePath,'utf8').split('\n'))
                 }
             });
 
             response.body = {
-                stackFrames: results.filter(stack=>stack.file.indexOf('debug-ide')<0)
-                    .map(stack => new StackFrame(+stack.no,
-                    this._activeFileData.get(this.convertDebuggerPathToClient(stack.file))[+stack.line-1].trim(),
-                    new Source(basename(stack.file), this.convertDebuggerPathToClient(stack.file)),
-                    this.convertDebuggerLineToClient(+stack.line), 0))
+                stackFrames: results.filter(stack=>stack.file.indexOf('debug-ide')<0&&+stack.line>0)
+                    .map(stack => {
+                        const filePath = this.convertDebuggerPathToClient(stack.file);
+                        const fileData = this._activeFileData.get(filePath);
+                        const gemFilePaths = filePath.split('/gems/');
+                        const gemFilePath = gemFilePaths[gemFilePaths.length-1];
+                        return new StackFrame(+stack.no,
+                            fileData ? fileData[+stack.line-1].trim() : (gemFilePath+':'+stack.line),
+                            fileData ? new Source(basename(stack.file), filePath) : null,
+                            this.convertDebuggerLineToClient(+stack.line), 0);
+                    })
             };
             if (response.body.stackFrames.length){
                 this.sendResponse(response);
