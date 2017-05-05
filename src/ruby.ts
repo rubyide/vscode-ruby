@@ -223,7 +223,7 @@ export class RubyProcess extends EventEmitter {
 
             this.debugprocess.stderr.on('data', (data: Buffer) => {
                 if (/^Fast Debugger/.test(data.toString())) {
-                    this.debugSocketClient.connect(args.debuggerPort);
+                    this.debugSocketClient.connect(args.debuggerPort || '1234');
                     if (args.showDebuggerOutput) {
                         this.emit('debuggerOutput', data);
                     }

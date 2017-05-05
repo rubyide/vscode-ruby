@@ -1,8 +1,8 @@
 # Ruby Language and Debugging Support for Visual Studio Code
 
-[![Join the chat at https://gitter.im/rebornix/vscode-ruby](https://badges.gitter.im/rebornix/vscode-ruby.svg)](https://gitter.im/rebornix/vscode-ruby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
+[![Join the chat at https://rubyide-slackin.azurewebsites.net](https://rubyide-slackin.azurewebsites.net/badge.svg)](https://rubyide-slackin.azurewebsites.net) [![Build Status](https://travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 
-This extension provides rich Ruby language and debugging support for Visual Studio Code. Fully tested against *nix/Windows and Ruby 1.9.3 to 2.2.0.
+This extension provides rich Ruby language and debugging support for VS Code. Fully tested against *nix/Windows and Ruby 1.9.3 to 2.3.0.
 It's still in progress ( [GitHub](https://github.com/rubyide/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0. If you are interested in this project, feel free to
 
 * Subscribe to our [mailing list](http://eepurl.com/bTBAfv), get notified when we release new features or fix bugs.
@@ -17,13 +17,11 @@ Press `F1`, type `ext install` then search for `ruby`.
 ### Install Ruby Dependencies
 In this extension, we implement [ruby debug ide protocol](http://debug-commons.rubyforge.org/protocol-spec.html) to allow VS Code to communicate with ruby debug, it requires `ruby-debug-ide` to be installed on your machine. This is also how RubyMine/NetBeans does by default.
 
-- If you are using JRuby or Ruby v1.8.x (`jruby`, `ruby_18`, `mingw_18`)
-  * `gem install ruby-debug-ide`, the latest version is `0.6.0`. Make sure `ruby-debug-base` is installed together with ruby-debug-ide`.
-- If you are using Ruby v1.9.x (`ruby_19`, `mingw_19`)
-  * `gem install ruby-debug-ide`, the latest version is `0.6.0`. Make sure `ruby-debug-base19x` is installed together with `ruby-debug-ide`.
+- If you are using JRuby or Ruby v1.8.x (`jruby`, `ruby_18`, `mingw_18`), run `gem install ruby-debug-ide`, the latest version is `0.6.0`
+- If you are using Ruby v1.9.x (`ruby_19`, `mingw_19`), run `gem install ruby-debug-ide`, the latest version is `0.6.0`. Make sure `ruby-debug-base19x` is installed together with `ruby-debug-ide`.
 - If you are using Ruby v2.x
-  * `gem install ruby-debug-ide -v 0.4.32` or higher versions
-  * `gem install debase -v 0.2.1` or higher versions
+  * `gem install ruby-debug-ide -v 0.6.0`
+  * `gem install debase -v 0.2.2.beta10` or higher versions
 
 ### Add VS Code config to your project
 Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby Debugger from the prompt window, then you'll get the sample launch config in `.vscode/launch.json`. The sample launch configurations include debuggers for RSpec (complete, and active spec file) and Cucumber runs. These examples expect that `bundle install --binstubs` has been called.
@@ -35,6 +33,10 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
 - [Attaching to a debugger](https://github.com/rubyide/vscode-ruby/wiki/3.-Attaching-to-a-debugger)
 - [Running gem scripts](https://github.com/rubyide/vscode-ruby/wiki/4.-Running-gem-scripts)
 - [Example configurations](https://github.com/rubyide/vscode-ruby/wiki/5.-Example-configurations)
+
+### Debugger F.A.Q.
+#### Conditional breakpoint doesn't work
+You need use Ruby `2.0` or above and you need to update `debase` to latest beta version `gem install debase -v 0.2.2.beta10`.
 
 ## Linters
 ### Available Linter hooks
@@ -63,6 +65,9 @@ Enable each one in your workspace or user settings:
 
 //advanced: set command line options for some linters:
 "ruby.lint": {
+	"ruby": {
+		"unicode": true //Runs ruby -wc -Ku
+	},
 	"rubocop": {
 		"only": ["SpaceInsideBlockBraces", "LeadingCommentSpace"],
 		"lint": true,
@@ -153,6 +158,7 @@ We now provide go to definition within `erb` files, as well as syntax highlighti
   * Breaking on uncaught exceptions and errors
   * Attach requests
   * Breakpoints can also be set in `.erb` files
+  * Conditional breakpoints
 
 - Ruby remote debug
 - Rails debugging
@@ -169,14 +175,11 @@ We now provide go to definition within `erb` files, as well as syntax highlighti
 - Code formatting
 
 ## TODO
-- Ruby scripts debugging
-  * Conditional breakpoints
 - Unit/Integration tests debugging
   * Shoulda
   * Test::Unit
 - Rack
 - Rake
-- Gem
 - IRB console
 
 ## Main contributors
