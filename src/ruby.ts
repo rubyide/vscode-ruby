@@ -196,7 +196,8 @@ export class RubyProcess extends EventEmitter {
             }
 
             if (args.debuggerPort && args.debuggerPort !== '1234'){
-                runtimeArgs.push(`-p ${args.debuggerPort}`);
+                runtimeArgs.push('-p');
+                runtimeArgs.push(args.debuggerPort);
             }
 
             if (args.stopOnEntry){
