@@ -4,7 +4,7 @@
 
 This extension provides rich Ruby language and debugging support for VS Code. It's still in progress ( [GitHub](https://github.com/rubyide/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0. 
 
-It started as a personal project of [@rebornix](https://github.com/rebornix), aiming to bring Ruby debugging experience to VS Code. Then it turned to be a community driven project. With his amazing commits, [@HookyQR](https://github.com/HookyQR) joined as a contributor and broght users Linting/Formatting/etc, made the debugger more robust and more! If you are interested in this project, feel free to join the [community](https://github.com/rubyide/vscode-ruby/graphs/contributors):  file [issues](https://github.com/rubyide/vscode-ruby/issues/new), fork [our project](https://github.com/rubyide/vscode-ruby) and hack it around and send us PRs, or subscribe to our [mailing list](http://eepurl.com/bTBAfv).
+It started as a personal project of [@rebornix](https://github.com/rebornix), aiming to bring Ruby debugging experience to VS Code. Then it turned to be a community driven project. With his amazing commits, [@HookyQR](https://github.com/HookyQR) joined as a contributor and brought users Linting/Formatting/etc, made the debugger more robust and more! If you are interested in this project, feel free to join the [community](https://github.com/rubyide/vscode-ruby/graphs/contributors):  file [issues](https://github.com/rubyide/vscode-ruby/issues/new), fork [our project](https://github.com/rubyide/vscode-ruby) and hack it around and send us PRs, or subscribe to our [mailing list](http://eepurl.com/bTBAfv).
 
 ## Install
 ### Install Extension
