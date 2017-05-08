@@ -77,6 +77,11 @@
 			"language": "erb",
 			"path": "./snippets/erb.json"
 		}],
+		"configurationDefaults": {
+			"[ruby]": {
+				"editor.tabSize": 2
+			}
+		},
 		"configuration": {
 			"title": "ruby language settings",
 			"properties": {
