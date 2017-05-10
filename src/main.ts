@@ -13,6 +13,7 @@ import * as childProcess from 'child_process';
 import * as path from 'path';
 import {DOMParser} from 'xmldom';
 import {RubyProcess} from './ruby';
+import {SymbolLocator} from './symbols';
 import {LaunchRequestArguments, AttachRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
 import {SocketClientState, Mode} from './common';
 import {endsWith, startsWith} from './helper';
@@ -46,7 +47,7 @@ class RubyDebugSession extends DebugSession {
     private _threadId = 2;
     private _frameId = 0;
     private _firstSuspendReceived = false;
-    private _activeFileData = new Map<string, string[]>();
+    private _activeFileData = new Map<string, SymbolLocator>();
     private _existingBreakpoints = new Map<string, CachedBreakpoint[]>();
     private _variableHandles: Handles<IDebugVariable>;
     private rubyProcess: RubyProcess;
@@ -264,30 +265,42 @@ class RubyDebugSession extends DebugSession {
             results.forEach(stack=>{
                 const filePath = this.convertDebuggerPathToClient(stack.file);
                 if (!this._activeFileData.has(filePath) && existsSync(filePath)) {
-                    this._activeFileData.set(filePath, readFileSync(filePath,'utf8').split('\n'))
+                    this._activeFileData.set(filePath, new SymbolLocator(filePath))
                 }
             });
 
-            response.body = {
-                stackFrames: results.filter(stack=>stack.file.indexOf('debug-ide')<0&&+stack.line>0)
-                    .map(stack => {
-                        const filePath = this.convertDebuggerPathToClient(stack.file);
-                        const fileData = this._activeFileData.get(filePath);
-                        const gemFilePaths = filePath.split('/gems/');
-                        const gemFilePath = gemFilePaths[gemFilePaths.length-1];
-                        return new StackFrame(+stack.no,
-                            fileData ? fileData[+stack.line-1].trim() : (gemFilePath+':'+stack.line),
-                            fileData ? new Source(basename(stack.file), filePath) : null,
-                            this.convertDebuggerLineToClient(+stack.line), 0);
-                    })
-            };
-            if (response.body.stackFrames.length){
-                this.sendResponse(response);
-            }
-            else {
-                this.sendEvent(new TerminatedEvent());
-            }
-            return;
+            const validFrames = results.filter(stack=>stack.file.indexOf('debug-ide')<0&&+stack.line>0);
+            const symbolicatedFrames: Promise<StackFrame>[] = validFrames.map(stack => {
+                const filePath = this.convertDebuggerPathToClient(stack.file);
+                const fileData = this._activeFileData.get(filePath);
+                if (fileData) {
+                    return fileData.symbolForLine(+stack.line).then(symbol =>
+                        new StackFrame(+stack.no, symbol,
+                            new Source(basename(stack.file), filePath),
+                            this.convertDebuggerLineToClient(+stack.line), 0)
+                    );
+                } else {
+                    const gemFilePaths = filePath.split('/gems/');
+                    const gemFilePath = gemFilePaths[gemFilePaths.length - 1];
+                    return Promise.resolve(
+                        new StackFrame(+stack.no,
+                            gemFilePath + ':' + stack.line, null,
+                            this.convertDebuggerLineToClient(+stack.line), 0)
+                    );
+                }
+
+            });
+
+            Promise.all(symbolicatedFrames).then(stackFrames => {
+                if (stackFrames.length) {
+                    response.body = {
+                        stackFrames
+                    };
+                    this.sendResponse(response);
+                } else {
+                    this.sendEvent(new TerminatedEvent());
+                }
+            });
         });
     }
 
