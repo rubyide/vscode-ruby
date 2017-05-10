@@ -1,3 +1,4 @@
+import {basename} from 'path';
 import * as parse from 'ruby-method-locate';
 
 interface Symbol {
@@ -16,7 +17,7 @@ const flatMap = (xs,f) => xs.map(f).reduce(concat, []);
 //  1. this produces a flat array of Symbols, rather than a nested object
 //  2. this doesn't use lodash
 function flatten(locateInfo: any, containerName?: string): Symbol[] {
-    return flatMap(Object.keys(locateInfo), type => {
+    return flatMap(Object.keys(locateInfo || {}), type => {
         const symbols = locateInfo[type];
         if (DECLARATION_TYPES.indexOf(type) === -1) {
             // Skip top-level include or posn property etc.
@@ -39,10 +40,12 @@ function flatten(locateInfo: any, containerName?: string): Symbol[] {
 }
 
 export class SymbolLocator {
+    private fileName: string;
     private symbols: Promise<Symbol[]>;
 
     constructor(fileName: string) {
         this.symbols = parse(fileName).then(flatten);
+        this.fileName = basename(fileName);
     }
 
     symbolForLine(lineNumber: number): Promise<string> {
@@ -53,15 +56,13 @@ export class SymbolLocator {
                     closestSymbol = candidate;
                 }
             }
-            return this.formatSymbol(closestSymbol);
+            return closestSymbol ?
+                this.formatSymbol(closestSymbol) :
+                `${this.fileName}:${lineNumber}`;
         });
     }
 
-    formatSymbol(symbol?: Symbol): string {
-        if (!symbol) {
-            return "(Unknown symbol)";
-        }
-
+    formatSymbol(symbol: Symbol): string {
         const name = symbol.type === 'classMethod' ? `::${symbol.name}` : symbol.name;
         return symbol.containerName ? `${name} (${symbol.containerName})` : name;
     }
