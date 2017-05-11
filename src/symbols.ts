@@ -9,6 +9,7 @@ interface Symbol {
 }
 
 const DECLARATION_TYPES = ['class', 'module', 'method', 'classMethod'];
+const METHOD_PREFIXES = { method: '#', classMethod: '.' };
 
 const concat = (x,y) => x.concat(y);
 const flatMap = (xs,f) => xs.map(f).reduce(concat, []);
@@ -31,7 +32,7 @@ function flatten(locateInfo: any, containerName?: string): Symbol[] {
                 line: inner.posn ? inner.posn.line : 0,
                 containerName: containerName || ''
             };
-            const sep = { method: '#', classMethod: '.' }[type] || '::';
+            const sep = METHOD_PREFIXES[type] || '::';
             const fullName = containerName ? `${containerName}${sep}${name}` : name;
 
             return [symbolInfo].concat(flatten(inner, fullName));
@@ -63,7 +64,7 @@ export class SymbolLocator {
     }
 
     formatSymbol(symbol: Symbol): string {
-        const name = symbol.type === 'classMethod' ? `::${symbol.name}` : symbol.name;
+        const name = `${METHOD_PREFIXES[symbol.type] || ''}${symbol.name}`;
         return symbol.containerName ? `${name} (${symbol.containerName})` : name;
     }
 }
