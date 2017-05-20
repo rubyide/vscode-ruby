@@ -133,8 +133,27 @@
         </dict>
         <key>6</key>
         <dict>
-          <key>name</key>
-          <string>variable.other.object.ruby</string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>match</key>
+              <string>\b(self)(?=($|\s))</string>
+              <key>name</key>
+              <string>variable.language.self.ruby</string>
+            </dict>
+            <dict>
+              <key>match</key>
+              <string>&lt;&lt;</string>
+              <key>name</key>
+              <string>keyword.operator.assignment.augmented.ruby</string>
+            </dict>
+            <dict>
+              <key>match</key>
+              <string>(\S+)</string>
+              <key>name</key>
+              <string>variable.other.object.ruby</string>
+            </dict>
+          </array>
         </dict>
         <key>7</key>
         <dict>
@@ -429,8 +448,89 @@
         </dict>
         <key>2</key>
         <dict>
-          <key>name</key>
-          <string>entity.name.function.ruby</string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>comment</key>
+              <string>self keyword followed by (.|::)</string>
+              <key>begin</key>
+              <string>\b(self)(?=((\.|\s*::\s*)\w+))</string>
+              <key>end</key>
+              <string>(\.|\s*::\s*)(?=(\w+))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>variable.language.self.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.seperator.method.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>function name (.|::) function name</string>
+              <key>begin</key>
+              <string>\b(\w+)(?=((\.|\s*::\s*)\w))</string>
+              <key>end</key>
+              <string>(\.|\s*::\s*)(?=(\w))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>entity.name.function.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.seperator.method.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>initialize</string>
+              <key>begin</key>
+              <string>\b(initialize)(?=((;)|($)|(\s+)|(\w+)|(\()))</string>
+              <key>end</key>
+              <string>(\s+\w+)*(?=((;)|($)|(\s+)|(,)|(\()))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>entity.name.function.special.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>variable.parameter.function.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>attempt to catch rest cases</string>
+              <key>match</key>
+              <string>(\w+)</string>
+              <key>name</key>
+              <string>entity.name.function.ruby</string>
+            </dict>
+          </array>
         </dict>
         <key>3</key>
         <dict>
@@ -508,8 +608,89 @@
         </dict>
         <key>2</key>
         <dict>
-          <key>name</key>
-          <string>entity.name.function.ruby</string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>comment</key>
+              <string>self keyword followed by (.|::)</string>
+              <key>begin</key>
+              <string>\b(self)(?=((\.|\s*::\s*)\w+))</string>
+              <key>end</key>
+              <string>(\.|\s*::\s*)(?=(\w+))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>variable.language.self.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.seperator.method.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>function name (.|::) function name</string>
+              <key>begin</key>
+              <string>\b(\w+)(?=((\.|\s*::\s*)\w))</string>
+              <key>end</key>
+              <string>(\.|\s*::\s*)(?=(\w))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>entity.name.function.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.seperator.method.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>initialize</string>
+              <key>begin</key>
+              <string>\b(initialize)(?=((;)|($)|(\s+)|(\w+)|(\()))</string>
+              <key>end</key>
+              <string>(\s+\w+)*(?=((;)|($)|(\s+)|(,)|(\()))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>entity.name.function.special.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>variable.parameter.function.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>attempt to catch rest cases</string>
+              <key>match</key>
+              <string>(\w+)</string>
+              <key>name</key>
+              <string>entity.name.function.ruby</string>
+            </dict>
+          </array>
         </dict>
       </dict>
       <key>comment</key>
@@ -561,8 +742,89 @@
         </dict>
         <key>3</key>
         <dict>
-          <key>name</key>
-          <string>entity.name.function.ruby</string>
+          <key>patterns</key>
+          <array>
+            <dict>
+              <key>comment</key>
+              <string>self keyword followed by (.|::)</string>
+              <key>begin</key>
+              <string>\b(self)(?=((\.|\s*::\s*)\w+))</string>
+              <key>end</key>
+              <string>(\.|\s*::\s*)(?=(\w+))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>variable.language.self.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.seperator.method.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>function name (.|::) function name</string>
+              <key>begin</key>
+              <string>\b(\w+)(?=((\.|\s*::\s*)\w))</string>
+              <key>end</key>
+              <string>(\.|\s*::\s*)(?=(\w))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>entity.name.function.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>punctuation.seperator.method.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>initialize</string>
+              <key>begin</key>
+              <string>\b(initialize)(?=((;)|($)|(\s+)|(\w+)|(\()))</string>
+              <key>end</key>
+              <string>(\s+\w+)*(?=((;)|($)|(\s+)|(,)|(\()))</string>
+              <key>beginCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>entity.name.function.special.ruby</string>
+                </dict>
+              </dict>
+              <key>endCaptures</key>
+              <dict>
+                <key>0</key>
+                <dict>
+                  <key>name</key>
+                  <string>variable.parameter.function.ruby</string>
+                </dict>
+              </dict>
+            </dict>
+            <dict>
+              <key>comment</key>
+              <string>attempt to catch rest cases</string>
+              <key>match</key>
+              <string>(\w+)</string>
+              <key>name</key>
+              <string>entity.name.function.ruby</string>
+            </dict>
+          </array>
         </dict>
       </dict>
       <key>comment</key>
