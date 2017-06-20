@@ -2,7 +2,7 @@
 	"if": {
 		"prefix": "if",
 		"body": [
-			"<% if ${true} %>",
+			"<% if ${1:truevalue} %>",
 			"  $2",
 			"<% end %>"
 		],
@@ -18,7 +18,7 @@
 	"elsif": {
 		"prefix": "elsif",
 		"body": [
-			"<% elsif ${true} %>"
+			"<% elsif ${1:truevalue} %>"
 		],
 		"description": "elsif"
 	},
@@ -32,10 +32,10 @@
 	"ife": {
 		"prefix": "ife",
 		"body": [
-			"<% if ${true} %>",
-			"  $1",
-			"<% else %>",
+			"<% if ${1:truevalue} %>",
 			"  $2",
+			"<% else %>",
+			"  $3",
 			"<% end %>"
 		],
 		"description": "if .. else .. end"
@@ -43,7 +43,7 @@
 	"unless": {
 		"prefix": "unless",
 		"body": [
-			"<% unless ${false} %>",
+			"<% unless ${1:falsevalue} %>",
 			"  $2",
 			"<% end %>"
 		],
@@ -52,10 +52,10 @@
 	"unlesse": {
 		"prefix": "unlesse",
 		"body": [
-			"<% unless ${false} %>",
-			"  $1",
-			"<% else %>",
+			"<% unless ${1:falsevalue} %>",
 			"  $2",
+			"<% else %>",
+			"  $3",
 			"<% end %>"
 		],
 		"description": "unless .. end"
@@ -63,8 +63,8 @@
 	"each": {
 		"prefix": "each",
 		"body": [
-			"<% ${items}.each do |${item}| %>",
-			"  $1",
+			"<% ${1:items}.each do |${2:item}| %>",
+			"  $2",
 			"<% end %>"
 		],
 		"description": "each do"
