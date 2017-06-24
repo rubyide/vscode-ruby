@@ -217,23 +217,14 @@
 		"languages": [{
 			"id": "ruby",
 			"aliases": ["Ruby", "ruby"],
-			"extensions": [".rb", ".rbx", ".rjs", ".Rakefile", ".rake", ".cgi", ".fcgi", ".gemspec", ".irbrc", ".capfile",
-				".ru", ".prawn", ".jbuilder"
+			"extensions": [
+				".cgi", ".fcgi", ".gemspec", ".irbrc", ".jbuilder",
+				".prawn", ".rake", ".rb", ".rbx", ".rjs", ".ru"
 			],
 			"filenames": [
-				"appfile",
-				"appraisals",
-				"berksfile",
-				"brewfile",
-				"capfile",
-				"fastfile",
-				"gemfile",
-				"guardfile",
-				"podfile",
-				"puppetfile",
-				"rakefile",
-				"thorfile",
-				"vagrantfile"
+				"appfile", "appraisals", "berksfile", "brewfile", "capfile",
+				"fastfile", "gemfile", "guardfile", "podfile", "puppetfile",
+				"rakefile", "thorfile", "vagrantfile"
 			],
 			"configuration": "./language-configuration-ruby.json"
 		}, {
