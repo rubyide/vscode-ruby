@@ -162,19 +162,25 @@ function activate(context) {
 	vscode.window.visibleTextEditors.forEach(changeTrigger);
 
 	//for locate: if it's a project, use the root, othewise, don't bother
-	let locate;
 	if (vscode.workspace.rootPath) {
+		const refreshLocate = () => {
+			let progressOptions = { location: vscode.ProgressLocation.Window, title: 'Indexing Ruby source files' };
+			vscode.window.withProgress(progressOptions, () => locate.walk());
+		};
 		const settings = vscode.workspace.getConfiguration("ruby.locate") || {};
-		locate = new Locate(vscode.workspace.rootPath, settings);
+		let locate = new Locate(vscode.workspace.rootPath, settings);
+		refreshLocate();
+		subs.push(vscode.commands.registerCommand('ruby.reloadProject', refreshLocate));
+
 		const watch = vscode.workspace.createFileSystemWatcher(settings.include);
 		watch.onDidChange(uri => locate.parse(uri.fsPath));
 		watch.onDidCreate(uri => locate.parse(uri.fsPath));
 		watch.onDidDelete(uri => locate.rm(uri.fsPath));
+		const locationConverter = match => new vscode.Location(vscode.Uri.file(match.file), new vscode.Position(match.line, match.char));
 		const defProvider = {
 			provideDefinition: (doc, pos) => {
 				const txt = doc.getText(doc.getWordRangeAtPosition(pos));
-				const matches = locate.find(txt);
-				return matches.map(m => new vscode.Location(vscode.Uri.file(m.file), new vscode.Position(m.line, m.char)));
+				return locate.find(txt).then(matches => matches.map(locationConverter));
 			}
 		};
 		subs.push(vscode.languages.registerDefinitionProvider(['ruby', 'erb'], defProvider));
@@ -191,21 +197,19 @@ function activate(context) {
 		// NOTE: Workaround for high CPU usage on IPC (channel.onread) when too many symbols returned.
 		// For channel.onread see issue like this: https://github.com/Microsoft/vscode/issues/6026
 		const numOfSymbolLimit = 3000;
-		const symbolConverter = matches => matches.slice(0, numOfSymbolLimit).map(match => {
+		const symbolsConverter = matches => matches.slice(0, numOfSymbolLimit).map(match => {
 			const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
-			const uri = vscode.Uri.file(match.file);
-			const location = new Location(uri, new Position(match.line, match.char));
-			return new SymbolInformation(match.name, symbolKind, match.containerName, location);
+			return new SymbolInformation(match.name, symbolKind, match.containerName, locationConverter(match));
 		});
 		const docSymbolProvider = {
 			provideDocumentSymbols: (document, token) => {
-				return locate.listInFile(document.fileName).then(symbolConverter);
+				return locate.listInFile(document.fileName).then(symbolsConverter);
 			}
 		};
 		subs.push(vscode.languages.registerDocumentSymbolProvider(['ruby', 'erb'], docSymbolProvider));
 		const workspaceSymbolProvider = {
 			provideWorkspaceSymbols: (query, token) => {
-				return symbolConverter(locate.query(query));
+				return locate.query(query).then(symbolsConverter);
 			}
 		};
 		subs.push(vscode.languages.registerWorkspaceSymbolProvider(workspaceSymbolProvider));
