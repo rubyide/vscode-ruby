@@ -36,13 +36,13 @@ function flatten(locateInfo, file, containerName = '') {
 	});
 }
 function camelCaseRegExp(query) {
-	const escaped = _.escapeRegExp(query)
+	const escaped = _.escapeRegExp(query);
 	const prefix = escaped.charAt(0);
 	return new RegExp(
 		`[${prefix.toLowerCase()}${prefix.toUpperCase()}]` +
 		escaped.slice(1).replace(/[A-Z]|([a-z])/g, (char, lower) => {
 			if (lower) return `[${char.toUpperCase()}${char}]`;
-			const lowered = char.toLowerCase()
+			const lowered = char.toLowerCase();
 			return `.*(?:${char}|_${lowered})`;
 		})
 	);
@@ -50,7 +50,7 @@ function camelCaseRegExp(query) {
 function filter(symbols, query, matcher) {
 	// TODO: Ask MS to expose or separate matchesFuzzy method.
 	// https://github.com/Microsoft/vscode/blob/a1d3c8a3006d0a3d68495122ea09a2a37bca69db/src/vs/base/common/filters.ts
-	const isLowerCase = (query.toLowerCase() === query)
+	const isLowerCase = (query.toLowerCase() === query);
 	const exact = new RegExp('^' + _.escapeRegExp(query) + '$', 'i');
 	const prefix = new RegExp('^' + _.escapeRegExp(query), 'i');
 	const substring = new RegExp(_.escapeRegExp(query), isLowerCase ? 'i' : '');
@@ -112,7 +112,7 @@ module.exports = class Locate {
 		const nameMatches = filter(symbols, nameQuery, (symbolInfo, regexp) => {
 			return _.includes(segmentTypes, symbolInfo.type) && regexp.test(symbolInfo.name);
 		});
-		const containerMatches = filter(nameMatches, containerQuery, (symbolInfo, regexp) => regexp.test(symbolInfo.containerName))
+		const containerMatches = filter(nameMatches, containerQuery, (symbolInfo, regexp) => regexp.test(symbolInfo.containerName));
 		return _.uniq(plainMatches.concat(containerMatches));
 	}
 	rm(absPath) {
