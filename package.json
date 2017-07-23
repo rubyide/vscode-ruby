@@ -117,7 +117,7 @@
 					"description": "Set individual ruby linters to use",
 					"properties": {
 						"ruby": {
-							"type": "boolean",
+							"type": ["boolean", "object"],
 							"default": false,
 							"description": "Use ruby -wc to lint"
 						},
