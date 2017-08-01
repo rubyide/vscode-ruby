@@ -1,6 +1,6 @@
 # Ruby Language and Debugging Support for Visual Studio Code
 
-[![Join the chat at https://rubyide-slackin.azurewebsites.net](https://rubyide-slackin.azurewebsites.net/badge.svg)](https://rubyide-slackin.azurewebsites.net) [![Build Status](https://travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
+[![Join the chat at https://rubyide-slackin.azurewebsites.net](./images/badge.png)](https://rubyide-slackin.azurewebsites.net) [![Build Status](https://api.travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 
 This extension provides rich Ruby language and debugging support for VS Code. It's still in progress ( [GitHub](https://github.com/rubyide/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0. 
 
