@@ -160,7 +160,7 @@
 								"lint": {
 									"type": "boolean",
 									"default": false,
-									"description": "Enable all lint cops"
+									"description": "Enable Lint cops: Lint cops check for possible errors and very bad practices in your code. RuboCop implements in a portable way all built-in MRI lint checks (ruby -wc) and adds a lot of extra lint checks of its own."
 								},
 								"only": {
 									"type": "array",
@@ -185,7 +185,8 @@
 								},
 								"rails": {
 									"type": "boolean",
-									"default": false
+									"default": false,
+									"description": "Rails cops are specific to the Ruby on Rails framework"
 								}
 							}
 						},
