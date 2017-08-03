@@ -21,7 +21,7 @@
 		"url": "https://github.com/lextm"
 	}],
 	"engines": {
-		"vscode": "^0.10.1"
+		"vscode": "^1.1.4"
 	},
 	"license": "MIT",
 	"icon": "images/ruby.png",
@@ -41,6 +41,7 @@
 		"url": "https://github.com/rubyide/vscode-ruby/issues"
 	},
 	"dependencies": {
+		"vscode": "^1.1.4",
 		"ruby-method-locate": "*",
 		"vscode-debugprotocol": "~1.6.0-pre4",
 		"vscode-debugadapter": "~1.6.0-pre8",
