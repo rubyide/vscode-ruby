@@ -54,9 +54,7 @@ export class RubyProcess extends EventEmitter {
             locator: domErrorLocator
         });
 
-        this.debugSocketClient = new net.Socket( {
-            type: 'tcp4'
-        });
+        this.debugSocketClient = new net.Socket();
 
         this.debugSocketClient.on('connect', (buffer: Buffer) => {
             this.state = SocketClientState.connected;

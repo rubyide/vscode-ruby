@@ -7,27 +7,28 @@
 
 import assert = require('assert');
 import * as Path from 'path';
-import {DebugClient} from './debugClient';
+// import {DebugClient} from './debugClient';
 import {DebugProtocol} from 'vscode-debugprotocol';
+import {DebugClient} from 'vscode-debugadapter-testsupport';
 
 suite('Node Debug Adapter', () => {
 
-	const DEBUG_ADAPTER = './out/main.js';
+	const DEBUG_ADAPTER = './out/debugger/main.js';
 
-	const PROJECT_ROOT = Path.join(__dirname, '../../');
-	const DATA_ROOT = Path.join(PROJECT_ROOT, 'src/tests/data/');
+	const PROJECT_ROOT = Path.join(__dirname, '../../../');
+	const DATA_ROOT = Path.join(PROJECT_ROOT, 'src/debugger/tests/data/');
 
 
 	let dc: DebugClient;
 
 
-	setup(done => {
+	setup(() => {
 		dc = new DebugClient('node', DEBUG_ADAPTER, 'node');
-		dc.start(done);
+		dc.start();
 	});
 
-	teardown(done => {
-		dc.stop(done);
+	teardown(() => {
+		dc.stop();
 	});
 
 

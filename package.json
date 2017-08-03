@@ -56,7 +56,11 @@
 		"gulp-sourcemaps": "^1.6.0",
 		"run-sequence": "*",
 		"mocha": "^2.4.5",
-		"typescript": "1.8.2"
+		"vscode-debugadapter-testsupport": "^1.19.0",
+		"typescript": "^2.1.5",
+		"vscode": "^1.1.4",
+		"@types/mocha": "^2.2.33",
+		"@types/node": "^6.0.50"
 	},
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./src",
@@ -247,7 +251,7 @@
 			"enableBreakpointsFor": {
 				"languageIds": ["ruby", "erb"]
 			},
-			"program": "./out/main.js",
+			"program": "./out/debugger/main.js",
 			"runtime": "node",
 			"configurationAttributes": {
 				"launch": {
