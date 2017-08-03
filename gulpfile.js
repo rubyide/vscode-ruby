@@ -17,8 +17,7 @@ const inlineSource = false;
 
 var watchedSources = [
 	'src/**/*',
-	'!src/tests/data/**',
-	'typings/**/*.ts'
+	'!src/debugger/tests/data/**'
 ];
 
 var outDest = 'out';

@@ -8,6 +8,7 @@
 		"outDir": "../out",
 		"noImplicitAny": false,
 		"removeComments": false,
-		"preserveConstEnums": true
+		"preserveConstEnums": true,
+		"allowJs": true
 	}
 }

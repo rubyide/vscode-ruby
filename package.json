@@ -62,14 +62,13 @@
 		"vscode:prepublish": "tsc -p ./src",
 		"compile": "tsc -p ./src",
 		"watch": "tsc -w -p ./src",
-		"test": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/tests/*.js"
+		"test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js"
 	},
 	"activationEvents": [
 		"onLanguage:ruby",
 		"onLanguage:erb"
 	],
-	"main": "ruby.js",
-
+	"main": "./out/ruby.js",
 	"contributes": {
 		"snippets": [{
 			"language": "ruby",
