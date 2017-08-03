@@ -1,3 +1,10 @@
+### 0.13.0 - August 3 2017
+Notable changes:
+* [Make stacktrace handling of missing files more robust](https://github.com/rubyide/vscode-ruby/pull/145)
+* [Fix the "debuggerPort" option](https://github.com/rubyide/vscode-ruby/pull/148)
+* [Fix snippet syntax errors](https://github.com/rubyide/vscode-ruby/pull/168)
+* [Completely fix too many open files issue by using queue](https://github.com/rubyide/vscode-ruby/pull/178)
+
 ### 0.12.1 - April 25 2017
 Fix rubocop linter regression :)
 
