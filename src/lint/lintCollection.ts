@@ -8,12 +8,14 @@ export class LintCollection {
 	private _docLinters: any;
 	private _cfg: any;
 	private _rootPath: string;
+	private _globalConfig: any;
 
-	constructor(config, rootPath) {
+	constructor(globalConfig, lintConfig, rootPath) {
 		this._results = {};
 		this._docLinters = {};
+		this._globalConfig = globalConfig;
 		this._cfg = {};
-		this.cfg(config);
+		this.cfg(lintConfig, globalConfig);
 		this._rootPath = rootPath;
 	}
 
@@ -31,7 +33,7 @@ export class LintCollection {
 		return Promise.resolve();
 	}
 
-	public cfg(newConfig) {
+	public cfg(newConfig, globalConfig) {
 		let activeLinters = Object.keys(this._cfg);
 		let toRemove = activeLinters.filter(l => !(l in newConfig) || !newConfig[l]);
 		toRemove.forEach(l => {
@@ -43,7 +45,7 @@ export class LintCollection {
 		});
 		// we change the config internally, so that the config of any (awaiting) linters will be updated by reference
 		for (let l in newConfig) {
-			if (newConfig[l]) this._cfg[l] = newConfig[l];
+			if (newConfig[l]) this._cfg[l] = Object.assign({}, newConfig[l], globalConfig);
 		}
 	}
 

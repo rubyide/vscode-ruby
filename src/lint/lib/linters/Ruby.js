@@ -4,10 +4,15 @@ const EOL = require("os")
 
 function RubyWC(opts) {
 	this.responsePath = "stderr";
+	this.title = "ruby";
 	this.exe = "ruby";
 	this.ext = "";
 	this.path = opts.path;
 	this.args = ["-wc"];
+
+	if (opts.rubyInterpreterPath) {
+		this.exe = opts.rubyInterpreterPath;
+	}
 
 	if(opts.unicode) {
 		this.args.push("-Ku");

@@ -26,6 +26,15 @@ export function activate(context: ExtensionContext) {
 	registerIntellisenseProvider(context);
 }
 
+function getGlobalConfig() {
+	let globalConfig = {};
+	let rubyInterpreterPath = vscode.workspace.getConfiguration("ruby.interpreter").commandPath;
+	if (rubyInterpreterPath) {
+		globalConfig["rubyInterpreterPath"] = rubyInterpreterPath;
+	}
+	return globalConfig;
+}
+
 function registerHighlightProvider(ctx: ExtensionContext) {
 	// highlight provider
 	let pairedEnds = [];
@@ -94,7 +103,8 @@ function registerHighlightProvider(ctx: ExtensionContext) {
 }
 
 function registerLinters(ctx: ExtensionContext) {
-	const linters = new LintCollection(vscode.workspace.getConfiguration("ruby").lint, vscode.workspace.rootPath);
+	const globalConfig = getGlobalConfig();
+	const linters = new LintCollection(globalConfig, vscode.workspace.getConfiguration("ruby").lint, vscode.workspace.rootPath);
 	ctx.subscriptions.push(linters);
 
 	function executeLinting(e: vscode.TextEditor | vscode.TextDocumentChangeEvent) {
@@ -107,7 +117,8 @@ function registerLinters(ctx: ExtensionContext) {
 	ctx.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
 		const docs = vscode.window.visibleTextEditors.map(editor => editor.document);
 		console.log("Config changed. Should lint:", docs.length);
-		linters.cfg(vscode.workspace.getConfiguration("ruby").lint);
+		const globalConfig = getGlobalConfig();
+		linters.cfg(vscode.workspace.getConfiguration("ruby").lint, globalConfig);
 		docs.forEach(doc => linters.run(doc));
 	}));
 

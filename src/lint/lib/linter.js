@@ -71,7 +71,7 @@ class Linter {
 				spawned.on("exit", () => {
 					try {
 						resolve({
-							linter: svc.exe,
+							linter: svc.title || svc.exe,
 							lintError: svc.processError ? svc.processError(error) : [],
 							result: svc.processResult(result)
 						});
@@ -85,7 +85,7 @@ class Linter {
 			})
 			.catch(e => ({
 				error: e,
-				linter: svc.exe,
+				linter: svc.title || svc.exe,
 				source: svc.exe
 			}));
 	}
