@@ -5,7 +5,7 @@ import { Location, ExtensionContext, Position, SymbolKind, SymbolInformation } f
 import * as Locate from './locate/locate';
 import * as path from 'path';
 import * as cp from 'child_process';
-import * as LintCollection from './lint/lintCollection';
+import { LintCollection } from './lint/lintCollection';
 import { RubyDocumentFormattingEditProvider } from './format/rubyFormat';
 
 export function activate(context: ExtensionContext) {

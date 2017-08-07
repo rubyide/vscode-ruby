@@ -3,7 +3,12 @@
 const Linter = require('./lib/linter');
 const LintResults = require('./lib/lintResults');
 
-class LintCollection {
+export class LintCollection {
+	private _results: any;
+	private _docLinters: any;
+	private _cfg: any;
+	private _rootPath: string;
+
 	constructor(config, rootPath) {
 		this._results = {};
 		this._docLinters = {};
@@ -11,19 +16,22 @@ class LintCollection {
 		this.cfg(config);
 		this._rootPath = rootPath;
 	}
-	run(doc) {
+
+	public run(doc) {
 		if (!doc) return;
 		if (doc.languageId !== 'ruby') return;
 		if (!this._docLinters[doc.fileName]) this._docLinters[doc.fileName] = new Linter(doc, this._rootPath, this._update.bind(this, doc));
 		this._docLinters[doc.fileName].run(this._cfg);
 	}
-	_update(doc, result) {
+
+	public _update(doc, result) {
 		const linter = result.linter;
 		if (!this._results[linter]) this._results[linter] = new LintResults(linter);
 		this._results[linter].updateForFile(doc.uri, result);
 		return Promise.resolve();
 	}
-	cfg(newConfig) {
+
+	public cfg(newConfig) {
 		let activeLinters = Object.keys(this._cfg);
 		let toRemove = activeLinters.filter(l => !(l in newConfig) || !newConfig[l]);
 		toRemove.forEach(l => {
@@ -38,9 +46,8 @@ class LintCollection {
 			if (newConfig[l]) this._cfg[l] = newConfig[l];
 		}
 	}
-	dispose() {
+
+	public dispose() {
 		for (let l in this._results) this._results[l].dispose();
 	}
 }
-
-module.exports = LintCollection;
