@@ -14,7 +14,7 @@ install:
 build_script:
   - gulp
 test_script:
-  - npm test
+  - npm test-debugger
 
 environment:
   matrix:

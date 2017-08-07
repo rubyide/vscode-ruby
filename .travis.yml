@@ -12,4 +12,4 @@ before_script:
   - npm install -g typescript -v 2.1.5
   - npm install
   - tsc -p ./src
-script: npm test
+script: npm test-debugger
