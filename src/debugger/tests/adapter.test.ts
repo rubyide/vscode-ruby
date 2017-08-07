@@ -15,8 +15,7 @@ suite('Node Debug Adapter', () => {
 
 	const DEBUG_ADAPTER = './out/debugger/main.js';
 
-	const PROJECT_ROOT = Path.join(__dirname, '../../../');
-	const DATA_ROOT = Path.join(PROJECT_ROOT, 'src/debugger/tests/data/');
+	const DATA_ROOT = Path.join(Path.join(__dirname, '../../../'), 'src/debugger/tests/data/');
 
 
 	let dc: DebugClient;
@@ -105,7 +104,7 @@ suite('Node Debug Adapter', () => {
 				dc.hitBreakpoint(
 					{ program: PROGRAM },
 					{ path: PROGRAM, line: BREAKPOINT_LINE } ),
-				dc.assertStoppedLocation('breakpoint', { path: PROGRAM, line: BREAKPOINT_LINE }),
+				dc.assertStoppedLocation('breakpoint', { line: BREAKPOINT_LINE }),
 				dc.waitForEvent('stopped').then(event => {
 					return dc.continueRequest({
 						threadId: event.body.threadId
@@ -121,11 +120,11 @@ suite('Node Debug Adapter', () => {
 			return Promise.all([
 				dc.hitBreakpoint(
 					{ program: PROGRAM },
-					{ path: PROGRAM, line: BREAKPOINT_LINE }
+					{ path: PROGRAM, line: BREAKPOINT_LINE }f
 				),
 				dc.assertStoppedLocation(
 					'breakpoint',
-					{ path: PROGRAM, line: BREAKPOINT_LINE }
+					{ line: BREAKPOINT_LINE }
 					).then(response => {
 						return dc.scopesRequest({
 							frameId: response.body.stackFrames[0].id
