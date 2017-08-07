@@ -142,7 +142,7 @@ function registerCompletionProvider(ctx: ExtensionContext) {
 			vscode.languages.registerCompletionItemProvider(
 				/** selector */'ruby',
 				/** provider */{
-					provideCompletionItems: function completionProvider(document, position) {
+					provideCompletionItems: function completionProvider(document, position, token) {
 						return new Promise((resolve, reject) => {
 							const line = position.line + 1;
 							const column = position.character;

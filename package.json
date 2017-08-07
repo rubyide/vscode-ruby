@@ -21,7 +21,7 @@
 		"url": "https://github.com/lextm"
 	}],
 	"engines": {
-		"vscode": "^1.1.4"
+		"vscode": "^1.12.0"
 	},
 	"license": "MIT",
 	"icon": "images/ruby.png",
@@ -67,7 +67,8 @@
 		"vscode:prepublish": "tsc -p ./src",
 		"compile": "tsc -p ./src",
 		"watch": "tsc -w -p ./src",
-		"test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js"
+		"test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
+		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"activationEvents": [
 		"onLanguage:ruby",
