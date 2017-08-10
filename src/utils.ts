@@ -30,7 +30,7 @@ export async function loadEnv() {
 		let result = definition.split('=', 2);
 		let envKey = result[0];
 		let envValue = result[1];
-		if (envKey in ["PATH", "GEM_HOME", "GEM_PATH", "RUBY_VERSION"]) {
+		if (["PATH", "GEM_HOME", "GEM_PATH", "RUBY_VERSION"].indexOf(envKey) > -1 ) {
 			if (!process.env[envKey]) {
 				process.env[envKey] = envValue;
 			}
