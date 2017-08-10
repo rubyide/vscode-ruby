@@ -7,6 +7,7 @@ import * as path from 'path';
 import * as cp from 'child_process';
 import { LintCollection } from './lint/lintCollection';
 import { RubyDocumentFormattingEditProvider } from './format/rubyFormat';
+import * as utils from './utils';
 
 export function activate(context: ExtensionContext) {
 	const subs = context.subscriptions;
@@ -24,6 +25,7 @@ export function activate(context: ExtensionContext) {
 	registerCompletionProvider(context);
 	registerFormatter(context);
 	registerIntellisenseProvider(context);
+	utils.loadEnv();
 }
 
 function getGlobalConfig() {
