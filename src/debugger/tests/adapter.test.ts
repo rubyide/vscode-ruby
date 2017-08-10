@@ -120,7 +120,7 @@ suite('Node Debug Adapter', () => {
 			return Promise.all([
 				dc.hitBreakpoint(
 					{ program: PROGRAM },
-					{ path: PROGRAM, line: BREAKPOINT_LINE }f
+					{ path: PROGRAM, line: BREAKPOINT_LINE }
 				),
 				dc.assertStoppedLocation(
 					'breakpoint',
