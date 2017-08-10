@@ -22,7 +22,6 @@ export function getOutputChannel(): vscode.OutputChannel {
 }
 
 export async function loadEnv() {
-	getOutputChannel().appendLine(process.env.SHELL);
 	let { stdout, stderr } = await exec(process.env.SHELL + " -lc export", { cwd: vscode.workspace.rootPath });
 	let envs = stdout.trim().split('\n');
 	for (let i = 0; i < envs.length; i++) {
