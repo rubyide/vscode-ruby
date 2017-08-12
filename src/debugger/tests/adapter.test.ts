@@ -17,7 +17,6 @@ suite('Node Debug Adapter', () => {
 
 	const DATA_ROOT = Path.join(Path.join(__dirname, '../../../'), 'src/debugger/tests/data/');
 
-
 	let dc: DebugClient;
 
 
@@ -97,7 +96,7 @@ suite('Node Debug Adapter', () => {
 
 		test('should stop on a breakpoint', () => {
 
-			const PROGRAM = Path.join(DATA_ROOT, 'basic.rb');
+			const PROGRAM = Path.resolve(DATA_ROOT, 'basic.rb');
 			const BREAKPOINT_LINE = 2;
 
 			return Promise.all<Promise<any>>([
@@ -114,7 +113,7 @@ suite('Node Debug Adapter', () => {
 		});
 
 		test('should get correct variables on a breakpoint', done => {
-			const PROGRAM = Path.join(DATA_ROOT, 'basic.rb');
+			const PROGRAM = Path.resolve(DATA_ROOT, 'basic.rb');
 			const BREAKPOINT_LINE = 3;
 
 			return Promise.all([
