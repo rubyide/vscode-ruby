@@ -111,6 +111,7 @@ class Linter {
 			.then(() => {
 				this.linting[result.linter].active = false;
 				if (this.linting[result.linter].pend) this._runLinters();
+				if (result.error) this._runLinters();
 			});
 
 		// if any of the runs need a temp file:
