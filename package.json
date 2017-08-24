@@ -1,505 +1,505 @@
 {
-	"name": "Ruby",
-	"displayName": "Ruby",
-	"version": "0.14.0",
-	"publisher": "rebornix",
-	"description": "Provides Ruby language and debugging support for Visual Studio Code",
-	"author": {
-		"name": "Peng Lv"
-	},
-	"contributors": [
-		{
-			"name": "Peng Lyu",
-			"url": "https://github.com/rebornix"
-		},
-		{
-			"name": "Bryan Hoekstra",
-			"url": "https://github.com/HookyQR"
-		},
-		{
-			"name": "Drew Cain",
-			"url": "https://github.com/groksrc"
-		},
-		{
-			"name": "Lex Li",
-			"url": "https://github.com/lextm"
-		}
-	],
-	"engines": {
-		"vscode": "^1.14.0"
-	},
-	"license": "MIT",
-	"icon": "images/ruby.png",
-	"categories": [
-		"Languages",
-		"Debuggers",
-		"Linters",
-		"Snippets",
-		"Formatters"
-	],
-	"private": false,
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/rubyide/vscode-ruby.git"
-	},
-	"bugs": {
-		"url": "https://github.com/rubyide/vscode-ruby/issues"
-	},
-	"dependencies": {
-		"vscode": "^1.1.4",
-		"ruby-method-locate": "*",
-		"vscode-debugprotocol": "^1.19.0",
-		"vscode-debugadapter": "^1.19.0",
-		"xmldom": "^0.1.19",
-		"lodash": "^4.17.3",
-		"minimatch": "^3.0.3",
-		"async": "^2.3.0"
-	},
-	"devDependencies": {
-		"gulp": "^3.9.0",
-		"gulp-util": "^3.0.5",
-		"gulp-typescript": "^2.12.0",
-		"gulp-sourcemaps": "^1.6.0",
-		"run-sequence": "*",
-		"mocha": "^2.4.5",
-		"vscode-debugadapter-testsupport": "^1.19.0",
-		"typescript": "^2.1.5",
-		"vscode": "^1.1.4",
-		"@types/mocha": "^2.2.33",
-		"@types/node": "^6.0.50"
-	},
-	"scripts": {
-		"vscode:prepublish": "tsc -p ./src",
-		"compile": "tsc -p ./src",
-		"watch": "tsc -w -p ./src",
-		"test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
-		"postinstall": "node ./node_modules/vscode/bin/install"
-	},
-	"activationEvents": [
-		"onLanguage:ruby",
-		"onLanguage:erb",
-		"onCommand:workbench.action.tasks.runTask"
-	],
-	"main": "./out/ruby.js",
-	"contributes": {
-		"snippets": [
-			{
-				"language": "ruby",
-				"path": "./snippets/ruby.json"
-			},
-			{
-				"language": "erb",
-				"path": "./snippets/erb.json"
-			}
-		],
-		"commands": [
-			{
-				"command": "ruby.reloadProject",
-				"title": "Ruby: Reload Project"
-			}
-		],
-		"configuration": {
-			"title": "ruby language settings",
-			"properties": {
-				"ruby.locate": {
-					"type": "object",
-					"description": "Defines where the Ruby extension will look to find Modules, Classes and methods.",
-					"default": {
-						"exclude": "{**/@(test|spec|tmp|.*),**/@(test|spec|tmp|.*)/**,**/*_spec.rb}",
-						"include": "**/*.rb"
-					},
-					"properties": {
-						"include": {
-							"type": "string",
-							"description": "glob pattern to select files to parse. Matches are performed against the path relative to the workspace root",
-							"default": "**/*.rb"
-						},
-						"exclude": {
-							"type": "string",
-							"description": "glob pattern to select files to ignore, this is also run against paths for exclusion from walking. Matches are performed against the path relative to the workspace root",
-							"default": "{**/@(test|spec|tmp|.*),**/@(test|spec|tmp|.*)/**,**/*_spec.rb}"
-						}
-					}
-				},
-				"ruby.interpreter.commandPath": {
-					"type": "string",
-					"default": "ruby",
-					"description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
-					"isExecutable": true
-				},
-				"ruby.rctComplete.commandPath": {
-					"type": "string",
-					"default": "rct-complete",
-					"description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions.",
-					"isExecutable": true
-				},
-				"ruby.lint": {
-					"type": "object",
-					"description": "Set individual ruby linters to use",
-					"properties": {
-						"ruby": {
-							"type": [
-								"boolean",
-								"object"
-							],
-							"default": false,
-							"description": "Use ruby -wc to lint"
-						},
-						"debride": {
-							"type": [
-								"boolean",
-								"object"
-							],
-							"default": false,
-							"properties": {
-								"rails": {
-									"type": "boolean",
-									"default": "true",
-									"description": "Add some rails call conversions"
-								}
-							},
-							"description": "Use debride to lint"
-						},
-						"fasterer": {
-							"type": "boolean",
-							"default": false,
-							"description": "Use fasterer to lint"
-						},
-						"reek": {
-							"type": "boolean",
-							"default": false,
-							"description": "Use reek to lint"
-						},
-						"rubocop": {
-							"type": [
-								"boolean",
-								"object"
-							],
-							"default": false,
-							"description": "Use RuboCop to lint",
-							"properties": {
-								"lint": {
-									"type": "boolean",
-									"default": false,
-									"description": "Enable Lint cops: Lint cops check for possible errors and very bad practices in your code. RuboCop implements in a portable way all built-in MRI lint checks (ruby -wc) and adds a lot of extra lint checks of its own."
-								},
-								"only": {
-									"type": "array",
-									"description": "Run only the specified cop(s) and/or cops in the specified departments",
-									"items": {
-										"type": "string"
-									}
-								},
-								"except": {
-									"type": "array",
-									"description": "Run all cops enabled by configuration except the specified cop(s) and/or departments",
-									"items": {
-										"type": "string"
-									}
-								},
-								"require": {
-									"type": "array",
-									"description": "Require Ruby files",
-									"items": {
-										"type": "string"
-									}
-								},
-								"rails": {
-									"type": "boolean",
-									"default": false,
-									"description": "Rails cops are specific to the Ruby on Rails framework"
-								}
-							}
-						},
-						"ruby-lint": {
-							"type": [
-								"boolean",
-								"object"
-							],
-							"default": false,
-							"description": "Use ruby-lint to lint",
-							"properties": {
-								"levels": {
-									"type": "array",
-									"description": "Level of offenses to show",
-									"items": {
-										"type": "string",
-										"enum": [
-											"error",
-											"warning",
-											"info"
-										]
-									}
-								},
-								"classes": {
-									"type": "array",
-									"description": "Classes of offenses to show",
-									"items": {
-										"type": "string",
-										"enum": [
-											"argument_amount",
-											"loop_keywords",
-											"pedantics",
-											"shadowing_variables",
-											"undefined_methods",
-											"undefined_variables",
-											"unused_variables",
-											"useless_equality_checks"
-										]
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"languages": [
-			{
-				"id": "ruby",
-				"aliases": [
-					"Ruby",
-					"ruby"
-				],
-				"extensions": [
-					".builder",
-					".cgi",
-					".fcgi",
-					".gemspec",
-					".god",
-					".irbrc",
-					".jbuilder",
-					".mspec",
-					".pluginspec",
-					".podspec",
-					".prawn",
-					".pryrc",
-					".rabl",
-					".rake",
-					".rb",
-					".rbuild",
-					".rbw",
-					".rbx",
-					".rjs",
-					".ru",
-					".ruby",
-					".spec",
-					".thor",
-					".watchr"
-				],
-				"filenames": [
-					"appfile",
-					"appraisals",
-					"berksfile",
-					"brewfile",
-					"capfile",
-					"fastfile",
-					"gemfile",
-					"guardfile",
-					"podfile",
-					"puppetfile",
-					"rakefile",
-					"snapfile",
-					"thorfile",
-					"vagrantfile",
-					"dangerfile"
-				],
-				"configuration": "./language-configuration-ruby.json"
-			},
-			{
-				"id": "erb",
-				"aliases": [
-					"erb",
-					"Encapsulated Ruby"
-				],
-				"extensions": [
-					".erb",
-					".rhtml",
-					".rhtm"
-				],
-				"configuration": "./language-configuration-erb.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "ruby",
-				"scopeName": "source.ruby",
-				"path": "./syntaxes/ruby.tmLanguage"
-			},
-			{
-				"language": "erb",
-				"scopeName": "text.html.erb",
-				"path": "./syntaxes/erb.tmLanguage"
-			}
-		],
-		"debuggers": [
-			{
-				"type": "Ruby",
-				"label": "Ruby",
-				"enableBreakpointsFor": {
-					"languageIds": [
-						"ruby",
-						"erb"
-					]
-				},
-				"program": "./out/debugger/main.js",
-				"runtime": "node",
-				"configurationAttributes": {
-					"launch": {
-						"required": [
-							"program"
-						],
-						"properties": {
-							"program": {
-								"type": "string",
-								"description": "Absolute path to the program.",
-								"default": "${workspaceRoot}/main.rb"
-							},
-							"stopOnEntry": {
-								"type": "boolean",
-								"description": "Automatically stop after launch.",
-								"default": true
-							},
-							"showDebuggerOutput": {
-								"type": "boolean",
-								"description": "Show output of the debugger in the console.",
-								"default": false
-							},
-							"args": {
-								"type": "array",
-								"description": "Command line arguments passed to the program.",
-								"items": {
-									"type": "string"
-								},
-								"default": []
-							},
-							"env": {
-								"type": "object",
-								"description": "Additional environment variables to pass to the debugging (and debugged) process.",
-								"default": {}
-							},
-							"cwd": {
-								"type": "string",
-								"description": "Absolute path to the working directory of the program being debugged.",
-								"default": "${workspaceRoot}"
-							},
-							"useBundler": {
-								"type": "boolean",
-								"description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
-								"default": false
-							},
-							"pathToBundler": {
-								"type": "string",
-								"description": "If you use the `useBunder` option, and `bundle` is not in your path, provide the absolute path to `bundle` (eg. \"/usr/bin/bundle\" )",
-								"default": "bundle"
-							},
-							"pathToRDebugIDE": {
-								"type": "string",
-								"description": "If `rdebug-ide` is not in your path, provide the absolute path to `rdebug-ide` (eg. \"c:\\ruby\\rdebug-ide.bat\" )",
-								"default": "rdebug-ide"
-							},
-							"debuggerPort": {
-								"type": "string",
-								"description": "If you want to run more than one debugger, you can specify the port here.",
-								"default": "1234"
-							}
-						}
-					},
-					"attach": {
-						"required": [
-							"cwd",
-							"remoteHost",
-							"remotePort",
-							"remoteWorkspaceRoot"
-						],
-						"properties": {
-							"cwd": {
-								"type": "string",
-								"description": "Absolute path to the working directory of the program being debugged.",
-								"default": "${workspaceRoot}"
-							},
-							"remoteHost": {
-								"type": "string",
-								"description": "Host address for remote debugging.",
-								"default": "127.0.0.1"
-							},
-							"remotePort": {
-								"type": "string",
-								"description": "Port for remote debugging.",
-								"default": "1234"
-							},
-							"remoteWorkspaceRoot": {
-								"type": "string",
-								"description": "Remote workspace root, this parameter is required for remote debugging.",
-								"default": "${workspaceRoot}"
-							},
-							"showDebuggerOutput": {
-								"type": "boolean",
-								"description": "Show output of the debugger in the console.",
-								"default": false
-							}
-						}
-					}
-				},
-				"initialConfigurations": [
-					{
-						"name": "Debug Local File",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/main.rb"
-					},
-					{
-						"name": "Listen for rdebug-ide",
-						"type": "Ruby",
-						"request": "attach",
-						"cwd": "${workspaceRoot}",
-						"remoteHost": "127.0.0.1",
-						"remotePort": "1234",
-						"remoteWorkspaceRoot": "${workspaceRoot}"
-					},
-					{
-						"name": "Rails server",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/rails",
-						"args": [
-							"server"
-						]
-					},
-					{
-						"name": "RSpec - all",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/rspec",
-						"args": [
-							"-I",
-							"${workspaceRoot}"
-						]
-					},
-					{
-						"name": "RSpec - active spec file only",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/rspec",
-						"args": [
-							"-I",
-							"${workspaceRoot}",
-							"${file}"
-						]
-					},
-					{
-						"name": "Cucumber",
-						"type": "Ruby",
-						"request": "launch",
-						"cwd": "${workspaceRoot}",
-						"program": "${workspaceRoot}/bin/cucumber"
-					}
-				]
-			}
-		]
-	}
+  "name": "Ruby",
+  "displayName": "Ruby",
+  "version": "0.15.0",
+  "publisher": "rebornix",
+  "description": "Provides Ruby language and debugging support for Visual Studio Code",
+  "author": {
+    "name": "Peng Lv"
+  },
+  "contributors": [
+    {
+      "name": "Peng Lyu",
+      "url": "https://github.com/rebornix"
+    },
+    {
+      "name": "Bryan Hoekstra",
+      "url": "https://github.com/HookyQR"
+    },
+    {
+      "name": "Drew Cain",
+      "url": "https://github.com/groksrc"
+    },
+    {
+      "name": "Lex Li",
+      "url": "https://github.com/lextm"
+    }
+  ],
+  "engines": {
+    "vscode": "^1.14.0"
+  },
+  "license": "MIT",
+  "icon": "images/ruby.png",
+  "categories": [
+    "Languages",
+    "Debuggers",
+    "Linters",
+    "Snippets",
+    "Formatters"
+  ],
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rubyide/vscode-ruby.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rubyide/vscode-ruby/issues"
+  },
+  "dependencies": {
+    "vscode": "^1.1.4",
+    "ruby-method-locate": "*",
+    "vscode-debugprotocol": "^1.19.0",
+    "vscode-debugadapter": "^1.19.0",
+    "xmldom": "^0.1.19",
+    "lodash": "^4.17.3",
+    "minimatch": "^3.0.3",
+    "async": "^2.3.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.5",
+    "gulp-typescript": "^2.12.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "run-sequence": "*",
+    "mocha": "^2.4.5",
+    "vscode-debugadapter-testsupport": "^1.19.0",
+    "typescript": "^2.1.5",
+    "vscode": "^1.1.4",
+    "@types/mocha": "^2.2.33",
+    "@types/node": "^6.0.50"
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./src",
+    "compile": "tsc -p ./src",
+    "watch": "tsc -w -p ./src",
+    "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "activationEvents": [
+    "onLanguage:ruby",
+    "onLanguage:erb",
+    "onCommand:workbench.action.tasks.runTask"
+  ],
+  "main": "./out/ruby.js",
+  "contributes": {
+    "snippets": [
+      {
+        "language": "ruby",
+        "path": "./snippets/ruby.json"
+      },
+      {
+        "language": "erb",
+        "path": "./snippets/erb.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "ruby.reloadProject",
+        "title": "Ruby: Reload Project"
+      }
+    ],
+    "configuration": {
+      "title": "ruby language settings",
+      "properties": {
+        "ruby.locate": {
+          "type": "object",
+          "description": "Defines where the Ruby extension will look to find Modules, Classes and methods.",
+          "default": {
+            "exclude": "{**/@(test|spec|tmp|.*),**/@(test|spec|tmp|.*)/**,**/*_spec.rb}",
+            "include": "**/*.rb"
+          },
+          "properties": {
+            "include": {
+              "type": "string",
+              "description": "glob pattern to select files to parse. Matches are performed against the path relative to the workspace root",
+              "default": "**/*.rb"
+            },
+            "exclude": {
+              "type": "string",
+              "description": "glob pattern to select files to ignore, this is also run against paths for exclusion from walking. Matches are performed against the path relative to the workspace root",
+              "default": "{**/@(test|spec|tmp|.*),**/@(test|spec|tmp|.*)/**,**/*_spec.rb}"
+            }
+          }
+        },
+        "ruby.interpreter.commandPath": {
+          "type": "string",
+          "default": "ruby",
+          "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
+          "isExecutable": true
+        },
+        "ruby.rctComplete.commandPath": {
+          "type": "string",
+          "default": "rct-complete",
+          "description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions.",
+          "isExecutable": true
+        },
+        "ruby.lint": {
+          "type": "object",
+          "description": "Set individual ruby linters to use",
+          "properties": {
+            "ruby": {
+              "type": [
+                "boolean",
+                "object"
+              ],
+              "default": false,
+              "description": "Use ruby -wc to lint"
+            },
+            "debride": {
+              "type": [
+                "boolean",
+                "object"
+              ],
+              "default": false,
+              "properties": {
+                "rails": {
+                  "type": "boolean",
+                  "default": "true",
+                  "description": "Add some rails call conversions"
+                }
+              },
+              "description": "Use debride to lint"
+            },
+            "fasterer": {
+              "type": "boolean",
+              "default": false,
+              "description": "Use fasterer to lint"
+            },
+            "reek": {
+              "type": "boolean",
+              "default": false,
+              "description": "Use reek to lint"
+            },
+            "rubocop": {
+              "type": [
+                "boolean",
+                "object"
+              ],
+              "default": false,
+              "description": "Use RuboCop to lint",
+              "properties": {
+                "lint": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Enable Lint cops: Lint cops check for possible errors and very bad practices in your code. RuboCop implements in a portable way all built-in MRI lint checks (ruby -wc) and adds a lot of extra lint checks of its own."
+                },
+                "only": {
+                  "type": "array",
+                  "description": "Run only the specified cop(s) and/or cops in the specified departments",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "except": {
+                  "type": "array",
+                  "description": "Run all cops enabled by configuration except the specified cop(s) and/or departments",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "require": {
+                  "type": "array",
+                  "description": "Require Ruby files",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "rails": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Rails cops are specific to the Ruby on Rails framework"
+                }
+              }
+            },
+            "ruby-lint": {
+              "type": [
+                "boolean",
+                "object"
+              ],
+              "default": false,
+              "description": "Use ruby-lint to lint",
+              "properties": {
+                "levels": {
+                  "type": "array",
+                  "description": "Level of offenses to show",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "error",
+                      "warning",
+                      "info"
+                    ]
+                  }
+                },
+                "classes": {
+                  "type": "array",
+                  "description": "Classes of offenses to show",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "argument_amount",
+                      "loop_keywords",
+                      "pedantics",
+                      "shadowing_variables",
+                      "undefined_methods",
+                      "undefined_variables",
+                      "unused_variables",
+                      "useless_equality_checks"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "ruby",
+        "aliases": [
+          "Ruby",
+          "ruby"
+        ],
+        "extensions": [
+          ".builder",
+          ".cgi",
+          ".fcgi",
+          ".gemspec",
+          ".god",
+          ".irbrc",
+          ".jbuilder",
+          ".mspec",
+          ".pluginspec",
+          ".podspec",
+          ".prawn",
+          ".pryrc",
+          ".rabl",
+          ".rake",
+          ".rb",
+          ".rbuild",
+          ".rbw",
+          ".rbx",
+          ".rjs",
+          ".ru",
+          ".ruby",
+          ".spec",
+          ".thor",
+          ".watchr"
+        ],
+        "filenames": [
+          "appfile",
+          "appraisals",
+          "berksfile",
+          "brewfile",
+          "capfile",
+          "fastfile",
+          "gemfile",
+          "guardfile",
+          "podfile",
+          "puppetfile",
+          "rakefile",
+          "snapfile",
+          "thorfile",
+          "vagrantfile",
+          "dangerfile"
+        ],
+        "configuration": "./language-configuration-ruby.json"
+      },
+      {
+        "id": "erb",
+        "aliases": [
+          "erb",
+          "Encapsulated Ruby"
+        ],
+        "extensions": [
+          ".erb",
+          ".rhtml",
+          ".rhtm"
+        ],
+        "configuration": "./language-configuration-erb.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ruby",
+        "scopeName": "source.ruby",
+        "path": "./syntaxes/ruby.tmLanguage"
+      },
+      {
+        "language": "erb",
+        "scopeName": "text.html.erb",
+        "path": "./syntaxes/erb.tmLanguage"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "Ruby",
+        "label": "Ruby",
+        "enableBreakpointsFor": {
+          "languageIds": [
+            "ruby",
+            "erb"
+          ]
+        },
+        "program": "./out/debugger/main.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Absolute path to the program.",
+                "default": "${workspaceRoot}/main.rb"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": true
+              },
+              "showDebuggerOutput": {
+                "type": "boolean",
+                "description": "Show output of the debugger in the console.",
+                "default": false
+              },
+              "args": {
+                "type": "array",
+                "description": "Command line arguments passed to the program.",
+                "items": {
+                  "type": "string"
+                },
+                "default": []
+              },
+              "env": {
+                "type": "object",
+                "description": "Additional environment variables to pass to the debugging (and debugged) process.",
+                "default": {}
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Absolute path to the working directory of the program being debugged.",
+                "default": "${workspaceRoot}"
+              },
+              "useBundler": {
+                "type": "boolean",
+                "description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
+                "default": false
+              },
+              "pathToBundler": {
+                "type": "string",
+                "description": "If you use the `useBunder` option, and `bundle` is not in your path, provide the absolute path to `bundle` (eg. \"/usr/bin/bundle\" )",
+                "default": "bundle"
+              },
+              "pathToRDebugIDE": {
+                "type": "string",
+                "description": "If `rdebug-ide` is not in your path, provide the absolute path to `rdebug-ide` (eg. \"c:\\ruby\\rdebug-ide.bat\" )",
+                "default": "rdebug-ide"
+              },
+              "debuggerPort": {
+                "type": "string",
+                "description": "If you want to run more than one debugger, you can specify the port here.",
+                "default": "1234"
+              }
+            }
+          },
+          "attach": {
+            "required": [
+              "cwd",
+              "remoteHost",
+              "remotePort",
+              "remoteWorkspaceRoot"
+            ],
+            "properties": {
+              "cwd": {
+                "type": "string",
+                "description": "Absolute path to the working directory of the program being debugged.",
+                "default": "${workspaceRoot}"
+              },
+              "remoteHost": {
+                "type": "string",
+                "description": "Host address for remote debugging.",
+                "default": "127.0.0.1"
+              },
+              "remotePort": {
+                "type": "string",
+                "description": "Port for remote debugging.",
+                "default": "1234"
+              },
+              "remoteWorkspaceRoot": {
+                "type": "string",
+                "description": "Remote workspace root, this parameter is required for remote debugging.",
+                "default": "${workspaceRoot}"
+              },
+              "showDebuggerOutput": {
+                "type": "boolean",
+                "description": "Show output of the debugger in the console.",
+                "default": false
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "name": "Debug Local File",
+            "type": "Ruby",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "program": "${workspaceRoot}/main.rb"
+          },
+          {
+            "name": "Listen for rdebug-ide",
+            "type": "Ruby",
+            "request": "attach",
+            "cwd": "${workspaceRoot}",
+            "remoteHost": "127.0.0.1",
+            "remotePort": "1234",
+            "remoteWorkspaceRoot": "${workspaceRoot}"
+          },
+          {
+            "name": "Rails server",
+            "type": "Ruby",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "program": "${workspaceRoot}/bin/rails",
+            "args": [
+              "server"
+            ]
+          },
+          {
+            "name": "RSpec - all",
+            "type": "Ruby",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "program": "${workspaceRoot}/bin/rspec",
+            "args": [
+              "-I",
+              "${workspaceRoot}"
+            ]
+          },
+          {
+            "name": "RSpec - active spec file only",
+            "type": "Ruby",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "program": "${workspaceRoot}/bin/rspec",
+            "args": [
+              "-I",
+              "${workspaceRoot}",
+              "${file}"
+            ]
+          },
+          {
+            "name": "Cucumber",
+            "type": "Ruby",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "program": "${workspaceRoot}/bin/cucumber"
+          }
+        ]
+      }
+    ]
+  }
 }
