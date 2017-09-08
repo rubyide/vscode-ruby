@@ -133,7 +133,7 @@ async function getRakeTasks(): Promise<vscode.Task[]> {
 		if (err.stdout) {
 			channel.appendLine(err.stdout);
 		}
-		channel.appendLine('Auto detecting rake tasts failed.');
+		channel.appendLine('Auto detecting rake tasks failed.');
 		channel.show(true);
 		return emptyTasks;
 	}
