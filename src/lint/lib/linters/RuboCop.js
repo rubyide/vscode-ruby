@@ -8,7 +8,7 @@ function RuboCop(opts) {
 
 	this.args = ["-s", "{path}", "-f", "json"] ;
 
-	if (opts.forceExclusion) this.args.push("--force-exclusion")
+	if (opts.forceExclusion) this.args.push("--force-exclusion");
 	if (opts.lint) this.args.push("-l");
 	if (opts.only) this.args = this.args.concat("--only", opts.only.join(','));
 	if (opts.except) this.args = this.args.concat("--except", opts.except.join(','));
