@@ -518,7 +518,7 @@
                 <key>0</key>
                 <dict>
                   <key>name</key>
-                  <string>variable.parameter.function.ruby1</string>
+                  <string>variable.parameter.function.ruby</string>
                 </dict>
               </dict>
             </dict>
@@ -541,7 +541,7 @@
       <key>comment</key>
       <string>the method pattern comes from the symbol pattern, see there for a explaination</string>
       <key>contentName</key>
-      <string>variable.parameter.function.ruby4</string>
+      <string>variable.parameter.function.ruby</string>
       <key>end</key>
       <string>\)</string>
       <key>endCaptures</key>
@@ -574,7 +574,7 @@
                 <key>2</key>
                 <dict>
                   <key>name</key>
-                  <string>variable.parameter.function.ruby5</string>
+                  <string>variable.parameter.function.ruby</string>
                 </dict>
               </dict>
               <key>match</key>
@@ -682,7 +682,7 @@
                 <key>0</key>
                 <dict>
                   <key>name</key>
-                  <string>variable.parameter.function.ruby2</string>
+                  <string>variable.parameter.function.ruby</string>
                 </dict>
               </dict>
             </dict>
@@ -700,7 +700,7 @@
       <key>comment</key>
       <string>same as the previous rule, but without parentheses around the arguments</string>
       <key>contentName</key>
-      <string>variable.parameter.function.ruby6</string>
+      <string>variable.parameter.function.ruby</string>
       <key>end</key>
       <string>$</string>
       <key>name</key>
@@ -734,7 +734,7 @@
               <key>match</key>
               <string>\G([&amp;*]?)[_a-zA-Z][_a-zA-Z0-9]*</string>
               <key>name</key>
-              <string>variable.parameter.function.ruby7</string>
+              <string>variable.parameter.function.ruby</string>
             </dict>
             <dict>
               <key>include</key>
@@ -824,7 +824,7 @@
                 <key>0</key>
                 <dict>
                   <key>name</key>
-                  <string>variable.parameter.function.ruby3</string>
+                  <string>variable.parameter.function.ruby</string>
                 </dict>
               </dict>
             </dict>
