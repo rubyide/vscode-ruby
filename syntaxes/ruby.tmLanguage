@@ -585,10 +585,10 @@
               <string>$self</string>
             </dict>
           </array>
-					<key>name</key>
-					<string>punctuation.seperator.object.ruby</string>
-					<key>match</key>
-					<string>(,)</string>
+          <key>name</key>
+          <string>punctuation.seperator.object.ruby</string>
+          <key>match</key>
+          <string>(,)</string>
         </dict>
       </array>
     </dict>
@@ -712,14 +712,14 @@
           <string>(?![\s,])</string>
           <key>end</key>
           <string>(,|$)</string>
-					<key>endCaptures</key>
-					<dict>
-						<key>0</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.seperator.object.ruby</string>
-						</dict>
-					</dict>
+          <key>endCaptures</key>
+          <dict>
+            <key>0</key>
+            <dict>
+              <key>name</key>
+              <string>punctuation.seperator.object.ruby</string>
+            </dict>
+          </dict>
           <key>patterns</key>
           <array>
             <dict>
