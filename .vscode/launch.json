@@ -1,47 +1,68 @@
 {
 	"version": "0.2.0",
-	"configurations": [{
-		"name": "Launch Extension",
-		"type": "extensionHost",
-		"request": "launch",
-		"runtimeExecutable": "${execPath}",
-		"args": [
-			"--extensionDevelopmentPath=${workspaceRoot}"
-		],
-		"sourceMaps": true,
-		"outDir": "${workspaceRoot}/out",
-		"stopOnEntry": false
-	}, {
-		"name": "ruby debug server",
-		"type": "node",
-		"request": "launch",
-		"runtimeArgs": ["--nolazy"],
-		"program": "${workspaceRoot}/src/main.ts",
-		"stopOnEntry": false,
-		"args": ["--server=4711"],
-		"sourceMaps": true,
-		"outDir": "${workspaceRoot}/out",
-		"cwd": "${workspaceRoot}"
-	}, {
-		"name": "ruby test",
-		"type": "ruby",
-		"request": "launch",
-		"program": "${workspaceRoot}/test.rb",
-		"stopOnEntry": true
-	}, {
-		"name": "Run Tests",
-		"type": "node",
-		"request": "launch",
-		"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-		"runtimeArgs": ["--nolazy"],
-		"args": [
-			"-u", "tdd",
-			"--timeout", "999999",
-			"--colors",
-			"./out/tests/"
-		],
-		"sourceMaps": true,
-		"outDir": "${workspaceRoot}/out",
-		"cwd": "${workspaceRoot}"
-	}]
+	"configurations": [
+		{
+			"type": "extensionHost",
+			"request": "launch",
+			"name": "Launch Extension",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}"
+			],
+			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceRoot}/out/**/*.js"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Server",
+			"cwd": "${workspaceRoot}",
+			"program": "${workspaceRoot}/src/debugger/main.ts",
+			"args": [
+				"--server=4711"
+			],
+			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceRoot}/out/**/*.js"
+			]
+		},
+		{
+			"name": "ruby test",
+			"type": "ruby",
+			"request": "launch",
+			"program": "${workspaceRoot}/test.rb",
+			"stopOnEntry": true
+		},
+		{
+			"name": "Run Tests",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+			"runtimeArgs": [
+				"--nolazy"
+			],
+			"args": [
+				"-u",
+				"tdd",
+				"--timeout",
+				"999999",
+				"--colors",
+				"./out/tests/"
+			],
+			"sourceMaps": true,
+			"outDir": "${workspaceRoot}/out",
+			"cwd": "${workspaceRoot}"
+		}
+	],
+	"compounds": [
+		{
+			"name": "Extension + Server",
+			"configurations": [
+				"Launch Extension",
+				"Server"
+			]
+		}
+	]
 }

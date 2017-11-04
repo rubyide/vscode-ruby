@@ -12,9 +12,9 @@ install:
   - npm install -g gulp
   - npm install
 build_script:
-  - gulp
+  - npm run compile
 test_script:
-  - npm test
+  - npm run test-debugger
 
 environment:
   matrix:

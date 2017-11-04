@@ -1,8 +1,8 @@
 "use strict";
-const fs = require('fs'),
-	path = require('path'),
-	cp = require('child_process'),
-	os = require('os');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as cp from 'child_process';
+import * as os from 'os';
 
 const findCfg = checkPath => {
 	try {
@@ -14,14 +14,18 @@ const findCfg = checkPath => {
 	}
 };
 
-class AutoCorrect {
+export class AutoCorrect {
+	private exe: string;
+	private ext: string;
+
 	constructor(opts) {
 		this.exe = "rubocop";
 		this.ext = process.platform === 'win32' ? ".bat" : "";
 		this.exe += this.ext;
 		if (opts.exe) this.exe = opts.exe;
 	}
-	test() {
+
+	public test(): Promise<any> {
 		return new Promise((resolve, reject) => {
 			const rubo = cp.spawn(this.exe, ['-v']);
 			let rejected = false;
@@ -36,7 +40,8 @@ class AutoCorrect {
 			});
 		});
 	}
-	correct(data, root, opts) {
+
+	public correct(data, root, opts): Promise<string> {
 		// we get opts again here, incase it has changed
 		let cfgPath;
 		let exe = "rubocop" + this.ext;
@@ -75,5 +80,3 @@ class AutoCorrect {
 		}));
 	}
 }
-
-module.exports = AutoCorrect;

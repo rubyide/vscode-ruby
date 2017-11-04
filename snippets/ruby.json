@@ -50,7 +50,7 @@
 	"Class definition with initialize": {
 		"prefix": "class init",
 		"body": [
-			"class ${ClassName}",
+			"class ${1:ClassName}",
 			"\tdef initialize",
 			"\t\t$0",
 			"\tend",
@@ -60,7 +60,7 @@
 	"Class definition": {
 		"prefix": "class",
 		"body": [
-			"class ${ClassName}",
+			"class ${1:ClassName}",
 			"\t$0",
 			"end"
 		]
@@ -68,7 +68,7 @@
 	"for loop": {
 		"prefix": "for",
 		"body": [
-			"for ${value} in ${enumerable} do",
+			"for ${1:value} in ${2:enumerable} do",
 			"\t$0",
 			"end"
 		]
@@ -76,7 +76,7 @@
 	"if": {
 		"prefix": "if",
 		"body": [
-			"if ${test}",
+			"if ${1:test}",
 			"\t$0",
 			"end"
 		]
@@ -94,7 +94,7 @@
 	"if elsif": {
 		"prefix": "if elsif",
 		"body": [
-			"if ${test}",
+			"if ${1:test}",
 			"\t$0",
 			"elsif ",
 			"\t",
@@ -104,7 +104,7 @@
 	"if elsif else": {
 		"prefix": "if elsif else",
 		"body": [
-			"if ${test}",
+			"if ${1:test}",
 			"\t$0",
 			"elsif ",
 			"\t",
@@ -124,7 +124,7 @@
 	"Module definition": {
 		"prefix": "module",
 		"body": [
-			"module ${ModuleName}",
+			"module ${1:ModuleName}",
 			"\t$0",
 			"end"
 		]
@@ -132,7 +132,7 @@
 	"unless": {
 		"prefix": "unless",
 		"body": [
-			"unless ${test}",
+			"unless ${1:test}",
 			"\t$0",
 			"end"
 		]
@@ -140,7 +140,7 @@
 	"until loop": {
 		"prefix": "until",
 		"body": [
-			"until ${test}",
+			"until ${1:test}",
 			"\t$0",
 			"end"
 		]
@@ -148,7 +148,7 @@
 	"while loop": {
 		"prefix": "while",
 		"body": [
-			"while ${test}",
+			"while ${1:test}",
 			"\t$0",
 			"end"
 		]
@@ -156,8 +156,20 @@
 	"method definition": {
 		"prefix": "def",
 		"body": [
-			"def ${method_name}",
+			"def ${1:method_name}",
 			"\t$0",
+			"end"
+		]
+	},
+	"Rake Task": {
+		"prefix": "rake",
+		"description": "Create a Rake Task",
+		"body": [
+			"namespace :${1} do",
+			"\tdesc \"${2}\"",
+			"\ttask ${3}: :environment do",
+			"\t\t${4}",
+			"\tend",
 			"end"
 		]
 	}

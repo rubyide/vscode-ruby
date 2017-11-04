@@ -1,3 +1,28 @@
+### 0.15.0 - August 21 2017
+VSCode added an API for task auto detection and now we brought this feature to Ruby. From this version, you can `Run Tasks` and the extesion will load Rake tasks for you automatically, if there is Rakefile available in the project.
+
+Notable changes:
+* Rubocop linter will be reloaded when it fails
+* [@tobychin](https://github.com/tobychin): Add a Rake task snippet
+
+Engineering:
+* Debug Apater and Debug Protocol are updated to latest verison.
+
+### 0.14.0 - August 11 2017
+We did a huge code refactoring with the code base in this milestone. The project consists of two parts, debugger and language features. The former was written in TypeScript from the very begining while the latter was originally written in JavaScript. To make it easier to maintain and contribute, we now port the code base to TypeScript. There are still several files in JavaScript and we will transform step by step.
+
+Notable changes:
+* Ruby (ruby -wc) linter honors ruby intepreter path config.
+* Update vscode engine to `^1.12.0`, users will not get update if they are using VSCode older than that.
+* Load ruby related system environment when extension gets activated. Launch VSCode from Dock will work the same as from command line.
+
+### 0.13.0 - August 3 2017
+Notable changes:
+* [Make stacktrace handling of missing files more robust](https://github.com/rubyide/vscode-ruby/pull/145)
+* [Fix the "debuggerPort" option](https://github.com/rubyide/vscode-ruby/pull/148)
+* [Fix snippet syntax errors](https://github.com/rubyide/vscode-ruby/pull/168)
+* [Completely fix too many open files issue by using queue](https://github.com/rubyide/vscode-ruby/pull/178)
+
 ### 0.12.1 - April 25 2017
 Fix rubocop linter regression :)
 

@@ -6,7 +6,7 @@ function RuboCop(opts) {
 	this.path = opts.path;
 	this.responsePath = "stdout";
 
-	this.args = ["-s", "{path}", "-f", "json", "--force-exclusion"] ;
+	this.args = ["-s", "{path}", "-f", "json"] ;
 
 	if (opts.lint) this.args.push("-l");
 	if (opts.only) this.args = this.args.concat("--only", opts.only.join(','));

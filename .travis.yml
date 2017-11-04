@@ -9,7 +9,7 @@ before_install:
  - nvm install v6.9.1
  - nvm use v6.9.1
 before_script:
-  - npm install -g typescript -v 1.8.2
+  - npm install -g typescript -v 2.1.5
   - npm install
   - tsc -p ./src
-script: npm test
+script: npm run test-debugger
