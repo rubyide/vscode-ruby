@@ -3233,6 +3233,12 @@
       </array>
     </dict>
     <dict>
+      <key>match</key>
+      <string>\b((__(dir)__)|abort|at_exit|binding|block_given[?]|caller|caller_locations|catch|eval|exec|exit[!]?|fail|fork|format|gets|global_variables|iterator[?]|lambda|load|local_variables|loop|open|p|print|printf|proc|putc|puts|raise|rand|readline|readlines|require|require_relative|select|set_trace_func|sleep|spawn|sprintf|srand|syscall|system|test|throw|trace_var|trap|untrace_var|warn)(\b|(?&lt;=[?!(]))(?=\(?)</string>
+      <key>name</key>
+      <string>support.function.core.ruby</string>
+    </dict>
+    <dict>
       <key>begin</key>
       <string>(?=[a-zA-Z0-9_!?]+\()</string>
       <key>end</key>
@@ -3251,7 +3257,7 @@
         </dict>
         <dict>
           <key>match</key>
-          <string>([a-zA-Z0-9_!?]+)(?=\()</string>
+          <string>\b([a-z][a-zA-Z0-9_!?]*)\b(?=\()</string>
           <key>name</key>
           <string>entity.name.function.ruby</string>
         </dict>
@@ -3272,12 +3278,6 @@
       <string>((?&lt;=\W)\b|^)\w+\b(?=\s*([\]\)\}\=\+\-\*\/\^\$\,\.]|&lt;\s|&lt;&lt;[\s|\.]))</string>
       <key>name</key>
       <string>variable.other.ruby</string>
-    </dict>
-    <dict>
-      <key>match</key>
-      <string>\b(abort|at_exit|binding|block_given[?]|caller|caller_locations|catch|eval|exec|exit[!]?|fail|fork|format|gets|global_variables|iterator[?]|lambda|load|local_variables|loop|open|p|print|printf|proc|putc|puts|raise|rand|readline|readlines|require|require_relative|select|set_trace_func|sleep|spawn|sprintf|srand|syscall|system|test|throw|trace_var|trap|untrace_var|warn)(\b|(?&lt;=[?!]))</string>
-      <key>name</key>
-      <string>support.function.core.ruby</string>
     </dict>
   </array>
   <key>repository</key>
