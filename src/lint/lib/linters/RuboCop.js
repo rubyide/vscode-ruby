@@ -22,7 +22,7 @@ RuboCop.prototype.processResult = function (data) {
 	}
 	let offenses = JSON.parse(data);
 	if (offenses.summary.offense_count == 0) {
-        return [];
+		return [];
 	}
 	return (offenses.files || [{
 		offenses: []
