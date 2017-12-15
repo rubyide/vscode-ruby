@@ -13,13 +13,13 @@ import { registerTaskProvider } from './task/rake';
 export function activate(context: ExtensionContext) {
 	const subs = context.subscriptions;
 	// register language config
-	vscode.languages.setLanguageConfiguration("ruby", {
-    indentationRules: {
-      increaseIndentPattern: /^\s*((begin|class|((private|protected)\s+)?def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while|case)|([^#]*\sdo\b)|([^#]*=\s*(case|if|unless)))\b([^\{;]|("|'|\/).+\4)*$/,
-      decreaseIndentPattern: /^\s*([}\]]([,)]?\s*(#|$)|\.[a-zA-Z_]\w*\b)|(end|rescue|ensure|else|elsif|when)\b)/
-    },
-    wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/.*\]\s\\!?]*[!?]?)/
-  })
+	vscode.languages.setLanguageConfiguration('ruby', {
+		indentationRules: {
+			increaseIndentPattern: /^\s*((begin|class|((private|protected)\s+)?def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while|case)|([^#]*\sdo\b)|([^#]*=\s*(case|if|unless)))\b([^\{;]|("|'|\/).+\4)*$/,
+			decreaseIndentPattern: /^\s*([}\]]([,)]?\s*(#|$)|\.[a-zA-Z_]\w*\b)|(end|rescue|ensure|else|elsif|when)\b)/
+		},
+		wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/.*\]\s\\!?]*[!?]?)/
+	});
 
 	registerHighlightProvider(context);
 	registerLinters(context);
