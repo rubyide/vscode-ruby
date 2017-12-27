@@ -56,6 +56,7 @@
     "async": "^2.3.0"
   },
   "devDependencies": {
+    "fast-plist": "^0.1.2",
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.5",
     "gulp-typescript": "^2.12.0",
@@ -73,7 +74,9 @@
     "compile": "tsc -p ./src",
     "watch": "tsc -w -p ./src",
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "update-all-grammars": "node scripts/update-all-grammars",
+    "update-grammar": "node scripts/update-grammar textmate/ruby.tmbundle"
   },
   "activationEvents": [
     "onLanguage:ruby",
