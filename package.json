@@ -327,12 +327,12 @@
       {
         "language": "ruby",
         "scopeName": "source.ruby",
-        "path": "./syntaxes/ruby.tmLanguage"
+        "path": "./syntaxes/ruby.tmLanguage.json"
       },
       {
         "language": "erb",
         "scopeName": "text.html.erb",
-        "path": "./syntaxes/erb.tmLanguage"
+        "path": "./syntaxes/erb.tmLanguage.json"
       }
     ],
     "debuggers": [
