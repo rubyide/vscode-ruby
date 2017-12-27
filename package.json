@@ -46,28 +46,28 @@
     "url": "https://github.com/rubyide/vscode-ruby/issues"
   },
   "dependencies": {
-    "vscode": "^1.1.4",
-    "ruby-method-locate": "*",
-    "vscode-debugprotocol": "^1.19.0",
-    "vscode-debugadapter": "^1.19.0",
-    "xmldom": "^0.1.19",
+    "async": "^2.3.0",
     "lodash": "^4.17.3",
     "minimatch": "^3.0.3",
-    "async": "^2.3.0"
+    "ruby-method-locate": "*",
+    "vscode": "^1.1.4",
+    "vscode-debugadapter": "^1.19.0",
+    "vscode-debugprotocol": "^1.19.0",
+    "xmldom": "^0.1.19"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.33",
+    "@types/node": "^6.0.50",
     "fast-plist": "^0.1.2",
     "gulp": "^3.9.0",
-    "gulp-util": "^3.0.5",
-    "gulp-typescript": "^2.12.0",
     "gulp-sourcemaps": "^1.6.0",
-    "run-sequence": "*",
+    "gulp-typescript": "^2.12.0",
+    "gulp-util": "^3.0.5",
     "mocha": "^2.4.5",
-    "vscode-debugadapter-testsupport": "^1.19.0",
+    "run-sequence": "*",
     "typescript": "^2.1.5",
     "vscode": "^1.1.4",
-    "@types/mocha": "^2.2.33",
-    "@types/node": "^6.0.50"
+    "vscode-debugadapter-testsupport": "^1.19.0"
   },
   "scripts": {
     "vscode:prepublish": "tsc -p ./src",
