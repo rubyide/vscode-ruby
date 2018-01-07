@@ -52,8 +52,7 @@ function registerHighlightProvider(ctx: ExtensionContext) {
 	}
 
 	const getEntry = function(line) {
-		//only lines that start with the entry
-		let match = line.text.match(/^(\s*)(begin|class|def|for|if|module|unless|until|case|while)\b[^\{;]*$/);
+		let match = line.text.match(/^(.*\b)(begin|class|def|for|if|module|unless|until|case|while)\b[^;]*$/);
 		if (match) {
 			return new vscode.Range(line.lineNumber, match[1].length, line.lineNumber, match[1].length + match[2].length);
 		} else {
