@@ -58,7 +58,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.50",
-    "fast-plist": "^0.1.2",
+    "cson-parser": "^2.0.1",
     "gulp": "^3.9.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-typescript": "^2.12.0",
@@ -76,7 +76,7 @@
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "update-all-grammars": "node scripts/update-all-grammars",
-    "update-grammar": "node scripts/update-grammar textmate/ruby.tmbundle"
+    "update-grammar": "node scripts/update-grammar atom/language-ruby"
   },
   "activationEvents": [
     "onLanguage:ruby",
@@ -327,12 +327,12 @@
       {
         "language": "ruby",
         "scopeName": "source.ruby",
-        "path": "./syntaxes/ruby.tmLanguage.json"
+        "path": "./syntaxes/ruby.cson.json"
       },
       {
         "language": "erb",
         "scopeName": "text.html.erb",
-        "path": "./syntaxes/erb.tmLanguage.json"
+        "path": "./syntaxes/erb.cson.json"
       }
     ],
     "debuggers": [

@@ -1,17 +1,18 @@
 {
 	"information_for_contributors": [
-		"This file has been converted from https://github.com/textmate/ruby.tmbundle/blob/master/Syntaxes/HTML (Ruby - ERB).tmLanguage",
+		"This file has been converted from https://github.com/atom/language-ruby/blob/master/grammars/html (ruby - erb).cson",
 		"If you want to provide a fix or improvement, please create a pull request against the original repository.",
 		"Once accepted there, we are happy to receive an update request."
 	],
-	"version": "https://github.com/textmate/ruby.tmbundle/commit/ecf0f1df23984bcff9b51552e35d9696cb0d9539",
+	"version": "https://github.com/atom/language-ruby/commit/94b56c2f7a835e9cfb0be6240efcd0be6c3fb45b",
+	"name": "HTML (Ruby - ERB)",
+	"scopeName": "text.html.erb",
 	"fileTypes": [
-		"erb",
 		"rhtml",
 		"html.erb"
 	],
 	"injections": {
-		"text.html.erb - (meta.embedded.block.erb | meta.embedded.line.erb | comment)": {
+		"text.html.erb - (meta.embedded.block.erb | meta.embedded.line.erb | meta.tag | comment), meta.tag string.quoted": {
 			"patterns": [
 				{
 					"begin": "(^\\s*)(?=<%+#(?![^%]*%>))",
@@ -60,8 +61,6 @@
 			]
 		}
 	},
-	"keyEquivalent": "^~H",
-	"name": "HTML (Ruby - ERB)",
 	"patterns": [
 		{
 			"include": "text.html.basic"
@@ -96,8 +95,8 @@
 							"name": "punctuation.section.embedded.begin.erb"
 						}
 					},
-					"contentName": "source.ruby",
-					"end": "(-?%)>",
+					"contentName": "source.ruby.embedded.erb",
+					"end": "-?%>",
 					"endCaptures": {
 						"0": {
 							"name": "punctuation.section.embedded.end.erb"
@@ -129,8 +128,8 @@
 							"name": "punctuation.section.embedded.begin.erb"
 						}
 					},
-					"contentName": "source.ruby",
-					"end": "(-?%)>",
+					"contentName": "source.ruby.embedded.erb",
+					"end": "-?%>",
 					"endCaptures": {
 						"0": {
 							"name": "punctuation.section.embedded.end.erb"
@@ -157,7 +156,5 @@
 				}
 			]
 		}
-	},
-	"scopeName": "text.html.erb",
-	"uuid": "13FF9439-15D0-4E74-9A8E-83ABF0BAA5E7"
+	}
 }

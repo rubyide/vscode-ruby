@@ -10,7 +10,7 @@
 
 var path = require('path');
 var fs = require('fs');
-var plist = require('fast-plist');
+var cson = require('cson-parser');
 var https = require('https');
 var url = require('url');
 
@@ -60,17 +60,17 @@ function grammarToTmLanguage(grammar) {
 	grammar = grammar.toLowerCase();
 	switch(grammar) {
 		case 'ruby':
-			var tmLanguage = 'Ruby.plist';
+			var file = 'ruby.cson';
 			break;
 		case 'gemfile':
-			tmLanguage = 'Gemfile.tmLanguage';
+			file = 'gemfile.cson';
 			break;
 		case 'erb':
-			tmLanguage = 'HTML (Ruby - ERB).tmLanguage';
+			file = 'html (ruby - erb).cson';
 			break;
 	}
 
-	return 'Syntaxes/' + tmLanguage;
+	return 'grammars/' + file;
 }
 
 function getCommitSha(repoId, repoPath) {
@@ -98,10 +98,8 @@ exports.update = function (repoId, repoPath, dest, modifyGrammar, version = 'mas
 	return download(contentPath).then(function (content) {
 		var ext = path.extname(repoPath);
 		var grammar;
-		if (ext === '.tmLanguage' || ext === '.plist') {
-			grammar = plist.parse(content);
-		} else if (ext === '.json') {
-			grammar = JSON.parse(content);
+		if (ext === '.cson') {
+			grammar = cson.parse(content);
 		} else {
 			console.error('Unknown file extension: ' + ext);
 			return;
@@ -145,7 +143,7 @@ exports.update = function (repoId, repoPath, dest, modifyGrammar, version = 'mas
 if (path.basename(process.argv[1]).indexOf('update-grammar') !== -1) {
 	let repo = process.argv[2];
 	let grammar = process.argv[3];
-	let outputFile = path.join('syntaxes', grammar + '.tmLanguage.json');
+	let outputFile = path.join('syntaxes', grammar + '.cson.json');
 	let repoFile = grammarToTmLanguage(grammar);
 	exports.update(repo, repoFile, outputFile);
 }
