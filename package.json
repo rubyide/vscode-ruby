@@ -402,6 +402,11 @@
                 "type": "string",
                 "description": "If you want to run more than one debugger, you can specify the port here.",
                 "default": "1234"
+              },
+              "includes": {
+                "type": "array",
+                "description": "Additional paths to be added to Ruby's include path",
+                "default": []
               }
             }
           },
