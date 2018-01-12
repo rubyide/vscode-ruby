@@ -261,6 +261,7 @@
           "Ruby",
           "ruby"
         ],
+        "firstLine": "^#!\\s*/.*\\bruby\\b",
         "extensions": [
           ".builder",
           ".cgi",
