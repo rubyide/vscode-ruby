@@ -261,6 +261,7 @@
           "Ruby",
           "ruby"
         ],
+        "firstLine": "^#!\\s*/.*(?:ruby|rbx|rake)\\b",
         "extensions": [
           ".builder",
           ".cgi",
