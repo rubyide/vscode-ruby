@@ -1,9 +1,10 @@
 {
-  "name": "Ruby",
-  "displayName": "Ruby",
+  "name": "ruby-lang",
+  "displayName": "Ruby Language Support",
   "version": "0.15.0",
-  "publisher": "rebornix",
+  "publisher": "wingrunr21",
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
+  "keywords": ["ruby", "rake", "rails", "ruby on rails", "rubocop"],
   "author": {
     "name": "Peng Lv"
   },
@@ -23,6 +24,10 @@
     {
       "name": "Lex Li",
       "url": "https://github.com/lextm"
+    },
+    {
+      "name": "Stafford Brunk",
+      "url": "https://github.com/wingrunr21"
     }
   ],
   "engines": {
@@ -30,6 +35,10 @@
   },
   "license": "MIT",
   "icon": "images/ruby.png",
+  "galleryBanner": {
+    "color": "#CC342D",
+    "theme": "dark"
+  },
   "categories": [
     "Languages",
     "Debuggers",
