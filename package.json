@@ -1,7 +1,7 @@
 {
   "name": "ruby-lang",
   "displayName": "Ruby Language Support",
-  "version": "0.15.0",
+  "version": "1.0.0",
   "publisher": "wingrunr21",
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
   "keywords": ["ruby", "rake", "rails", "ruby on rails", "rubocop"],
