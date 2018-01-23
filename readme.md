@@ -2,7 +2,7 @@
 
 [![Join the chat at https://rubyide-slackin.azurewebsites.net](./images/badge.png)](https://rubyide-slackin.azurewebsites.net) [![Build Status](https://api.travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 
-This extension provides rich Ruby language and debugging support for VS Code. It's still in progress ( [GitHub](https://github.com/rubyide/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0. 
+This extension provides rich Ruby language and debugging support for VS Code. It's still in progress ( [GitHub](https://github.com/rubyide/vscode-ruby.git) ), please expect frequent updates with breaking changes before 1.0.
 
 It started as a personal project of [@rebornix](https://github.com/rebornix), aiming to bring Ruby debugging experience to VS Code. Then it turned to be a community driven project. With his amazing commits, [@HookyQR](https://github.com/HookyQR) joined as a contributor and brought users Linting/Formatting/etc, made the debugger more robust and more! If you are interested in this project, feel free to join the [community](https://github.com/rubyide/vscode-ruby/graphs/contributors):  file [issues](https://github.com/rubyide/vscode-ruby/issues/new), fork [our project](https://github.com/rubyide/vscode-ruby) and hack it around and send us PRs, or subscribe to our [mailing list](http://eepurl.com/bTBAfv).
 
@@ -115,11 +115,13 @@ Formatting requires the rubocop gem to be installed. Note that you may have to t
 
 ## Autocomplete
 
-To enable method completion in ruby: `gem install rcodetools`. You may need to restart Visual Studio Code the first time.
+To enable method completion in ruby: `gem install solargraph`. You may need to restart Visual Studio Code the first time.
 
 ```ruby
 [1, 2, 3].e #<= Press CTRL-Space here
 ```
+
+See the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) for more information about code completion and inline documentation.
 
 ## Go to definition
 
