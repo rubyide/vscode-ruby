@@ -68,6 +68,9 @@
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.50"
   },
+  "extensionDependencies": [
+    "castwide.solargraph"
+  ],
   "scripts": {
     "vscode:prepublish": "tsc -p ./src",
     "compile": "tsc -p ./src",
