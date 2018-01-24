@@ -292,7 +292,7 @@
       <key>comment</key>
       <string> everything being a method but having a special function is a..</string>
       <key>match</key>
-      <string>\b(initialize|new|loop|include|extend|prepend|raise|attr_reader|attr_writer|attr_accessor|attr|catch|throw|private|module_function|public|protected)\b(?![?!])</string>
+      <string>\b(initialize|new|loop|include|extend|prepend|raise|attr_reader|attr_writer|attr_accessor|attr|catch|throw|private|module_function|public|protected|delegate)\b(?![?!])</string>
       <key>name</key>
       <string>keyword.other.special-method.ruby</string>
     </dict>
