@@ -10,5 +10,5 @@ before_install:
  - nvm use v6.9.1
 before_script:
   - npm install
-  -  npm run compile
+  - npm run compile
 script: npm run test-debugger
