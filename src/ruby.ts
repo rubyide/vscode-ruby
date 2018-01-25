@@ -15,8 +15,8 @@ export function activate(context: ExtensionContext) {
 	// register language config
 	vscode.languages.setLanguageConfiguration('ruby', {
 		indentationRules: {
-			increaseIndentPattern: /^\s*((begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)|(.*\sdo\b))\b[^\{;]*$/,
-			decreaseIndentPattern: /^\s*([}\]]([,)]?\s*(#|$)|\.[a-zA-Z_]\w*\b)|(end|rescue|ensure|else|elsif|when)\b)/
+			increaseIndentPattern: /^\s*((begin|class|((private|protected)\s+)?def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while|case)|([^#]*\sdo\b)|([^#]*=\s*(case|if|unless)))\b([^#\{;]|("|'|\/).*\4)*(#.*)?$/,
+			decreaseIndentPattern: /^\s*([}\]]([,)]?\s*(#|$)|\.[a-zA-Z_]\w*\b)|(end|rescue|ensure|else|elsif)\b)/
 		},
 		wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/.*\]\s\\!?]*[!?]?)/
 	});
@@ -54,8 +54,7 @@ function registerHighlightProvider(ctx: ExtensionContext) {
 	}
 
 	const getEntry = function(line) {
-		//only lines that start with the entry
-		let match = line.text.match(/^(\s*)(begin|class|def|for|if|module|unless|until|case|while)\b[^\{;]*$/);
+		let match = line.text.match(/^(.*\b)(begin|class|def|for|if|module|unless|until|case|while)\b[^;]*$/);
 		if (match) {
 			return new vscode.Range(line.lineNumber, match[1].length, line.lineNumber, match[1].length + match[2].length);
 		} else {

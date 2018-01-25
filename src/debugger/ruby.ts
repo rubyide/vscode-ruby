@@ -207,6 +207,13 @@ export class RubyProcess extends EventEmitter {
                     runtimeExecutable = args.pathToBundler;
                 }
             }
+
+            if (args.includes){
+                args.includes.forEach((path) => {
+                    runtimeArgs.push('-I')
+                    runtimeArgs.push(path)
+                })
+            }
             // '--' forces process arguments (args.args) not to be swollowed by rdebug-ide
             this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, '--', args.program, ...args.args || []], {cwd: processCwd, env: processEnv});
 
