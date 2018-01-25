@@ -130,6 +130,12 @@
           "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
         },
+        "ruby.codeCompletion": {
+          "type": "string",
+          "enum": ["solargraph", "rctcomplete", "none"],
+          "default": "solargraph",
+          "description": "Method to use for code completion."
+        },
         "ruby.rctComplete.commandPath": {
           "type": "string",
           "default": "rct-complete",
