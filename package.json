@@ -132,7 +132,7 @@
         },
         "ruby.codeCompletion": {
           "type": "string",
-          "enum": ["solargraph", "rctcomplete", "none"],
+          "enum": ["solargraph", "rcodetools", "none"],
           "default": "solargraph",
           "description": "Method to use for code completion."
         },
