@@ -1,3 +1,19 @@
+### 0.16.0 - Jan 25 2018
+It has been half a year since our last release but even though rebornix is away from this extension most of time, the community is helping it improve and pushing it to its limit. Special thanks to [Stafford Brunk
+](https://github.com/wingrunr21) who reached out to me and tried to review issues and PRs. And of course, thanks to all contributors and users.
+
+Notable changes:
+* [Task 2.0](https://github.com/rubyide/vscode-ruby/pull/244) by [Sylvain Joyeux](https://github.com/doudou)
+* Indentation rules update: [1](https://github.com/rubyide/vscode-ruby/pull/231) by [TeeSeal](https://github.com/TeeSeal) [2](https://github.com/rubyide/vscode-ruby/pull/223) by [Jared Wyatt](https://github.com/wyattisimo)
+* [Grammar tracking improvements](https://github.com/rubyide/vscode-ruby/pull/242) by [Stafford Brunk](https://github.com/wingrunr21)
+* [WorkspaceRoot and bundler support](https://github.com/rubyide/vscode-ruby/pull/232) by [Stafford Brunk](https://github.com/wingrunr21)
+* [Fix getEntry regex to handle additional cases](https://github.com/rubyide/vscode-ruby/pull/250) by [Stafford Brunk](https://github.com/wingrunr21)
+* [Fix Shebang detection](https://github.com/rubyide/vscode-ruby/pull/249) by [Stafford Brunk](https://github.com/wingrunr21)
+* [Add single line comment for erb](https://github.com/rubyide/vscode-ruby/pull/224) by [NickWarm](https://github.com/NickWarm)
+* [Grammar update](https://github.com/rubyide/vscode-ruby/pull/199) by [Joshua Azemoh](https://github.com/azemoh)
+* [define the 'includes' field in the debug configuration](https://github.com/rubyide/vscode-ruby/pull/243) by [Sylvain Joyeux](https://github.com/doudou)
+* [Typo fix;)](https://github.com/rubyide/vscode-ruby/pull/204) by [Richard Keenan](https://github.com/richkeenan)
+
 ### 0.15.0 - August 21 2017
 VSCode added an API for task auto detection and now we brought this feature to Ruby. From this version, you can `Run Tasks` and the extesion will load Rake tasks for you automatically, if there is Rakefile available in the project.
 
