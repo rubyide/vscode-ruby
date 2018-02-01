@@ -1,7 +1,7 @@
 {
   "name": "Ruby",
   "displayName": "Ruby",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "publisher": "rebornix",
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
   "author": {
@@ -46,34 +46,40 @@
     "url": "https://github.com/rubyide/vscode-ruby/issues"
   },
   "dependencies": {
-    "vscode": "^1.1.4",
-    "ruby-method-locate": "*",
-    "vscode-debugprotocol": "^1.19.0",
-    "vscode-debugadapter": "^1.19.0",
-    "xmldom": "^0.1.19",
+    "async": "^2.3.0",
     "lodash": "^4.17.3",
     "minimatch": "^3.0.3",
-    "async": "^2.3.0"
+    "ruby-method-locate": "*",
+    "vscode": "^1.1.4",
+    "vscode-debugadapter": "^1.19.0",
+    "vscode-debugprotocol": "^1.19.0",
+    "xmldom": "^0.1.19"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.33",
+    "@types/node": "^6.0.50",
+    "cson-parser": "^2.0.1",
     "gulp": "^3.9.0",
-    "gulp-util": "^3.0.5",
-    "gulp-typescript": "^2.12.0",
     "gulp-sourcemaps": "^1.6.0",
-    "run-sequence": "*",
+    "gulp-typescript": "^2.12.0",
+    "gulp-util": "^3.0.5",
     "mocha": "^2.4.5",
-    "vscode-debugadapter-testsupport": "^1.19.0",
+    "run-sequence": "*",
     "typescript": "^2.1.5",
     "vscode": "^1.1.4",
-    "@types/mocha": "^2.2.33",
-    "@types/node": "^6.0.50"
+    "vscode-debugadapter-testsupport": "^1.19.0"
   },
+  "extensionDependencies": [
+    "castwide.solargraph"
+  ],
   "scripts": {
     "vscode:prepublish": "tsc -p ./src",
     "compile": "tsc -p ./src",
     "watch": "tsc -w -p ./src",
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "update-all-grammars": "node scripts/update-all-grammars",
+    "update-grammar": "node scripts/update-grammar atom/language-ruby"
   },
   "activationEvents": [
     "onLanguage:ruby",
@@ -126,6 +132,12 @@
           "default": "ruby",
           "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
+        },
+        "ruby.codeCompletion": {
+          "type": "string",
+          "enum": ["solargraph", "rcodetools", "none"],
+          "default": "solargraph",
+          "description": "Method to use for code completion."
         },
         "ruby.rctComplete.commandPath": {
           "type": "string",
@@ -261,7 +273,9 @@
           "Ruby",
           "ruby"
         ],
+        "firstLine": "^#!\\s*/.*(?:ruby|rbx|rake)\\b",
         "extensions": [
+          ".arb",
           ".builder",
           ".cgi",
           ".fcgi",
@@ -294,7 +308,6 @@
           "brewfile",
           "capfile",
           "fastfile",
-          "gemfile",
           "guardfile",
           "podfile",
           "puppetfile",
@@ -318,18 +331,35 @@
           ".rhtm"
         ],
         "configuration": "./language-configuration-erb.json"
+      },
+      {
+        "id": "gemfile",
+        "aliases": [
+          "Gemfile",
+          "Bundler",
+          "bundler"
+        ],
+        "filenames": [
+          "Gemfile"
+        ],
+        "configuration": "./language-configuration-ruby.json"
       }
     ],
     "grammars": [
       {
         "language": "ruby",
         "scopeName": "source.ruby",
-        "path": "./syntaxes/ruby.tmLanguage"
+        "path": "./syntaxes/ruby.cson.json"
       },
       {
         "language": "erb",
         "scopeName": "text.html.erb",
-        "path": "./syntaxes/erb.tmLanguage"
+        "path": "./syntaxes/erb.cson.json"
+      },
+      {
+        "language": "gemfile",
+        "scopeName": "source.ruby.gemfile",
+        "path": "./syntaxes/gemfile.cson.json"
       }
     ],
     "debuggers": [
@@ -402,6 +432,11 @@
                 "type": "string",
                 "description": "If you want to run more than one debugger, you can specify the port here.",
                 "default": "1234"
+              },
+              "includes": {
+                "type": "array",
+                "description": "Additional paths to be added to Ruby's include path",
+                "default": []
               }
             }
           },

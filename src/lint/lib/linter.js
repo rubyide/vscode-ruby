@@ -1,5 +1,7 @@
 'use strict';
 
+import {workspace} from 'vscode';
+
 const fs = require('./fsPromise'),
 	path = require('path'),
 	os = require('os'),
@@ -56,10 +58,39 @@ class Linter {
 		}
 		return fs.link(sourceFile, opName).then(() => opName);
 	}
+	_detectBundledLinter(name, cwd) {
+		try {
+			cp.execSync(`bundle show ${name}`, { cwd });
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+	_getLinterPath(svc) {
+		const workspaceRoot = workspace.rootPath;
+		let svcPath = svc.path || "";
+		svcPath = svcPath.replace('${workspaceRoot}', workspaceRoot);
+		return svcPath;
+	}
+	_getLinterCmd(svc, cmdOpts) {
+		const args = svc.args.map(arg => arg.replace("{path}", cmdOpts.file || ""));
+		let svcPath = this._getLinterPath(svc);
+
+		// Try bundler for the linter
+		// otherwise fallback to the path + the exe name
+		if (svcPath.length === 0 && this._detectBundledLinter(svc.exe, cmdOpts.dir)) {
+			svcPath = 'bundle';
+			args.unshift('exec', svc.exe);
+		} else {
+			svcPath = path.join(svcPath, svc.exe + svc.ext);
+		}
+
+		return [svcPath, args];
+	}
 	_exeLinter(svc, cmdOpts) {
 		return new Promise((resolve, reject) => {
-				const args = svc.args.map(arg => arg.replace("{path}", cmdOpts.file || ""));
-				const spawned = cp.spawn(path.join(svc.path || "", svc.exe + svc.ext), args, {
+				const [svcPath, args] = this._getLinterCmd(svc, cmdOpts);
+				const spawned = cp.spawn(svcPath, args, {
 					cwd: cmdOpts.dir,
 					env: process.env
 				});
@@ -135,7 +166,7 @@ class Linter {
 			return prom.then(final);
 		});
 		const noTmpFileSvc = () => toRun.filter(svc => !svc.tmp).map(svc => this._exeLinter(svc, {
-			dir: this.rootPath || sourceDir,
+			dir: sourceDir || this.rootPath,
 			data: doc.getText(),
 			file: doc.fileName
 		}).then(final));

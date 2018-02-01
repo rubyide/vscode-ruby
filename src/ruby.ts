@@ -15,7 +15,7 @@ export function activate(context: ExtensionContext) {
 	// register language config
 	vscode.languages.setLanguageConfiguration('ruby', {
 		indentationRules: {
-			increaseIndentPattern: /^\s*((begin|class|def|else|elsif|ensure|for|if|module|rescue|unless|until|when|while)|(.*\sdo\b))\b[^\{;]*$/,
+			increaseIndentPattern: /^(\s*(module|class|((private|protected)\s+)?def|unless|if|else|elsif|case|when|begin|rescue|ensure|for|while|until|(?=.*?\b(do|begin|case|if|unless)\b)("(\\.|[^\\"])*"|'(\\.|[^\\'])*'|[^#"'])*(\s(do|begin|case)|[-+=&|*/~%^<>~]\s*(if|unless)))\b(?![^;]*;.*?\bend\b)|("(\\.|[^\\"])*"|'(\\.|[^\\'])*'|[^#"'])*(\((?![^\)]*\))|\{(?![^\}]*\})|\[(?![^\]]*\]))).*$/,
 			decreaseIndentPattern: /^\s*([}\]]([,)]?\s*(#|$)|\.[a-zA-Z_]\w*\b)|(end|rescue|ensure|else|elsif|when)\b)/
 		},
 		wordPattern: /(-?\d+(?:\.\d+))|(:?[A-Za-z][^-`~@#%^&()=+[{}|;:'",<>/.*\]\s\\!?]*[!?]?)/
@@ -23,7 +23,9 @@ export function activate(context: ExtensionContext) {
 
 	registerHighlightProvider(context);
 	registerLinters(context);
-	registerCompletionProvider(context);
+	if (vscode.workspace.getConfiguration('ruby').codeCompletion == 'rcodetools') {
+		registerCompletionProvider(context);
+	}
 	registerFormatter(context);
 	registerIntellisenseProvider(context);
 	registerTaskProvider(context);
@@ -52,8 +54,7 @@ function registerHighlightProvider(ctx: ExtensionContext) {
 	}
 
 	const getEntry = function(line) {
-		//only lines that start with the entry
-		let match = line.text.match(/^(\s*)(begin|class|def|for|if|module|unless|until|case|while)\b[^\{;]*$/);
+		let match = line.text.match(/^(.*\b)(begin|class|def|for|if|module|unless|until|case|while)\b[^;]*$/);
 		if (match) {
 			return new vscode.Range(line.lineNumber, match[1].length, line.lineNumber, match[1].length + match[2].length);
 		} else {

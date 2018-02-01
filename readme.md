@@ -112,15 +112,20 @@ Settings available (in your VSCode workspace) for each of the linters:
 }
 ```
 ## Formatting
+
 Formatting requires the rubocop gem to be installed. Note that you may have to turn on some of the AutoCorrect functions in your `.rubocop.yml` file. See the [rubocop documentation](http://rubocop.readthedocs.io/en/latest/configuration/).
 
 ## Autocomplete
 
-To enable method completion in ruby: `gem install rcodetools`. You may need to restart Visual Studio Code the first time.
+The `ruby.codeCompletion` setting lets you select a method for code completion and other intellisense features. Valid options are `solargraph`, `rcodetools`, and `none`.
+
+To enable method completion in Ruby, run `gem install solargraph` or `gem install rcodetools` based on the `ruby.codeCompletion` setting. You may need to restart Visual Studio Code the first time.
 
 ```ruby
 [1, 2, 3].e #<= Press CTRL-Space here
 ```
+
+For more information about using Solargraph, refer to the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph).
 
 ## Go to definition
 
