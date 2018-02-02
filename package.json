@@ -281,6 +281,7 @@
         ],
         "firstLine": "^#!\\s*/.*(?:ruby|rbx|rake)\\b",
         "extensions": [
+          ".arb",
           ".builder",
           ".cgi",
           ".fcgi",
@@ -313,7 +314,6 @@
           "brewfile",
           "capfile",
           "fastfile",
-          "gemfile",
           "guardfile",
           "podfile",
           "puppetfile",
@@ -337,6 +337,18 @@
           ".rhtm"
         ],
         "configuration": "./language-configuration-erb.json"
+      },
+      {
+        "id": "gemfile",
+        "aliases": [
+          "Gemfile",
+          "Bundler",
+          "bundler"
+        ],
+        "filenames": [
+          "Gemfile"
+        ],
+        "configuration": "./language-configuration-ruby.json"
       }
     ],
     "grammars": [
@@ -349,6 +361,11 @@
         "language": "erb",
         "scopeName": "text.html.erb",
         "path": "./syntaxes/erb.cson.json"
+      },
+      {
+        "language": "gemfile",
+        "scopeName": "source.ruby.gemfile",
+        "path": "./syntaxes/gemfile.cson.json"
       }
     ],
     "debuggers": [
