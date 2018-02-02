@@ -139,6 +139,12 @@
           "default": "solargraph",
           "description": "Method to use for code completion."
         },
+        "ruby.intellisense": {
+          "type": "string",
+          "enum": ["solargraph", "rubyLocate", "none"],
+          "default": "solargraph",
+          "description": "Method to use for intellisense (go to definition, etc.)."
+        },
         "ruby.rctComplete.commandPath": {
           "type": "string",
           "default": "rct-complete",

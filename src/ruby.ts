@@ -27,7 +27,9 @@ export function activate(context: ExtensionContext) {
 		registerCompletionProvider(context);
 	}
 	registerFormatter(context);
-	registerIntellisenseProvider(context);
+	if (vscode.workspace.getConfiguration('ruby').intellisense == 'rubyLocate') {
+		registerIntellisenseProvider(context);
+	}
 	registerTaskProvider(context);
 	utils.loadEnv();
 }
