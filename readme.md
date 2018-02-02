@@ -126,7 +126,21 @@ To enable method completion in Ruby, run `gem install solargraph` or `gem instal
 
 For more information about using Solargraph, refer to the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph).
 
-## Go to definition
+## Intellisense (Go to/Peek Definition)
+
+Use the `ruby.intellisense` setting to select a `go to/peek definition` method. Valid options are `solargraph`, `rubyLocate`, and `none`.
+
+### Solargraph Intellisense
+
+Make sure the solargraph gem installed:
+
+```
+gem install solargraph
+```
+
+Solargraph's features now extend to providing go to/peek definition. See the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) for more information.
+
+### RubyLocate Intellisense
 
 Now includes workspace parsing functionality. Allows VS Code to `go to definition` and `peak definition` for modules, classes, and methods defined within the same workspace. You can set glob patterns to match including and excluding particular files. The exclude match also runs against directories on initial load, to reduce latency.
 
