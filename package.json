@@ -360,7 +360,12 @@
       {
         "language": "erb",
         "scopeName": "text.html.erb",
-        "path": "./syntaxes/erb.cson.json"
+        "path": "./syntaxes/erb.cson.json",
+        "embeddedLanguages": {
+          "source.css": "css",
+          "source.js": "javascript",
+          "source.ruby": "ruby"
+        }
       },
       {
         "language": "gemfile",

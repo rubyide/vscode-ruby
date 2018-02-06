@@ -1,7 +1,6 @@
 {
 	"comments": {
-		"lineComment": "#",
-		"blockComment": ["=begin", "=end"]
+		"blockComment": [ "<%#", "%>" ]
 	},
 	"brackets": [
 		["{", "}"],
