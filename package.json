@@ -145,6 +145,16 @@
           "default": "solargraph",
           "description": "Method to use for intellisense (go to definition, etc.)."
         },
+        "ruby.useBundler": {
+          "type": ["boolean", "null"],
+          "default": null,
+          "description": "Whether ruby tools should be started using Bundler"
+        },
+        "ruby.pathToBundler": {
+          "type": "string",
+          "default": "bundle",
+          "description": "Path to the bundler executable (used if useBundler is true)"
+        },
         "ruby.rctComplete.commandPath": {
           "type": "string",
           "default": "rct-complete",
