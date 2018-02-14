@@ -78,6 +78,8 @@ class RubyDebugSession extends DebugSession {
 	protected setupProcessHanlders() {
 		this.rubyProcess.on('debuggerComplete', () => {
             this.sendEvent(new TerminatedEvent());
+        }).on('debuggerProcessExit', () => {
+            this.sendEvent(new TerminatedEvent());
         }).on('executableOutput', (data: Buffer) => {
             this.sendEvent(new OutputEvent(data.toString(), 'stdout'));
         }).on('executableStdErr', (error: Buffer) => {
