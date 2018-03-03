@@ -112,7 +112,6 @@ function getGrammarModifier(grammarName) {
 	switch(grammarName) {
 		case 'ruby':
 			return modifyRubyGrammar;
-			break;
 	}
 }
 
