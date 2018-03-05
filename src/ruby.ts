@@ -10,6 +10,7 @@ import { RubyDocumentFormattingEditProvider } from './format/rubyFormat';
 import * as utils from './utils';
 import { registerTaskProvider } from './task/rake';
 import { Config as LintConfig } from './lint/lintConfig';
+import * as debounce from 'lodash/debounce';
 
 export function activate(context: ExtensionContext) {
 	const subs = context.subscriptions;
@@ -131,8 +132,12 @@ function registerLinters(ctx: ExtensionContext) {
 		linters.run(e.document);
 	}
 
+	// Debounce linting to prevent running on every keypress, only run when typing has stopped
+	const lintDebounceTime = vscode.workspace.getConfiguration('ruby').lintDebounceTime;
+	const executeDebouncedLinting = debounce(executeLinting, lintDebounceTime);
+
 	ctx.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(executeLinting));
-	ctx.subscriptions.push(vscode.workspace.onDidChangeTextDocument(executeLinting));
+	ctx.subscriptions.push(vscode.workspace.onDidChangeTextDocument(executeDebouncedLinting));
 	ctx.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
 		const docs = vscode.window.visibleTextEditors.map(editor => editor.document);
 		console.log("Config changed. Should lint:", docs.length);

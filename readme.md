@@ -58,7 +58,11 @@ Enable each one in your workspace or user settings:
 	"fasterer": true,
 	"debride": true,
 	"ruby-lint": true
-}
+},
+
+// Time (ms) to wait after keypress before running enabled linters. Ensures
+// linters are only run when typing has finished and not for every keypress
+"ruby.lintDebounceTime": 500,
 
 //advanced: set command line options for some linters:
 "ruby.lint": {
