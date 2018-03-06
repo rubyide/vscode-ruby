@@ -161,6 +161,11 @@
           "description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
         },
+        "ruby.lintDebounceTime": {
+          "type": "integer",
+          "default": 500,
+          "description": "Time (ms) to wait after keypress before running enabled linters. Ensures linters are only run when typing has finished and not for every keypress"
+        },
         "ruby.lint": {
           "type": "object",
           "description": "Set individual ruby linters to use",
