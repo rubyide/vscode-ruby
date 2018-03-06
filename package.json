@@ -69,9 +69,6 @@
     "vscode": "^1.1.4",
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
-  "extensionDependencies": [
-    "castwide.solargraph"
-  ],
   "scripts": {
     "vscode:prepublish": "tsc -p ./src",
     "compile": "tsc -p ./src",
@@ -132,18 +129,6 @@
           "default": "ruby",
           "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
-        },
-        "ruby.codeCompletion": {
-          "type": "string",
-          "enum": ["solargraph", "rcodetools", "none"],
-          "default": "solargraph",
-          "description": "Method to use for code completion."
-        },
-        "ruby.intellisense": {
-          "type": "string",
-          "enum": ["solargraph", "rubyLocate", "none"],
-          "default": "solargraph",
-          "description": "Method to use for intellisense (go to definition, etc.)."
         },
         "ruby.useBundler": {
           "type": ["boolean", "null"],

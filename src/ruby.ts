@@ -25,13 +25,9 @@ export function activate(context: ExtensionContext) {
 
 	registerHighlightProvider(context);
 	registerLinters(context);
-	if (vscode.workspace.getConfiguration('ruby').codeCompletion == 'rcodetools') {
-		registerCompletionProvider(context);
-	}
+	registerCompletionProvider(context);
 	registerFormatter(context);
-	if (vscode.workspace.getConfiguration('ruby').intellisense == 'rubyLocate') {
-		registerIntellisenseProvider(context);
-	}
+	registerIntellisenseProvider(context);
 	registerTaskProvider(context);
 	utils.loadEnv();
 }
