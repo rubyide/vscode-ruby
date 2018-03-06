@@ -444,6 +444,11 @@
                 "description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
                 "default": false
               },
+              "pathToRuby": {
+                "type": "string",
+                "description": "Path to the Ruby executable if it is not 'ruby', used to run the program without the debugger (under CTRL+F5)",
+                "default": "ruby"
+              },
               "pathToBundler": {
                 "type": "string",
                 "description": "If you use the `useBunder` option, and `bundle` is not in your path, provide the absolute path to `bundle` (eg. \"/usr/bin/bundle\" )",
