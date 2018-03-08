@@ -130,7 +130,18 @@
           "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
         },
-        "ruby.useBundler": {
+        "ruby.codeCompletion": {
+          "type": "string",
+          "enum": ["rcodetools", "other"],
+          "default": "rcodetools",
+          "description": "Method to use for code completion. Use `other` if another extension provides this feature."
+        },
+        "ruby.intellisense": {
+          "type": "string",
+          "enum": ["rubyLocate", "other"],
+          "default": "rubyLocate",
+          "description": "Method to use for intellisense (go to definition, etc.). Use `other` if another extension provides this feature."
+},        "ruby.useBundler": {
           "type": ["boolean", "null"],
           "default": null,
           "description": "Whether ruby tools should be started using Bundler"
