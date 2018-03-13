@@ -284,6 +284,12 @@
               }
             }
           }
+        },
+        "ruby.format": {
+          "type": [ "boolean", "string" ],
+          "enum": [ false, "rubocop" ],
+          "default": false,
+          "description": "Which system to use for formatting, or false for no formatting"
         }
       }
     },

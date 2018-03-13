@@ -6,16 +6,18 @@ import { AutoCorrect } from './RuboCop';
 export class RubyDocumentFormattingEditProvider implements vscode.DocumentFormattingEditProvider {
 	private autoCorrect: AutoCorrect;
 
-	constructor() {
-		this.autoCorrect = new AutoCorrect();
-	}
-
 	public register(ctx: vscode.ExtensionContext) {
+		// only attempt to format if ruby.format is set to rubocop
+		if (vscode.workspace.getConfiguration("ruby").get("format") !== "rubocop") {
+			return;
+		}
+
+		this.autoCorrect = new AutoCorrect();
 		this.autoCorrect.test().then(
 			() => ctx.subscriptions.push(
 				vscode.languages.registerDocumentFormattingEditProvider('ruby', this)
-			),
-			() => console.log("Rubocop not installed")
+			)
+					// silent failure - AutoCorrect will handle error messages
 		);
 	}
 
@@ -28,7 +30,7 @@ export class RubyDocumentFormattingEditProvider implements vscode.DocumentFormat
 					return [new vscode.TextEdit(document.validateRange(new vscode.Range(0, 0, Infinity, Infinity)), result)];
 				},
 				err => {
-					console.log("Failed to format:", err);
+					// silent failure - AutoCorrect will handle error messages
 					return [];
 				}
 			);
