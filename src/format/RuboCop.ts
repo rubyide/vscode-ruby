@@ -1,82 +1,180 @@
 "use strict";
-import * as fs from 'fs';
-import * as path from 'path';
-import * as cp from 'child_process';
-import * as os from 'os';
 
+import * as cp from "child_process";
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
+import * as vscode from "vscode";
+
+// REMIND: move this into own file? seems handy
 const findCfg = checkPath => {
-	try {
-		fs.accessSync(path.join(checkPath, '.rubocop.yml'));
-		return checkPath;
-	} catch (e) {
-		let nextCheckPath = path.dirname(checkPath);
-		if (nextCheckPath && nextCheckPath !== checkPath) return findCfg(nextCheckPath);
-	}
+  try {
+    fs.accessSync(path.join(checkPath, ".rubocop.yml"));
+    return checkPath;
+  } catch (e) {
+    let nextCheckPath = path.dirname(checkPath);
+    if (nextCheckPath && nextCheckPath !== checkPath)
+      return findCfg(nextCheckPath);
+  }
 };
 
+//
+// Wrapper class around rubocop. AutoCorrect parses options and runs rubocop to
+// format documents.
+//
+
 export class AutoCorrect {
-	private exe: string;
-	private ext: string;
+  // get options from ruby.lint.rubocop. We have to do this every time because
+  // options can change while the extension is loaded.
+  get opts(): any {
+    const opts: any = vscode.workspace.getConfiguration("ruby.lint.rubocop");
+    if (!opts || opts === true) {
+      return {};
+    }
+    return opts;
+  }
 
-	constructor(opts) {
-		this.exe = "rubocop";
-		this.ext = process.platform === 'win32' ? ".bat" : "";
-		this.exe += this.ext;
-		if (opts.exe) this.exe = opts.exe;
-	}
+  // What's the exe name for rubocop?
+  get exe(): string {
+    const opts = this.opts;
+    if (opts.exe) {
+      return opts.exe;
+    }
+    const ext = process.platform === "win32" ? ".bat" : "";
+    return `rubocop${ext}`;
+  }
 
-	public test(): Promise<any> {
-		return new Promise((resolve, reject) => {
-			const rubo = cp.spawn(this.exe, ['-v']);
-			let rejected = false;
-			rubo.on("error", () => {
-				rejected = true;
-				reject();
-			});
-			rubo.on("exit", e => {
-				if (rejected) return;
-				if (e) return reject();
-				resolve();
-			});
-		});
-	}
+  // Arguments for running rubocop.
+  //
+  // REMIND: is this useful? Might be better to just allow
+  // ruby.lint.rubocop = { args : "xxx" }
+  args = (root: string): string[] => {
+    let args = ["-a", "-f", "simple"];
+    if (root) {
+      const cfgPath = findCfg(root);
+      if (cfgPath) {
+        args = args.concat(["-c", path.join(cfgPath, ".rubocop.yml")]);
+      }
+    }
 
-	public correct(data, root, opts): Promise<string> {
-		// we get opts again here, incase it has changed
-		let cfgPath;
-		let exe = "rubocop" + this.ext;
-		let args = ["-a", "-f", "simple"];
-		if (root) cfgPath = findCfg(root);
-		if (cfgPath) args = args.concat(["-c", path.join(cfgPath, '.rubocop.yml')]);
-		if (opts.exe) exe = opts.exe;
-		if (opts.lint) args.push("-l");
-		if (opts.only) args = args.concat("--only", opts.only.join(','));
-		if (opts.except) args = args.concat("--except", opts.except.join(','));
-		if (opts.rails) args.push('-R');
-		if (opts.require) args = args.concat("-r", opts.require.join(','));
-		return new Promise((resolve, reject) => fs.mkdtemp(path.join(os.tmpdir(), 'rubocop'), (err, folder) => {
-			if (err) return reject(err);
-			let file = path.join(folder, 'tmp.rb');
-			args.push(file);
-			fs.writeFile(file, data, err => {
-				if (err) return reject(err);
-				const rubo = cp.spawn(exe, args, {
-					cwd: root || process.cwd(),
-					env: process.env
-				});
-				let rejected = false;
-				rubo.on("exit", (e) => {
-					if (rejected) return;
-					fs.readFile(file, 'utf8', (err, result) => {
-						if (err) reject(err);
-						resolve(result);
-					});
-				});
-				rubo.on("error", e => {
-					rejected = true;
-					reject(e);
-				});
-			});
-		}));
-	}
+    const opts = this.opts;
+    if (opts.lint) {
+      args.push("-l");
+    }
+    if (opts.only) {
+      args = args.concat("--only", opts.only.join(","));
+    }
+    if (opts.except) {
+      args = args.concat("--except", opts.except.join(","));
+    }
+    if (opts.rails) {
+      args.push("-R");
+    }
+    if (opts.require) {
+      args = args.concat("-r", opts.require.join(","));
+    }
+
+    return args;
+  };
+
+  //
+  // Is rubocop ready to run? Really important to have decent error messages
+  // here to make it easier for users to debug config issues.
+  //
+
+  public test(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const rubo = cp.spawn(this.exe, ["-v"]);
+      rubo.on("error", err => {
+        if (err.message.includes("ENOENT")) {
+          vscode.window.showErrorMessage(
+            `couldn't find ${this.exe} for formatting (ENOENT)`
+          );
+        } else {
+          vscode.window.showErrorMessage(
+            `couldn't run ${this.exe} '${err.message}'`
+          );
+        }
+        reject(err);
+      });
+
+      rubo.stderr.on("data", data => {
+        // for debugging
+        console.log(`rubocop stderr ${data}`);
+      });
+
+      rubo.on("exit", code => {
+        if (code) {
+          vscode.window.showErrorMessage(`rubocop failed with code=${code}`);
+          return reject();
+        }
+
+        // success!
+        console.log(`rubocop is ready to go!`);
+        resolve();
+      });
+    });
+  }
+
+  //
+  // format!
+  //
+  // Write to a temp file, format the file, then return the result.
+  //
+
+  public correct(data, root): Promise<string> {
+    return new Promise((resolve, reject) =>
+      fs.mkdtemp(path.join(os.tmpdir(), "rubocop"), (err, folder) => {
+        if (err) return reject(err); // not common
+
+        const args = this.args(root);
+
+        const tmpfile = path.join(folder, "tmp.rb");
+        args.push(tmpfile);
+
+        fs.writeFile(tmpfile, data, err => {
+          if (err) return reject(err); // not common
+
+          console.log(`${this.exe} ${args.join(" ")}`);
+
+          const startTm = new Date().getTime();
+          const rubo = cp.spawn(this.exe, args, {
+            cwd: root || process.cwd(),
+            env: process.env
+          });
+
+          rubo.on("error", error => {
+            vscode.window.showErrorMessage(
+              `couldn't run rubocop '${error.message}'`
+            );
+            reject(error);
+          });
+
+          rubo.stderr.on("data", data => {
+            // for debugging
+            console.log(`rubocop stderr ${data}`);
+          });
+
+          rubo.on("exit", code => {
+            // https://github.com/bbatsov/rubocop/blob/master/manual/basic_usage.md
+            if (code && code !== 1) {
+              vscode.window.showErrorMessage(
+                `rubocop failed with code=${code}`
+              );
+              return reject();
+            }
+
+            fs.readFile(tmpfile, "utf8", (err, result) => {
+              if (err) reject(err); // not common
+
+              // success!
+              const elapsedTm = new Date().getTime() - startTm;
+              console.log(`rubocop ran in ${elapsedTm}ms`);
+              resolve(result);
+            });
+          });
+        });
+      })
+    );
+  }
 }
