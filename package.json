@@ -64,7 +64,10 @@
     "gulp-typescript": "^2.12.0",
     "gulp-util": "^3.0.5",
     "mocha": "^2.4.5",
+    "prettier": "^1.11.1",
     "run-sequence": "*",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.10.0",
     "typescript": "^2.1.5",
     "vscode": "^1.1.4",
     "vscode-debugadapter-testsupport": "^1.19.0"
@@ -135,13 +138,21 @@
         },
         "ruby.codeCompletion": {
           "type": "string",
-          "enum": ["solargraph", "rcodetools", "none"],
+          "enum": [
+            "solargraph",
+            "rcodetools",
+            "none"
+          ],
           "default": "solargraph",
           "description": "Method to use for code completion."
         },
         "ruby.intellisense": {
           "type": "string",
-          "enum": ["solargraph", "rubyLocate", "none"],
+          "enum": [
+            "solargraph",
+            "rubyLocate",
+            "none"
+          ],
           "default": "solargraph",
           "description": "Method to use for intellisense (go to definition, etc.)."
         },
@@ -567,5 +578,11 @@
         ]
       }
     ]
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "useTabs": true
   }
 }
