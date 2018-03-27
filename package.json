@@ -146,8 +146,8 @@
           "description": "Method to use for intellisense (go to definition, etc.)."
         },
         "ruby.useBundler": {
-          "type": ["boolean", "null"],
-          "default": null,
+          "type": "boolean",
+          "default": false,
           "description": "Whether ruby tools should be started using Bundler"
         },
         "ruby.pathToBundler": {
@@ -284,6 +284,12 @@
               }
             }
           }
+        },
+        "ruby.format": {
+          "type": [ "boolean", "string" ],
+          "enum": [ false, "rubocop" ],
+          "default": false,
+          "description": "Which system to use for formatting, or false for no formatting"
         }
       }
     },
