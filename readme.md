@@ -136,7 +136,19 @@ Settings available (in your VSCode workspace) for each of the linters:
 ```
 ## Formatting
 
+The VS Code Ruby extension can automatically format your Ruby files whenever you save.
+
+### Rubocop
+
+Set `ruby.format` to `rubocop` to enable rubocop formatting on save.
+
 Formatting requires the rubocop gem to be installed. Note that you may have to turn on some of the AutoCorrect functions in your `.rubocop.yml` file. See the [rubocop documentation](http://rubocop.readthedocs.io/en/latest/configuration/).
+
+Important note: VS Code has a timeout that limits file formatters to 750ms. This is often not enough time for rubocop to complete. In the near future VS Code will allow customizing this timeout via the `editor.formatOnSaveTimeout` setting. See [#43702](https://github.com/Microsoft/vscode/pull/43702) for more details.
+
+### Rufo
+
+Rufo is an alternative Ruby formatting tool. See the [VS Code Rufo Extension](https://github.com/bessey/vscode-rufo) if you want to try it.
 
 ## Autocomplete
 
