@@ -131,16 +131,16 @@
           "isExecutable": true
         },
         "ruby.codeCompletion": {
-          "type": "string",
-          "enum": ["rcodetools", "other"],
-          "default": "rcodetools",
-          "description": "Method to use for code completion. Use `other` if another extension provides this feature."
+          "type": ["boolean", "string"],
+          "enum": [false, "rcodetools"],
+          "default": false,
+          "description": "Method to use for code completion. Use `false` to disable or if another extension provides this feature."
         },
         "ruby.intellisense": {
-          "type": "string",
-          "enum": ["solargraph", "rubyLocate", "none"],
-          "default": "solargraph",
-          "description": "Method to use for intellisense (go to definition, etc.)."
+          "type": ["boolean", "string"],
+          "enum": [false, "rubyLocate"],
+          "default": false,
+          "description": "Method to use for intellisense (go to definition, etc.). Use `false` to disable or if another extension provides this feature."
         },
         "ruby.useBundler": {
           "type": "boolean",
@@ -286,7 +286,7 @@
           "type": [ "boolean", "string" ],
           "enum": [ false, "rubocop" ],
           "default": false,
-          "description": "Which system to use for formatting, or false for no formatting"
+          "description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature."
         }
       }
     },
