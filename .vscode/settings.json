@@ -5,10 +5,10 @@
 	"eslint.enable": false,
 	"editor.insertSpaces": false,
 	"[javascript]": {
-		"editor.formatOnSave": true
+		"editor.formatOnSave": false
 	},
 	"[typescript]": {
-		"editor.formatOnSave": true
+		"editor.formatOnSave": false
 	},
 	"typescript.tsdk": "node_modules/typescript/lib"
 }
