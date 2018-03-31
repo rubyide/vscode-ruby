@@ -130,43 +130,52 @@ Settings available (in your VSCode workspace) for each of the linters:
 	"lint": true, //enable all lint cops.
 	"only": [/* array: Run only the specified cop(s) and/or cops in the specified departments. */],
 	"except": [/* array: Run all cops enabled by configuration except the specified cop(s) and/or departments. */],
+	"forceExclusion": true, //Add --force-exclusion option
 	"require": [/* array: Require Ruby files. */],
 	"rails": true //Run extra rails cops
 }
 ```
 ## Formatting
 
+The VS Code Ruby extension can automatically format your Ruby files whenever you save.
+
+### Rubocop
+
+Set `ruby.format` to `rubocop` to enable rubocop formatting on save.
+
 Formatting requires the rubocop gem to be installed. Note that you may have to turn on some of the AutoCorrect functions in your `.rubocop.yml` file. See the [rubocop documentation](http://rubocop.readthedocs.io/en/latest/configuration/).
+
+Important note: VS Code has a timeout that limits file formatters to 750ms. This is often not enough time for rubocop to complete. In the near future VS Code will allow customizing this timeout via the `editor.formatOnSaveTimeout` setting. See [#43702](https://github.com/Microsoft/vscode/pull/43702) for more details.
+
+### Rufo
+
+Rufo is an alternative Ruby formatting tool. See the [VS Code Rufo Extension](https://github.com/bessey/vscode-rufo) if you want to try it.
 
 ## Autocomplete
 
-The `ruby.codeCompletion` setting lets you select a method for code completion and other intellisense features. Valid options are `solargraph`, `rcodetools`, and `none`.
+The `ruby.codeCompletion` setting lets you select a method for code completion and other intellisense features. Valid options are `rcodetools` and `false`.
 
-To enable method completion in Ruby, run `gem install solargraph` or `gem install rcodetools` based on the `ruby.codeCompletion` setting. You may need to restart Visual Studio Code the first time.
+### rcodetools
+
+To enable method completion in Ruby, run `gem install rcodetools`. You may need to restart Visual Studio Code the first time.
 
 ```ruby
 [1, 2, 3].e #<= Press CTRL-Space here
 ```
 
+### Solargraph
+
+Solargraph is an alternative Ruby code completion tool. See the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) if you want to try it.
+
 For more information about using Solargraph, refer to the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph).
 
 ## Intellisense (Go to/Peek Definition)
 
-Use the `ruby.intellisense` setting to select a `go to/peek definition` method. Valid options are `solargraph`, `rubyLocate`, and `none`.
+Use the `ruby.intellisense` setting to select a `go to/peek definition` method. Valid options are `rubyLocate`, and `false`.
 
-### Solargraph Intellisense
+### rubyLocate
 
-Make sure the solargraph gem installed:
-
-```
-gem install solargraph
-```
-
-Solargraph's features now extend to providing go to/peek definition. See the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) for more information.
-
-### RubyLocate Intellisense
-
-Now includes workspace parsing functionality. Allows VS Code to `go to definition` and `peak definition` for modules, classes, and methods defined within the same workspace. You can set glob patterns to match including and excluding particular files. The exclude match also runs against directories on initial load, to reduce latency.
+The `rubyLocate` option includes workspace parsing functionality. It allows VS Code to `go to definition` and `peak definition` for modules, classes, and methods defined within the same workspace. You can set glob patterns to match including and excluding particular files. The exclude match also runs against directories on initial load, to reduce latency.
 
 The default settings are:
 
@@ -182,6 +191,10 @@ The defaults will include all files with the `rb` extension, but avoids searchin
 If you change these settings, currently you will need to reload your workspace.
 
 We now provide go to definition within `erb` files, as well as syntax highlighting for `erb`.
+
+### Solargraph
+
+Solargraph now includes go to/peek definition and other language features. See the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) for more information.
 
 ## TODO
 
