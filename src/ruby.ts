@@ -1,9 +1,7 @@
 'use strict';
 
-import * as path from 'path';
-import { ExtensionContext, languages, Location, Position } from 'vscode';
-import * as Locate from './locate/locate';
-import { registerTaskProvider } from './task/rake';
+import { ExtensionContext, languages } from 'vscode';
+
 import * as utils from './utils';
 
 import { registerCompletionProvider } from './providers/completion';
@@ -11,6 +9,7 @@ import { registerFormatter } from './providers/formatter';
 import { registerHighlightProvider } from './providers/highlight';
 import { registerIntellisenseProvider } from './providers/intellisense';
 import { registerLinters } from './providers/linters';
+import { registerTaskProvider } from './task/rake';
 
 export function activate(context: ExtensionContext) {
 	const subs = context.subscriptions;
