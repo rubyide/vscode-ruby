@@ -1,7 +1,7 @@
 {
   "name": "Ruby",
   "displayName": "Ruby",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "publisher": "rebornix",
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
   "author": {
@@ -69,9 +69,6 @@
     "vscode": "^1.1.4",
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
-  "extensionDependencies": [
-    "castwide.solargraph"
-  ],
   "scripts": {
     "vscode:prepublish": "tsc -p ./src",
     "compile": "tsc -p ./src",
@@ -134,16 +131,37 @@
           "isExecutable": true
         },
         "ruby.codeCompletion": {
+          "type": ["boolean", "string"],
+          "enum": [false, "rcodetools"],
+          "default": false,
+          "description": "Method to use for code completion. Use `false` to disable or if another extension provides this feature."
+        },
+        "ruby.intellisense": {
+          "type": ["boolean", "string"],
+          "enum": [false, "rubyLocate"],
+          "default": false,
+          "description": "Method to use for intellisense (go to definition, etc.). Use `false` to disable or if another extension provides this feature."
+        },
+        "ruby.useBundler": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether ruby tools should be started using Bundler"
+        },
+        "ruby.pathToBundler": {
           "type": "string",
-          "enum": ["solargraph", "rcodetools", "none"],
-          "default": "solargraph",
-          "description": "Method to use for code completion."
+          "default": "bundle",
+          "description": "Path to the bundler executable (used if useBundler is true)"
         },
         "ruby.rctComplete.commandPath": {
           "type": "string",
           "default": "rct-complete",
           "description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
+        },
+        "ruby.lintDebounceTime": {
+          "type": "integer",
+          "default": 500,
+          "description": "Time (ms) to wait after keypress before running enabled linters. Ensures linters are only run when typing has finished and not for every keypress"
         },
         "ruby.lint": {
           "type": "object",
@@ -263,6 +281,12 @@
               }
             }
           }
+        },
+        "ruby.format": {
+          "type": [ "boolean", "string" ],
+          "enum": [ false, "rubocop" ],
+          "default": false,
+          "description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature."
         }
       }
     },
@@ -354,7 +378,12 @@
       {
         "language": "erb",
         "scopeName": "text.html.erb",
-        "path": "./syntaxes/erb.cson.json"
+        "path": "./syntaxes/erb.cson.json",
+        "embeddedLanguages": {
+          "source.css": "css",
+          "source.js": "javascript",
+          "source.ruby": "ruby"
+        }
       },
       {
         "language": "gemfile",
@@ -417,6 +446,11 @@
                 "type": "boolean",
                 "description": "Use `bundle exec` to run rdebug-ide. Enable this option if you have used bundle install --path with rdebug-ide as a bundled gem.",
                 "default": false
+              },
+              "pathToRuby": {
+                "type": "string",
+                "description": "Path to the Ruby executable if it is not 'ruby', used to run the program without the debugger (under CTRL+F5)",
+                "default": "ruby"
               },
               "pathToBundler": {
                 "type": "string",

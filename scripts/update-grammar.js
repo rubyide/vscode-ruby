@@ -92,6 +92,29 @@ function getCommitSha(repoId, repoPath) {
 	});
 }
 
+function modifyRubyGrammar(grammar) {
+	const metaFunctionCallRuby = require('./meta.function-call.ruby.json');
+	const variableOtherRuby = require('./variable.other.ruby.json');
+
+	// Replace the constant.other.symbol scope with constant.language.symbol
+	// this is technically incorrect per the docs but a lot of themes do not
+	// have colors defined for constant.other.symbol resulting in users
+	// believing there is no syntax highlighting
+	let stringPatterns = JSON.stringify(grammar.patterns);
+	stringPatterns = stringPatterns.replace(/constant\.other\.symbol/g, 'constant.language.symbol');
+	grammar.patterns = JSON.parse(stringPatterns);
+
+	// Insert meta.function-call.ruby and variable.other.ruby at end
+	grammar.patterns.push(metaFunctionCallRuby, variableOtherRuby);
+}
+
+function getGrammarModifier(grammarName) {
+	switch(grammarName) {
+		case 'ruby':
+			return modifyRubyGrammar;
+	}
+}
+
 exports.update = function (repoId, repoPath, dest, modifyGrammar, version = 'master') {
 	var contentPath = 'https://raw.githubusercontent.com/' + repoId + `/${version}/` + repoPath;
 	console.log('Reading from ' + contentPath);
@@ -145,5 +168,5 @@ if (path.basename(process.argv[1]).indexOf('update-grammar') !== -1) {
 	let grammar = process.argv[3];
 	let outputFile = path.join('syntaxes', grammar + '.cson.json');
 	let repoFile = grammarToTmLanguage(grammar);
-	exports.update(repo, repoFile, outputFile);
+	exports.update(repo, repoFile, outputFile, getGrammarModifier(grammar));
 }

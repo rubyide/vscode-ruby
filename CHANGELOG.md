@@ -1,3 +1,11 @@
+### 0.17.0 - Mar 4 2018
+A release driven by [Stafford Brunk](https://github.com/wingrunr21) and community, thanks all for your contribution.
+
+Notable changes:
+* [Syntax Highlighting rollback and enhancement](https://github.com/rubyide/vscode-ruby/pull/279), we upgraded our syntax to upstream one but that broke original syntax highlighting behavior. Here we brought it back but we still keep the goodness of upstream syntax.
+* [Bundler setting for Linters](https://github.com/rubyide/vscode-ruby/commit/1be81cc75e56fd31da18d6d5bfca2f9cef35dd5e), linters now honor `pathToBundler` and `useBundler` settings.
+* [CSS, JS, and Ruby can be embedded in ERB](https://github.com/rubyide/vscode-ruby/commit/1af8efb72591b575cf7468aa309ae9691632071d)
+
 ### 0.16.0 - Jan 25 2018
 It has been half a year since our last release but even though rebornix is away from this extension most of time, the community is helping it improve and pushing it to its limit. Special thanks to [Stafford Brunk
 ](https://github.com/wingrunr21) who reached out to me and tried to review issues and PRs. And of course, thanks to all contributors and users.

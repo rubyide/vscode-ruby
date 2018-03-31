@@ -115,7 +115,7 @@
 			},
 			"comment": "symbols as hash key (1.9 syntax)",
 			"match": "(?>[a-zA-Z_]\\w*(?>[?!])?)(:)(?!:)",
-			"name": "constant.other.symbol.hashkey.ruby"
+			"name": "constant.language.symbol.hashkey.ruby"
 		},
 		{
 			"captures": {
@@ -125,7 +125,7 @@
 			},
 			"comment": "symbols as hash key (1.8 syntax)",
 			"match": "(?<!:)(:)(?>[a-zA-Z_]\\w*(?>[?!])?)(?=\\s*=>)",
-			"name": "constant.other.symbol.hashkey.ruby"
+			"name": "constant.language.symbol.hashkey.ruby"
 		},
 		{
 			"comment": "everything being a reserved word, not a value and needing a 'end' is a..",
@@ -277,7 +277,7 @@
 									"name": "storage.type.variable.ruby"
 								},
 								"2": {
-									"name": "constant.other.symbol.hashkey.parameter.function.ruby"
+									"name": "constant.language.symbol.hashkey.parameter.function.ruby"
 								},
 								"3": {
 									"name": "punctuation.definition.constant.hashkey.ruby"
@@ -319,7 +319,7 @@
 									"name": "storage.type.variable.ruby"
 								},
 								"2": {
-									"name": "constant.other.symbol.hashkey.parameter.function.ruby"
+									"name": "constant.language.symbol.hashkey.parameter.function.ruby"
 								},
 								"3": {
 									"name": "punctuation.definition.constant.hashkey.ruby"
@@ -368,7 +368,7 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\['\\\\]",
@@ -390,7 +390,7 @@
 					"name": "punctuation.section.symbol.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.interpolated.ruby",
+			"name": "constant.language.symbol.interpolated.ruby",
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -619,7 +619,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.interpolated.ruby",
+			"name": "constant.language.symbol.interpolated.ruby",
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -645,7 +645,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.interpolated.ruby",
+			"name": "constant.language.symbol.interpolated.ruby",
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -671,7 +671,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.interpolated.ruby",
+			"name": "constant.language.symbol.interpolated.ruby",
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -697,7 +697,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.interpolated.ruby",
+			"name": "constant.language.symbol.interpolated.ruby",
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -723,7 +723,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.interpolated.ruby",
+			"name": "constant.language.symbol.interpolated.ruby",
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -746,7 +746,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\]|\\\\\\\\",
@@ -770,7 +770,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\\\)|\\\\\\\\",
@@ -794,7 +794,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\>|\\\\\\\\",
@@ -818,7 +818,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\}|\\\\\\\\",
@@ -842,7 +842,7 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"comment": "Cant be named because its not neccesarily an escape.",
@@ -1374,7 +1374,7 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\\\)|\\\\\\\\",
@@ -1398,7 +1398,7 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\>|\\\\\\\\",
@@ -1422,7 +1422,7 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\]|\\\\\\\\",
@@ -1446,7 +1446,7 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"match": "\\\\}|\\\\\\\\",
@@ -1470,7 +1470,7 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
-			"name": "constant.other.symbol.ruby",
+			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
 					"comment": "Cant be named because its not neccesarily an escape.",
@@ -1486,7 +1486,7 @@
 			},
 			"comment": "symbols",
 			"match": "(?x)\n(?<!:)(:)\n(?>\n  [$a-zA-Z_]\\w*(?>[?!]|=(?![>=]))?\n  |\n  ===?|<=>|>[>=]?|<[<=]?|[%&`/\\|]|\\*\\*?|=?~|[-+]@?|\\[]=?\n  |\n  @@?[a-zA-Z_]\\w*\n)",
-			"name": "constant.other.symbol.ruby"
+			"name": "constant.language.symbol.ruby"
 		},
 		{
 			"begin": "^=begin",
@@ -2179,6 +2179,31 @@
 		{
 			"match": "\\(|\\)",
 			"name": "punctuation.section.function.ruby"
+		},
+		{
+			"begin": "(?=[a-zA-Z0-9_!?]+\\()",
+			"end": "(?<=\\))",
+			"name": "meta.function-call.ruby",
+			"patterns": [
+				{
+					"include": "#nest_function_parens"
+				},
+				{
+					"include": "#known_function_names"
+				},
+				{
+					"match": "([a-zA-Z0-9_!?]+)(?=\\()",
+					"name": "entity.name.function.ruby"
+				},
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"comment": "This is kindof experimental. There really is no way to perfectly match all regular variables, but you can pretty well assume that any normal word in certain curcumstances that havnt already been scoped as something else are probably variables, and the advantages beat the potential errors",
+			"match": "((?<=\\W)\\b|^)\\w+\\b(?=\\s*([\\]\\)\\}\\=\\+\\-\\*\\/\\^\\$\\,\\.]|<\\s|<<[\\s|\\.]))",
+			"name": "variable.other.ruby"
 		}
 	],
 	"repository": {
