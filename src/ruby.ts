@@ -6,12 +6,12 @@ import * as Locate from './locate/locate';
 import * as path from 'path';
 import * as cp from 'child_process';
 import { LintCollection } from './lint/lintCollection';
-import { RubyDocumentFormattingEditProvider } from './format/rubyFormat';
 import * as utils from './utils';
 import { registerTaskProvider } from './task/rake';
 import { Config as LintConfig } from './lint/lintConfig';
 import * as debounce from 'lodash/debounce';
 
+import { registerFormatter } from './providers/formatter';
 import { registerHighlightProvider } from './providers/highlight';
 import { registerIntellisenseProvider } from './providers/intellisense';
 
@@ -145,8 +145,4 @@ function registerCompletionProvider(ctx: ExtensionContext) {
 		});
 		completeTest.on('error', () => 0);
 	}
-}
-
-function registerFormatter(ctx: ExtensionContext) {
-	new RubyDocumentFormattingEditProvider().register(ctx);
 }
