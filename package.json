@@ -64,14 +64,15 @@
     "gulp-typescript": "^2.12.0",
     "gulp-util": "^3.0.5",
     "mocha": "^2.4.5",
+    "prettier": "^1.11.1",
     "run-sequence": "*",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.10.0",
+    "tslint-microsoft-contrib": "^5.0.3",
     "typescript": "^2.1.5",
     "vscode": "^1.1.4",
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
-  "extensionDependencies": [
-    "castwide.solargraph"
-  ],
   "scripts": {
     "vscode:prepublish": "tsc -p ./src",
     "compile": "tsc -p ./src",
@@ -79,7 +80,8 @@
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "update-all-grammars": "node scripts/update-all-grammars",
-    "update-grammar": "node scripts/update-grammar atom/language-ruby"
+    "update-grammar": "node scripts/update-grammar atom/language-ruby",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'"
   },
   "activationEvents": [
     "onLanguage:ruby",
@@ -134,16 +136,16 @@
           "isExecutable": true
         },
         "ruby.codeCompletion": {
-          "type": "string",
-          "enum": ["solargraph", "rcodetools", "none"],
-          "default": "solargraph",
-          "description": "Method to use for code completion."
+          "type": ["boolean", "string"],
+          "enum": [false, "rcodetools"],
+          "default": false,
+          "description": "Method to use for code completion. Use `false` to disable or if another extension provides this feature."
         },
         "ruby.intellisense": {
-          "type": "string",
-          "enum": ["solargraph", "rubyLocate", "none"],
-          "default": "solargraph",
-          "description": "Method to use for intellisense (go to definition, etc.)."
+          "type": ["boolean", "string"],
+          "enum": [false, "rubyLocate"],
+          "default": false,
+          "description": "Method to use for intellisense (go to definition, etc.). Use `false` to disable or if another extension provides this feature."
         },
         "ruby.useBundler": {
           "type": "boolean",
@@ -284,6 +286,12 @@
               }
             }
           }
+        },
+        "ruby.format": {
+          "type": [ "boolean", "string" ],
+          "enum": [ false, "rubocop" ],
+          "default": false,
+          "description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature."
         }
       }
     },
