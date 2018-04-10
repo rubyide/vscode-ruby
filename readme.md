@@ -30,6 +30,20 @@ It started as a personal project of [@rebornix](https://github.com/rebornix), ai
 
 Press `F1`, type `ext install` then search for `ruby`.
 
+### Gem Dependencies
+
+Depending on your setup, you may need to manually install gem dependencies like
+`rubocop`, `ruby-debug-ide` or `solargraph`. This can be complicated because
+there are many different ways to use Ruby itself - system ruby, rbenv, chruby,
+rvm, bundler, etc. Your results may also vary depending on how you start VS Code
+and the environment variables present at that time.
+
+The important thing is that if VS Code can't find `rubocop`, our extension can't
+either. One way to debug these problems is to investigate within VS Code's
+Integrated Terminal. (View > Integrated Terminal). Try `ruby -v`, `gem env
+gemdir`, `gem list | grep rubocop`, `which rubocop` and then `rubocop -v`. This
+might shed some light on why a gem dependency isn't working.
+
 ## Debugger
 ### Install Ruby Dependencies
 In this extension, we implement [ruby debug ide protocol](http://debug-commons.rubyforge.org/protocol-spec.html) to allow VS Code to communicate with ruby debug, it requires `ruby-debug-ide` to be installed on your machine. This is also how RubyMine/NetBeans does by default.
