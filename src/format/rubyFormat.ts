@@ -6,7 +6,7 @@ import { AutoCorrect } from './RuboCop';
 export class RubyDocumentFormattingEditProvider implements vscode.DocumentFormattingEditProvider {
 	private autoCorrect: AutoCorrect;
 
-	public register(ctx: vscode.ExtensionContext) {
+	public register(ctx: vscode.ExtensionContext, documentSelector: vscode.DocumentSelector) {
 		// only attempt to format if ruby.format is set to rubocop
 		if (vscode.workspace.getConfiguration("ruby").get("format") !== "rubocop") {
 			return;
@@ -15,7 +15,7 @@ export class RubyDocumentFormattingEditProvider implements vscode.DocumentFormat
 		this.autoCorrect = new AutoCorrect();
 		this.autoCorrect.test().then(
 			() => ctx.subscriptions.push(
-				vscode.languages.registerDocumentFormattingEditProvider('ruby', this)
+				vscode.languages.registerDocumentFormattingEditProvider(documentSelector, this)
 			)
 					// silent failure - AutoCorrect will handle error messages
 		);
