@@ -1,3 +1,19 @@
+### 0.18.0 - Apr 10 2018
+
+Notable changes:
+* [Add tslint/prettier for linting/formatting](https://github.com/rubyide/vscode-ruby/pull/299) by [Adam Doppelt](https://github.com/gurgeous)
+* [Added support for ruby.format, defaults to false (no formatting)](https://github.com/rubyide/vscode-ruby/pull/298) by [Adam Doppelt](https://github.com/gurgeous)
+* [Better error handling & messages when running RuboCop formatting](https://github.com/rubyide/vscode-ruby/pull/297) by [Adam Doppelt](https://github.com/gurgeous)
+* [set ruby.useBundler config option type to boolean](https://github.com/rubyide/vscode-ruby/commit/399a614a6708c455824ca75bf184d5093aa1749d) by [Gabriel Arjones](https://github.com/g-arjones)
+* [support running launch entries without debugging](https://github.com/rubyide/vscode-ruby/pull/266) by [Sylvain Joyeux](https://github.com/doudou)
+* [Debounce linting to prevent running on every keypress](https://github.com/rubyide/vscode-ruby/pull/264) by [Sam Killgallon](https://github.com/Sam-Killgallon)
+* [Add forceExclusion flag to rubocop setting](https://github.com/rubyide/vscode-ruby/pull/217) by [cyang6](https://github.com/cyang6)
+* [Remove solargraph dependency and update codeCompletion and intellisense options](https://github.com/rubyide/vscode-ruby/pull/309) by [Fred Snyder](https://github.com/castwide)
+
+Enhanced documentation:
+* [Readme update about gem dependencies](https://github.com/rubyide/vscode-ruby/pull/327) by [Adam Doppelt](https://github.com/gurgeous)
+* [Readme update about new debase gem](https://github.com/rubyide/vscode-ruby/pull/313) by [Kevin Coleman](https://github.com/KevinColemanInc)
+
 ### 0.17.0 - Mar 4 2018
 A release driven by [Stafford Brunk](https://github.com/wingrunr21) and community, thanks all for your contribution.
 
