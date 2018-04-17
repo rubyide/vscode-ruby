@@ -1,6 +1,6 @@
 'use strict';
 
-import {DebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
+import {DebugSession, LoggingDebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
 import {DebugProtocol} from 'vscode-debugprotocol';
 import {readFileSync,existsSync} from 'fs';
 import {basename, dirname} from 'path';
@@ -12,6 +12,7 @@ import {RubyProcess} from './ruby';
 import {LaunchRequestArguments, AttachRequestArguments, IRubyEvaluationResult, IDebugVariable} from './interface';
 import {SocketClientState, Mode} from './common';
 import {endsWith, startsWith} from './helper';
+import { LogLevel, logger } from "vscode-debugadapter/lib/logger";
 
 class CachedBreakpoint implements DebugProtocol.SourceBreakpoint {
     public line: number;
@@ -37,7 +38,7 @@ class CachedBreakpoint implements DebugProtocol.SourceBreakpoint {
     }
 }
 
-class RubyDebugSession extends DebugSession {
+class RubyDebugSession extends LoggingDebugSession {
     private _breakpointId = 1000;
     private _threadId = 2;
     private _frameId = 0;
@@ -54,8 +55,8 @@ class RubyDebugSession extends DebugSession {
      * We configure the default implementation of a debug adapter here
      * by specifying this this 'debugger' uses zero-based lines and columns.
      */
-    public constructor() {
-        super();
+    public constructor(debuggerLinesStartAt1: boolean) {
+        super(path.join(__dirname, '..', '..', '..', 'debug.log'), debuggerLinesStartAt1, true);
 
         this.setDebuggerLinesStartAt1(true);
         this.setDebuggerColumnsStartAt1(false);
@@ -99,6 +100,7 @@ class RubyDebugSession extends DebugSession {
 
 
     protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
+        logger.setup(args.showDebuggerOutput ? LogLevel.Verbose : LogLevel.Stop, true);
 		this.debugMode = Mode.launch;
 		this.requestArguments = args;
         this.rubyProcess = new RubyProcess(Mode.launch, args);
@@ -127,6 +129,7 @@ class RubyDebugSession extends DebugSession {
     }
 
 	protected attachRequest(response: DebugProtocol.AttachResponse, args: AttachRequestArguments): void {
+        logger.setup(args.showDebuggerOutput ? LogLevel.Verbose : LogLevel.Stop, true);
 		this.requestArguments = args;
 		this.debugMode = Mode.attach;
         this.rubyProcess = new RubyProcess(Mode.attach, args);
@@ -452,8 +455,10 @@ class RubyDebugSession extends DebugSession {
     }
 
     protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
-        if (this.rubyProcess.state !== SocketClientState.closed) {
+        if (this.rubyProcess.state !== SocketClientState.closed && this.debugMode === Mode.launch) {
             this.rubyProcess.Run('quit');
+        } else if ( this.rubyProcess.state !== SocketClientState.closed && this.debugMode === Mode.attach ) {
+            this.rubyProcess.Run('detach');
         }
         this.sendResponse(response);
     }
