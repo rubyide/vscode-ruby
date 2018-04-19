@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { ExtensionContext } from 'vscode';
+import { DocumentSelector, ExtensionContext } from 'vscode';
 import * as cp from 'child_process';
 
-export function registerCompletionProvider(ctx: ExtensionContext) {
+export function registerCompletionProvider(ctx: ExtensionContext, documentSelector: DocumentSelector) {
 	if (vscode.workspace.getConfiguration('ruby').codeCompletion == 'rcodetools') {
 		const completeCommand = function (args) {
 			let rctCompletePath = vscode.workspace.getConfiguration('ruby.rctComplete').get('commandPath', 'rct-complete');
@@ -17,7 +17,7 @@ export function registerCompletionProvider(ctx: ExtensionContext) {
 		completeTest.on('exit', () => {
 			ctx.subscriptions.push(
 				vscode.languages.registerCompletionItemProvider(
-					/** selector */'ruby',
+					/** selector */documentSelector,
 					/** provider */{
 						provideCompletionItems: function completionProvider(document, position, token) {
 							return new Promise((resolve, reject) => {

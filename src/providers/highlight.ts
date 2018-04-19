@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { ExtensionContext } from 'vscode';
+import { DocumentSelector, ExtensionContext } from 'vscode';
 
-export function registerHighlightProvider(ctx: ExtensionContext) {
+export function registerHighlightProvider(ctx: ExtensionContext, documentSelector: DocumentSelector) {
 	// highlight provider
 	let pairedEnds = [];
 
@@ -48,7 +48,7 @@ export function registerHighlightProvider(ctx: ExtensionContext) {
 		if (event && event.document) balancePairs(event.document);
 	}
 
-	ctx.subscriptions.push(vscode.languages.registerDocumentHighlightProvider('ruby', {
+	ctx.subscriptions.push(vscode.languages.registerDocumentHighlightProvider(documentSelector, {
 		provideDocumentHighlights: (doc, pos) => {
 			let result = pairedEnds.find(pair => (
 				pair.entry.start.line === pos.line ||

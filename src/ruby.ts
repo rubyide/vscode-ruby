@@ -1,6 +1,6 @@
 'use strict';
 
-import { ExtensionContext, languages } from 'vscode';
+import { ExtensionContext, languages, workspace } from 'vscode';
 
 import * as utils from './utils';
 
@@ -10,6 +10,11 @@ import { registerHighlightProvider } from './providers/highlight';
 import { registerIntellisenseProvider } from './providers/intellisense';
 import { registerLinters } from './providers/linters';
 import { registerTaskProvider } from './task/rake';
+
+const DOCUMENT_SELECTOR = [
+	{ language: 'ruby', scheme: 'file' },
+	{ language: 'ruby', scheme: 'untitled' }
+];
 
 export function activate(context: ExtensionContext) {
 	const subs = context.subscriptions;
@@ -24,12 +29,15 @@ export function activate(context: ExtensionContext) {
 	});
 
 	// Register providers
-	registerHighlightProvider(context);
-	registerLinters(context);
-	registerCompletionProvider(context);
-	registerFormatter(context);
-	registerIntellisenseProvider(context);
-	registerTaskProvider(context);
+	registerHighlightProvider(context, DOCUMENT_SELECTOR);
+	registerCompletionProvider(context, DOCUMENT_SELECTOR);
+	registerFormatter(context, DOCUMENT_SELECTOR);
+
+	if (workspace.rootPath) {
+		registerLinters(context);
+		registerIntellisenseProvider(context);
+		registerTaskProvider(context);
+	}
 
 	utils.loadEnv();
 }
