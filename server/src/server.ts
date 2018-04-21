@@ -20,7 +20,7 @@ connection.onInitialize((params: InitializeParams) => {
 	const calculator: CapabilityCalculator = new CapabilityCalculator(params.capabilities);
 
 	return {
-		capabilities: calculator.capabilities
+		capabilities: calculator.capabilities,
 	};
 });
 

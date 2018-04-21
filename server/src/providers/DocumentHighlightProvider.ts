@@ -5,12 +5,27 @@
  */
 
 import { ASTNode, Document } from 'tree-sitter';
-import {DocumentHighlight, DocumentHighlightKind, IConnection, Range, TextDocumentPositionParams} from 'vscode-languageserver';
+import {
+	DocumentHighlight,
+	DocumentHighlightKind,
+	IConnection,
+	Range,
+	TextDocumentPositionParams,
+} from 'vscode-languageserver';
 import { IForest } from '../Forest';
-import { Position } from '../Position'
+import { Position } from '../Position';
 
 export class DocumentHighlightProvider {
-	private readonly BEGIN_TYPES: Set<string> = new Set(['begin', 'def', 'if', 'case', 'unless', 'do', 'class', 'module']);
+	private readonly BEGIN_TYPES: Set<string> = new Set([
+		'begin',
+		'def',
+		'if',
+		'case',
+		'unless',
+		'do',
+		'class',
+		'module',
+	]);
 
 	private connection: IConnection;
 	private forest: IForest;
@@ -22,14 +37,16 @@ export class DocumentHighlightProvider {
 		this.connection.onDocumentHighlight(this.handleDocumentHighlight);
 	}
 
-	protected handleDocumentHighlight = async (textDocumentPosition: TextDocumentPositionParams): Promise<DocumentHighlight[]> => {
+	protected handleDocumentHighlight = async (
+		textDocumentPosition: TextDocumentPositionParams
+	): Promise<DocumentHighlight[]> => {
 		const ast: Document = this.forest.tree(textDocumentPosition.textDocument.uri);
 		const rootNode: ASTNode = ast.rootNode;
 		const position: Position = Position.FROM_VS_POSITION(textDocumentPosition.position);
 		const node: ASTNode = rootNode.descendantForPosition(position.toTSPosition());
 
 		return this.computeHighlights(node);
-	}
+	};
 
 	private computeHighlights(node: ASTNode): DocumentHighlight[] {
 		let highlights: DocumentHighlight[] = [];
@@ -61,7 +78,7 @@ export class DocumentHighlightProvider {
 					Position.FROM_TS_POSITION(endNode.endPosition).toVSPosition()
 				),
 				DocumentHighlightKind.Text
-			)
+			),
 		];
 	}
 
@@ -82,7 +99,7 @@ export class DocumentHighlightProvider {
 					Position.FROM_TS_POSITION(node.endPosition).toVSPosition()
 				),
 				DocumentHighlightKind.Text
-			)
+			),
 		];
 	}
 }

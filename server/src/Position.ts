@@ -4,8 +4,8 @@
  * This class supports converting to/from VSCode and TreeSitter positions
  */
 
-import {Position as TSPosition} from 'tree-sitter';
-import {Position as VSPosition} from 'vscode-languageserver';
+import { Position as TSPosition } from 'tree-sitter';
+import { Position as VSPosition } from 'vscode-languageserver';
 
 export class Position {
 	private row: number;
@@ -31,7 +31,7 @@ export class Position {
 	public toTSPosition(): TSPosition {
 		return {
 			row: this.row,
-			column: this.col
+			column: this.col,
 		};
 	}
 }

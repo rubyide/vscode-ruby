@@ -6,8 +6,8 @@ import { Document } from 'tree-sitter';
 import * as TreeSitterRuby from 'tree-sitter-ruby';
 
 export interface IForest {
-	tree(uri: string): Document
-	removeTree(uri: string): boolean
+	tree(uri: string): Document;
+	removeTree(uri: string): boolean;
 }
 
 export class Forest implements IForest {
