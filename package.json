@@ -79,8 +79,13 @@
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./src",
-    "compile": "tsc -p ./src",
+    "vscode:prepublish": "npm run compile",
+    "compile:legacy": "tsc -p ./src",
+    "compile:client": "tsc -p ./client/tsconfig.json",
+    "compile:server": "tsc -p ./server/tsconfig.json",
+    "watch:client": "tsc -w -p ./client/tsconfig.json",
+    "watch:server": "tsc -w -p ./server/tsconfig.json",
+    "compile": "npm run compile:legacy && npm run compile:client && npm run compile:server",
     "watch": "tsc -w -p ./src",
     "test": "node ./node_modules/mocha/bin/mocha --recursive ./out/*.test.js",
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
