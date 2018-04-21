@@ -30,7 +30,7 @@
     }
   ],
   "engines": {
-    "vscode": "^1.14.0"
+    "vscode": "^1.21.0"
   },
   "license": "MIT",
   "icon": "images/ruby.png",
