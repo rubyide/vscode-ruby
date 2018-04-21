@@ -54,6 +54,14 @@
 			"sourceMaps": true,
 			"outDir": "${workspaceRoot}/out",
 			"cwd": "${workspaceRoot}"
+		},
+		{
+			"name": "Attach to Language Server",
+			"type": "node",
+			"request": "attach",
+			"port": 6009,
+			"sourceMaps": true,
+			"outFiles": [ "${workspaceRoot}/server/out/**/*.js" ]
 		}
 	],
 	"compounds": [
