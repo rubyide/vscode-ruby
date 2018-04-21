@@ -17,7 +17,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Server",
+			"name": "Debug Server",
 			"cwd": "${workspaceRoot}",
 			"program": "${workspaceRoot}/src/debugger/main.ts",
 			"args": [
@@ -58,10 +58,10 @@
 	],
 	"compounds": [
 		{
-			"name": "Extension + Server",
+			"name": "Extension w/ Debug Server",
 			"configurations": [
 				"Launch Extension",
-				"Server"
+				"Debug Server"
 			]
 		}
 	]
