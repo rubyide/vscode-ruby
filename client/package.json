@@ -1,0 +1,14 @@
+{
+  "name": "vscode-ruby-client",
+  "version": "1.0.0",
+  "description": "Language server client for vscode-ruby",
+  "repository": "https://github.com/rubyide/vscode-ruby",
+  "author": "Stafford Brunk <stafford.brunk@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "main": "out/extension.js",
+  "dependencies": {
+    "vscode": "^1.1.14",
+    "vscode-languageclient": "^4.1.3"
+  }
+}
