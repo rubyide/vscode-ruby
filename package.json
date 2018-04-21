@@ -146,6 +146,11 @@
           "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
         },
+        "ruby.useLanguageServer": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use experimental built-in language server"
+        },
         "ruby.codeCompletion": {
           "type": ["boolean", "string"],
           "enum": [false, "rcodetools"],
