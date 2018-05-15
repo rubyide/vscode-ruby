@@ -183,13 +183,13 @@ Solargraph is an alternative Ruby code completion tool. See the [Solargraph exte
 
 For more information about using Solargraph, refer to the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph).
 
-## Intellisense (Go to/Peek Definition)
+## Intellisense (Go to/Peek Definition/Symbols)
 
-Use the `ruby.intellisense` setting to select a `go to/peek definition` method. Valid options are `rubyLocate`, and `false`.
+Use the `ruby.intellisense` setting to select a `go to/peek definition/symbol` method. Valid options are `rubyLocate`, and `false`.
 
 ### rubyLocate
 
-The `rubyLocate` option includes workspace parsing functionality. It allows VS Code to `go to definition` and `peak definition` for modules, classes, and methods defined within the same workspace. You can set glob patterns to match including and excluding particular files. The exclude match also runs against directories on initial load, to reduce latency.
+The `rubyLocate` option includes workspace parsing functionality. It allows VS Code to `go to definition`, `peak definition` and provides `symbols` for modules, classes, and methods defined within the same workspace. You can set glob patterns to match including and excluding particular files. The exclude match also runs against directories on initial load, to reduce latency. `rubyLocate` uses [ruby-method-locate](https://www.npmjs.com/package/ruby-method-locate) to parse symbols.
 
 The default settings are:
 
@@ -209,6 +209,8 @@ We now provide go to definition within `erb` files, as well as syntax highlighti
 ### Solargraph
 
 Solargraph now includes go to/peek definition and other language features. See the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) for more information.
+
+When using Solargraph it is recommended to set `ruby.intellisense` to `false`.
 
 ## TODO
 
