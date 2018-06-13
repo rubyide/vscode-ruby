@@ -60,7 +60,7 @@ function filter(symbols, query, matcher) {
 		.uniq()
 		.value();
 }
-module.exports = class Locate {
+export class Locate {
 	constructor(root, settings) {
 		this.settings = settings;
 		this.root = root;

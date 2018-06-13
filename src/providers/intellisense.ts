@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ExtensionContext, SymbolKind, SymbolInformation } from 'vscode';
-import * as Locate from '../locate/locate';
+import { Locate } from '../locate/locate';
 
 export function registerIntellisenseProvider(ctx: ExtensionContext) {
 	// for locate: if it's a project, use the root, othewise, don't bother
