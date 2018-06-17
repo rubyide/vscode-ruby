@@ -77,6 +77,7 @@
     "vscode:prepublish": "tsc -p ./src",
     "compile": "tsc -p ./src",
     "watch": "tsc -w -p ./src",
+    "test": "node ./node_modules/mocha/bin/mocha --recursive ./out/*.test.js",
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "update-all-grammars": "node scripts/update-all-grammars",

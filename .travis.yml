@@ -18,4 +18,4 @@ before_script:
   - npm install -g typescript -v 2.1.5
   - npm install
   - npm run compile
-script: nvm use && npm run test-debugger
+script: nvm use && npm run test && npm run test-debugger
