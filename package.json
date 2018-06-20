@@ -1,7 +1,7 @@
 {
   "name": "Ruby",
   "displayName": "Ruby",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "publisher": "rebornix",
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
   "author": {
@@ -23,6 +23,10 @@
     {
       "name": "Lex Li",
       "url": "https://github.com/lextm"
+    },
+    {
+      "name": "Stafford Brunk",
+      "url": "https://github.com/wingrunr21"
     }
   ],
   "engines": {

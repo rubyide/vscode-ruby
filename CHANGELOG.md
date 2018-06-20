@@ -1,3 +1,14 @@
+### 0.19.0 - Jun 19 2018
+Notable Changes:
+* [Fix bug where word match includes colon](https://github.com/rubyide/vscode-ruby/pull/353) by [toddmazierski](https://github.com/toddmazierski)
+* [Only override paths when file actually exists within cwd/remoteRoot](https://github.com/rubyide/vscode-ruby/pull/350) by [stefansedich](https://github.com/stefansedich)
+* [Remove explicit gem versions](https://github.com/rubyide/vscode-ruby/pull/334) by [perlun](https://github.com/perlun)
+* [Restrict language server to local files](https://github.com/rubyide/vscode-ruby/pull/326) by [lostintangent](https://github.com/lostintangent)
+
+Enhanced Documentation:
+* [Add README clarifications for rubyLocate and Solargraph](https://github.com/rubyide/vscode-ruby/pull/340) by [lumean](https://github.com/lumean)
+
+
 ### 0.18.0 - Apr 10 2018
 
 Notable changes:
