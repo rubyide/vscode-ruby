@@ -15,7 +15,7 @@ markdown-toc --no-firsth1 --maxdepth 1 readme.md
 - [Linters](#linters)
 - [Formatting](#formatting)
 - [Autocomplete](#autocomplete)
-- [Intellisense (Go to/Peek Definition)](#intellisense-go-topeek-definition)
+- [Intellisense (Go to/Peek Definition/Symbols)](#intellisense-go-topeek-definitionsymbols)
 - [TODO](#todo)
 - [Contributing](#contributing)
 - [License](#license)
