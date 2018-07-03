@@ -4,7 +4,7 @@
  * Super basic highlight provider
  */
 
-import { ASTNode, Document } from 'tree-sitter';
+import { SyntaxNode, Tree } from 'tree-sitter';
 import {
 	DocumentHighlight,
 	DocumentHighlightKind,
@@ -14,6 +14,8 @@ import {
 } from 'vscode-languageserver';
 import { IForest } from '../Forest';
 import { Position } from '../Position';
+
+// TODO support more highlight use cases than just balanced pairs
 
 export class DocumentHighlightProvider {
 	private readonly BEGIN_TYPES: Set<string> = new Set([
@@ -40,15 +42,15 @@ export class DocumentHighlightProvider {
 	protected handleDocumentHighlight = async (
 		textDocumentPosition: TextDocumentPositionParams
 	): Promise<DocumentHighlight[]> => {
-		const ast: Document = this.forest.tree(textDocumentPosition.textDocument.uri);
-		const rootNode: ASTNode = ast.rootNode;
+		const tree: Tree = this.forest.getTree(textDocumentPosition.textDocument.uri);
+		const rootNode: SyntaxNode = tree.rootNode;
 		const position: Position = Position.FROM_VS_POSITION(textDocumentPosition.position);
-		const node: ASTNode = rootNode.descendantForPosition(position.toTSPosition());
+		const node: SyntaxNode = rootNode.descendantForPosition(position.toTSPosition());
 
 		return this.computeHighlights(node);
 	};
 
-	private computeHighlights(node: ASTNode): DocumentHighlight[] {
+	private computeHighlights(node: SyntaxNode): DocumentHighlight[] {
 		let highlights: DocumentHighlight[] = [];
 
 		if (node.type === 'end') {
@@ -61,8 +63,8 @@ export class DocumentHighlightProvider {
 		return highlights;
 	}
 
-	private computeBeginHighlight(node: ASTNode): DocumentHighlight[] {
-		const endNode: ASTNode = node.parent.lastChild;
+	private computeBeginHighlight(node: SyntaxNode): DocumentHighlight[] {
+		const endNode: SyntaxNode = node.parent.lastChild;
 
 		return [
 			DocumentHighlight.create(
@@ -82,8 +84,8 @@ export class DocumentHighlightProvider {
 		];
 	}
 
-	private computeEndHighlight(node: ASTNode): DocumentHighlight[] {
-		const startNode: ASTNode = node.parent.firstChild;
+	private computeEndHighlight(node: SyntaxNode): DocumentHighlight[] {
+		const startNode: SyntaxNode = node.parent.firstChild;
 
 		return [
 			DocumentHighlight.create(

@@ -2,29 +2,27 @@
  * Forest
  */
 
-import { Document } from 'tree-sitter';
-import * as TreeSitterRuby from 'tree-sitter-ruby';
+import { Tree } from 'tree-sitter';
 
 export interface IForest {
-	tree(uri: string): Document;
+	getTree(uri: string): Tree;
+	setTree(uri: string, tree: Tree): void;
 	removeTree(uri: string): boolean;
 }
 
 export class Forest implements IForest {
-	private trees: Map<string, Document>;
+	private trees: Map<string, Tree>;
 
 	constructor() {
 		this.trees = new Map();
 	}
 
-	public tree(uri: string): Document {
-		if (!this.trees.has(uri)) {
-			const treeSitterDocument: Document = new Document();
-			treeSitterDocument.setLanguage(TreeSitterRuby);
-			this.trees.set(uri, treeSitterDocument);
-		}
-
+	public getTree(uri: string): Tree {
 		return this.trees.get(uri);
+	}
+
+	public setTree(uri: string, tree: Tree): void {
+		this.trees.set(uri, tree);
 	}
 
 	public removeTree(uri: string): boolean {

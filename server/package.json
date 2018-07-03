@@ -7,16 +7,18 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "tree-sitter": "^0.11.2",
-    "tree-sitter-ruby": "^0.11.0",
-    "vscode-languageserver": "^4.1.2",
-    "vscode-languageserver-protocol-foldingprovider": "^1.0.1",
-    "vscode-uri": "^1.0.3"
+    "electron-rebuild": "^1.7.3",
+    "prebuild-install": "^4.0.0",
+    "tree-sitter": "^0.12.13",
+    "tree-sitter-ruby": "^0.12.0",
+    "vscode-languageserver": "^4.2.1",
+    "vscode-languageserver-protocol-foldingprovider": "^2.0.1",
+    "vscode-uri": "^1.0.5"
   },
   "devDependencies": {
-    "electron-rebuild": "^1.7.3"
+    "prebuild": "^7.6.0"
   },
   "scripts": {
-    "postinstall": "electron-rebuild -v 1.7.12 -f -w tree-sitter,tree-sitter-ruby"
+    "postinstall": "electron-rebuild -v 1.7.12"
   }
 }
