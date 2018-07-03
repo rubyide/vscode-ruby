@@ -2,7 +2,7 @@
  * vscode-ruby main
  */
 import { ExtensionContext, languages, workspace } from 'vscode';
-import * as client from 'vscode-ruby-client';
+import * as client from '../client/out/extension';
 
 import * as utils from './utils';
 
@@ -16,7 +16,7 @@ import { registerTaskProvider } from './task/rake';
 
 const DOCUMENT_SELECTOR: { language: string; scheme: string }[] = [
 	{ language: 'ruby', scheme: 'file' },
-	{ language: 'ruby', scheme: 'untitled' }
+	{ language: 'ruby', scheme: 'untitled' },
 ];
 
 export function activate(context: ExtensionContext): void {
