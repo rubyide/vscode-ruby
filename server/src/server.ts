@@ -13,6 +13,7 @@ import { CapabilityCalculator } from './CapabilityCalculator';
 import { Forest } from './Forest';
 import { ASTProvider } from './providers/ASTProvider';
 import { DocumentHighlightProvider } from './providers/DocumentHighlightProvider';
+import { FoldingRangeProvider } from './providers/FoldingRangeProvider';
 
 const connection: IConnection = createConnection(ProposedFeatures.all);
 
@@ -30,6 +31,7 @@ const forest: Forest = new Forest();
 // Register providers
 new ASTProvider(connection, forest);
 new DocumentHighlightProvider(connection, forest);
+new FoldingRangeProvider(connection, forest);
 
 // Listen on the connection
 connection.listen();
