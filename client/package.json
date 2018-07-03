@@ -5,6 +5,9 @@
   "repository": "https://github.com/rubyide/vscode-ruby",
   "author": "Stafford Brunk <stafford.brunk@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "vscode": "^1.23.0"
+  },
   "private": false,
   "main": "out/extension.js",
   "dependencies": {
