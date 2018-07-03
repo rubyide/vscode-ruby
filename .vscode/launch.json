@@ -1,6 +1,7 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+
 		{
 			"type": "extensionHost",
 			"request": "launch",
@@ -11,7 +12,8 @@
 			],
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceRoot}/out/**/*.js"
+				"${workspaceRoot}/out/**/*.js",
+				"${workspaceRoot}/client/out/**/*.js"
 			]
 		},
 		{
