@@ -34,13 +34,18 @@ export class AutoCorrect {
 	}
 
 	// What's the exe name for rubocop?
-	get exe(): string {
-		const opts = this.opts;
+	get exe(): string[] {
+		const opts:any = this.opts;
 		if (opts.exe) {
-			return opts.exe;
+			return [opts.exe];
 		}
-		const ext = process.platform === 'win32' ? '.bat' : '';
-		return `rubocop${ext}`;
+
+		const ext: string = process.platform === 'win32' ? '.bat' : '';
+		if (vscode.workspace.getConfiguration('ruby').useBundler) {
+			return [`bundle${ext}`, 'exec', 'rubocop'];
+		}
+
+		return [`rubocop${ext}`];
 	}
 
 	// Arguments for running rubocop.
@@ -81,9 +86,20 @@ export class AutoCorrect {
 	// here to make it easier for users to debug config issues.
 	//
 
+	private spawn = (args: string[], options?: cp.SpawnOptions): cp.ChildProcess => {
+		const exe: string[] = this.exe;
+		const spawnOpt: cp.SpawnOptions = options ? options : {}
+
+		if (!spawnOpt.cwd) { spawnOpt.cwd = vscode.workspace.rootPath }
+
+		return cp.spawn(exe.shift(), exe.concat(args), spawnOpt);
+	};
+
 	public test(): Promise<any> {
 		return new Promise((resolve, reject) => {
-			const rubo = cp.spawn(this.exe, ['-v']);
+
+			const rubo = this.spawn(['-v']);
+
 			rubo.on('error', err => {
 				if (err.message.includes('ENOENT')) {
 					vscode.window.showErrorMessage(`couldn't find ${this.exe} for formatting (ENOENT)`);
@@ -96,6 +112,11 @@ export class AutoCorrect {
 			rubo.stderr.on('data', data => {
 				// for debugging
 				console.log(`rubocop stderr ${data}`);
+			});
+
+			rubo.stdout.on('data', data => {
+				// for debugging
+				console.log(`rubocop stdout ${data}`);
 			});
 
 			rubo.on('exit', code => {
@@ -133,7 +154,7 @@ export class AutoCorrect {
 					console.log(`${this.exe} ${args.join(' ')}`);
 
 					const startTm = new Date().getTime();
-					const rubo = cp.spawn(this.exe, args, {
+					const rubo = this.spawn(args, {
 						cwd: root || process.cwd(),
 						env: process.env,
 					});
