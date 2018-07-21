@@ -2596,6 +2596,9 @@
 					"include": "#yard_name_types"
 				},
 				{
+					"include": "#yard_param_types"
+				},
+				{
 					"include": "#yard_tag"
 				},
 				{
@@ -2640,7 +2643,7 @@
 		},
 		"yard_name_types": {
 			"comment": "For YARD tags that follow the tag-name-types-comment pattern",
-			"begin": "^(\\s*)(#)(\\s*)(@)(attr|attr_reader|option|param|attr_writer|see|yieldparam)(?=\\s)(\\s+([a-z_][a-zA-Z_]*))?(\\s+((\\[).+(])))?",
+			"begin": "^(\\s*)(#)(\\s*)(@)(attr|attr_reader|attr_writer|see|yieldparam)(?=\\s)(\\s+([a-z_][a-zA-Z_]*))?(\\s+((\\[).+(])))?",
 			"beginCaptures":{
 				"1": {
 					"name": "comment.line.yard.ruby"
@@ -2673,6 +2676,65 @@
 					"name": "comment.line.punctuation.yard.ruby"
 				},
 				"11": {
+					"name": "comment.line.punctuation.yard.ruby"
+				}
+			},
+			"end": "^(?!\\s*#\\3\\s{2,})",
+			"contentName": "comment.line.string.yard.ruby",
+			"name": "comment.line.number-sign.ruby",
+			"patterns": [
+				{
+					"include": "#yard"
+				},
+				{
+					"include": "#yard_continuation"
+				}
+			]
+		},
+		"yard_param_types": {
+			"comment": "For YARD tags that follow the tag-param-types-comment pattern",
+			"begin": "^(\\s*)(#)(\\s*)(@)(option|param)(?=\\s)(\\s+([a-z_][a-zA-Z_]*:?))?(\\s+((\\[).+(])))?(\\s+(:[a-z_][a-zA-Z_]*))?",
+			"beginCaptures":{
+				"1": {
+					"name": "comment.line.yard.ruby"
+				},
+				"2": {
+					"name": "punctuation.definition.comment.ruby"
+				},
+				"3": {
+					"name": "comment.line.yard.ruby"
+				},
+				"4": {
+					"name": "comment.line.keyword.punctuation.yard.ruby"
+				},
+				"5": {
+					"name": "comment.line.keyword.yard.ruby"
+				},
+				"6": {
+					"name": "comment.line.yard.ruby"
+				},
+				"7": {
+					"name": "comment.line.parameter.yard.ruby"
+				},
+				"8": {
+					"name": "comment.line.yard.ruby"
+				},
+				"9": {
+					"name": "comment.line.type.yard.ruby"
+				},
+				"10": {
+					"name": "comment.line.punctuation.yard.ruby"
+				},
+				"11": {
+					"name": "comment.line.punctuation.yard.ruby"
+				},
+				"12": {
+					"name": "comment.line.punctuation.yard.ruby"
+				},
+				"13": {
+					"name": "comment.line.keyword.yard.ruby"
+				},
+				"14": {
 					"name": "comment.line.punctuation.yard.ruby"
 				}
 			},
