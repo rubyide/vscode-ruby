@@ -5,13 +5,13 @@
  */
 
 import { SyntaxNode, Tree } from 'tree-sitter';
-import { CancellationToken, IConnection } from 'vscode-languageserver';
 import {
 	FoldingRange,
 	FoldingRangeKind,
 	FoldingRangeRequest,
 	FoldingRangeRequestParam,
-} from 'vscode-languageserver-protocol-foldingprovider';
+	IConnection,
+} from 'vscode-languageserver';
 import { IForest } from '../Forest';
 
 export class FoldingRangeProvider {
@@ -36,8 +36,7 @@ export class FoldingRangeProvider {
 	}
 
 	protected handleFoldingRange = async (
-		param: FoldingRangeRequestParam,
-		_token: CancellationToken
+		param: FoldingRangeRequestParam
 	): Promise<FoldingRange[]> => {
 		this.connection.console.log('Fold request!');
 		const folds: FoldingRange[] = [];

@@ -7,12 +7,10 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "electron-rebuild": "^1.7.3",
-    "prebuild-install": "^4.0.0",
+    "electron-rebuild": "^1.8.1",
     "tree-sitter": "^0.13.2-0",
     "tree-sitter-ruby": "^0.13.5",
-    "vscode-languageserver": "^4.2.1",
-    "vscode-languageserver-protocol-foldingprovider": "^2.0.1",
+    "vscode-languageserver": "^4.4.0",
     "vscode-uri": "^1.0.5"
   },
   "devDependencies": {
