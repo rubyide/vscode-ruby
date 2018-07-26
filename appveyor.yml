@@ -8,8 +8,7 @@ install:
   - ruby --version
   - gem --version
   - gem install ruby-debug-ide --no-ri --no-rdoc
-  - ps: Install-Product node '6.9.1'
-  - npm install -g gulp
+  - ps: Install-Product node '8.11.3'
   - npm install
 build_script:
   - npm run compile

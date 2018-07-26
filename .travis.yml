@@ -10,8 +10,8 @@ rvm:
 
 before_install:
   - gem install ruby-debug-ide
-  - nvm install 8.9.3
-  - echo "8.9.3" > .nvmrc
+  - nvm install 8.11.3
+  - echo "8.11.3" > .nvmrc
 
 before_script:
   - nvm use
