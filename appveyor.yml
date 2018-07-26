@@ -10,6 +10,8 @@ install:
   - gem install ruby-debug-ide --no-ri --no-rdoc
   - ps: Install-Product node '8.11.3'
   - npm install
+  - cd client && npm install && cd ..
+  - cd server && npm install && cd ..
 build_script:
   - npm run compile
 test_script:

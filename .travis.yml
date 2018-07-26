@@ -17,5 +17,7 @@ before_script:
   - nvm use
   - npm install -g typescript -v 2.1.5
   - npm install
+  - cd client && npm install && cd ..
+  - cd server && npm install && cd ..
   - npm run compile
 script: nvm use && npm run test && npm run test-debugger
