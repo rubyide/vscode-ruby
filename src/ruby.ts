@@ -2,8 +2,6 @@
  * vscode-ruby main
  */
 import { ExtensionContext, languages, workspace } from 'vscode';
-import * as client from '../client/out/extension';
-
 import * as utils from './utils';
 
 import languageConfiguration from './languageConfiguration';
@@ -18,6 +16,8 @@ const DOCUMENT_SELECTOR: { language: string; scheme: string }[] = [
 	{ language: 'ruby', scheme: 'file' },
 	{ language: 'ruby', scheme: 'untitled' },
 ];
+
+const client = require('../client/out/extension');
 
 export function activate(context: ExtensionContext): void {
 	// register language config
