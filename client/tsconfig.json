@@ -5,8 +5,7 @@
 		"target": "es6",
 		"outDir": "out",
 		"rootDir": "src",
-		"lib": [ "es6" ],
-		"sourceMap": true
+		"lib": [ "es6" ]
 	},
 	"include": [
 		"src"
