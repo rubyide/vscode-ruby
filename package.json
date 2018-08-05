@@ -73,7 +73,8 @@
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run clean:server && npm run compile",
+    "clean:server": "cd server && npm run remove-binaries",
     "compile:legacy": "rm -rf out && tsc -p ./src",
     "compile:client": "rm -rf ./client/out && tsc -p ./client/tsconfig.json",
     "compile:server": "rm -rf ./server/out && tsc -p ./server/tsconfig.json",
