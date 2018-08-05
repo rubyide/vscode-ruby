@@ -17,13 +17,14 @@ const DOCUMENT_SELECTOR: { language: string; scheme: string }[] = [
 	{ language: 'ruby', scheme: 'untitled' },
 ];
 
-const client = require('../client/out/extension');
+let client;
 
 export function activate(context: ExtensionContext): void {
 	// register language config
 	languages.setLanguageConfiguration('ruby', languageConfiguration);
 
 	if (workspace.getConfiguration('ruby').useLanguageServer) {
+		client = require('../client/out/extension');
 		client.activate(context);
 	} else {
 		// Register legacy providers
@@ -44,7 +45,9 @@ export function activate(context: ExtensionContext): void {
 }
 
 export function deactivate(): void {
-	client.deactivate();
+	if (workspace.getConfiguration('ruby').useLanguageServer) {
+		client.deactivate();
+	}
 
 	return undefined;
 }
