@@ -1,13 +1,4 @@
-/**
- * LSP server for vscode-ruby
- */
-
-import {
-	createConnection,
-	IConnection,
-	InitializeParams,
-	ProposedFeatures,
-} from 'vscode-languageserver';
+import { Connection, InitializeParams, InitializeResult } from 'vscode-languageserver';
 
 import { CapabilityCalculator } from './CapabilityCalculator';
 import { Forest } from './Forest';
@@ -15,23 +6,32 @@ import { ASTProvider } from './providers/ASTProvider';
 import { DocumentHighlightProvider } from './providers/DocumentHighlightProvider';
 import { FoldingRangeProvider } from './providers/FoldingRangeProvider';
 
-const connection: IConnection = createConnection(ProposedFeatures.all);
+export interface ILanguageServer {
+	readonly capabilities: InitializeResult;
+}
 
-connection.onInitialize((params: InitializeParams) => {
-	const calculator: CapabilityCalculator = new CapabilityCalculator(params.capabilities);
+export class Server implements ILanguageServer {
+	public connection: Connection;
+	private calculator: CapabilityCalculator;
+	private forest: Forest;
 
-	return {
-		capabilities: calculator.capabilities,
-	};
-});
+	constructor(connection: Connection, params: InitializeParams) {
+		this.connection = connection;
+		this.calculator = new CapabilityCalculator(params.capabilities);
+		this.forest = new Forest();
 
-// Create a forest to track our docs
-const forest: Forest = new Forest();
+		this.registerProviders();
+	}
 
-// Register providers
-new ASTProvider(connection, forest);
-new DocumentHighlightProvider(connection, forest);
-new FoldingRangeProvider(connection, forest);
+	get capabilities(): InitializeResult {
+		return {
+			capabilities: this.calculator.capabilities,
+		};
+	}
 
-// Listen on the connection
-connection.listen();
+	private registerProviders(): void {
+		new ASTProvider(this.connection, this.forest);
+		new DocumentHighlightProvider(this.connection, this.forest);
+		new FoldingRangeProvider(this.connection, this.forest);
+	}
+}

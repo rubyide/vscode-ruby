@@ -12,7 +12,7 @@ import {
 } from 'vscode-languageclient';
 
 export function activate(context: ExtensionContext): void {
-	const serverModule: string = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
+	const serverModule: string = context.asAbsolutePath(path.join('server', 'out', 'index.js'));
 	const debugOptions: { execArgv: string[] } = { execArgv: ['--nolazy', '--inspect=6009'] };
 
 	// If the extension is launched in debug mode then the debug server options are used
