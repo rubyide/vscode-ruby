@@ -8,9 +8,10 @@ install:
   - ruby --version
   - gem --version
   - gem install ruby-debug-ide --no-ri --no-rdoc
-  - ps: Install-Product node '6.9.1'
-  - npm install -g gulp
+  - ps: Install-Product node '8.11.3'
   - npm install
+  - cd client && npm install && cd ..
+  - cd server && npm install && cd ..
 build_script:
   - npm run compile
 test_script:
@@ -18,14 +19,11 @@ test_script:
 
 environment:
   matrix:
-    - ruby_version: "193"
-    - ruby_version: "200"
-    - ruby_version: "200-x64"
-    - ruby_version: "21"
-    - ruby_version: "21-x64"
     - ruby_version: "22"
     - ruby_version: "22-x64"
     - ruby_version: "23"
     - ruby_version: "23-x64"
     - ruby_version: "24"
     - ruby_version: "24-x64"
+    - ruby_version: "25"
+    - ruby_version: "25-x64"

@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": false,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"sourceMap": true
+	}
+}

@@ -1,0 +1,22 @@
+{
+  "name": "vscode-ruby-server",
+  "version": "1.0.0",
+  "description": "Language server for vscode-ruby",
+  "repository": "https://github.com/rubyide/vscode-ruby",
+  "author": "Stafford Brunk <stafford.brunk@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "prebuild-install": "^5.0.0",
+    "tree-sitter": "^0.13.4",
+    "tree-sitter-ruby": "^0.13.5",
+    "vscode-languageserver": "^4.4.0",
+    "vscode-uri": "^1.0.5"
+  },
+  "devDependencies": {
+    "prebuild": "^7.6.0"
+  },
+  "scripts": {
+    "remove-binaries": "rm -rf node_modules/tree-sitter/build && rm -rf node_modules/tree-sitter-ruby/build"
+  }
+}

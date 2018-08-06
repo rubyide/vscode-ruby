@@ -19,7 +19,7 @@ export function registerCompletionProvider(ctx: ExtensionContext, documentSelect
 				vscode.languages.registerCompletionItemProvider(
 					/** selector */documentSelector,
 					/** provider */{
-						provideCompletionItems: function completionProvider(document, position, token) {
+						provideCompletionItems: (document, position, token, context): Thenable<vscode.CompletionItem[] | vscode.CompletionList> => {
 							return new Promise((resolve, reject) => {
 								const line = position.line + 1;
 								const column = position.character;
@@ -51,8 +51,8 @@ export function registerCompletionProvider(ctx: ExtensionContext, documentSelect
 										completionItems.push(completionItem);
 									}, this);
 									if (completionItems.length === 0)
-										return reject([]);
-									return resolve(completionItems);
+										return reject({items: []});
+									return resolve({items: completionItems});
 								});
 								child.stdin.end(document.getText());
 							});

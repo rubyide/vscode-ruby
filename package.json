@@ -30,7 +30,7 @@
     }
   ],
   "engines": {
-    "vscode": "^1.14.0"
+    "vscode": "^1.25.0"
   },
   "license": "MIT",
   "icon": "images/ruby.png",
@@ -63,24 +63,25 @@
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.50",
     "cson-parser": "^2.0.1",
-    "gulp": "^3.9.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-typescript": "^2.12.0",
-    "gulp-util": "^3.0.5",
     "mocha": "^2.4.5",
     "prettier": "^1.11.1",
     "run-sequence": "*",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.10.0",
     "tslint-microsoft-contrib": "^5.0.3",
-    "typescript": "^2.1.5",
-    "vscode": "^1.1.4",
+    "typescript": "^2.9.2",
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./src",
-    "compile": "tsc -p ./src",
+    "vscode:prepublish": "npm run clean:server && npm run compile",
+    "clean:server": "cd server && npm run remove-binaries",
+    "compile:legacy": "rm -rf out && tsc -p ./src",
+    "compile:client": "rm -rf ./client/out && tsc -p ./client/tsconfig.json",
+    "compile:server": "rm -rf ./server/out && tsc -p ./server/tsconfig.json",
     "watch": "tsc -w -p ./src",
+    "watch:client": "tsc -w -p ./client/tsconfig.json",
+    "watch:server": "tsc -w -p ./server/tsconfig.json",
+    "compile": "npm run compile:legacy && npm run compile:client && npm run compile:server",
     "test": "node ./node_modules/mocha/bin/mocha --recursive ./out/*.test.js",
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
     "postinstall": "node ./node_modules/vscode/bin/install",
@@ -140,15 +141,32 @@
           "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
           "isExecutable": true
         },
+        "ruby.useLanguageServer": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use experimental built-in language server"
+        },
         "ruby.codeCompletion": {
-          "type": ["boolean", "string"],
-          "enum": [false, "rcodetools"],
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "enum": [
+            false,
+            "rcodetools"
+          ],
           "default": false,
           "description": "Method to use for code completion. Use `false` to disable or if another extension provides this feature."
         },
         "ruby.intellisense": {
-          "type": ["boolean", "string"],
-          "enum": [false, "rubyLocate"],
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "enum": [
+            false,
+            "rubyLocate"
+          ],
           "default": false,
           "description": "Method to use for intellisense (go to definition, etc.). Use `false` to disable or if another extension provides this feature."
         },
@@ -293,8 +311,14 @@
           }
         },
         "ruby.format": {
-          "type": [ "boolean", "string" ],
-          "enum": [ false, "rubocop" ],
+          "type": [
+            "boolean",
+            "string"
+          ],
+          "enum": [
+            false,
+            "rubocop"
+          ],
           "default": false,
           "description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature."
         }

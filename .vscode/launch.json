@@ -1,6 +1,7 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+
 		{
 			"type": "extensionHost",
 			"request": "launch",
@@ -11,13 +12,14 @@
 			],
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceRoot}/out/**/*.js"
+				"${workspaceRoot}/out/**/*.js",
+				"${workspaceRoot}/client/out/**/*.js"
 			]
 		},
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Server",
+			"name": "Debug Server",
 			"cwd": "${workspaceRoot}",
 			"program": "${workspaceRoot}/src/debugger/main.ts",
 			"args": [
@@ -54,14 +56,22 @@
 			"sourceMaps": true,
 			"outDir": "${workspaceRoot}/out",
 			"cwd": "${workspaceRoot}"
+		},
+		{
+			"name": "Attach to Language Server",
+			"type": "node",
+			"request": "attach",
+			"port": 6009,
+			"sourceMaps": true,
+			"outFiles": [ "${workspaceRoot}/server/out/**/*.js" ]
 		}
 	],
 	"compounds": [
 		{
-			"name": "Extension + Server",
+			"name": "Extension w/ Debug Server",
 			"configurations": [
 				"Launch Extension",
-				"Server"
+				"Debug Server"
 			]
 		}
 	]
