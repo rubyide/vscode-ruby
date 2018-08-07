@@ -1,4 +1,5 @@
-Make sure these boxes are checked before submitting your PR -- thanks in advance!
+*Description of change and why it was needed here*
 
-- [] Build pass!
-- [] Follow VS Code [Coding Guidelines](https://github.com/Microsoft/vscode/wiki/Coding-Guidelines)
+- [] The build passes
+- [] TSLint is mostly happy
+- [] Prettier has been run
