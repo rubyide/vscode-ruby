@@ -1,16 +1,16 @@
-# VS Code Ruby Extension
+# Visual Studio Code Ruby Extension
 
-[![Join the chat at https://slackin-rrckhypvhm.now.sh/](./images/badge.png)](https://slackin-rrckhypvhm.now.sh/) [![Build Status](https://api.travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
+ [![Build Status](https://api.travis-ci.org/rubyide/vscode-ruby.svg?branch=master)](https://travis-ci.org/rubyide/vscode-ruby) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 
-This extension provides rich Ruby language and debugging support for VS Code. It's still in progress ([GitHub](https://github.com/rubyide/vscode-ruby.git)), please expect frequent updates with breaking changes before 1.0.
+This extension provides Ruby language and debugging support for VS Code.
 
 ## Table of Contents
 
 <!---
 markdown-toc --no-firsth1 --maxdepth 1 readme.md
 -->
-- [About](#about)
 - [Install](#install)
+- [Language Server](#language-server)
 - [Debugger](#debugger)
 - [Linters](#linters)
 - [Formatting](#formatting)
@@ -21,10 +21,6 @@ markdown-toc --no-firsth1 --maxdepth 1 readme.md
 - [License](#license)
 
 Also see the [CHANGELOG](CHANGELOG.md).
-
-## About
-
-It started as a personal project of [@rebornix](https://github.com/rebornix), aiming to bring Ruby debugging experience to VS Code. Then it turned to be a community driven project. With his amazing commits, [@HookyQR](https://github.com/HookyQR) joined as a contributor and brought users Linting/Formatting/etc, made the debugger more robust and more! If you are interested in this project, feel free to join the [community](https://github.com/rubyide/vscode-ruby/graphs/contributors):  file [issues](https://github.com/rubyide/vscode-ruby/issues/new), fork [our project](https://github.com/rubyide/vscode-ruby) and hack it around and send us PRs, or subscribe to our [mailing list](http://eepurl.com/bTBAfv).
 
 ## Install
 
@@ -43,6 +39,17 @@ either. One way to debug these problems is to investigate within VS Code's
 Integrated Terminal. (View > Integrated Terminal). Try `ruby -v`, `gem env
 gemdir`, `gem list | grep rubocop`, `which rubocop` and then `rubocop -v`. This
 might shed some light on why a gem dependency isn't working.
+
+## Language Server
+As of version v0.20.0, a new language server has been introduced into the extension. This server provides the following features:
+
+* Balanced pairs (eg `def-end`, `if-end`, etc) highlighting
+* Syntax aware code folding
+
+The server is designed to slowly replace existing extension functionality. Users can choose to replace that functionality with that of the language server's via the `useLanguageServer` configuration option (set it to `true`). You can verify the server is running via the "Output" tab in VSCode (next to the Terminal).
+
+### Feature Requests
+The language server is under active development. You can check [Issue 317](https://github.com/rubyide/vscode-ruby/issues/317) to see the currently proposed feature list. Please do not open GitHub issues for unimplemented features that are already on that list!
 
 ## Debugger
 ### Install Ruby Dependencies
@@ -212,25 +219,17 @@ Solargraph now includes go to/peek definition and other language features. See t
 
 When using Solargraph it is recommended to set `ruby.intellisense` to `false`.
 
-## TODO
-
-- Unit/Integration tests debugging
-  * Shoulda
-  * Test::Unit
-- Rack
-- Rake
-- IRB console
-
 ## Contributing
 
 Feel free to open issues or PRs! We welcome all contributions, even from beginners. If you want to get started with a PR, please do the following:
 
 1. Check out the [VS Code Extension Docs](https://code.visualstudio.com/docs/extensions/overview), especially [Running and Debugging Extensions](https://code.visualstudio.com/docs/extensions/debugging-extensions).
 1. Fork this repo.
-1. Install dependencies with `npm install`.
+1. Install dependencies with `npm install`. You'll also need to install dependencies in the `client` and `server` directories.
 1. Run `npm run watch` in a shell to get the Typescript compiler running.
+1. Run `npm run watch:client` to compile the client and `npm run watch:server` to compile the server. You'll need all three running to do development on the extension.
 1. Open the repo directory in VS Code.
-1. Make a code change and test it. This is not hard, see the doc links above.
+1. Make a code change and test it. You can use the Debug tab and the `Launch Extension` configuration to help.
 1. Create a branch and submit a PR!
 
 ## License
