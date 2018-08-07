@@ -1,11 +1,11 @@
 {
-  "name": "Ruby",
+  "name": "ruby",
   "displayName": "Ruby",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "publisher": "rebornix",
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
   "author": {
-    "name": "Peng Lv"
+    "name": "Stafford Brunk"
   },
   "contributors": [
     {
@@ -144,7 +144,7 @@
         "ruby.useLanguageServer": {
           "type": "boolean",
           "default": false,
-          "description": "Use experimental built-in language server"
+          "description": "Use built-in language server"
         },
         "ruby.codeCompletion": {
           "type": [

@@ -1,3 +1,15 @@
+### 0.20.0 - Aug 7 2018
+First release with the proof of concept internal language server
+
+Notable Changes:
+* [Language Server - proof of concept](https://github.com/rubyide/vscode-ruby/pull/366) by [wingrunr21](https://github.com/wingrunr21)
+
+Bug Fixes:
+* [Respect the bundler option when formatting](https://github.com/rubyide/vscode-ruby/pull/357) by [narinari](https://github.com/narinari)
+
+Enhanced Documentation:
+* [Fixes broken anchor link in README](https://github.com/rubyide/vscode-ruby/pull/362) by [ecbrodie](https://github.com/ecbrodie)
+
 ### 0.19.0 - Jun 19 2018
 Notable Changes:
 * [Fix bug where word match includes colon](https://github.com/rubyide/vscode-ruby/pull/353) by [toddmazierski](https://github.com/toddmazierski)
