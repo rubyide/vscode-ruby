@@ -22,6 +22,7 @@ let client;
 export function activate(context: ExtensionContext): void {
 	// register language config
 	languages.setLanguageConfiguration('ruby', languageConfiguration);
+	languages.setLanguageConfiguration('erb', languageConfiguration);
 
 	if (workspace.getConfiguration('ruby').useLanguageServer) {
 		client = require('../client/out/extension');
