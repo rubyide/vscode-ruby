@@ -14,7 +14,7 @@
     "vscode-uri": "^1.0.5"
   },
   "devDependencies": {
-    "prebuild": "^7.6.0"
+    "prebuild": "^8.0.1"
   },
   "scripts": {
     "remove-binaries": "rm -rf node_modules/tree-sitter/build && rm -rf node_modules/tree-sitter-ruby/build"
