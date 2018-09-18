@@ -63,7 +63,7 @@
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.50",
     "cson-parser": "^2.0.1",
-    "mocha": "^2.4.5",
+    "mocha": "^5.2.0",
     "prettier": "^1.11.1",
     "run-sequence": "*",
     "tslint": "^5.9.1",
