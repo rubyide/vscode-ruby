@@ -154,6 +154,7 @@ Settings available (in your VSCode workspace) for each of the linters:
 	"rails": true //Run extra rails cops
 }
 ```
+
 ## Formatting
 
 The VS Code Ruby extension can automatically format your Ruby files whenever you save.
