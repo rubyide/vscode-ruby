@@ -9,6 +9,7 @@ This extension provides Ruby language and debugging support for VS Code.
 <!---
 markdown-toc --no-firsth1 --maxdepth 1 readme.md
 -->
+
 - [Install](#install)
 - [Language Server](#language-server)
 - [Debugger](#debugger)
@@ -41,31 +42,38 @@ gemdir`, `gem list | grep rubocop`, `which rubocop` and then `rubocop -v`. This
 might shed some light on why a gem dependency isn't working.
 
 ## Language Server
+
 As of version v0.20.0, a new language server has been introduced into the extension. This server provides the following features:
 
-* Balanced pairs (eg `def-end`, `if-end`, etc) highlighting
-* Syntax aware code folding
+- Balanced pairs (eg `def-end`, `if-end`, etc) highlighting
+- Syntax aware code folding
 
 The server is designed to slowly replace existing extension functionality. Users can choose to replace that functionality with that of the language server's via the `useLanguageServer` configuration option (set it to `true`). You can verify the server is running via the "Output" tab in VSCode (next to the Terminal).
 
 ### Feature Requests
+
 The language server is under active development. You can check [Issue 317](https://github.com/rubyide/vscode-ruby/issues/317) to see the currently proposed feature list. Please do not open GitHub issues for unimplemented features that are already on that list!
 
 ## Debugger
+
 ### Install Ruby Dependencies
+
 In this extension, we implement [ruby debug ide protocol](http://debug-commons.rubyforge.org/protocol-spec.html) to allow VS Code to communicate with ruby debug, it requires `ruby-debug-ide` to be installed on your machine. This is also how RubyMine/NetBeans does by default.
 
 - If you are using JRuby or Ruby v1.8.x (`jruby`, `ruby_18`, `mingw_18`), run `gem install ruby-debug-ide`.
 - If you are using Ruby v1.9.x (`ruby_19`, `mingw_19`), run `gem install ruby-debug-ide`. Make sure `ruby-debug-base19x` is installed together with `ruby-debug-ide`.
 - If you are using Ruby v2.x
-  * `gem install ruby-debug-ide`
-  * `gem install debase` (or `gem install byebug`)
+  - `gem install ruby-debug-ide`
+  - `gem install debase` (or `gem install byebug`)
 
 ### Add VS Code config to your project
+
 Go to the debugger view of VS Code and hit the gear icon. Choose Ruby or Ruby Debugger from the prompt window, then you'll get the sample launch config in `.vscode/launch.json`. The sample launch configurations include debuggers for RSpec (complete, and active spec file) and Cucumber runs. These examples expect that `bundle install --binstubs` has been called.
 
 ### Detailed instruction for debugging Ruby Scripts/Rails/etc
+
 Read following instructions about how to debug ruby/rails/etc locally or remotely
+
 - [Debugger installation](https://github.com/rubyide/vscode-ruby/wiki/1.-Debugger-Installation)
 - [Launching from VS Code](https://github.com/rubyide/vscode-ruby/wiki/2.-Launching-from-VS-Code)
 - [Attaching to a debugger](https://github.com/rubyide/vscode-ruby/wiki/3.-Attaching-to-a-debugger)
@@ -73,32 +81,35 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
 - [Example configurations](https://github.com/rubyide/vscode-ruby/wiki/5.-Example-configurations)
 
 ### Debugger F.A.Q.
+
 #### Conditional breakpoint doesn't work
+
 You need use Ruby `2.0` or above and you need to update `debase` to latest beta version `gem install debase -v 0.2.2.beta10`.
 
 ## Linters
+
 ### Available Linter hooks
+
 You will need to install the ruby gem for each of these for linting to work (except ruby -wc of course)
 
-* ruby -wc
-* rubocop
-* ruby-lint
-* reek
-* fasterer
-* debride
-
+- ruby -wc
+- rubocop
+- ruby-lint
+- reek
+- fasterer
+- debride
 
 Enable each one in your workspace or user settings:
 
 ```javascript
 // Basic settings: turn linter(s) on
 "ruby.lint": {
-	"reek": true,
-	"rubocop": true,
-	"ruby": true, //Runs ruby -wc
-	"fasterer": true,
-	"debride": true,
-	"ruby-lint": true
+  "reek": true,
+  "rubocop": true,
+  "ruby": true, //Runs ruby -wc
+  "fasterer": true,
+  "debride": true,
+  "ruby-lint": true
 },
 
 // Time (ms) to wait after keypress before running enabled linters. Ensures
@@ -107,15 +118,15 @@ Enable each one in your workspace or user settings:
 
 //advanced: set command line options for some linters:
 "ruby.lint": {
-	"ruby": {
-		"unicode": true //Runs ruby -wc -Ku
-	},
-	"rubocop": {
-		"only": ["SpaceInsideBlockBraces", "LeadingCommentSpace"],
-		"lint": true,
-		"rails": true
-	},
-	"reek": true
+  "ruby": {
+    "unicode": true //Runs ruby -wc -Ku
+  },
+  "rubocop": {
+    "only": ["SpaceInsideBlockBraces", "LeadingCommentSpace"],
+    "lint": true,
+    "rails": true
+  },
+  "reek": true
 }
 ```
 
@@ -124,18 +135,19 @@ By default no linters are turned on.
 Each linter runs only on the newly opened or edited file. This excludes some of the linters functionality, and makes some overly chatty - such as ruby-lint reporting undefined methods. The usual configuration file for each linter will be use as they would be when running from the command line, however settings that include/exclude files will not likely be followed.
 
 Relevant configuration files:
-* debride: _none_
-* ruby: _none_
-* reek: [*.reek](https://github.com/troessner/reek)
-* fasterer: [.fasterer.yml](https://github.com/DamirSvrtan/fasterer)
-* ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/master/doc/configuration.md)
-* rubocop: [.rubocop.yml](http://rubocop.readthedocs.io/en/latest/configuration/)
+
+- debride: _none_
+- ruby: _none_
+- reek: [*.reek](https://github.com/troessner/reek)
+- fasterer: [.fasterer.yml](https://github.com/DamirSvrtan/fasterer)
+- ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/master/doc/configuration.md)
+- rubocop: [.rubocop.yml](http://rubocop.readthedocs.io/en/latest/configuration/)
 
 Settings available (in your VSCode workspace) for each of the linters:
 
 ```javascript
 "debride": {
-	"rails": true //Add some rails call conversions.
+  "rails": true //Add some rails call conversions.
 }
 
 "ruby"//no settings
@@ -143,19 +155,20 @@ Settings available (in your VSCode workspace) for each of the linters:
 "fasterer" //no settings
 
 "ruby-lint": {
-	"levels": [/* a subset of these */ "error","warning","info"],
-	"classes":[ /* a subset of these */ "argument_amount", "loop_keywords", "pedantics", "shadowing_variables", "undefined_methods", "undefined_variables", "unused_variables", "useless_equality_checks" ]
+  "levels": [/* a subset of these */ "error","warning","info"],
+  "classes":[ /* a subset of these */ "argument_amount", "loop_keywords", "pedantics", "shadowing_variables", "undefined_methods", "undefined_variables", "unused_variables", "useless_equality_checks" ]
 }
 
 "rubocop": {
-	"lint": true, //enable all lint cops.
-	"only": [/* array: Run only the specified cop(s) and/or cops in the specified departments. */],
-	"except": [/* array: Run all cops enabled by configuration except the specified cop(s) and/or departments. */],
-	"forceExclusion": true, //Add --force-exclusion option
-	"require": [/* array: Require Ruby files. */],
-	"rails": true //Run extra rails cops
+  "lint": true, //enable all lint cops.
+  "only": [/* array: Run only the specified cop(s) and/or cops in the specified departments. */],
+  "except": [/* array: Run all cops enabled by configuration except the specified cop(s) and/or departments. */],
+  "forceExclusion": true, //Add --force-exclusion option
+  "require": [/* array: Require Ruby files. */],
+  "rails": true //Run extra rails cops
 }
 ```
+
 ## Formatting
 
 The VS Code Ruby extension can automatically format your Ruby files whenever you save.
@@ -202,8 +215,8 @@ The default settings are:
 
 ```javascript
 "ruby.locate": {
-	"include": "**/*.rb",
-	"exclude": "{**/@(test|spec|tmp|.*),**/@(test|spec|tmp|.*)/**,**/*_spec.rb}"
+  "include": "**/*.rb",
+  "exclude": "{**/@(test|spec|tmp|.*),**/@(test|spec|tmp|.*)/**,**/*_spec.rb}"
 }
 ```
 
