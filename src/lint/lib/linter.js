@@ -172,7 +172,7 @@ class Linter {
 			return prom.then(final);
 		});
 		const noTmpFileSvc = () => toRun.filter(svc => !svc.tmp).map(svc => this._exeLinter(svc, {
-			dir: sourceDir || this.rootPath,
+			dir: this.rootPath || sourceDir,
 			data: doc.getText(),
 			file: doc.fileName
 		}).then(final));
