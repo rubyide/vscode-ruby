@@ -13,10 +13,9 @@ import {
 	IConnection,
 } from 'vscode-languageserver';
 import { IForest } from '../Forest';
+import Provider from './Provider';
 
-export class FoldingRangeProvider {
-	private connection: IConnection;
-	private forest: IForest;
+export default class FoldingRangeProvider extends Provider {
 	private readonly FOLD_CONSTRUCTS: Set<string> = new Set([
 		'begin',
 		'def',
@@ -28,9 +27,12 @@ export class FoldingRangeProvider {
 		'module',
 	]);
 
+	static register(connection: IConnection, forest: IForest) {
+		return new FoldingRangeProvider(connection, forest);
+	}
+
 	constructor(connection: IConnection, forest: IForest) {
-		this.connection = connection;
-		this.forest = forest;
+		super(connection, forest);
 
 		this.connection.onRequest(FoldingRangeRequest.type, this.handleFoldingRange);
 	}

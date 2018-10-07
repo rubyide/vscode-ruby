@@ -2,9 +2,9 @@ import { Connection, InitializeParams, InitializeResult } from 'vscode-languages
 
 import { CapabilityCalculator } from './CapabilityCalculator';
 import { Forest } from './Forest';
-import { ASTProvider } from './providers/ASTProvider';
-import { DocumentHighlightProvider } from './providers/DocumentHighlightProvider';
-import { FoldingRangeProvider } from './providers/FoldingRangeProvider';
+import ASTProvider from './providers/ASTProvider';
+import DocumentHighlightProvider from './providers/DocumentHighlightProvider';
+import FoldingRangeProvider from './providers/FoldingRangeProvider';
 
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
@@ -30,8 +30,8 @@ export class Server implements ILanguageServer {
 	}
 
 	private registerProviders(): void {
-		new ASTProvider(this.connection, this.forest);
-		new DocumentHighlightProvider(this.connection, this.forest);
-		new FoldingRangeProvider(this.connection, this.forest);
+		ASTProvider.register(this.connection, this.forest);
+		DocumentHighlightProvider.register(this.connection, this.forest);
+		FoldingRangeProvider.register(this.connection, this.forest);
 	}
 }

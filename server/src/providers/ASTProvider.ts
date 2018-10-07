@@ -19,15 +19,17 @@ import {
 
 import { IForest } from '../Forest';
 import { Position } from '../Position';
+import Provider from './Provider';
 
-export class ASTProvider {
-	private connection: IConnection;
-	private forest: IForest;
+export default class ASTProvider extends Provider {
 	private parser: Parser;
 
+	static register(connection: IConnection, forest: IForest) {
+		return new ASTProvider(connection, forest);
+	}
+
 	constructor(connection: IConnection, forest: IForest) {
-		this.connection = connection;
-		this.forest = forest;
+		super(connection, forest);
 		this.parser = new Parser();
 		this.parser.setLanguage(TreeSitterRuby);
 

@@ -14,10 +14,11 @@ import {
 } from 'vscode-languageserver';
 import { IForest } from '../Forest';
 import { Position } from '../Position';
+import Provider from './Provider';
 
 // TODO support more highlight use cases than just balanced pairs
 
-export class DocumentHighlightProvider {
+export default class DocumentHighlightProvider extends Provider {
 	private readonly BEGIN_TYPES: Set<string> = new Set([
 		'begin',
 		'def',
@@ -29,12 +30,12 @@ export class DocumentHighlightProvider {
 		'module',
 	]);
 
-	private connection: IConnection;
-	private forest: IForest;
+	static register(connection: IConnection, forest: IForest) {
+		return new DocumentHighlightProvider(connection, forest);
+	}
 
 	constructor(connection: IConnection, forest: IForest) {
-		this.connection = connection;
-		this.forest = forest;
+		super(connection, forest);
 
 		this.connection.onDocumentHighlight(this.handleDocumentHighlight);
 	}
