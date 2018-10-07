@@ -4,6 +4,7 @@
 		"noImplicitReturns": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"esModuleInterop": true
 	}
 }
