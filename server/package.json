@@ -7,6 +7,8 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "default-shell": "^1.0.1",
+    "execa": "^1.0.0",
     "prebuild-install": "^5.0.0",
     "tree-sitter": "^0.13.4",
     "tree-sitter-ruby": "^0.13.5",
