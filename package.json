@@ -68,7 +68,8 @@
     "run-sequence": "*",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.10.0",
-    "tslint-microsoft-contrib": "^5.0.3",
+    "tslint-config-standard": "^8.0.1",
+    "tslint-no-circular-imports": "^0.6.1",
     "typescript": "^2.9.2",
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
