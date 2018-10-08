@@ -1,6 +1,6 @@
 'use strict';
 
-import { workspace } from 'vscode';
+import {workspace} from 'vscode';
 import {DebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
 import {DebugProtocol} from 'vscode-debugprotocol';
 import {readFileSync,existsSync} from 'fs';
