@@ -1,5 +1,6 @@
 'use strict';
 
+import { workspace } from 'vscode';
 import {DebugSession, InitializedEvent, TerminatedEvent, StoppedEvent, BreakpointEvent, OutputEvent, Thread, StackFrame, Scope, Source, Handles, Breakpoint} from 'vscode-debugadapter';
 import {DebugProtocol} from 'vscode-debugprotocol';
 import {readFileSync,existsSync} from 'fs';
@@ -452,9 +453,11 @@ class RubyDebugSession extends DebugSession {
     }
 
     protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
+        const detachDebugger = workspace.getConfiguration('ruby').detachDebugger && this.debugMode === Mode.attach;
         if (this.rubyProcess.state !== SocketClientState.closed) {
-            this.rubyProcess.Run('quit');
+            this.rubyProcess.Run(detachDebugger ? 'detach' : 'quit');
         }
+
         this.sendResponse(response);
     }
 }
