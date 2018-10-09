@@ -10,7 +10,9 @@ import { CapabilityCalculator } from './CapabilityCalculator';
 import { Forest } from './Forest';
 import DocumentHighlightProvider from './providers/DocumentHighlightProvider';
 import FoldingRangeProvider from './providers/FoldingRangeProvider';
+import ConfigurationProvider from './providers/ConfigurationProvider';
 import TextDocumentProvider from './providers/TextDocumentProvider';
+import WorkspaceProvider from './providers/WorkspaceProvider';
 
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
@@ -38,14 +40,23 @@ export class Server implements ILanguageServer {
 
 	// registers providers on the initialize step
 	public registerInitializeProviders(): void {
+		// Handles highlight requests
 		DocumentHighlightProvider.register(this.connection, this.forest);
+
+		// Handles folding requests
 		FoldingRangeProvider.register(this.connection, this.forest);
+
 		// Handles text document changes and will delegate to other providers that need these events
 		TextDocumentProvider.register(this.connection, this.forest);
 	}
 
 	// registers providers on the initialized step
 	public registerInitializedProviders(): void {
+		// Handles configuration changes
+		ConfigurationProvider.register(this.connection, this.forest);
+
+		// Handle workspace changes
+		WorkspaceProvider.register(this.connection, this.forest);
 	}
 
 	private async loadWorkspaceEnvironments(folders: WorkspaceFolder[]): Promise<void> {
