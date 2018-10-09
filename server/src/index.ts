@@ -13,6 +13,7 @@ import { ILanguageServer } from './Server';
 import { rebuildTreeSitter } from './util/rebuilder';
 
 const connection: IConnection = createConnection(ProposedFeatures.all);
+let server: ILanguageServer;
 
 connection.onInitialize(async (params: InitializeParams) => {
 	connection.console.info('Initializing Ruby language server...');
@@ -30,9 +31,14 @@ connection.onInitialize(async (params: InitializeParams) => {
 	connection.console.info('Rebuild succeeded!');
 
 	const { Server } = await import('./Server');
-	const server: ILanguageServer = new Server(connection, params);
+	server = new Server(connection, params);
+	server.registerInitializeProviders();
 
 	return server.capabilities;
+});
+
+connection.onInitialized(() => {
+	server.registerInitializedProviders();
 });
 
 // Listen on the connection

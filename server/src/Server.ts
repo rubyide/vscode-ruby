@@ -14,6 +14,8 @@ import TextDocumentProvider from './providers/TextDocumentProvider';
 
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
+	registerInitializeProviders();
+	registerInitializedProviders();
 }
 
 export class Server implements ILanguageServer {
@@ -25,8 +27,6 @@ export class Server implements ILanguageServer {
 		this.connection = connection;
 		this.calculator = new CapabilityCalculator(params.capabilities);
 		this.forest = new Forest();
-
-		this.registerProviders();
 		this.loadWorkspaceEnvironments(params.workspaceFolders);
 	}
 
@@ -36,11 +36,16 @@ export class Server implements ILanguageServer {
 		};
 	}
 
-	private registerProviders(): void {
+	// registers providers on the initialize step
+	public registerInitializeProviders(): void {
 		DocumentHighlightProvider.register(this.connection, this.forest);
 		FoldingRangeProvider.register(this.connection, this.forest);
 		// Handles text document changes and will delegate to other providers that need these events
 		TextDocumentProvider.register(this.connection, this.forest);
+	}
+
+	// registers providers on the initialized step
+	public registerInitializedProviders(): void {
 	}
 
 	private async loadWorkspaceEnvironments(folders: WorkspaceFolder[]): Promise<void> {
