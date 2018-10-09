@@ -26,7 +26,6 @@ function downloadUrl(name: string, version: string): string {
 
 function fetchPrebuild(name: string): Promise<void | Error> {
 	const pkgRoot: string = path.resolve(path.join(__dirname, '../../node_modules', name));
-	//tslint:disable-next-line non-literal-require
 	const pkg: { name: string; version: string } = require(`${pkgRoot}/package.json`);
 	const url: string = downloadUrl(pkg.name, pkg.version);
 
