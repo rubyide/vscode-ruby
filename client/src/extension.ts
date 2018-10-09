@@ -3,13 +3,15 @@
  */
 import * as path from 'path';
 
-import { ExtensionContext, workspace } from 'vscode';
+import { ExtensionContext, window, workspace } from 'vscode';
 import {
 	LanguageClient,
 	LanguageClientOptions,
 	ServerOptions,
 	TransportKind,
 } from 'vscode-languageclient';
+
+let client: LanguageClient;
 
 export function activate(context: ExtensionContext): void {
 	const serverModule: string = context.asAbsolutePath(path.join('server', 'out', 'index.js'));
@@ -35,10 +37,11 @@ export function activate(context: ExtensionContext): void {
 			// Notify server of changes to .ruby-version or .rvmrc files
 			fileEvents: workspace.createFileSystemWatcher('**/{.ruby-version,.rvmrc}'),
 		},
+		outputChannel: window.createOutputChannel('Ruby'),
 	};
 
 	// Create the language client and start the client.
-	const client: LanguageClient = new LanguageClient('ruby', 'Ruby', serverOptions, clientOptions);
+	client = new LanguageClient('ruby', 'Ruby', serverOptions, clientOptions);
 	client.registerProposedFeatures();
 
 	// Push the disposable to the context's subscriptions so that the
@@ -46,6 +49,6 @@ export function activate(context: ExtensionContext): void {
 	context.subscriptions.push(client.start());
 }
 
-export function deactivate(): void {
-	return undefined;
+export function deactivate(): Thenable<void> {
+	return client ? client.stop() : undefined;
 }
