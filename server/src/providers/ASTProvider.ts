@@ -2,10 +2,8 @@
  * ASTProvider
  */
 
-import * as Parser from 'tree-sitter';
-// tslint:disable-next-line no-duplicate-imports
-import { Point, SyntaxNode, Tree } from 'tree-sitter';
-import * as TreeSitterRuby from 'tree-sitter-ruby';
+import Parser, { Point, SyntaxNode, Tree } from 'tree-sitter';
+import TreeSitterRuby from 'tree-sitter-ruby';
 
 import {
 	DidChangeTextDocumentParams,
@@ -30,23 +28,18 @@ export default class ASTProvider extends Provider {
 
 	constructor(connection: IConnection, forest: IForest) {
 		super(connection, forest);
+
 		this.parser = new Parser();
 		this.parser.setLanguage(TreeSitterRuby);
-
-		this.connection.onDidOpenTextDocument(this.handleOpenTextDocument);
-		this.connection.onDidChangeTextDocument(this.handleChangeTextDocument);
-		this.connection.onDidCloseTextDocument(this.handleCloseTextDocument);
 	}
 
-	protected handleOpenTextDocument = async (params: DidOpenTextDocumentParams): Promise<void> => {
+	public handleOpenTextDocument = async (params: DidOpenTextDocumentParams): Promise<void> => {
 		const document: TextDocumentItem = params.textDocument;
 		const tree: Tree = this.parser.parse(document.text);
 		this.forest.setTree(document.uri, tree);
 	};
 
-	protected handleChangeTextDocument = async (
-		params: DidChangeTextDocumentParams
-	): Promise<void> => {
+	public handleChangeTextDocument = async (params: DidChangeTextDocumentParams): Promise<void> => {
 		const document: VersionedTextDocumentIdentifier = params.textDocument;
 		let tree: Tree = this.forest.getTree(document.uri);
 		if (tree !== undefined) {
@@ -77,7 +70,7 @@ export default class ASTProvider extends Provider {
 		this.forest.setTree(document.uri, tree);
 	};
 
-	protected handleCloseTextDocument = async (params: DidCloseTextDocumentParams): Promise<void> => {
+	public handleCloseTextDocument = async (params: DidCloseTextDocumentParams): Promise<void> => {
 		const document: TextDocumentIdentifier = params.textDocument;
 		this.forest.removeTree(document.uri);
 	};
