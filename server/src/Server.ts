@@ -1,5 +1,11 @@
-import { Connection, InitializeParams, InitializeResult } from 'vscode-languageserver';
+import {
+	Connection,
+	InitializeParams,
+	InitializeResult,
+	WorkspaceFolder,
+} from 'vscode-languageserver';
 
+import { config } from './ServerConfiguration';
 import { CapabilityCalculator } from './CapabilityCalculator';
 import { Forest } from './Forest';
 import ASTProvider from './providers/ASTProvider';
@@ -21,6 +27,7 @@ export class Server implements ILanguageServer {
 		this.forest = new Forest();
 
 		this.registerProviders();
+		this.loadWorkspaceEnvironments(params.workspaceFolders);
 	}
 
 	get capabilities(): InitializeResult {
@@ -33,5 +40,10 @@ export class Server implements ILanguageServer {
 		ASTProvider.register(this.connection, this.forest);
 		DocumentHighlightProvider.register(this.connection, this.forest);
 		FoldingRangeProvider.register(this.connection, this.forest);
+	}
+
+	private async loadWorkspaceEnvironments(folders: WorkspaceFolder[]): Promise<void> {
+		const loaders = folders.map(folder => config.loadWorkspaceEnvironment(folder));
+		await Promise.all(loaders);
 	}
 }
