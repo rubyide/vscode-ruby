@@ -365,6 +365,7 @@
           "berksfile",
           "brewfile",
           "capfile",
+          "deliverfile",
           "fastfile",
           "guardfile",
           "podfile",
