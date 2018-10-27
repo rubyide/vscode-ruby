@@ -5,6 +5,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"sourceMap": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"lib": ["dom", "es2017"]
 	}
 }

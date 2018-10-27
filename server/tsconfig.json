@@ -6,7 +6,6 @@
 		"moduleResolution": "node",
 		"outDir": "out",
 		"rootDir": "src",
-		"lib": [ "es6" ]
 	},
 	"include": [
 		"src"
