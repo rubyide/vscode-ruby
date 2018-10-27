@@ -50,6 +50,7 @@
     "url": "https://github.com/rubyide/vscode-ruby/issues"
   },
   "dependencies": {
+    "@types/xmldom": "^0.1.29",
     "async": "^2.3.0",
     "lodash": "^4.17.3",
     "minimatch": "^3.0.3",
