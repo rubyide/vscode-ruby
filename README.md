@@ -181,6 +181,10 @@ Note: VS Code has a timeout that limits file formatters to 750ms which is often 
 
 Rufo is an alternative Ruby formatting tool. See the [VS Code Rufo Extension](https://github.com/bessey/vscode-rufo) if you want to try it.
 
+### endwise
+
+endwise is a Visual Studio Code plugin that automatically inserts the `end` keyword where appropriate. See the [VS Code endwise extension](https://github.com/kaiwood/vscode-endwise).
+
 ## Autocomplete
 
 The `ruby.codeCompletion` setting lets you select a method for code completion and other intellisense features. Valid options are `rcodetools` and `false`.
