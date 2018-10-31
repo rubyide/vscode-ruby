@@ -5,3 +5,4 @@ client/out/
 server/out/
 npm-debug.log
 *.vsix
+.vscode

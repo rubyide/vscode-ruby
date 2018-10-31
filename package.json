@@ -1,15 +1,8 @@
 {
-<<<<<<< HEAD
-  "name": "ruby-lang",
-  "displayName": "Ruby Language Support",
-  "version": "1.0.0",
-  "publisher": "wingrunr21",
-=======
   "name": "ruby",
   "displayName": "Ruby",
   "version": "0.20.0",
   "publisher": "rebornix",
->>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
   "keywords": ["ruby", "rake", "rails", "ruby on rails", "rubocop"],
   "author": {
@@ -75,16 +68,6 @@
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.50",
     "cson-parser": "^2.0.1",
-<<<<<<< HEAD
-    "gulp": "^3.9.0",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-typescript": "^2.12.0",
-    "gulp-util": "^3.0.5",
-    "mocha": "^2.4.5",
-    "run-sequence": "*",
-    "typescript": "^2.1.5",
-    "vscode": "^1.1.4",
-=======
     "mocha": "^2.4.5",
     "prettier": "^1.11.1",
     "run-sequence": "*",
@@ -92,7 +75,6 @@
     "tslint-config-prettier": "^1.10.0",
     "tslint-microsoft-contrib": "^5.0.3",
     "typescript": "^2.9.2",
->>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
     "vscode-debugadapter-testsupport": "^1.19.0"
   },
   "scripts": {
@@ -109,12 +91,8 @@
     "test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "update-all-grammars": "node scripts/update-all-grammars",
-<<<<<<< HEAD
-    "update-grammar": "node scripts/update-grammar atom/language-ruby"
-=======
     "update-grammar": "node scripts/update-grammar atom/language-ruby",
     "lint": "tslint -c tslint.json 'src/**/*.ts'"
->>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
   },
   "activationEvents": [
     "onLanguage:ruby",
@@ -440,9 +418,6 @@
       {
         "language": "erb",
         "scopeName": "text.html.erb",
-<<<<<<< HEAD
-        "path": "./syntaxes/erb.cson.json"
-=======
         "path": "./syntaxes/erb.cson.json",
         "embeddedLanguages": {
           "source.css": "css",
@@ -454,7 +429,6 @@
         "language": "gemfile",
         "scopeName": "source.ruby.gemfile",
         "path": "./syntaxes/gemfile.cson.json"
->>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
       }
     ],
     "debuggers": [
