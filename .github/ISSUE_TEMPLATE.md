@@ -1,17 +1,14 @@
 ### Your environment
 
-- `vscode-ruby` version: 
-- Ruby version: 
-- VS Code version: 
-- Operating System: 
-- Hardware (optional): 
-
-Make sure you have `ruby`, `ruby-debug-ide` and `ruby-debug-basex19` installed before submitting your issue -- thank you !
+- `vscode-ruby` version:
+- Ruby version:
+- Ruby version manager (if any):
+- VS Code version:
+- Operating System:
+- Using language server?
 
 ### Expected behavior
 
-
 ### Actual behavior
 
-
-### Steps to reproduce the problem
+*This and the next section should include screenshots, code samples, console output, etc. The more information we have to reproduce the better!*

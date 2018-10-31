@@ -84,7 +84,7 @@
 	"if else": {
 		"prefix": "if else",
 		"body": [
-			"if ${test}",
+			"if ${1:test}",
 			"\t$0",
 			"else",
 			"\t",

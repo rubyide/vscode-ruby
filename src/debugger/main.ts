@@ -78,6 +78,8 @@ class RubyDebugSession extends DebugSession {
 	protected setupProcessHanlders() {
 		this.rubyProcess.on('debuggerComplete', () => {
             this.sendEvent(new TerminatedEvent());
+        }).on('debuggerProcessExit', () => {
+            this.sendEvent(new TerminatedEvent());
         }).on('executableOutput', (data: Buffer) => {
             this.sendEvent(new OutputEvent(data.toString(), 'stdout'));
         }).on('executableStdErr', (error: Buffer) => {
@@ -291,36 +293,44 @@ class RubyDebugSession extends DebugSession {
         return localPath.replace(/\\/g, '/');
     }
 
-	protected convertClientPathToDebugger(localPath: string): string {
-		if (this.debugMode == Mode.launch) {
-			return localPath;
-		}
+    protected convertClientPathToDebugger(localPath: string): string {
+        if (this.debugMode == Mode.launch) {
+            return localPath;
+        }
 
-		var relativePath = path.join(
-			this.requestArguments.remoteWorkspaceRoot, localPath.substring(this.requestArguments.cwd.length)
-		);
+        if (!localPath.startsWith(this.requestArguments.cwd)) {
+            return localPath;
+        }
 
-		var sepIndex = this.requestArguments.remoteWorkspaceRoot.lastIndexOf('/');
+        var relativePath = path.join(
+            this.requestArguments.remoteWorkspaceRoot, localPath.substring(this.requestArguments.cwd.length)
+        );
 
-		if (sepIndex !== -1) {
-			// *inx or darwin
-			relativePath = relativePath.replace(/\\/g, '/');
-		}
+        var sepIndex = this.requestArguments.remoteWorkspaceRoot.lastIndexOf('/');
 
-		return relativePath;
-	}
+        if (sepIndex !== -1) {
+            // *inx or darwin
+            relativePath = relativePath.replace(/\\/g, '/');
+        }
 
-	protected convertDebuggerPathToClient(serverPath: string):string{
-		if (this.debugMode == Mode.launch) {
-			return serverPath;
-		}
+        return relativePath;
+    }
 
-		// Path.join will convert the path using local OS preferred separator
-		var relativePath = path.join(
-			this.requestArguments.cwd, serverPath.substring(this.requestArguments.remoteWorkspaceRoot.length)
-		);
-		return relativePath;
-	}
+    protected convertDebuggerPathToClient(serverPath: string):string{
+        if (this.debugMode == Mode.launch) {
+            return serverPath;
+        }
+
+        if (!serverPath.startsWith(this.requestArguments.remoteWorkspaceRoot)) {
+            return serverPath;
+        }
+
+        // Path.join will convert the path using local OS preferred separator
+        var relativePath = path.join(
+            this.requestArguments.cwd, serverPath.substring(this.requestArguments.remoteWorkspaceRoot.length)
+        );
+        return relativePath;
+    }
 
     protected switchFrame(frameId) {
         if (frameId === this._frameId) return;

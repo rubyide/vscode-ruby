@@ -1,6 +1,14 @@
 .vscode/**/*
 .gitignore
 src/**/*
+client/src/**/*
+server/src/**/*
 out/tests/**/*
 **/*.js.map
 *.vsix
+appveyor.yml
+.travis.yml
+.prettierrc
+tsconfig.base.json
+tsconfig.json
+tslint.json

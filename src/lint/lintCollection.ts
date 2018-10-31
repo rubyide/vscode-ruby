@@ -2,15 +2,16 @@
 
 const Linter = require('./lib/linter');
 const LintResults = require('./lib/lintResults');
+import { Config } from './lintConfig';
 
 export class LintCollection {
 	private _results: any;
 	private _docLinters: any;
-	private _cfg: any;
+	private _cfg: { [key: string]: Config };
 	private _rootPath: string;
-	private _globalConfig: any;
+	private _globalConfig: Config;
 
-	constructor(globalConfig, lintConfig, rootPath) {
+	constructor(globalConfig : Config, lintConfig : { [key: string]: Config }, rootPath) {
 		this._results = {};
 		this._docLinters = {};
 		this._globalConfig = globalConfig;

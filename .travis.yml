@@ -1,5 +1,6 @@
 language: ruby
 rvm:
+<<<<<<< HEAD
   - 1.9.3
   - 2.0.0
   - 2.1.10
@@ -19,3 +20,22 @@ before_script:
   - npm install
   - npm run compile
 script: nvm use && npm run test-debugger
+=======
+  - 2.2
+  - 2.3
+  - 2.4
+  - 2.5
+
+before_install:
+  - gem install ruby-debug-ide
+  - nvm install 8.11.3
+  - echo "8.11.3" > .nvmrc
+
+before_script:
+  - nvm use
+  - npm install
+  - cd client && npm install && cd ..
+  - cd server && npm install && cd ..
+  - npm run compile
+script: nvm use && npm run test && npm run test-debugger
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e

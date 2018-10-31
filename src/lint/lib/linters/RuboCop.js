@@ -8,6 +8,7 @@ function RuboCop(opts) {
 
 	this.args = ["-s", "{path}", "-f", "json"] ;
 
+	if (opts.forceExclusion) this.args.push("--force-exclusion");
 	if (opts.lint) this.args.push("-l");
 	if (opts.only) this.args = this.args.concat("--only", opts.only.join(','));
 	if (opts.except) this.args = this.args.concat("--except", opts.except.join(','));
@@ -20,6 +21,9 @@ RuboCop.prototype.processResult = function (data) {
 		return [];
 	}
 	let offenses = JSON.parse(data);
+	if (offenses.summary.offense_count == 0) {
+		return [];
+	}
 	return (offenses.files || [{
 		offenses: []
 	}])[0].offenses;

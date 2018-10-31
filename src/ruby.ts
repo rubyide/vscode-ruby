@@ -1,13 +1,9 @@
-"use strict";
-
-import * as vscode from 'vscode';
-import { Location, ExtensionContext, Position, SymbolKind, SymbolInformation } from 'vscode';
-import * as Locate from './locate/locate';
-import * as path from 'path';
-import * as cp from 'child_process';
-import { LintCollection } from './lint/lintCollection';
-import { RubyDocumentFormattingEditProvider } from './format/rubyFormat';
+/**
+ * vscode-ruby main
+ */
+import { ExtensionContext, languages, workspace } from 'vscode';
 import * as utils from './utils';
+<<<<<<< HEAD
 import { registerTaskProvider } from './task/rake';
 
 export function activate(context: ExtensionContext) {
@@ -67,133 +63,57 @@ function registerHighlightProvider(ctx: ExtensionContext) {
 	const balancePairs = function (doc) {
 		pairedEnds = [];
 		if (doc.languageId !== 'ruby') return;
+=======
 
-		let waitingEntries = [];
-		let entry, end;
-		for (let i = 0; i < doc.lineCount; i++) {
-			if ((entry = getEntry(doc.lineAt(i)))) {
-				waitingEntries.push(entry);
-			} else if (waitingEntries.length && (end = getEnd(doc.lineAt(i)))) {
-				pairedEnds.push({
-					entry: waitingEntries.pop(),
-					end: end
-				});
-			}
-		}
+import languageConfiguration from './languageConfiguration';
+import { registerCompletionProvider } from './providers/completion';
+import { registerFormatter } from './providers/formatter';
+import { registerHighlightProvider } from './providers/highlight';
+import { registerIntellisenseProvider } from './providers/intellisense';
+import { registerLinters } from './providers/linters';
+import { registerTaskProvider } from './task/rake';
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
+
+const DOCUMENT_SELECTOR: { language: string; scheme: string }[] = [
+	{ language: 'ruby', scheme: 'file' },
+	{ language: 'ruby', scheme: 'untitled' },
+];
+
+let client;
+
+export function activate(context: ExtensionContext): void {
+	// register language config
+	languages.setLanguageConfiguration('ruby', languageConfiguration);
+
+	if (workspace.getConfiguration('ruby').useLanguageServer) {
+		client = require('../client/out/extension');
+		client.activate(context);
+	} else {
+		// Register legacy providers
+		registerHighlightProvider(context, DOCUMENT_SELECTOR);
 	}
 
-	const balanceEvent = function (event) {
-		if (event && event.document) balancePairs(event.document);
+	// Register providers
+	registerCompletionProvider(context, DOCUMENT_SELECTOR);
+	registerFormatter(context, DOCUMENT_SELECTOR);
+
+	if (workspace.rootPath) {
+		registerLinters(context);
+		registerIntellisenseProvider(context);
+		registerTaskProvider(context);
 	}
 
-	ctx.subscriptions.push(vscode.languages.registerDocumentHighlightProvider('ruby', {
-		provideDocumentHighlights: (doc, pos) => {
-			let result = pairedEnds.find(pair => (
-				pair.entry.start.line === pos.line ||
-				pair.end.start.line === pos.line));
-			if (result) {
-				return [new vscode.DocumentHighlight(result.entry, 2), new vscode.DocumentHighlight(result.end, 2)];
-			}
-		}
-	}));
-
-	ctx.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(balanceEvent));
-	ctx.subscriptions.push(vscode.workspace.onDidChangeTextDocument(balanceEvent));
-	ctx.subscriptions.push(vscode.workspace.onDidOpenTextDocument(balancePairs));
-	if (vscode.window && vscode.window.activeTextEditor) {
-		balancePairs(vscode.window.activeTextEditor.document);
-	}
+	utils.loadEnv();
 }
 
-function registerLinters(ctx: ExtensionContext) {
-	const globalConfig = getGlobalConfig();
-	const linters = new LintCollection(globalConfig, vscode.workspace.getConfiguration("ruby").lint, vscode.workspace.rootPath);
-	ctx.subscriptions.push(linters);
-
-	function executeLinting(e: vscode.TextEditor | vscode.TextDocumentChangeEvent) {
-		if (!e) return;
-		linters.run(e.document);
+export function deactivate(): void {
+	if (workspace.getConfiguration('ruby').useLanguageServer) {
+		client.deactivate();
 	}
 
-	ctx.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(executeLinting));
-	ctx.subscriptions.push(vscode.workspace.onDidChangeTextDocument(executeLinting));
-	ctx.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
-		const docs = vscode.window.visibleTextEditors.map(editor => editor.document);
-		console.log("Config changed. Should lint:", docs.length);
-		const globalConfig = getGlobalConfig();
-		linters.cfg(vscode.workspace.getConfiguration("ruby").lint, globalConfig);
-		docs.forEach(doc => linters.run(doc));
-	}));
-
-	// run against all of the current open files
-	vscode.window.visibleTextEditors.forEach(executeLinting);
+	return undefined;
 }
-
-function registerCompletionProvider(ctx: ExtensionContext) {
-	const completeCommand = function(args) {
-		let rctCompletePath = vscode.workspace.getConfiguration('ruby.rctComplete').get('commandPath', 'rct-complete');
-		args.push('--interpreter');
-		args.push(vscode.workspace.getConfiguration('ruby.interpreter').get('commandPath', 'ruby'));
-		if (process.platform === 'win32')
-			return cp.spawn('cmd', ['/c', rctCompletePath].concat(args));
-		return cp.spawn(rctCompletePath, args);
-	}
-
-	const completeTest = completeCommand(['--help']);
-	completeTest.on('exit', () => {
-		ctx.subscriptions.push(
-			vscode.languages.registerCompletionItemProvider(
-				/** selector */'ruby',
-				/** provider */{
-					provideCompletionItems: function completionProvider(document, position, token) {
-						return new Promise((resolve, reject) => {
-							const line = position.line + 1;
-							const column = position.character;
-							let child = completeCommand([
-								'--completion-class-info',
-								'--dev',
-								'--fork',
-								'--line=' + line,
-								'--column=' + column
-							]);
-							let outbuf = [],
-								errbuf = [];
-							child.stderr.on('data', (data) => errbuf.push(data));
-							child.stdout.on('data', (data) => outbuf.push(data));
-							child.stdout.on('end', () => {
-								if (errbuf.length > 0) return reject(Buffer.concat(errbuf).toString());
-								let completionItems = [];
-								Buffer.concat(outbuf).toString().split('\n').forEach(function (elem) {
-									let items = elem.split('\t');
-									if (/^[^\w]/.test(items[0])) return;
-									if (items[0].trim().length === 0) return;
-									let completionItem = new vscode.CompletionItem(items[0]);
-									completionItem.detail = items[1];
-									completionItem.documentation = items[1];
-									completionItem.filterText = items[0];
-									completionItem.insertText = items[0];
-									completionItem.label = items[0];
-									completionItem.kind = vscode.CompletionItemKind.Method;
-									completionItems.push(completionItem);
-								}, this);
-								if (completionItems.length === 0)
-									return reject([]);
-								return resolve(completionItems);
-							});
-							child.stdin.end(document.getText());
-						});
-					}
-				},
-				/** triggerCharacters */ ...['.']
-			)
-		)
-	});
-	completeTest.on('error', () => 0);
-}
-
-function registerFormatter(ctx: ExtensionContext) {
-	new RubyDocumentFormattingEditProvider().register(ctx);
-}
+<<<<<<< HEAD
 
 function registerIntellisenseProvider(ctx: ExtensionContext) {
 	// for locate: if it's a project, use the root, othewise, don't bother
@@ -250,3 +170,5 @@ function registerIntellisenseProvider(ctx: ExtensionContext) {
 		ctx.subscriptions.push(vscode.languages.registerWorkspaceSymbolProvider(workspaceSymbolProvider));
 	}
 }
+=======
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e

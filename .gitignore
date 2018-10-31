@@ -1,5 +1,7 @@
 .DS_Store
 node_modules/
 out/
+client/out/
+server/out/
 npm-debug.log
 *.vsix

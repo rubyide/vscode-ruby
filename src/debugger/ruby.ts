@@ -13,6 +13,13 @@ var domErrorLocator: any = {};
 
 const ELEMENT_NODE:number = 1; // Node.ELEMENT_NODE
 
+type ExecutableCommandConfiguration = {
+    pathToRuby : string;
+    useBundler : boolean;
+    pathToBundler : string;
+    rdebugIdePath : string;
+};
+
 export class RubyProcess extends EventEmitter {
     private debugSocketClient : net.Socket = null;
     private buffer: string;
@@ -39,6 +46,38 @@ export class RubyProcess extends EventEmitter {
 
     set state(newState: SocketClientState) {
         this._state = newState;
+    }
+
+    public executableCommandConfiguration(args) {
+        let rdebugIdeDefault : string;
+        if (process.platform === 'win32') {
+            rdebugIdeDefault = 'rdebug-ide.bat';
+        }
+        else {
+            rdebugIdeDefault = 'rdebug-ide';
+        }
+
+        let result : ExecutableCommandConfiguration = {
+            pathToRuby: 'ruby',
+            useBundler: false,
+            pathToBundler : 'bundle',
+            rdebugIdePath : rdebugIdeDefault
+        }
+
+        if (args.pathToRuby) {
+            result.pathToRuby = args.pathToRuby;
+        }
+        if (args.useBundler !== undefined) {
+            result.useBundler = args.useBundler;
+        }
+        if (args.pathToBundler) {
+            result.pathToBundler = args.pathToBundler;
+        }
+        if (args.rdebugIdePath) {
+            result.rdebugIdePath = args.rdebugIdePath;
+        }
+
+        return result;
     }
 
     public constructor(mode: Mode, args: any) {
@@ -156,21 +195,32 @@ export class RubyProcess extends EventEmitter {
             this.buffer = "";
         });
 
+        let executableCommandConfiguration = this.executableCommandConfiguration(args);
 
         if (mode == Mode.launch) {
-            var runtimeArgs = ['--evaluation-timeout', '10'];
+            var runtimeArgs : string[];
             var runtimeExecutable: string;
 
-            if (process.platform === 'win32') {
-                runtimeExecutable = 'rdebug-ide.bat';
+            if (args.noDebug) {
+                runtimeExecutable = executableCommandConfiguration.pathToRuby;
+                runtimeArgs = [];
             }
             else {
-                // platform: linux or darwin
-                runtimeExecutable = 'rdebug-ide';
-            }
+                runtimeExecutable = executableCommandConfiguration.rdebugIdePath;
+                runtimeArgs = ['--evaluation-timeout', '10']
 
-            if (args.pathToRDebugIDE && args.pathToRDebugIDE !== 'rdebug-ide'){
-                runtimeExecutable = args.pathToRDebugIDE;
+                if (args.showDebuggerOutput){
+                    runtimeArgs.push('-x');
+                }
+
+                if (args.debuggerPort && args.debuggerPort !== '1234'){
+                    runtimeArgs.push('-p');
+                    runtimeArgs.push(args.debuggerPort);
+                }
+
+                if (args.stopOnEntry){
+                    runtimeArgs.push('--stop');
+                }
             }
 
             var processCwd = args.cwd || dirname(args.program);
@@ -185,28 +235,19 @@ export class RubyProcess extends EventEmitter {
                 processEnv[env] = args.env[env];
             }
 
-            if (args.showDebuggerOutput){
-                runtimeArgs.push('-x');
-            }
-
-            if (args.debuggerPort && args.debuggerPort !== '1234'){
-                runtimeArgs.push('-p');
-                runtimeArgs.push(args.debuggerPort);
-            }
-
-            if (args.stopOnEntry){
-                runtimeArgs.push('--stop');
-            }
-
-            if (args.useBundler){
+            if (executableCommandConfiguration.useBundler){
                 runtimeArgs.unshift(runtimeExecutable);
                 runtimeArgs.unshift('exec');
-                runtimeExecutable = 'bundle';
-
-                if (args.pathToBundler && args.pathToBundler !== 'bundle'){
-                    runtimeExecutable = args.pathToBundler;
-                }
+                runtimeExecutable = executableCommandConfiguration.pathToBundler;
             }
+
+            if (args.includes){
+                args.includes.forEach((path) => {
+                    runtimeArgs.push('-I')
+                    runtimeArgs.push(path)
+                })
+            }
+
             // '--' forces process arguments (args.args) not to be swollowed by rdebug-ide
             this.debugprocess = childProcess.spawn(runtimeExecutable, [...runtimeArgs, '--', args.program, ...args.args || []], {cwd: processCwd, env: processEnv});
 

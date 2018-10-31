@@ -115,7 +115,11 @@
 			},
 			"comment": "symbols as hash key (1.9 syntax)",
 			"match": "(?>[a-zA-Z_]\\w*(?>[?!])?)(:)(?!:)",
+<<<<<<< HEAD
 			"name": "constant.other.symbol.hashkey.ruby"
+=======
+			"name": "constant.language.symbol.hashkey.ruby"
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 		},
 		{
 			"captures": {
@@ -125,7 +129,11 @@
 			},
 			"comment": "symbols as hash key (1.8 syntax)",
 			"match": "(?<!:)(:)(?>[a-zA-Z_]\\w*(?>[?!])?)(?=\\s*=>)",
+<<<<<<< HEAD
 			"name": "constant.other.symbol.hashkey.ruby"
+=======
+			"name": "constant.language.symbol.hashkey.ruby"
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 		},
 		{
 			"comment": "everything being a reserved word, not a value and needing a 'end' is a..",
@@ -277,7 +285,11 @@
 									"name": "storage.type.variable.ruby"
 								},
 								"2": {
+<<<<<<< HEAD
 									"name": "constant.other.symbol.hashkey.parameter.function.ruby"
+=======
+									"name": "constant.language.symbol.hashkey.parameter.function.ruby"
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 								},
 								"3": {
 									"name": "punctuation.definition.constant.hashkey.ruby"
@@ -319,7 +331,11 @@
 									"name": "storage.type.variable.ruby"
 								},
 								"2": {
+<<<<<<< HEAD
 									"name": "constant.other.symbol.hashkey.parameter.function.ruby"
+=======
+									"name": "constant.language.symbol.hashkey.parameter.function.ruby"
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 								},
 								"3": {
 									"name": "punctuation.definition.constant.hashkey.ruby"
@@ -368,7 +384,11 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\['\\\\]",
@@ -390,7 +410,11 @@
 					"name": "punctuation.section.symbol.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.interpolated.ruby",
+=======
+			"name": "constant.language.symbol.interpolated.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -619,7 +643,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.interpolated.ruby",
+=======
+			"name": "constant.language.symbol.interpolated.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -645,7 +673,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.interpolated.ruby",
+=======
+			"name": "constant.language.symbol.interpolated.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -671,7 +703,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.interpolated.ruby",
+=======
+			"name": "constant.language.symbol.interpolated.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -697,7 +733,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.interpolated.ruby",
+=======
+			"name": "constant.language.symbol.interpolated.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -723,7 +763,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.interpolated.ruby",
+=======
+			"name": "constant.language.symbol.interpolated.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"include": "#interpolated_ruby"
@@ -746,7 +790,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\]|\\\\\\\\",
@@ -770,7 +818,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\\\)|\\\\\\\\",
@@ -794,7 +846,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\>|\\\\\\\\",
@@ -818,7 +874,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\}|\\\\\\\\",
@@ -842,7 +902,11 @@
 					"name": "punctuation.section.array.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"comment": "Cant be named because its not neccesarily an escape.",
@@ -1374,7 +1438,11 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\\\)|\\\\\\\\",
@@ -1398,7 +1466,11 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\>|\\\\\\\\",
@@ -1422,7 +1494,11 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\]|\\\\\\\\",
@@ -1446,7 +1522,11 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"match": "\\\\}|\\\\\\\\",
@@ -1470,7 +1550,11 @@
 					"name": "punctuation.definition.symbol.end.ruby"
 				}
 			},
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby",
+=======
+			"name": "constant.language.symbol.ruby",
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			"patterns": [
 				{
 					"comment": "Cant be named because its not neccesarily an escape.",
@@ -1486,7 +1570,11 @@
 			},
 			"comment": "symbols",
 			"match": "(?x)\n(?<!:)(:)\n(?>\n  [$a-zA-Z_]\\w*(?>[?!]|=(?![>=]))?\n  |\n  ===?|<=>|>[>=]?|<[<=]?|[%&`/\\|]|\\*\\*?|=?~|[-+]@?|\\[]=?\n  |\n  @@?[a-zA-Z_]\\w*\n)",
+<<<<<<< HEAD
 			"name": "constant.other.symbol.ruby"
+=======
+			"name": "constant.language.symbol.ruby"
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 		},
 		{
 			"begin": "^=begin",
@@ -2179,6 +2267,34 @@
 		{
 			"match": "\\(|\\)",
 			"name": "punctuation.section.function.ruby"
+<<<<<<< HEAD
+=======
+		},
+		{
+			"begin": "(?=[a-zA-Z0-9_!?]+\\()",
+			"end": "(?<=\\))",
+			"name": "meta.function-call.ruby",
+			"patterns": [
+				{
+					"include": "#nest_function_parens"
+				},
+				{
+					"include": "#known_function_names"
+				},
+				{
+					"match": "([a-zA-Z0-9_!?]+)(?=\\()",
+					"name": "entity.name.function.ruby"
+				},
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"comment": "This is kindof experimental. There really is no way to perfectly match all regular variables, but you can pretty well assume that any normal word in certain curcumstances that havnt already been scoped as something else are probably variables, and the advantages beat the potential errors",
+			"match": "((?<=\\W)\\b|^)\\w+\\b(?=\\s*([\\]\\)\\}\\=\\+\\-\\*\\/\\^\\$\\,\\.]|<\\s|<<[\\s|\\.]))",
+			"name": "variable.other.ruby"
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 		}
 	],
 	"repository": {

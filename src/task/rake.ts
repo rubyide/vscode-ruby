@@ -8,10 +8,6 @@ import { getOutputChannel, exec } from '../utils';
 let rakeFiles: Set<vscode.Uri> = new Set<vscode.Uri>();
 
 export async function registerTaskProvider(ctx: vscode.ExtensionContext) {
-	let workspaceRoot = vscode.workspace.rootPath;
-	if (!workspaceRoot) {
-		return;
-	}
 	let rakePromise: Thenable<vscode.Task[]> | undefined = undefined;
 	let files = await vscode.workspace.findFiles("**/[rR]akefile{,.rb}");
 	for (let i = 0; i < files.length; i++) {
@@ -133,7 +129,7 @@ async function getRakeTasks(): Promise<vscode.Task[]> {
 		if (err.stdout) {
 			channel.appendLine(err.stdout);
 		}
-		channel.appendLine('Auto detecting rake tasts failed.');
+		channel.appendLine('Auto detecting rake tasks failed.');
 		channel.show(true);
 		return emptyTasks;
 	}

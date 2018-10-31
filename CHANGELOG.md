@@ -1,3 +1,66 @@
+### 0.20.0 - Aug 7 2018
+First release with the proof of concept internal language server
+
+Notable Changes:
+* [Language Server - proof of concept](https://github.com/rubyide/vscode-ruby/pull/366) by [wingrunr21](https://github.com/wingrunr21)
+
+Bug Fixes:
+* [Respect the bundler option when formatting](https://github.com/rubyide/vscode-ruby/pull/357) by [narinari](https://github.com/narinari)
+
+Enhanced Documentation:
+* [Fixes broken anchor link in README](https://github.com/rubyide/vscode-ruby/pull/362) by [ecbrodie](https://github.com/ecbrodie)
+
+### 0.19.0 - Jun 19 2018
+Notable Changes:
+* [Fix bug where word match includes colon](https://github.com/rubyide/vscode-ruby/pull/353) by [toddmazierski](https://github.com/toddmazierski)
+* [Only override paths when file actually exists within cwd/remoteRoot](https://github.com/rubyide/vscode-ruby/pull/350) by [stefansedich](https://github.com/stefansedich)
+* [Remove explicit gem versions](https://github.com/rubyide/vscode-ruby/pull/334) by [perlun](https://github.com/perlun)
+* [Restrict language server to local files](https://github.com/rubyide/vscode-ruby/pull/326) by [lostintangent](https://github.com/lostintangent)
+
+Enhanced Documentation:
+* [Add README clarifications for rubyLocate and Solargraph](https://github.com/rubyide/vscode-ruby/pull/340) by [lumean](https://github.com/lumean)
+
+
+### 0.18.0 - Apr 10 2018
+
+Notable changes:
+* [Add tslint/prettier for linting/formatting](https://github.com/rubyide/vscode-ruby/pull/299) by [Adam Doppelt](https://github.com/gurgeous)
+* [Added support for ruby.format, defaults to false (no formatting)](https://github.com/rubyide/vscode-ruby/pull/298) by [Adam Doppelt](https://github.com/gurgeous)
+* [Better error handling & messages when running RuboCop formatting](https://github.com/rubyide/vscode-ruby/pull/297) by [Adam Doppelt](https://github.com/gurgeous)
+* [set ruby.useBundler config option type to boolean](https://github.com/rubyide/vscode-ruby/commit/399a614a6708c455824ca75bf184d5093aa1749d) by [Gabriel Arjones](https://github.com/g-arjones)
+* [support running launch entries without debugging](https://github.com/rubyide/vscode-ruby/pull/266) by [Sylvain Joyeux](https://github.com/doudou)
+* [Debounce linting to prevent running on every keypress](https://github.com/rubyide/vscode-ruby/pull/264) by [Sam Killgallon](https://github.com/Sam-Killgallon)
+* [Add forceExclusion flag to rubocop setting](https://github.com/rubyide/vscode-ruby/pull/217) by [cyang6](https://github.com/cyang6)
+* [Remove solargraph dependency and update codeCompletion and intellisense options](https://github.com/rubyide/vscode-ruby/pull/309) by [Fred Snyder](https://github.com/castwide)
+
+Enhanced documentation:
+* [Readme update about gem dependencies](https://github.com/rubyide/vscode-ruby/pull/327) by [Adam Doppelt](https://github.com/gurgeous)
+* [Readme update about new debase gem](https://github.com/rubyide/vscode-ruby/pull/313) by [Kevin Coleman](https://github.com/KevinColemanInc)
+
+### 0.17.0 - Mar 4 2018
+A release driven by [Stafford Brunk](https://github.com/wingrunr21) and community, thanks all for your contribution.
+
+Notable changes:
+* [Syntax Highlighting rollback and enhancement](https://github.com/rubyide/vscode-ruby/pull/279), we upgraded our syntax to upstream one but that broke original syntax highlighting behavior. Here we brought it back but we still keep the goodness of upstream syntax.
+* [Bundler setting for Linters](https://github.com/rubyide/vscode-ruby/commit/1be81cc75e56fd31da18d6d5bfca2f9cef35dd5e), linters now honor `pathToBundler` and `useBundler` settings.
+* [CSS, JS, and Ruby can be embedded in ERB](https://github.com/rubyide/vscode-ruby/commit/1af8efb72591b575cf7468aa309ae9691632071d)
+
+### 0.16.0 - Jan 25 2018
+It has been half a year since our last release but even though rebornix is away from this extension most of time, the community is helping it improve and pushing it to its limit. Special thanks to [Stafford Brunk
+](https://github.com/wingrunr21) who reached out to me and tried to review issues and PRs. And of course, thanks to all contributors and users.
+
+Notable changes:
+* [Task 2.0](https://github.com/rubyide/vscode-ruby/pull/244) by [Sylvain Joyeux](https://github.com/doudou)
+* Indentation rules update: [1](https://github.com/rubyide/vscode-ruby/pull/231) by [TeeSeal](https://github.com/TeeSeal) [2](https://github.com/rubyide/vscode-ruby/pull/223) by [Jared Wyatt](https://github.com/wyattisimo)
+* [Grammar tracking improvements](https://github.com/rubyide/vscode-ruby/pull/242) by [Stafford Brunk](https://github.com/wingrunr21)
+* [WorkspaceRoot and bundler support](https://github.com/rubyide/vscode-ruby/pull/232) by [Stafford Brunk](https://github.com/wingrunr21)
+* [Fix getEntry regex to handle additional cases](https://github.com/rubyide/vscode-ruby/pull/250) by [Stafford Brunk](https://github.com/wingrunr21)
+* [Fix Shebang detection](https://github.com/rubyide/vscode-ruby/pull/249) by [Stafford Brunk](https://github.com/wingrunr21)
+* [Add single line comment for erb](https://github.com/rubyide/vscode-ruby/pull/224) by [NickWarm](https://github.com/NickWarm)
+* [Grammar update](https://github.com/rubyide/vscode-ruby/pull/199) by [Joshua Azemoh](https://github.com/azemoh)
+* [define the 'includes' field in the debug configuration](https://github.com/rubyide/vscode-ruby/pull/243) by [Sylvain Joyeux](https://github.com/doudou)
+* [Typo fix;)](https://github.com/rubyide/vscode-ruby/pull/204) by [Richard Keenan](https://github.com/richkeenan)
+
 ### 0.15.0 - August 21 2017
 VSCode added an API for task auto detection and now we brought this feature to Ruby. From this version, you can `Run Tasks` and the extesion will load Rake tasks for you automatically, if there is Rakefile available in the project.
 

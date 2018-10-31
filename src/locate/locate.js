@@ -60,14 +60,14 @@ function filter(symbols, query, matcher) {
 		.uniq()
 		.value();
 }
-module.exports = class Locate {
+export class Locate {
 	constructor(root, settings) {
 		this.settings = settings;
 		this.root = root;
 		this.tree = {};
 		this.walkQueue = this._createWalkQueue();
 		this.walkPromise = null;
-		this.parseQueue = async.queue((task, callback) => task().then(() => callback), SINGLE_FILE_PARSE_CONCURRENCY);
+		this.parseQueue = async.queue((task, callback) => task().then(() => callback()), SINGLE_FILE_PARSE_CONCURRENCY);
 	}
 	listInFile(absPath) {
 		const waitForParse = (absPath in this.tree) ? Promise.resolve() : this.parse(absPath);
