@@ -1,5 +1,26 @@
 language: ruby
 rvm:
+<<<<<<< HEAD
+  - 1.9.3
+  - 2.0.0
+  - 2.1.10
+  - 2.2.9
+  - 2.3.6
+  - 2.4.3
+  - 2.5.0
+
+before_install:
+  - gem install ruby-debug-ide
+  - nvm install 8.9.3
+  - echo "8.9.3" > .nvmrc
+
+before_script:
+  - nvm use
+  - npm install -g typescript -v 2.1.5
+  - npm install
+  - npm run compile
+script: nvm use && npm run test-debugger
+=======
   - 2.2
   - 2.3
   - 2.4
@@ -17,3 +38,4 @@ before_script:
   - cd server && npm install && cd ..
   - npm run compile
 script: nvm use && npm run test && npm run test-debugger
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e

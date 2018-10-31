@@ -92,6 +92,8 @@ function getCommitSha(repoId, repoPath) {
 	});
 }
 
+<<<<<<< HEAD
+=======
 function modifyRubyGrammar(grammar) {
 	const metaFunctionCallRuby = require('./meta.function-call.ruby.json');
 	const variableOtherRuby = require('./variable.other.ruby.json');
@@ -115,6 +117,7 @@ function getGrammarModifier(grammarName) {
 	}
 }
 
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 exports.update = function (repoId, repoPath, dest, modifyGrammar, version = 'master') {
 	var contentPath = 'https://raw.githubusercontent.com/' + repoId + `/${version}/` + repoPath;
 	console.log('Reading from ' + contentPath);
@@ -168,5 +171,9 @@ if (path.basename(process.argv[1]).indexOf('update-grammar') !== -1) {
 	let grammar = process.argv[3];
 	let outputFile = path.join('syntaxes', grammar + '.cson.json');
 	let repoFile = grammarToTmLanguage(grammar);
+<<<<<<< HEAD
+	exports.update(repo, repoFile, outputFile);
+=======
 	exports.update(repo, repoFile, outputFile, getGrammarModifier(grammar));
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 }

@@ -25,5 +25,8 @@ environment:
     - ruby_version: "23-x64"
     - ruby_version: "24"
     - ruby_version: "24-x64"
+<<<<<<< HEAD
+=======
     - ruby_version: "25"
     - ruby_version: "25-x64"
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e

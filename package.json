@@ -4,6 +4,7 @@
   "version": "0.20.0",
   "publisher": "rebornix",
   "description": "Provides Ruby language and debugging support for Visual Studio Code",
+  "keywords": ["ruby", "rake", "rails", "ruby on rails", "rubocop"],
   "author": {
     "name": "Stafford Brunk"
   },
@@ -34,6 +35,10 @@
   },
   "license": "MIT",
   "icon": "images/ruby.png",
+  "galleryBanner": {
+    "color": "#CC342D",
+    "theme": "dark"
+  },
   "categories": [
     "Languages",
     "Debuggers",

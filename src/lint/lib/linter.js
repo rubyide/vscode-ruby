@@ -59,6 +59,10 @@ class Linter {
 		return fs.link(sourceFile, opName).then(() => opName);
 	}
 	_detectBundledLinter(name, cwd) {
+<<<<<<< HEAD
+		try {
+			cp.execSync(`bundle show ${name}`, { cwd });
+=======
 		let useBundler  = this.cfg[name].useBundler;
 		if (useBundler !== undefined) {
 			return useBundler;
@@ -67,6 +71,7 @@ class Linter {
 		let pathToBundler = this.cfg[name].pathToBundler || 'bundle';
 		try {
 			cp.execSync(`${pathToBundler} show ${name}`, { cwd });
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			return true;
 		} catch (e) {
 			return false;
@@ -85,7 +90,11 @@ class Linter {
 		// Try bundler for the linter
 		// otherwise fallback to the path + the exe name
 		if (svcPath.length === 0 && this._detectBundledLinter(svc.exe, cmdOpts.dir)) {
+<<<<<<< HEAD
+			svcPath = 'bundle';
+=======
 			svcPath = this.cfg[svc.exe].pathToBundler;
+>>>>>>> 6799da0da2e66e6b9b0fae3c1d53ae1b1df6974e
 			args.unshift('exec', svc.exe);
 		} else {
 			svcPath = path.join(svcPath, svc.exe + svc.ext);
