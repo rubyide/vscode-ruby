@@ -34,7 +34,6 @@ export function activate(context: ExtensionContext): void {
 	const clientOptions: LanguageClientOptions = {
 		documentSelector: rubyDocumentSelector,
 		synchronize: {
-			configurationSection: 'ruby',
 			// Notify server of changes to .ruby-version or .rvmrc files
 			fileEvents: workspace.createFileSystemWatcher('**/{.ruby-version,.rvmrc}'),
 		},
