@@ -10,6 +10,7 @@ import {
 	ServerOptions,
 	TransportKind,
 } from 'vscode-languageclient';
+import { WorkspaceRubyEnvironmentFeature } from './WorkspaceRubyEnvironment';
 
 let client: LanguageClient;
 
@@ -43,6 +44,7 @@ export function activate(context: ExtensionContext): void {
 	// Create the language client and start the client.
 	client = new LanguageClient('ruby', 'Ruby', serverOptions, clientOptions);
 	client.registerProposedFeatures();
+	client.registerFeature(new WorkspaceRubyEnvironmentFeature(client));
 
 	// Push the disposable to the context's subscriptions so that the
 	// client can be deactivated on extension deactivation
