@@ -11,8 +11,10 @@
   "private": false,
   "main": "out/extension.js",
   "dependencies": {
-    "vscode": "^1.1.18",
-    "vscode-languageclient": "^5.1.0"
+    "default-shell": "^1.0.1",
+    "execa": "^1.0.0",
+    "vscode": "^1.1.21",
+    "vscode-languageclient": "^5.1.1"
   },
   "scripts": {
     "postinstall": "vscode-install"
