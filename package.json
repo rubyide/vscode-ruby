@@ -433,7 +433,8 @@
         "enableBreakpointsFor": {
           "languageIds": [
             "ruby",
-            "erb"
+            "erb",
+            "haml"
           ]
         },
         "program": "./out/debugger/main.js",
