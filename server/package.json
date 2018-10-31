@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "execa": "^1.0.0",
     "prebuild-install": "^5.0.0",
     "tree-sitter": "^0.13.15",
     "tree-sitter-ruby": "^0.13.11",
