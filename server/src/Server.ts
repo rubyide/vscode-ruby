@@ -2,10 +2,9 @@ import {
 	Connection,
 	InitializeParams,
 	InitializeResult,
-	WorkspaceFolder,
+	RequestType,
 } from 'vscode-languageserver';
 
-import { config } from './ServerConfiguration';
 import { CapabilityCalculator } from './CapabilityCalculator';
 import { Forest } from './Forest';
 import DocumentHighlightProvider from './providers/DocumentHighlightProvider';
@@ -14,10 +13,33 @@ import ConfigurationProvider from './providers/ConfigurationProvider';
 import TextDocumentProvider from './providers/TextDocumentProvider';
 import WorkspaceProvider from './providers/WorkspaceProvider';
 
+import {
+	documentConfigurationCache,
+	workspaceRubyEnvironmentCache,
+	RubyConfiguration,
+	RubyEnvironment,
+} from './SettingsCache';
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
 	registerInitializeProviders();
 	registerInitializedProviders();
+}
+
+interface WorkspaceRubyEnvironmentParams {
+	readonly folders: string[];
+}
+
+interface WorkspaceRubyEnvironmentResult {
+	readonly [key: string]: RubyEnvironment;
+}
+
+namespace WorkspaceRubyEnvironmentRequest {
+	export const type = new RequestType<
+		WorkspaceRubyEnvironmentParams,
+		WorkspaceRubyEnvironmentResult,
+		void,
+		true
+	>('workspace/rubyEnvironment');
 }
 
 export class Server implements ILanguageServer {
@@ -28,8 +50,27 @@ export class Server implements ILanguageServer {
 	constructor(connection: Connection, params: InitializeParams) {
 		this.connection = connection;
 		this.calculator = new CapabilityCalculator(params.capabilities);
-		this.forest = new Forest();
-		this.loadWorkspaceEnvironments(params.workspaceFolders);
+
+		if (this.calculator.clientCapabilities.workspace.rubyEnvironment) {
+			workspaceRubyEnvironmentCache.fetcher = async (
+				folders: string[]
+			): Promise<RubyEnvironment[]> => {
+				const result: WorkspaceRubyEnvironmentResult = await this.connection.sendRequest(
+					WorkspaceRubyEnvironmentRequest.type,
+					{
+						folders,
+					}
+				);
+
+				return Object.values(result);
+			};
+		} else {
+			workspaceRubyEnvironmentCache.fetcher = async (
+				folders: string[]
+			): Promise<RubyEnvironment[]> => {
+				return folders.map(_f => process.env as RubyEnvironment);
+			};
+		}
 	}
 
 	get capabilities(): InitializeResult {
@@ -57,10 +98,5 @@ export class Server implements ILanguageServer {
 
 		// Handle workspace changes
 		WorkspaceProvider.register(this.connection, this.forest);
-	}
-
-	private async loadWorkspaceEnvironments(folders: WorkspaceFolder[]): Promise<void> {
-		const loaders = folders.map(folder => config.loadWorkspaceEnvironment(folder));
-		await Promise.all(loaders);
 	}
 }

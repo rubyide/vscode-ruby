@@ -8,12 +8,21 @@ import {
 	TextDocumentSyncKind,
 } from 'vscode-languageserver';
 
+type WorkspaceRubyEnvironmentCapability = {
+	workspace?: {
+		rubyEnvironment?: boolean;
+	};
+};
+
+type ClientCapabilitiesWithRubyEnvironment = ClientCapabilities &
+	WorkspaceRubyEnvironmentCapability;
+
 export class CapabilityCalculator {
-	private clientCapabilities: ClientCapabilities;
+	public clientCapabilities: ClientCapabilitiesWithRubyEnvironment;
 	public capabilities: ServerCapabilities;
 
 	constructor(clientCapabilities: ClientCapabilities) {
-		this.clientCapabilities = clientCapabilities;
+		this.clientCapabilities = clientCapabilities as ClientCapabilitiesWithRubyEnvironment;
 		this.calculateCapabilities();
 	}
 
