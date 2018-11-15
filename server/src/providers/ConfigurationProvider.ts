@@ -1,19 +1,26 @@
-import { IConnection, DidChangeConfigurationParams } from 'vscode-languageserver';
-import { IForest } from '../Forest';
+import {
+	IConnection,
+	DidChangeConfigurationParams,
+	DidChangeConfigurationNotification,
+} from 'vscode-languageserver';
 import Provider from './Provider';
+import { documentConfigurationCache } from '../SettingsCache';
 
 export default class ConfigurationProvider extends Provider {
-	static register(connection: IConnection, forest: IForest) {
-		return new ConfigurationProvider(connection, forest);
+	static register(connection: IConnection) {
+		return new ConfigurationProvider(connection);
 	}
 
-	constructor(connection: IConnection, forest: IForest) {
-		super(connection, forest);
+	constructor(connection: IConnection) {
+		super(connection);
 
-		this.connection.onDidChangeConfiguration(this.handleConfigurationChange);
+		this.connection.client.register(DidChangeConfigurationNotification.type, undefined);
+		this.connection.onDidChangeConfiguration(this.handleDidChangeConfiguration);
 	}
 
-	private handleConfigurationChange(event: DidChangeConfigurationParams) {
-		console.log(event.settings);
-	}
+	private handleDidChangeConfiguration = async (
+		_params: DidChangeConfigurationParams // params is empty in the pull config model
+	): Promise<void> => {
+		documentConfigurationCache.flush();
+	};
 }
