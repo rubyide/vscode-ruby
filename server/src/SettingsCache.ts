@@ -10,7 +10,32 @@ export type RubyEnvironment = {
 	RUBOCOP_OPTS?: string;
 };
 
-export interface RubyConfiguration {}
+export type RubyLintConfiguration = {
+	command?: string;
+	useBundler?: boolean;
+};
+
+export type RuboCopLintConfiguration = RubyLintConfiguration & {
+	lint?: boolean;
+	only?: string[];
+	except?: string[];
+	require?: string[];
+	rails?: boolean;
+	forceExclusion?: boolean;
+};
+
+export interface RubyConfiguration {
+	workspaceFolderUri: string;
+	interpreter?: {
+		commandPath?: string;
+	};
+	pathToBundler: string;
+	lint: {
+		fasterer?: boolean | RubyConfiguration;
+		reek?: boolean | RubyConfiguration;
+		rubocop?: boolean | RuboCopLintConfiguration;
+	};
+}
 
 class SettingsCache<P extends WorkspaceFolder | TextDocument, T> {
 	private cache: Map<string, T>;
