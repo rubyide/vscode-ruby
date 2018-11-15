@@ -19,7 +19,6 @@ export default class DocumentSymbolProvider extends Provider {
 			textDocument: { uri },
 		} = params;
 		const analysis = analyses.getAnalysis(uri);
-		console.log(JSON.stringify(analysis.documentSymbols));
 		return analysis.documentSymbols;
 	};
 }
