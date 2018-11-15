@@ -1,17 +1,12 @@
-import {
-	Connection,
-	InitializeParams,
-	InitializeResult,
-	RequestType,
-} from 'vscode-languageserver';
+import { Connection, InitializeParams, InitializeResult, RequestType } from 'vscode-languageserver';
 
 import { CapabilityCalculator } from './CapabilityCalculator';
-import { Forest } from './Forest';
 import DocumentHighlightProvider from './providers/DocumentHighlightProvider';
 import FoldingRangeProvider from './providers/FoldingRangeProvider';
 import ConfigurationProvider from './providers/ConfigurationProvider';
 import TextDocumentProvider from './providers/TextDocumentProvider';
 import WorkspaceProvider from './providers/WorkspaceProvider';
+import DocumentSymbolProvider from './providers/DocumentSymbolProvider';
 
 import { documents } from './DocumentManager';
 import {
@@ -46,7 +41,6 @@ namespace WorkspaceRubyEnvironmentRequest {
 export class Server implements ILanguageServer {
 	public connection: Connection;
 	private calculator: CapabilityCalculator;
-	private forest: Forest;
 
 	constructor(connection: Connection, params: InitializeParams) {
 		this.connection = connection;
@@ -85,21 +79,21 @@ export class Server implements ILanguageServer {
 	// registers providers on the initialize step
 	public registerInitializeProviders(): void {
 		// Handles highlight requests
-		DocumentHighlightProvider.register(this.connection, this.forest);
+		DocumentHighlightProvider.register(this.connection);
 
 		// Handles folding requests
-		FoldingRangeProvider.register(this.connection, this.forest);
+		FoldingRangeProvider.register(this.connection);
 
-		// Handles text document changes and will delegate to other providers that need these events
-		TextDocumentProvider.register(this.connection, this.forest);
+		// Handles document symbol requests
+		DocumentSymbolProvider.register(this.connection);
 	}
 
 	// registers providers on the initialized step
 	public registerInitializedProviders(): void {
 		// Handles configuration changes
-		ConfigurationProvider.register(this.connection, this.forest);
+		ConfigurationProvider.register(this.connection);
 
 		// Handle workspace changes
-		WorkspaceProvider.register(this.connection, this.forest);
+		WorkspaceProvider.register(this.connection);
 	}
 }
