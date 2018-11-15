@@ -1,4 +1,10 @@
-import { Connection, InitializeParams, InitializeResult, RequestType } from 'vscode-languageserver';
+import {
+	ConfigurationItem,
+	Connection,
+	InitializeParams,
+	InitializeResult,
+	RequestType,
+} from 'vscode-languageserver';
 
 import { CapabilityCalculator } from './CapabilityCalculator';
 import DocumentHighlightProvider from './providers/DocumentHighlightProvider';
@@ -55,6 +61,18 @@ export class Server implements ILanguageServer {
 				connection.sendDiagnostics({ uri: result.document.uri, diagnostics: result.diagnostics });
 			},
 		});
+
+		documentConfigurationCache.fetcher = async (
+			targets: string[]
+		): Promise<RubyConfiguration[]> => {
+			const items: ConfigurationItem[] = targets.map(t => {
+				return {
+					scopeUri: t,
+					section: 'ruby',
+				};
+			});
+			return this.connection.workspace.getConfiguration(items);
+		};
 
 		if (this.calculator.clientCapabilities.workspace.rubyEnvironment) {
 			workspaceRubyEnvironmentCache.fetcher = async (
