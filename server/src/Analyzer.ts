@@ -3,13 +3,13 @@ import { Observer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Tree, SyntaxNode } from 'tree-sitter';
 import DocumentSymbolAnalyzer from './analyzers/DocumentSymbolAnalyzer';
-import { forestStream } from './Forest';
+import { forestStream, ForestEventKind } from './Forest';
 import FoldingRangeAnalyzer from './analyzers/FoldingRangeAnalyzer';
 
 type Analysis = {
 	uri: string;
-	foldingRanges: FoldingRange[];
-	documentSymbols: DocumentSymbol[];
+	foldingRanges?: FoldingRange[];
+	documentSymbols?: DocumentSymbol[];
 };
 
 class Analyzer {
@@ -80,9 +80,15 @@ class Analyses implements Observer<Analysis> {
 export const analyses = new Analyses();
 forestStream
 	.pipe(
-		map(({ document, tree }) => {
-			const analyzer = new Analyzer(document.uri);
-			return analyzer.analyze(tree);
-		})
+		map(
+			({ kind, document, tree }): Analysis => {
+				if (kind === ForestEventKind.DELETE) {
+					return { uri: document.uri };
+				} else {
+					const analyzer = new Analyzer(document.uri);
+					return analyzer.analyze(tree);
+				}
+			}
+		)
 	)
 	.subscribe(analyses);
