@@ -1,5 +1,5 @@
 import URI from 'vscode-uri';
-import { empty, iif, from, Observable } from 'rxjs';
+import { empty, iif, from, of, Observable } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
 import {
@@ -68,7 +68,11 @@ export const linter = documents.subject.pipe(
 		iif(
 			() =>
 				event.kind === DocumentEventKind.OPEN || event.kind === DocumentEventKind.CHANGE_CONTENT,
-			lint(event.document)
+			lint(event.document),
+			of({
+				document: event.document,
+				diagnostics: [],
+			})
 		)
 	)
 );
