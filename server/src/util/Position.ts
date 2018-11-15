@@ -7,21 +7,25 @@
 import { Point as TSPosition } from 'tree-sitter';
 import { Position as VSPosition } from 'vscode-languageserver';
 
-export class Position {
-	private row: number;
-	private col: number;
+export default class Position {
+	public row: number;
+	public col: number;
 
 	constructor(row: number, col: number) {
 		this.row = row;
 		this.col = col;
 	}
 
-	public static FROM_VS_POSITION(position: VSPosition): Position {
+	public static fromVSPosition(position: VSPosition): Position {
 		return new Position(position.line, position.character);
 	}
 
-	public static FROM_TS_POSITION(position: TSPosition): Position {
+	public static fromTSPosition(position: TSPosition): Position {
 		return new Position(position.row, position.column);
+	}
+
+	public static tsPositionIsEqual(p1: TSPosition, p2: TSPosition): boolean {
+		return p1.row === p2.row && p1.column === p2.column;
 	}
 
 	public toVSPosition(): VSPosition {
@@ -33,5 +37,9 @@ export class Position {
 			row: this.row,
 			column: this.col,
 		};
+	}
+
+	public isEqual(position: Position) {
+		return this.row === position.row && this.col === position.col;
 	}
 }
