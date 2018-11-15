@@ -9,6 +9,8 @@ import WorkspaceProvider from './providers/WorkspaceProvider';
 import DocumentSymbolProvider from './providers/DocumentSymbolProvider';
 
 import { documents } from './DocumentManager';
+import { LintResult, linter } from './Linter';
+
 import {
 	documentConfigurationCache,
 	workspaceRubyEnvironmentCache,
@@ -47,6 +49,12 @@ export class Server implements ILanguageServer {
 		this.calculator = new CapabilityCalculator(params.capabilities);
 
 		documents.listen(connection);
+
+		linter.subscribe({
+			next: (result: LintResult) => {
+				connection.sendDiagnostics({ uri: result.document.uri, diagnostics: result.diagnostics });
+			},
+		});
 
 		if (this.calculator.clientCapabilities.workspace.rubyEnvironment) {
 			workspaceRubyEnvironmentCache.fetcher = async (
