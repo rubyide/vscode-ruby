@@ -9,7 +9,7 @@
   "dependencies": {
     "execa": "^1.0.0",
     "prebuild-install": "^5.0.0",
-    "tree-sitter": "^0.13.15",
+    "tree-sitter": "^0.13.22",
     "tree-sitter-ruby": "^0.13.11",
     "vscode-languageserver": "^5.1.0",
     "vscode-uri": "^1.0.6"
