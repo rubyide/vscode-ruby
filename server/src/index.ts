@@ -43,3 +43,8 @@ connection.onInitialized(() => {
 
 // Listen on the connection
 connection.listen();
+
+// Don't die on unhandled Promise rejections
+process.on('unhandledRejection', (reason, p) => {
+	connection.console.error(`Unhandled Rejection at: Promise ${p} reason:, ${reason}`);
+});
