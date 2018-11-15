@@ -13,6 +13,7 @@ import ConfigurationProvider from './providers/ConfigurationProvider';
 import TextDocumentProvider from './providers/TextDocumentProvider';
 import WorkspaceProvider from './providers/WorkspaceProvider';
 
+import { documents } from './DocumentManager';
 import {
 	documentConfigurationCache,
 	workspaceRubyEnvironmentCache,
@@ -50,6 +51,8 @@ export class Server implements ILanguageServer {
 	constructor(connection: Connection, params: InitializeParams) {
 		this.connection = connection;
 		this.calculator = new CapabilityCalculator(params.capabilities);
+
+		documents.listen(connection);
 
 		if (this.calculator.clientCapabilities.workspace.rubyEnvironment) {
 			workspaceRubyEnvironmentCache.fetcher = async (
