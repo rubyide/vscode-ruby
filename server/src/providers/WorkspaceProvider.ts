@@ -1,25 +1,37 @@
 import Provider from './Provider';
-import { IConnection, WorkspaceFoldersChangeEvent } from 'vscode-languageserver';
-import { IForest } from '../Forest';
+import {
+	DidChangeWatchedFilesParams,
+	IConnection,
+	WorkspaceFoldersChangeEvent,
+} from 'vscode-languageserver';
 
-import { config } from '../ServerConfiguration';
+import { workspaceRubyEnvironmentCache } from '../SettingsCache';
 
 export default class WorkspaceProvider extends Provider {
-	static register(connection: IConnection, forest: IForest) {
-		return new WorkspaceProvider(connection, forest);
+	static register(connection: IConnection) {
+		return new WorkspaceProvider(connection);
 	}
 
-	constructor(connection: IConnection, forest: IForest) {
-		super(connection, forest);
+	constructor(connection: IConnection) {
+		super(connection);
 
 		this.connection.workspace.onDidChangeWorkspaceFolders(this.handleWorkspaceFoldersChange);
+		this.connection.onDidChangeWatchedFiles(this.handleDidChangeWatchedFiles);
 	}
 
 	private handleWorkspaceFoldersChange = async (
 		event: WorkspaceFoldersChangeEvent
 	): Promise<void> => {
-		const loaders = event.added.map(folder => config.loadWorkspaceEnvironment(folder));
-		const removers = event.removed.map(folder => config.removeWorkspaceEnvironment(folder));
-		await Promise.all(loaders.concat(removers));
+		const loader = workspaceRubyEnvironmentCache.getAll(event.added);
+		const remover = workspaceRubyEnvironmentCache.deleteAll(event.removed);
+		await Promise.all([loader, remover]);
+	};
+
+	private handleDidChangeWatchedFiles = async (
+		params: DidChangeWatchedFilesParams
+	): Promise<void> => {
+		console.log('Watched file change!');
+		console.log(params);
+		// TODO load workspace environment again based on workspace where the file changed
 	};
 }
