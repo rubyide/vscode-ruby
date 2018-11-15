@@ -4,7 +4,6 @@ import { CapabilityCalculator } from './CapabilityCalculator';
 import DocumentHighlightProvider from './providers/DocumentHighlightProvider';
 import FoldingRangeProvider from './providers/FoldingRangeProvider';
 import ConfigurationProvider from './providers/ConfigurationProvider';
-import TextDocumentProvider from './providers/TextDocumentProvider';
 import WorkspaceProvider from './providers/WorkspaceProvider';
 import DocumentSymbolProvider from './providers/DocumentSymbolProvider';
 
@@ -17,6 +16,7 @@ import {
 	RubyConfiguration,
 	RubyEnvironment,
 } from './SettingsCache';
+
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
 	registerInitializeProviders();
