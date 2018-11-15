@@ -30,7 +30,7 @@ export class CapabilityCalculator {
 		this.capabilities = {
 			// Perform incremental syncs
 			// Incremental sync is disabled for now due to not being able to get the
-			// old text in ASTProvider
+			// old text
 			// textDocumentSync: TextDocumentSyncKind.Incremental,
 			textDocumentSync: TextDocumentSyncKind.Full,
 			documentHighlightProvider: true,
