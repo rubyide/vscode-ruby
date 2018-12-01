@@ -6,8 +6,12 @@ export function registerConfigurationProvider(): void {
 
 class RubyConfigurationProvider implements vscode.DebugConfigurationProvider {
 
-	public provideDebugConfigurations(folder: vscode.WorkspaceFolder, token: vscode.CancellationToken): vscode.DebugConfiguration[] {
-		return rubyConfigurations;
+	public provideDebugConfigurations(folder: vscode.WorkspaceFolder, token: vscode.CancellationToken): Thenable<vscode.DebugConfiguration[]> {
+		const names = rubyConfigurations.map((config) => config.name);
+
+		return vscode.window.showQuickPick(names).then((selected: string) => {
+			return [rubyConfigurations.find((config) => config.name === selected)];
+		});
 	}
 }
 

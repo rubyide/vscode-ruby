@@ -438,6 +438,81 @@
         },
         "program": "./out/debugger/main.js",
         "runtime": "node",
+        "configurationSnippets": [
+          {
+            "label": "Ruby: Debug Local File",
+            "body": {
+              "name": "Debug Local File",
+              "type": "Ruby",
+              "request": "launch",
+              "program": "${workspaceRoot}/main.rb"
+            }
+          },
+          {
+            "label": "Ruby: Listen for rdebug-ide",
+            "body": {
+              "name": "Listen for rdebug-ide",
+              "type": "Ruby",
+              "request": "attach",
+              "cwd": "${workspaceRoot}",
+              "remoteHost": "127.0.0.1",
+              "remotePort": "1234",
+              "remoteWorkspaceRoot": "${workspaceRoot}"
+            }
+          },
+          {
+            "label": "Ruby: Rails server",
+            "body": {
+              "name": "Rails server",
+              "type": "Ruby",
+              "request": "launch",
+              "cwd": "${workspaceRoot}",
+              "program": "${workspaceRoot}/bin/rails",
+              "args": [
+                "server"
+              ]
+            }
+          },
+          {
+            "label": "Ruby: RSpec - all",
+            "body": {
+              "name": "RSpec - all",
+              "type": "Ruby",
+              "request": "launch",
+              "cwd": "${workspaceRoot}",
+              "program": "${workspaceRoot}/bin/rspec",
+              "args": [
+                "-I",
+                "${workspaceRoot}"
+              ]
+            }
+          },
+          {
+            "label": "Ruby: RSpec - active spec file only",
+            "body": {
+              "name": "RSpec - active spec file only",
+              "type": "Ruby",
+              "request": "launch",
+              "cwd": "${workspaceRoot}",
+              "program": "${workspaceRoot}/bin/rspec",
+              "args": [
+                "-I",
+                "${workspaceRoot}",
+                "${file}"
+              ]
+            }
+          },
+          {
+            "label": "Ruby: Cucumber",
+            "body": {
+              "name": "Cucumber",
+              "type": "Ruby",
+              "request": "launch",
+              "cwd": "${workspaceRoot}",
+              "program": "${workspaceRoot}/bin/cucumber"
+            }
+          }
+        ],
         "configurationAttributes": {
           "launch": {
             "required": [
