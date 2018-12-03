@@ -13,6 +13,11 @@ class RubyConfigurationProvider implements vscode.DebugConfigurationProvider {
 			return [rubyConfigurations.find((config) => config.name === selected)];
 		});
 	}
+
+	public resolveDebugConfiguration?(folder: vscode.WorkspaceFolder | undefined, debugConfiguration: vscode.DebugConfiguration): vscode.ProviderResult<vscode.DebugConfiguration> {
+
+		return { ...debugConfiguration, cwd: "${workspaceRoot}" };
+	}
 }
 
 const rubyConfigurations: vscode.DebugConfiguration[] = [
@@ -20,14 +25,12 @@ const rubyConfigurations: vscode.DebugConfiguration[] = [
 		"name": "Debug Local File",
 		"type": "Ruby",
 		"request": "launch",
-		"cwd": "${workspaceRoot}",
 		"program": "${workspaceRoot}/main.rb"
 	},
 	{
 		"name": "Listen for rdebug-ide",
 		"type": "Ruby",
 		"request": "attach",
-		"cwd": "${workspaceRoot}",
 		"remoteHost": "127.0.0.1",
 		"remotePort": "1234",
 		"remoteWorkspaceRoot": "${workspaceRoot}"
@@ -36,7 +39,6 @@ const rubyConfigurations: vscode.DebugConfiguration[] = [
 		"name": "Rails server",
 		"type": "Ruby",
 		"request": "launch",
-		"cwd": "${workspaceRoot}",
 		"program": "${workspaceRoot}/bin/rails",
 		"args": [
 			"server"
@@ -46,7 +48,6 @@ const rubyConfigurations: vscode.DebugConfiguration[] = [
 		"name": "RSpec - all",
 		"type": "Ruby",
 		"request": "launch",
-		"cwd": "${workspaceRoot}",
 		"program": "${workspaceRoot}/bin/rspec",
 		"args": [
 			"-I",
@@ -57,7 +58,6 @@ const rubyConfigurations: vscode.DebugConfiguration[] = [
 		"name": "RSpec - active spec file only",
 		"type": "Ruby",
 		"request": "launch",
-		"cwd": "${workspaceRoot}",
 		"program": "${workspaceRoot}/bin/rspec",
 		"args": [
 			"-I",
@@ -69,7 +69,6 @@ const rubyConfigurations: vscode.DebugConfiguration[] = [
 		"name": "Cucumber",
 		"type": "Ruby",
 		"request": "launch",
-		"cwd": "${workspaceRoot}",
 		"program": "${workspaceRoot}/bin/cucumber"
 	}
 ]
