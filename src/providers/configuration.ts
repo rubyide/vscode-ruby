@@ -16,7 +16,9 @@ class RubyConfigurationProvider implements vscode.DebugConfigurationProvider {
 
 	public resolveDebugConfiguration?(folder: vscode.WorkspaceFolder | undefined, debugConfiguration: vscode.DebugConfiguration): vscode.ProviderResult<vscode.DebugConfiguration> {
 
-		return { ...debugConfiguration, cwd: "${workspaceRoot}" };
+		const cwd: string = debugConfiguration.cwd || "${workspaceRoot}";
+
+		return { ...debugConfiguration, cwd };
 	}
 }
 
