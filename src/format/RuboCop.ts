@@ -42,7 +42,9 @@ export class AutoCorrect {
 
 		const ext: string = process.platform === 'win32' ? '.bat' : '';
 		if (vscode.workspace.getConfiguration('ruby').useBundler) {
-			return [`bundle${ext}`, 'exec', 'rubocop'];
+			const pathToBundler: string =
+				vscode.workspace.getConfiguration('ruby').pathToBundler || 'bundle';
+			return [`${pathToBundler}${ext}`, 'exec', 'rubocop'];
 		}
 
 		return [`rubocop${ext}`];
