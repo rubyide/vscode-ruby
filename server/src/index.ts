@@ -48,3 +48,9 @@ connection.listen();
 process.on('unhandledRejection', (reason, p) => {
 	connection.console.error(`Unhandled Rejection at: Promise ${p} reason:, ${reason}`);
 });
+
+// Don't die when attempting to pipe stdin to a bad spawn
+// https://github.com/electron/electron/issues/13254
+process.on('SIGPIPE', () => {
+	// console.log('SIGPIPE!!');
+});
