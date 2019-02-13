@@ -1,3 +1,11 @@
+### 0.21.1 - Feb 12 2019
+
+Bug Fixes:
+* Upgrade `tree-sitter` and `tree-sitter-ruby` to versions compatible with Node ABI v64
+
+Improvements:
+* (Update settings panel title)[] by [](https://github.com/rubyide/vscode-ruby/commits?author=vnbrs)
+
 ### 0.21.0 - Dec 9 2018
 
 Notable Changes:
