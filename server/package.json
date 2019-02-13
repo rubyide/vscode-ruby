@@ -8,8 +8,8 @@
   "private": false,
   "dependencies": {
     "prebuild-install": "^5.0.0",
-    "tree-sitter": "^0.13.4",
-    "tree-sitter-ruby": "^0.13.5",
+    "tree-sitter": "^0.13.23",
+    "tree-sitter-ruby": "^0.13.13",
     "vscode-languageserver": "^4.4.0",
     "vscode-uri": "^1.0.5"
   },
