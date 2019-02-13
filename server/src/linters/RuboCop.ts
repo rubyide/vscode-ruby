@@ -15,7 +15,7 @@ type RuboCopOffense = {
 	};
 };
 
-interface IRuboCopResults {
+export interface IRuboCopResults {
 	summary: {
 		offense_count: number;
 		target_file_count: number;
@@ -79,7 +79,7 @@ export default class RuboCop extends BaseLinter {
 		return results;
 	}
 
-	private rubocopOffenseToDiagnostic(offense: RuboCopOffense): Diagnostic {
+	protected rubocopOffenseToDiagnostic(offense: RuboCopOffense): Diagnostic {
 		const offenseCharacter = offense.location.column - 1;
 		return {
 			range: {
