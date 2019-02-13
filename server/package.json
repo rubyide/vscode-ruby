@@ -7,11 +7,11 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "execa": "^1.0.0",
     "prebuild-install": "^5.0.0",
-    "rxjs": "^6.3.3",
     "tree-sitter": "^0.13.22",
     "tree-sitter-ruby": "^0.13.11",
+    "rxjs": "^6.4.0",
+    "spawn-rx": "^3.0.0",
     "vscode-languageserver": "^5.1.0",
     "vscode-uri": "^1.0.6"
   },

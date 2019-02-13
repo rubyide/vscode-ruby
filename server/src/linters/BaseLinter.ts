@@ -1,6 +1,6 @@
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
-import execa from 'execa';
-import { from, Observable, empty } from 'rxjs';
+import { spawn } from 'spawn-rx';
+import { of, Observable, empty } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { RubyEnvironment, RubyLintConfiguration } from '../SettingsCache';
 
@@ -44,22 +44,16 @@ export default abstract class BaseLinter implements ILinter {
 		}
 
 		console.info(`Lint: executing ${cmd} ${args.join(' ')}...`);
-
-		return from(
-			execa(cmd, args, {
-				env: this.config.env,
-				cwd: this.config.executionRoot,
-				input: this.document.getText(),
-				reject: false, // important since linters return non-zero error codes
-			})
-		).pipe(
-			map(result => {
-				return this.processResults(result.stdout);
-			}),
+		return spawn(cmd, args, {
+			env: this.config.env,
+			cwd: this.config.executionRoot,
+			stdin: of(this.document.getText()),
+		}).pipe(
 			catchError(error => {
-				console.log(error);
+				this.processError(error);
 				return empty();
-			})
+			}),
+			map(result => this.processResults(result))
 		);
 	}
 
@@ -69,5 +63,17 @@ export default abstract class BaseLinter implements ILinter {
 
 	protected isWindows(): boolean {
 		return process.platform === 'win32';
+	}
+
+	protected processError(error: any) {
+		switch (error.code) {
+			case 'ENOENT':
+				console.log(
+					`Lint: unable to execute ${error.path} ${error.spawnargs.join(
+						' '
+					)} as the command could not be found`
+				);
+				break;
+		}
 	}
 }
