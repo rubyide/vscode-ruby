@@ -37,7 +37,7 @@ export function activate(context: ExtensionContext): void {
 			// Notify server of changes to .ruby-version or .rvmrc files
 			fileEvents: workspace.createFileSystemWatcher('**/{.ruby-version,.rvmrc}'),
 		},
-		outputChannel: window.createOutputChannel('Ruby'),
+		outputChannel: window.createOutputChannel('Ruby Language Server'),
 	};
 
 	// Create the language client and start the client.
