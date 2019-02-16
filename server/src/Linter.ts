@@ -9,12 +9,13 @@ import {
 	RubyConfiguration,
 	RubyLintConfiguration,
 } from './SettingsCache';
-import { ILinter, LinterConfig, RuboCop, Reek } from './linters';
+import { ILinter, LinterConfig, RuboCop, Reek, Standard } from './linters';
 import { documents, DocumentEvent, DocumentEventKind } from './DocumentManager';
 
 const LINTER_MAP = {
 	rubocop: RuboCop,
 	reek: Reek,
+	standard: Standard,
 };
 
 export type LintResult = {
