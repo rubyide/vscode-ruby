@@ -50,7 +50,7 @@ function lint(document: TextDocument): Observable<LintResult> {
 		switchMap(({ config, env }) => {
 			return from(Object.keys(config.lint)).pipe(
 				mergeMap(l => {
-					return iif(() => config.lint[l], getLinter(l, document, env, config).lint(), empty());
+					return config.lint[l] ? getLinter(l, document, env, config).lint() : empty();
 				})
 			);
 		}),
