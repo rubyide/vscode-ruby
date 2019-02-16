@@ -30,6 +30,10 @@ export function activate(context: ExtensionContext): void {
 	} else {
 		// Register legacy providers
 		registerHighlightProvider(context, DOCUMENT_SELECTOR);
+
+		if (workspace.rootPath) {
+			registerLinters(context);
+		}
 	}
 
 	// Register providers
@@ -37,7 +41,6 @@ export function activate(context: ExtensionContext): void {
 	registerFormatter(context, DOCUMENT_SELECTOR);
 
 	if (workspace.rootPath) {
-		registerLinters(context);
 		registerIntellisenseProvider(context);
 		registerTaskProvider(context);
 	}
