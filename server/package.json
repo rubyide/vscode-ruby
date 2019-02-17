@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "diff-match-patch": "^1.0.4",
     "prebuild-install": "^5.0.0",
     "tree-sitter": "^0.13.22",
     "tree-sitter-ruby": "^0.13.11",
@@ -16,6 +17,7 @@
     "vscode-uri": "^1.0.6"
   },
   "devDependencies": {
+    "@types/diff-match-patch": "^1.0.32",
     "@types/execa": "^0.9.0",
     "prebuild": "^7.6.0"
   },
