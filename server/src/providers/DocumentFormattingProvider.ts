@@ -1,4 +1,9 @@
-import { IConnection, DocumentFormattingParams, TextEdit } from 'vscode-languageserver';
+import {
+	IConnection,
+	DocumentFormattingParams,
+	DocumentRangeFormattingParams,
+	TextEdit,
+} from 'vscode-languageserver';
 import Provider from './Provider';
 import Formatter from '../Formatter';
 
@@ -10,6 +15,7 @@ export default class DocumentFormattingProvider extends Provider {
 	constructor(connection: IConnection) {
 		super(connection);
 		this.connection.onDocumentFormatting(this.handleDocumentFormattingRequest);
+		this.connection.onDocumentRangeFormatting(this.handleDocumentRangeFormattingRequest);
 	}
 
 	private handleDocumentFormattingRequest = async (
@@ -18,5 +24,13 @@ export default class DocumentFormattingProvider extends Provider {
 		const { textDocument } = params;
 
 		return Formatter.format(textDocument).toPromise();
+	};
+
+	private handleDocumentRangeFormattingRequest = async (
+		params: DocumentRangeFormattingParams
+	): Promise<TextEdit[]> => {
+		const { textDocument, range } = params;
+
+		return Formatter.format(textDocument, range).toPromise();
 	};
 }

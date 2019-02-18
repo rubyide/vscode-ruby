@@ -1,4 +1,4 @@
-import { TextDocument, TextEdit } from 'vscode-languageserver';
+import { Position, Range, TextDocument, TextEdit } from 'vscode-languageserver';
 import { spawn } from 'spawn-rx';
 import { of, Observable, empty } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -19,17 +19,24 @@ export type FormatterConfig = {
 	env: RubyEnvironment;
 	executionRoot: string;
 	config: RubyCommandConfiguration;
+	range?: Range;
 };
 
 export default abstract class BaseFormatter implements IFormatter {
 	protected document: TextDocument;
+	private originalText: string;
 	protected config: FormatterConfig;
 	private differ: DiffMatchPatch;
 
 	constructor(document: TextDocument, config: FormatterConfig) {
 		this.document = document;
+		this.originalText = document.getText();
 		this.config = config;
 		this.differ = new DiffMatchPatch();
+
+		if (this.range) {
+			this.modifyRange();
+		}
 	}
 
 	get cmd(): string {
@@ -44,6 +51,10 @@ export default abstract class BaseFormatter implements IFormatter {
 		return this.config.config.useBundler;
 	}
 
+	get range(): Range {
+		return this.config.range;
+	}
+
 	public format(): Observable<TextEdit[]> {
 		let { cmd, args } = this;
 
@@ -56,7 +67,7 @@ export default abstract class BaseFormatter implements IFormatter {
 		return spawn(cmd, args, {
 			env: this.config.env,
 			cwd: this.config.executionRoot,
-			stdin: of(this.document.getText()),
+			stdin: of(this.originalText),
 			split: true,
 		}).pipe(
 			catchError(error => {
@@ -80,8 +91,7 @@ export default abstract class BaseFormatter implements IFormatter {
 	}
 
 	protected processResults(output: string): TextEdit[] {
-		const originalText = this.document.getText();
-		const diffs: Diff[] = this.differ.diff_main(originalText, output);
+		const diffs: Diff[] = this.differ.diff_main(this.originalText, output);
 		const edits: TextEdit[] = [];
 		// VSCode wants TextEdits on the original document
 		// this means position only gets moved for DIFF_EQUAL and DIFF_DELETE
@@ -90,6 +100,7 @@ export default abstract class BaseFormatter implements IFormatter {
 		for (let diff of diffs) {
 			const [num, str] = diff;
 			const startPos = this.document.positionAt(position);
+
 			switch (num) {
 				case DIFF_DELETE:
 					edits.push({
@@ -110,6 +121,12 @@ export default abstract class BaseFormatter implements IFormatter {
 				case DIFF_EQUAL:
 					position += str.length;
 					break;
+			}
+
+			// If we are have a range we are doing a selection format. Thus,
+			// only apply patches that start within the selected range
+			if (this.range && !this.checkPositionInRange(startPos)) {
+				edits.shift();
 			}
 		}
 
@@ -135,6 +152,37 @@ export default abstract class BaseFormatter implements IFormatter {
 						error.message
 					}`
 				);
+		}
+	}
+
+	// Modified from https://github.com/Microsoft/vscode/blob/master/src/vs/editor/common/core/range.ts#L90
+	private checkPositionInRange(position: Position) {
+		const { start, end } = this.range;
+
+		if (position.line < start.line || position.line > end.line) {
+			return false;
+		}
+
+		if (position.line === start.line && position.character < start.character) {
+			return false;
+		}
+
+		if (position.line === end.line && position.character > end.character) {
+			return false;
+		}
+
+		return true;
+	}
+
+	// If the selection range just has whitespace before it in the line,
+	// extend the range to account for that whitespace
+	private modifyRange() {
+		const { start } = this.range;
+		const offset = this.document.offsetAt(start);
+		const prefixLineText = this.originalText.substring(offset - start.character, offset);
+
+		if (/^\s+$/.test(prefixLineText)) {
+			this.range.start.character = 0;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-import { TextDocument, TextDocumentIdentifier, TextEdit } from 'vscode-languageserver';
+import { Range, TextDocument, TextDocumentIdentifier, TextEdit } from 'vscode-languageserver';
 import {
 	documentConfigurationCache,
 	RubyEnvironment,
@@ -20,7 +20,8 @@ const FORMATTER_MAP = {
 function getFormatter(
 	document: TextDocument,
 	env: RubyEnvironment,
-	config: RubyConfiguration
+	config: RubyConfiguration,
+	range?: Range
 ): IFormatter {
 	if (typeof config.format === 'string') {
 		const formatterConfig: FormatterConfig = {
@@ -32,6 +33,10 @@ function getFormatter(
 			},
 		};
 
+		if (range) {
+			formatterConfig.range = range;
+		}
+
 		return new FORMATTER_MAP[config.format](document, formatterConfig);
 	} else {
 		return new NullFormatter();
@@ -39,7 +44,7 @@ function getFormatter(
 }
 
 export default class Formatter {
-	static format(ident: TextDocumentIdentifier): Observable<TextEdit[]> {
+	static format(ident: TextDocumentIdentifier, range?: Range): Observable<TextEdit[]> {
 		const document = documents.get(ident.uri);
 
 		return from(documentConfigurationCache.get(ident.uri)).pipe(
@@ -50,7 +55,7 @@ export default class Formatter {
 				}
 			),
 			switchMap(({ config, env }) => {
-				return getFormatter(document, env, config).format();
+				return getFormatter(document, env, config, range).format();
 			})
 		);
 	}
