@@ -6,7 +6,7 @@ export default class Standard extends RuboCop {
 		if (this.lintConfig.command) {
 			return this.lintConfig.command;
 		} else {
-			const command = 'standard';
+			const command = 'standardrb';
 			return this.isWindows() ? command + '.bat' : command;
 		}
 	}
