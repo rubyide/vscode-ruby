@@ -71,7 +71,7 @@
 		"tslint-config-standard": "^8.0.1",
 		"tslint-no-circular-imports": "^0.6.1",
 		"typescript": "^2.9.2",
-		"vscode": "^1.1.4",
+		"vscode": "^1.1.29",
 		"vscode-debugadapter-testsupport": "^1.19.0"
 	},
 	"scripts": {
