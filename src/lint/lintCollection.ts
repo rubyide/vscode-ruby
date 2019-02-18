@@ -23,7 +23,12 @@ export class LintCollection {
 	public run(doc) {
 		if (!doc) return;
 		if (doc.languageId !== 'ruby') return;
-		if (!this._docLinters[doc.fileName]) this._docLinters[doc.fileName] = new Linter(doc, this._rootPath, this._update.bind(this, doc));
+		if (!this._docLinters[doc.fileName] || this._docLinters[doc.fileName].doc != doc)
+			this._docLinters[doc.fileName] = new Linter(
+				doc,
+				this._rootPath,
+				this._update.bind(this, doc)
+			);
 		this._docLinters[doc.fileName].run(this._cfg);
 	}
 

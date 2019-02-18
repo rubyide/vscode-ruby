@@ -6,6 +6,7 @@ import * as utils from './utils';
 
 import languageConfiguration from './languageConfiguration';
 import { registerCompletionProvider } from './providers/completion';
+import { registerConfigurationProvider } from './providers/configuration';
 import { registerFormatter } from './providers/formatter';
 import { registerHighlightProvider } from './providers/highlight';
 import { registerIntellisenseProvider } from './providers/intellisense';
@@ -39,6 +40,7 @@ export function activate(context: ExtensionContext): void {
 	// Register providers
 	registerCompletionProvider(context, DOCUMENT_SELECTOR);
 	registerFormatter(context, DOCUMENT_SELECTOR);
+	registerConfigurationProvider();
 
 	if (workspace.rootPath) {
 		registerIntellisenseProvider(context);

@@ -1,3 +1,28 @@
+### 0.21.1 - Feb 12 2019
+
+Bug Fixes:
+* Upgrade `tree-sitter` and `tree-sitter-ruby` to versions compatible with Node ABI v64
+
+Improvements:
+* [Update settings panel title](https://github.com/rubyide/vscode-ruby/pull/419) by [vnbrs](https://github.com/vnbrs)
+
+### 0.21.0 - Dec 9 2018
+
+Notable Changes:
+* Update ruby grammar to support quoted heredocs. See atom/language-ruby#212
+* [Improve configuration provider](https://github.com/rubyide/vscode-ruby/pull/408) by [YisraelV](https://github.com/YisraelV). Resolves [#404](https://github.com/rubyide/vscode-ruby/issues/404)
+* [Call the async-callback to clear parseQueue of items](https://github.com/rubyide/vscode-ruby/pull/399) by [peret](https://github.com/peret)
+* [Mark `deliverfile` as Ruby file](https://github.com/rubyide/vscode-ruby/pull/395) by [remcohaszing](https://github.com/remcohaszing)
+
+Bug Fixes:
+* [Fix linter offenses not updating after re-opening a file.](https://github.com/rubyide/vscode-ruby/pull/409) by [peret](https://github.com/peret). Resolves [#373](https://github.com/rubyide/vscode-ruby/issues/373)
+* [Respect ruby.pathToBundler for RuboCop executable](https://github.com/rubyide/vscode-ruby/pull/407) by [spilist](https://github.com/spilist)
+* [fix wrong placeholder in "if else" snippet](https://github.com/rubyide/vscode-ruby/pull/272) by [doudou](https://github.com/doudou)
+
+Enhanced Documentation:
+* [Add endwise to README.md](https://github.com/rubyide/vscode-ruby/pull/401) by [michielboekhoff](https://github.com/michielboekhoff)
+* [Improve Documentation on RuboCop](https://github.com/rubyide/vscode-ruby/pull/384) by [alex-tan](https://github.com/alex-tan)
+
 ### 0.20.0 - Aug 7 2018
 First release with the proof of concept internal language server
 

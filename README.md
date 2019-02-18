@@ -162,15 +162,28 @@ The VS Code Ruby extension can automatically format your Ruby files whenever you
 
 ### Rubocop
 
-Set `ruby.format` to `rubocop` to enable rubocop formatting on save.
+Steps to enable rubocop formatting.
 
-Formatting requires the rubocop gem to be installed. Note that you may have to turn on some of the AutoCorrect functions in your `.rubocop.yml` file. See the [rubocop documentation](http://rubocop.readthedocs.io/en/latest/configuration/).
+1. Install rubocop with `gem install rubocop`. Note that you may have to turn on some of the AutoCorrect functions in your `.rubocop.yml` file. See the [rubocop documentation](http://rubocop.readthedocs.io/en/latest/configuration/).
+2. Add the following to your settings.json:
 
-Important note: VS Code has a timeout that limits file formatters to 750ms. This is often not enough time for rubocop to complete. In the near future VS Code will allow customizing this timeout via the `editor.formatOnSaveTimeout` setting. See [#43702](https://github.com/Microsoft/vscode/pull/43702) for more details.
+```
+    "[ruby]": {
+        "editor.formatOnSave": true
+    },
+    "ruby.format": "rubocop",
+    "editor.formatOnSaveTimeout": 1500
+```
+
+Note: VS Code has a timeout that limits file formatters to 750ms which is often not enough time for rubocop to complete, which is why the setting is adjusted above. You may want to tweak this setting to meet your needs. See [#43702](https://github.com/Microsoft/vscode/pull/43702) for more details.
 
 ### Rufo
 
 Rufo is an alternative Ruby formatting tool. See the [VS Code Rufo Extension](https://github.com/bessey/vscode-rufo) if you want to try it.
+
+### endwise
+
+endwise is a Visual Studio Code plugin that automatically inserts the `end` keyword where appropriate. See the [VS Code endwise extension](https://github.com/kaiwood/vscode-endwise).
 
 ## Autocomplete
 
