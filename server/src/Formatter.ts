@@ -8,7 +8,7 @@ import {
 import { documents } from './DocumentManager';
 import URI from 'vscode-uri';
 import { from, Observable } from 'rxjs';
-import { mergeMap, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { IFormatter, FormatterConfig, NullFormatter, RuboCop, Standard, Rufo } from './formatters';
 
 const FORMATTER_MAP = {
@@ -48,15 +48,13 @@ export default class Formatter {
 		const document = documents.get(ident.uri);
 
 		return from(documentConfigurationCache.get(ident.uri)).pipe(
-			mergeMap(
-				config => workspaceRubyEnvironmentCache.get(config.workspaceFolderUri),
-				(config, env) => {
-					return { config, env };
-				}
-			),
-			switchMap(({ config, env }) => {
-				return getFormatter(document, env, config, range).format();
-			})
+			switchMap(config =>
+				from(workspaceRubyEnvironmentCache.get(config.workspaceFolderUri)).pipe(
+					switchMap(env => {
+						return getFormatter(document, env, config, range).format();
+					})
+				)
+			)
 		);
 	}
 }
