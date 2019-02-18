@@ -1,6 +1,6 @@
 import { Position, Range, TextDocument, TextEdit } from 'vscode-languageserver';
 import { spawn } from 'spawn-rx';
-import { of, Observable, empty } from 'rxjs';
+import { of, Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import {
 	diff_match_patch as DiffMatchPatch,
@@ -63,29 +63,18 @@ export default abstract class BaseFormatter implements IFormatter {
 			cmd = 'bundle';
 		}
 
-		console.info(`Format: executing ${cmd} ${args.join(' ')}...`);
+		const formatStr = `${cmd} ${args.join(' ')}`;
+		console.info(`Format: executing ${formatStr}...`);
 		return spawn(cmd, args, {
 			env: this.config.env,
 			cwd: this.config.executionRoot,
 			stdin: of(this.originalText),
-			split: true,
 		}).pipe(
 			catchError(error => {
-				this.processError(error);
-				return empty();
+				return throwError(this.processError(error, formatStr));
 			}),
-			map((result: any) => {
-				const { source, text } = result;
-				if (source === 'stdout') {
-					return this.processResults(text);
-				} else {
-					this.processError({
-						code: source,
-						spawnargs: args,
-						message: text,
-					});
-					return [];
-				}
+			map((result: string) => {
+				return this.processResults(result);
 			})
 		);
 	}
@@ -137,21 +126,22 @@ export default abstract class BaseFormatter implements IFormatter {
 		return process.platform === 'win32';
 	}
 
-	protected processError(error: any) {
-		switch (error.code) {
+	protected processError(error: any, formatStr: string): Error {
+		let code = error.code || error.toString().match(/code: (\d+)/)[1] || null;
+		let message = `\n    unable to execute ${formatStr}:\n    ${error.toString()} - ${this.messageForCode(
+			code
+		)}`;
+		return new Error(message);
+	}
+
+	private messageForCode(code: string) {
+		switch (code) {
+			case '127':
+				return 'missing gem executables';
 			case 'ENOENT':
-				console.error(
-					`Format: unable to execute ${error.path} ${error.spawnargs.join(
-						' '
-					)} as the command could not be found`
-				);
-				break;
-			case 'stderr':
-				console.error(
-					`Format: unable to execute ${error.path} ${error.spawnargs.join(' ')}. Got error:\n\n${
-						error.message
-					}`
-				);
+				return 'command not found';
+			default:
+				return 'unknown error';
 		}
 	}
 
