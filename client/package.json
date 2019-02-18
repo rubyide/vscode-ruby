@@ -1,22 +1,24 @@
 {
-  "name": "vscode-ruby-client",
-  "version": "1.0.0",
-  "description": "Language server client for vscode-ruby",
-  "repository": "https://github.com/rubyide/vscode-ruby",
-  "author": "Stafford Brunk <stafford.brunk@gmail.com>",
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.25.0"
-  },
-  "private": false,
-  "main": "out/extension.js",
-  "dependencies": {
-    "default-shell": "^1.0.1",
-    "execa": "^1.0.0",
-    "vscode": "^1.1.21",
-    "vscode-languageclient": "^5.1.1"
-  },
-  "scripts": {
-    "postinstall": "vscode-install"
-  }
+	"name": "vscode-ruby-client",
+	"version": "1.0.0",
+	"description": "Language server client for vscode-ruby",
+	"repository": "https://github.com/rubyide/vscode-ruby",
+	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.25.0"
+	},
+	"private": false,
+	"main": "out/extension.js",
+	"dependencies": {
+		"default-shell": "^1.0.1",
+		"execa": "^1.0.0",
+		"vscode-languageclient": "^5.1.1"
+	},
+	"devDependencies": {
+		"vscode": "^1.1.21"
+	},
+	"scripts": {
+		"postinstall": "vscode-install"
+	}
 }
