@@ -22,6 +22,7 @@ import {
 	RubyConfiguration,
 	RubyEnvironment,
 } from './SettingsCache';
+import DocumentFormattingProvider from './providers/DocumentFormattingProvider';
 
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
@@ -112,6 +113,9 @@ export class Server implements ILanguageServer {
 
 		// Handles document symbol requests
 		DocumentSymbolProvider.register(this.connection);
+
+		// Handles document formatting requests
+		DocumentFormattingProvider.register(this.connection);
 	}
 
 	// registers providers on the initialized step

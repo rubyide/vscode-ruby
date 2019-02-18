@@ -25,6 +25,7 @@ export type RuboCopLintConfiguration = RubyCommandConfiguration & {
 };
 
 export interface RubyConfiguration {
+	useBundler: boolean;
 	workspaceFolderUri: string;
 	interpreter?: {
 		commandPath?: string;
@@ -35,6 +36,7 @@ export interface RubyConfiguration {
 		reek?: boolean | RubyConfiguration;
 		rubocop?: boolean | RuboCopLintConfiguration;
 	};
+	format: boolean | 'rubocop' | 'standard' | 'rufo';
 }
 
 class SettingsCache<P extends WorkspaceFolder | TextDocument, T> {

@@ -33,6 +33,7 @@ export class CapabilityCalculator {
 			// old text
 			// textDocumentSync: TextDocumentSyncKind.Incremental,
 			textDocumentSync: TextDocumentSyncKind.Full,
+			documentFormattingProvider: true,
 			documentHighlightProvider: true,
 			documentSymbolProvider: true,
 			foldingRangeProvider: true,

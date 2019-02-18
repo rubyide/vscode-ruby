@@ -1,4 +1,9 @@
-import { TextDocument, TextDocuments, IConnection } from 'vscode-languageserver';
+import {
+	TextDocument,
+	TextDocuments,
+	IConnection,
+	TextDocumentIdentifier,
+} from 'vscode-languageserver';
 import { Subject } from 'rxjs';
 
 export enum DocumentEventKind {
@@ -23,6 +28,11 @@ export default class DocumentManager {
 		this.documents.onDidOpen(this.emitDocumentEvent(DocumentEventKind.OPEN));
 		this.documents.onDidChangeContent(this.emitDocumentEvent(DocumentEventKind.CHANGE_CONTENT));
 		this.documents.onDidClose(this.emitDocumentEvent(DocumentEventKind.CLOSE));
+	}
+
+	public get(id: TextDocumentIdentifier | string): TextDocument {
+		const docId = typeof id === 'string' ? id : id.uri;
+		return this.documents.get(docId);
 	}
 
 	public listen(connection: IConnection): void {
