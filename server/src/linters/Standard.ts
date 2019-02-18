@@ -26,7 +26,7 @@ export default class Standard extends RuboCop {
 				results = results.concat(diagnostics);
 			}
 		} catch (e) {
-			console.error(e);
+			console.error(`Lint: Received invalid JSON from standardrb:\n\n${data}`);
 		}
 
 		return results;

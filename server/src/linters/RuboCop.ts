@@ -75,7 +75,7 @@ export default class RuboCop extends BaseLinter {
 				results = results.concat(diagnostics);
 			}
 		} catch (e) {
-			console.error(e);
+			console.error(`Lint: Received invalid JSON from rubocop:\n\n${data}`);
 		}
 
 		return results;

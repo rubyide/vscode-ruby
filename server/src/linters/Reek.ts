@@ -36,7 +36,7 @@ export default class Reek extends BaseLinter {
 				results = results.concat(diagnostics);
 			}
 		} catch (e) {
-			console.error(e);
+			console.error(`Lint: Received invalid JSON from reek:\n\n${data}`);
 		}
 
 		return results;
