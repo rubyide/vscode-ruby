@@ -141,7 +141,8 @@
           "type": "string",
           "default": "ruby",
           "description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
-          "isExecutable": true
+          "isExecutable": true,
+          "scope": "resource"
         },
         "ruby.useLanguageServer": {
           "type": "boolean",
@@ -175,12 +176,14 @@
         "ruby.useBundler": {
           "type": "boolean",
           "default": false,
-          "description": "Whether ruby tools should be started using Bundler"
+          "description": "Whether ruby tools should be started using Bundler",
+          "scope": "resource"
         },
         "ruby.pathToBundler": {
           "type": "string",
           "default": "bundle",
-          "description": "Path to the bundler executable (used if useBundler is true)"
+          "description": "Path to the bundler executable (used if useBundler is true)",
+          "scope": "resource"
         },
         "ruby.rctComplete.commandPath": {
           "type": "string",
@@ -194,6 +197,7 @@
           "description": "Time (ms) to wait after keypress before running enabled linters. Ensures linters are only run when typing has finished and not for every keypress"
         },
         "ruby.lint": {
+          "scope": "resource",
           "type": "object",
           "description": "Set individual ruby linters to use",
           "properties": {
@@ -226,9 +230,23 @@
               "description": "Use fasterer to lint"
             },
             "reek": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "object"
+              ],
               "default": false,
-              "description": "Use reek to lint"
+              "description": "Use reek to lint",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "reek command. Setting this will cause reek to be executed exactly this way and other settings will be ignored!"
+                },
+                "useBundler": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Prefix the `reek` command with `bundle exec`"
+                }
+              }
             },
             "rubocop": {
               "type": [
@@ -238,6 +256,15 @@
               "default": false,
               "description": "Use RuboCop to lint",
               "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "RuboCop command. Setting this will cause RuboCop to be executed this way and other settings will be ignored!"
+                },
+                "useBundler": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Prefix the `rubocop` command with `bundle exec`"
+                },
                 "lint": {
                   "type": "boolean",
                   "default": false,
@@ -268,6 +295,46 @@
                   "type": "boolean",
                   "default": false,
                   "description": "Rails cops are specific to the Ruby on Rails framework"
+                }
+              }
+            },
+            "standard": {
+              "type": [
+                "boolean",
+                "object"
+              ],
+              "default": false,
+              "description": "Use standard to lint",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "Standard command. Setting this will cause standard to be executed this way and other settings will be ignored!"
+                },
+                "useBundler": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Prefix the `standard` command with `bundle exec`"
+                },
+                "only": {
+                  "type": "array",
+                  "description": "Run only the specified cop(s) and/or cops in the specified departments",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "except": {
+                  "type": "array",
+                  "description": "Run all cops enabled by configuration except the specified cop(s) and/or departments",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "require": {
+                  "type": "array",
+                  "description": "Require Ruby files",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             },
@@ -319,10 +386,13 @@
           ],
           "enum": [
             false,
-            "rubocop"
+            "rubocop",
+            "standard",
+            "rufo"
           ],
           "default": false,
-          "description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature."
+          "description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature.",
+          "scope": "resource"
         }
       }
     },
