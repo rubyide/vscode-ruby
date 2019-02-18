@@ -7,7 +7,7 @@ import {
 	RubyEnvironment,
 	workspaceRubyEnvironmentCache,
 	RubyConfiguration,
-	RubyLintConfiguration,
+	RubyCommandConfiguration,
 } from './SettingsCache';
 import { ILinter, LinterConfig, RuboCop, Reek, Standard } from './linters';
 import { documents, DocumentEvent, DocumentEventKind } from './DocumentManager';
@@ -30,7 +30,7 @@ function getLinter(
 	env: RubyEnvironment,
 	config: RubyConfiguration
 ): ILinter {
-	const lintConfig: RubyLintConfiguration =
+	const lintConfig: RubyCommandConfiguration =
 		typeof config.lint[name] === 'object' ? config.lint[name] : {};
 	const linterConfig: LinterConfig = {
 		env,

@@ -10,12 +10,12 @@ export type RubyEnvironment = {
 	RUBOCOP_OPTS?: string;
 };
 
-export type RubyLintConfiguration = {
+export type RubyCommandConfiguration = {
 	command?: string;
 	useBundler?: boolean;
 };
 
-export type RuboCopLintConfiguration = RubyLintConfiguration & {
+export type RuboCopLintConfiguration = RubyCommandConfiguration & {
 	lint?: boolean;
 	only?: string[];
 	except?: string[];

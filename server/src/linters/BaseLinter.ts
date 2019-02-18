@@ -2,7 +2,7 @@ import { Diagnostic, TextDocument } from 'vscode-languageserver';
 import { spawn } from 'spawn-rx';
 import { of, Observable, empty } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { RubyEnvironment, RubyLintConfiguration } from '../SettingsCache';
+import { RubyEnvironment, RubyCommandConfiguration } from '../SettingsCache';
 
 export interface ILinter {
 	lint(): Observable<Diagnostic[]>;
@@ -11,7 +11,7 @@ export interface ILinter {
 export type LinterConfig = {
 	env: RubyEnvironment;
 	executionRoot: string;
-	config: RubyLintConfiguration;
+	config: RubyCommandConfiguration;
 };
 
 export default abstract class BaseLinter implements ILinter {
@@ -32,7 +32,7 @@ export default abstract class BaseLinter implements ILinter {
 		return [this.document.uri];
 	}
 
-	get lintConfig(): RubyLintConfiguration {
+	get lintConfig(): RubyCommandConfiguration {
 		return this.config.config;
 	}
 
