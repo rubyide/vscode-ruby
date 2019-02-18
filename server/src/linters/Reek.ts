@@ -12,6 +12,8 @@ type ReekOffense = {
 };
 
 export default class Reek extends BaseLinter {
+	protected code = 'Reek';
+
 	get cmd(): string {
 		if (this.lintConfig.command) {
 			return this.lintConfig.command;
@@ -45,6 +47,7 @@ export default class Reek extends BaseLinter {
 			severity: DiagnosticSeverity.Warning,
 			message: offense.message,
 			source: offense.smell_type,
+			code: this.code,
 		};
 		return offense.lines.map(l => {
 			return {

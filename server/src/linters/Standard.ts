@@ -2,6 +2,8 @@ import { Diagnostic } from 'vscode-languageserver';
 import RuboCop, { IRuboCopResults } from './RuboCop';
 
 export default class Standard extends RuboCop {
+	protected code = 'Standard';
+
 	get cmd(): string {
 		if (this.lintConfig.command) {
 			return this.lintConfig.command;

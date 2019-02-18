@@ -30,6 +30,8 @@ export interface IRuboCopResults {
 }
 
 export default class RuboCop extends BaseLinter {
+	protected code = 'RuboCop';
+
 	private readonly DIAGNOSTIC_SEVERITIES = {
 		refactor: DiagnosticSeverity.Hint,
 		convention: DiagnosticSeverity.Information,
@@ -95,6 +97,7 @@ export default class RuboCop extends BaseLinter {
 			severity: this.DIAGNOSTIC_SEVERITIES[offense.severity],
 			message: offense.message,
 			source: offense.cop_name,
+			code: this.code,
 		};
 	}
 }

@@ -17,6 +17,7 @@ export type LinterConfig = {
 export default abstract class BaseLinter implements ILinter {
 	protected document: TextDocument;
 	protected config: LinterConfig;
+	protected code = 'BaseLinter';
 
 	constructor(document: TextDocument, config: LinterConfig) {
 		this.document = document;
