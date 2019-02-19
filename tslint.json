@@ -1,6 +1,6 @@
 {
 	"defaultSeverity": "warning",
-	"extends": ["tslint-microsoft-contrib", "tslint-config-prettier"],
+	"extends": ["tslint-config-standard", "tslint-no-circular-imports", "tslint-config-prettier"],
 	"jsRules": {},
 	"rules": {
 		"missing-jsdoc": false,

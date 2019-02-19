@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ExtensionContext } from 'vscode';
-import * as debounce from 'lodash/debounce';
+import debounce from 'lodash/debounce';
 
 import { LintCollection } from '../lint/lintCollection';
 import { Config as LintConfig } from '../lint/lintConfig';

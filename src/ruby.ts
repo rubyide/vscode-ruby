@@ -23,6 +23,7 @@ let client;
 export function activate(context: ExtensionContext): void {
 	// register language config
 	languages.setLanguageConfiguration('ruby', languageConfiguration);
+	utils.getOutputChannel();
 
 	if (workspace.getConfiguration('ruby').useLanguageServer) {
 		client = require('../client/out/extension');
@@ -30,6 +31,10 @@ export function activate(context: ExtensionContext): void {
 	} else {
 		// Register legacy providers
 		registerHighlightProvider(context, DOCUMENT_SELECTOR);
+
+		if (workspace.rootPath) {
+			registerLinters(context);
+		}
 	}
 
 	// Register providers
@@ -38,7 +43,6 @@ export function activate(context: ExtensionContext): void {
 	registerConfigurationProvider();
 
 	if (workspace.rootPath) {
-		registerLinters(context);
 		registerIntellisenseProvider(context);
 		registerTaskProvider(context);
 	}

@@ -1,15 +1,22 @@
 /**
  * LSP client for vscode-ruby
  */
-import * as path from 'path';
+import path from 'path';
 
-import { ExtensionContext, workspace } from 'vscode';
+import { ExtensionContext, window, workspace, WorkspaceFolder } from 'vscode';
 import {
+	ConfigurationParams,
+	CancellationToken,
 	LanguageClient,
 	LanguageClientOptions,
 	ServerOptions,
 	TransportKind,
+	WorkspaceMiddleware,
 } from 'vscode-languageclient';
+import { WorkspaceRubyEnvironmentFeature } from './WorkspaceRubyEnvironment';
+
+const RUBOCOP_ABSOLUTE_PATH_KEYS = ['only', 'except', 'require'];
+let client: LanguageClient;
 
 export function activate(context: ExtensionContext): void {
 	const serverModule: string = context.asAbsolutePath(path.join('server', 'out', 'index.js'));
@@ -31,21 +38,81 @@ export function activate(context: ExtensionContext): void {
 	const clientOptions: LanguageClientOptions = {
 		documentSelector: rubyDocumentSelector,
 		synchronize: {
-			configurationSection: 'ruby',
-			// Notify the server about file changes to '.clientrc files contain in the workspace
-			fileEvents: workspace.createFileSystemWatcher('**/.clientrc'),
+			// Notify server of changes to .ruby-version or .rvmrc files
+			fileEvents: workspace.createFileSystemWatcher('**/{.ruby-version,.rvmrc}'),
+		},
+		outputChannel: window.createOutputChannel('Ruby Language Server'),
+		middleware: {
+			workspace: {
+				configuration: (
+					params: ConfigurationParams,
+					token: CancellationToken,
+					next: Function
+				): any[] => {
+					if (!params.items) {
+						return [];
+					}
+					let result = next(params, token, next);
+					let settings = result[0];
+					let scopeUri = '';
+
+					for (let item of params.items) {
+						if (!item.scopeUri) {
+							continue;
+						} else {
+							scopeUri = item.scopeUri;
+						}
+					}
+					let resource = client.protocol2CodeConverter.asUri(scopeUri);
+					let workspaceFolder = workspace.getWorkspaceFolder(resource);
+					if (workspaceFolder) {
+						// Convert any relative paths to absolute paths
+						if (
+							settings.lint &&
+							settings.lint.rubocop &&
+							typeof settings.lint.rubocop === 'object'
+						) {
+							const {
+								lint: { rubocop },
+							} = settings;
+							for (const key of RUBOCOP_ABSOLUTE_PATH_KEYS) {
+								if (rubocop[key]) {
+									rubocop[key] = rubocop[key].map(f => convertAbsolute(f, workspaceFolder));
+								}
+							}
+						}
+
+						// Save the file's workspace folder
+						const protocolUri = client.code2ProtocolConverter.asUri(workspaceFolder.uri);
+						settings.workspaceFolderUri = protocolUri;
+					}
+					return result;
+				},
+			} as WorkspaceMiddleware,
 		},
 	};
 
 	// Create the language client and start the client.
-	const client: LanguageClient = new LanguageClient('ruby', 'Ruby', serverOptions, clientOptions);
+	client = new LanguageClient('ruby', 'Ruby', serverOptions, clientOptions);
 	client.registerProposedFeatures();
+	client.registerFeature(new WorkspaceRubyEnvironmentFeature(client));
 
 	// Push the disposable to the context's subscriptions so that the
 	// client can be deactivated on extension deactivation
 	context.subscriptions.push(client.start());
 }
 
-export function deactivate(): void {
-	return undefined;
+export function deactivate(): Thenable<void> {
+	return client ? client.stop() : undefined;
+}
+
+function convertAbsolute(file: string, folder: WorkspaceFolder): string {
+	if (path.isAbsolute(file)) {
+		return file;
+	}
+	let folderPath = folder.uri.fsPath;
+	if (!folderPath) {
+		return file;
+	}
+	return path.join(folderPath, file);
 }
