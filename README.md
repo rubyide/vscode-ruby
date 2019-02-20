@@ -41,10 +41,14 @@ gemdir`, `gem list | grep rubocop`, `which rubocop` and then `rubocop -v`. This
 might shed some light on why a gem dependency isn't working.
 
 ## Language Server
-As of version v0.20.0, a new language server has been introduced into the extension. This server provides the following features:
+As of version v0.22.0, a new language server has been introduced into the extension. This server provides the following features:
 
+* Multi-root support
 * Balanced pairs (eg `def-end`, `if-end`, etc) highlighting
 * Syntax aware code folding
+* Diagnostics support (eg lint) with [rubocop](https://github.com/rubocop-hq/rubocop), [reek](https://github.com/troessner/reek), and [standard](https://github.com/testdouble/standard)
+* Document/selection formatting support for [rubocop](https://github.com/rubocop-hq/rubocop), [standard](https://github.com/testdouble/standard), and [rufo](https://github.com/ruby-formatter/rufo)
+* `DocumentSymbol` support which enables features line the Outline view
 
 The server is designed to slowly replace existing extension functionality. Users can choose to replace that functionality with that of the language server's via the `useLanguageServer` configuration option (set it to `true`). You can verify the server is running via the "Output" tab in VSCode (next to the Terminal).
 
