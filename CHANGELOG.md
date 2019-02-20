@@ -1,3 +1,8 @@
+### 0.22.0 - Feb 20 2019
+
+Notable Changes:
+* [Multi-root support, lint support, DocumentSymbol support, and more!](https://github.com/rubyide/vscode-ruby/pull/405) by [wingrunr21](https://github.com/wingrunr21)
+
 ### 0.21.1 - Feb 12 2019
 
 Bug Fixes:
