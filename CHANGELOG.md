@@ -1,3 +1,10 @@
+### 0.22.1 - Feb 21 2019
+
+Bug Fixes:
+* Set archive files to ignored so they don't get published
+* Whitelist the `HOME` environment variable in the environment detection
+* Fix for opening single files and not having the language server crash
+
 ### 0.22.0 - Feb 20 2019
 
 Notable Changes:

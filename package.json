@@ -1,7 +1,7 @@
 {
 	"name": "ruby",
 	"displayName": "Ruby",
-	"version": "0.22.0",
+	"version": "0.22.1",
 	"publisher": "rebornix",
 	"description": "Provides Ruby language and debugging support for Visual Studio Code",
 	"author": {
