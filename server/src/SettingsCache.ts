@@ -7,6 +7,7 @@ export type RubyEnvironment = {
 	GEM_HOME: string;
 	GEM_PATH: string;
 	GEM_ROOT: string;
+	HOME: string;
 	RUBOCOP_OPTS?: string;
 };
 

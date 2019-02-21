@@ -15,6 +15,7 @@ const RUBY_ENVIRONMENT_VARIABLES = [
 	'GEM_HOME',
 	'GEM_PATH',
 	'GEM_ROOT',
+	'HOME',
 ];
 
 function mkShim(shell: string, shimPath: string): boolean {
