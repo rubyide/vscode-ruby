@@ -13,7 +13,7 @@
 	"dependencies": {
 		"default-shell": "^1.0.1",
 		"execa": "^1.0.0",
-		"vscode-languageclient": "^5.1.1"
+		"vscode-languageclient": "^5.2.1"
 	},
 	"devDependencies": {
 		"vscode": "^1.1.29"
