@@ -70,6 +70,7 @@ class SettingsCache<P extends WorkspaceFolder | TextDocument, T> {
 	}
 
 	public async get(target: P | string): Promise<T | undefined> {
+		if (!target) return undefined;
 		const key = typeof target === 'string' ? target : target.uri;
 		let settings: T = this.cache.get(key);
 		if (!settings) {
