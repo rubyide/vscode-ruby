@@ -19,7 +19,7 @@ const RUBY_ENVIRONMENT_VARIABLES = [
 ];
 
 function mkShim(shell: string, shimPath: string): boolean {
-	const template = `#!/usr/bin/env ${shell} -i\nexport`;
+	const template = `#!${shell} -i\nexport`;
 	let result = false;
 
 	try {
@@ -33,11 +33,11 @@ function mkShim(shell: string, shimPath: string): boolean {
 	return result;
 }
 
-function getShim(shell): string {
-	const shellName = path.basename(shell);
-	const shimPath = path.join(SHIM_DIR, `env.${shell}`);
+function getShim(): string {
+	const shellName: string = path.basename(defaultShell);
+	const shimPath = path.join(SHIM_DIR, `env.${shellName}`);
 	if (!fs.existsSync(shimPath)) {
-		mkShim(shellName, shimPath);
+		mkShim(defaultShell, shimPath);
 	}
 
 	return shimPath;
@@ -58,9 +58,7 @@ export interface IEnvironment {
 }
 
 export function loadEnv(cwd: string): RubyEnvironment {
-	const shellName: string = path.basename(defaultShell);
-	const env: IEnvironment = {};
-	const shim: string = getShim(shellName);
+	const shim: string = getShim();
 	const { stdout, stderr } = execa.sync(shim, [], {
 		cwd,
 	});
