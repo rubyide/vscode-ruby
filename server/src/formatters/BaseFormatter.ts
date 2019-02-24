@@ -71,7 +71,9 @@ export default abstract class BaseFormatter implements IFormatter {
 			stdin: of(this.originalText),
 		}).pipe(
 			catchError(error => {
-				return throwError(this.processError(error, formatStr));
+				console.error(error);
+				const err: Error | null = this.processError(error, formatStr);
+				return err ? throwError(err) : of('');
 			}),
 			map((result: string) => {
 				return this.processResults(result);
@@ -112,10 +114,10 @@ export default abstract class BaseFormatter implements IFormatter {
 					break;
 			}
 
-			// If we are have a range we are doing a selection format. Thus,
+			// If we have a range we are doing a selection format. Thus,
 			// only apply patches that start within the selected range
-			if (this.range && !this.checkPositionInRange(startPos)) {
-				edits.shift();
+			if (this.range && num !== DIFF_EQUAL && !this.checkPositionInRange(startPos)) {
+				edits.pop();
 			}
 		}
 
@@ -134,7 +136,7 @@ export default abstract class BaseFormatter implements IFormatter {
 		return new Error(message);
 	}
 
-	private messageForCode(code: string) {
+	protected messageForCode(code: string) {
 		switch (code) {
 			case '127':
 				return 'missing gem executables';

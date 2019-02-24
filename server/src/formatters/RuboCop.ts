@@ -22,4 +22,10 @@ export default class RuboCop extends BaseFormatter {
 		const cleanOutput = output.substring(endOfDiagnostics).trimLeft();
 		return super.processResults(cleanOutput);
 	}
+
+	protected processError(error: any, formatStr: string): Error {
+		let code = error.code || error.toString().match(/code: (\d+)/)[1] || null;
+		if (code === '1') return null;
+		return super.processError(error, formatStr);
+	}
 }
