@@ -9,7 +9,7 @@ import {
 	RubyConfiguration,
 	RubyCommandConfiguration,
 } from './SettingsCache';
-import { ILinter, LinterConfig, RuboCop, Reek, Standard } from './linters';
+import { ILinter, LinterConfig, RuboCop, Reek, Standard, NullLinter } from './linters';
 import { documents, DocumentEvent, DocumentEventKind } from './DocumentManager';
 
 const LINTER_MAP = {
@@ -30,6 +30,8 @@ function getLinter(
 	env: RubyEnvironment,
 	config: RubyConfiguration
 ): ILinter {
+	const linter = LINTER_MAP[name];
+	if (!linter) return new NullLinter(name);
 	const lintConfig: RubyCommandConfiguration =
 		typeof config.lint[name] === 'object' ? config.lint[name] : {};
 	const linterConfig: LinterConfig = {
@@ -37,7 +39,7 @@ function getLinter(
 		executionRoot: URI.parse(config.workspaceFolderUri).fsPath,
 		config: lintConfig,
 	};
-	return new LINTER_MAP[name](document, linterConfig);
+	return new linter(document, linterConfig);
 }
 
 function lint(document: TextDocument): Observable<LintResult> {
