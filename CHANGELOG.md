@@ -1,3 +1,15 @@
+### 0.22.2 - Feb 24 2019
+
+Improvements:
+* Reduce plugin size by correctly pruning down to production dependencies in client and server packages
+* Upgrade required VSCode engine to `^1.30.0`
+
+Bug Fixes:
+* Implement more robust ENV variable processing
+* Call default shell directly instead of via `/usr/bin/env` to be more POSIX compliant. Resolves [#433](https://github.com/rubyide/vscode-ruby/issues/433)
+* Fix a few selection formatting bugs. Resolves [#434](https://github.com/rubyide/vscode-ruby/issues/434)
+* Gracefully handle unsupported linters in settings. Resolves [#437](https://github.com/rubyide/vscode-ruby/issues/437)
+
 ### 0.22.1 - Feb 21 2019
 
 Bug Fixes:
