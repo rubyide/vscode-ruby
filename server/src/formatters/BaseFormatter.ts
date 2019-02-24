@@ -71,7 +71,6 @@ export default abstract class BaseFormatter implements IFormatter {
 			stdin: of(this.originalText),
 		}).pipe(
 			catchError(error => {
-				console.error(error);
 				const err: Error | null = this.processError(error, formatStr);
 				return err ? throwError(err) : of('');
 			}),
