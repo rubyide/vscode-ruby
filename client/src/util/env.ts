@@ -8,16 +8,6 @@ if (!fs.existsSync(SHIM_DIR)) {
 	fs.mkdirSync(SHIM_DIR);
 }
 
-const RUBY_ENVIRONMENT_VARIABLES = [
-	'PATH',
-	'RUBY_VERSION',
-	'RUBY_ROOT',
-	'GEM_HOME',
-	'GEM_PATH',
-	'GEM_ROOT',
-	'HOME',
-];
-
 function mkShim(shell: string, shimPath: string): boolean {
 	const template = `#!${shell} -i\nexport`;
 	let result = false;
@@ -43,6 +33,17 @@ function getShim(): string {
 	return shimPath;
 }
 
+const RUBY_ENVIRONMENT_VARIABLES = [
+	'PATH',
+	'RUBY_VERSION',
+	'RUBY_ROOT',
+	'GEM_HOME',
+	'GEM_PATH',
+	'GEM_ROOT',
+	'HOME',
+	'RUBOCOP_OPTS',
+];
+
 export type RubyEnvironment = {
 	PATH: string;
 	RUBY_VERSION: string;
@@ -50,6 +51,7 @@ export type RubyEnvironment = {
 	GEM_HOME: string;
 	GEM_PATH: string;
 	GEM_ROOT: string;
+	HOME: string;
 	RUBOCOP_OPTS?: string;
 };
 
