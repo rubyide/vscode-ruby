@@ -31,6 +31,7 @@ export function activate(context: ExtensionContext): void {
 	} else {
 		// Register legacy providers
 		registerHighlightProvider(context, DOCUMENT_SELECTOR);
+		registerFormatter(context, DOCUMENT_SELECTOR);
 
 		if (workspace.rootPath) {
 			registerLinters(context);
@@ -39,7 +40,6 @@ export function activate(context: ExtensionContext): void {
 
 	// Register providers
 	registerCompletionProvider(context, DOCUMENT_SELECTOR);
-	registerFormatter(context, DOCUMENT_SELECTOR);
 	registerConfigurationProvider();
 
 	if (workspace.rootPath) {
