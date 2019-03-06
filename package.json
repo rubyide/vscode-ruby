@@ -53,7 +53,7 @@
 		"async": "^2.3.0",
 		"lodash": "^4.17.11",
 		"minimatch": "^3.0.3",
-		"ruby-method-locate": "*",
+		"ruby-method-locate": "^0.0.6",
 		"vscode-debugadapter": "^1.19.0",
 		"vscode-debugprotocol": "^1.19.0",
 		"xmldom": "^0.1.19"
