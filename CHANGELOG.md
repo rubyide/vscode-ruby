@@ -1,3 +1,9 @@
+### 0.22.3 - Mar 6 2019
+
+Bug Fixes:
+* Support Windows cmd.exe for environment detection. Resolves [#438](https://github.com/rubyide/vscode-ruby/issues/438)
+* Buffer `stdout` from lint/format commands. Resolves [#435](https://github.com/rubyide/vscode-ruby/issues/435) and [#443](https://github.com/rubyide/vscode-ruby/issues/443)
+
 ### 0.22.2 - Feb 24 2019
 
 Improvements:
