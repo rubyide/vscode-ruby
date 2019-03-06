@@ -51,7 +51,7 @@
 	},
 	"dependencies": {
 		"async": "^2.3.0",
-		"lodash": "^4.17.3",
+		"lodash": "^4.17.11",
 		"minimatch": "^3.0.3",
 		"ruby-method-locate": "*",
 		"vscode-debugadapter": "^1.19.0",
