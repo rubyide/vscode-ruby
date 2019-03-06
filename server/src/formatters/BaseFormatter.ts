@@ -1,7 +1,7 @@
 import { Position, Range, TextDocument, TextEdit } from 'vscode-languageserver';
 import { spawn } from 'spawn-rx';
 import { of, Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError, map, reduce } from 'rxjs/operators';
 import {
 	diff_match_patch as DiffMatchPatch,
 	Diff,
@@ -74,9 +74,8 @@ export default abstract class BaseFormatter implements IFormatter {
 				const err: Error | null = this.processError(error, formatStr);
 				return err ? throwError(err) : of('');
 			}),
-			map((result: string) => {
-				return this.processResults(result);
-			})
+			reduce((acc: string, value: string) => acc + value, ''),
+			map((result: string) => this.processResults(result))
 		);
 	}
 

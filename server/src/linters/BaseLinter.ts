@@ -1,7 +1,7 @@
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
 import { spawn } from 'spawn-rx';
 import { of, Observable, empty } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { catchError, map, reduce } from 'rxjs/operators';
 import { IEnvironment, RubyCommandConfiguration } from '../SettingsCache';
 
 export interface ILinter {
@@ -54,7 +54,8 @@ export default abstract class BaseLinter implements ILinter {
 				this.processError(error);
 				return empty();
 			}),
-			map(result => this.processResults(result))
+			reduce((acc: string, value: string) => acc + value, ''),
+			map((result: string) => this.processResults(result))
 		);
 	}
 
