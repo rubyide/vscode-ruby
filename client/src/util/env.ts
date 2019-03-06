@@ -4,12 +4,29 @@ import fs from 'fs';
 import path from 'path';
 
 const SHIM_DIR = path.resolve(__dirname, 'shims');
+const SHIM_EXTENSION = isWindows() ? 'cmd' : 'sh';
+
 if (!fs.existsSync(SHIM_DIR)) {
 	fs.mkdirSync(SHIM_DIR);
 }
 
+function isWindows(): boolean {
+	return process.platform === 'win32';
+}
+
+function getTemplate(shell: string): string {
+	let template;
+	if (isWindows()) {
+		template = 'SET';
+	} else {
+		template = `#!${shell} -i\nexport`;
+	}
+
+	return template;
+}
+
 function mkShim(shell: string, shimPath: string): boolean {
-	const template = `#!${shell} -i\nexport`;
+	const template = getTemplate(shell);
 	let result = false;
 
 	try {
@@ -25,7 +42,7 @@ function mkShim(shell: string, shimPath: string): boolean {
 
 function getShim(): string {
 	const shellName: string = path.basename(defaultShell);
-	const shimPath = path.join(SHIM_DIR, `env.${shellName}`);
+	const shimPath = path.join(SHIM_DIR, `env.${shellName}.${SHIM_EXTENSION}`);
 	if (!fs.existsSync(shimPath)) {
 		mkShim(defaultShell, shimPath);
 	}
@@ -64,6 +81,8 @@ function processExportLine(line: string): string[] {
 
 const RUBY_ENVIRONMENT_VARIABLES = [
 	'PATH',
+	'Path', // Windows
+	'PATHEXT', // Windows
 	'RUBY_VERSION',
 	'RUBY_ROOT',
 	'GEM_HOME',
