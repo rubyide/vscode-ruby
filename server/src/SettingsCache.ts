@@ -1,15 +1,8 @@
 import { TextDocument, WorkspaceFolder } from 'vscode-languageserver';
 
-export type RubyEnvironment = {
-	PATH: string;
-	RUBY_VERSION: string;
-	RUBY_ROOT: string;
-	GEM_HOME: string;
-	GEM_PATH: string;
-	GEM_ROOT: string;
-	HOME: string;
-	RUBOCOP_OPTS?: string;
-};
+export interface IEnvironment {
+	[key: string]: string;
+}
 
 export type RubyCommandConfiguration = {
 	command?: string;
@@ -105,4 +98,4 @@ class SettingsCache<P extends WorkspaceFolder | TextDocument, T> {
 }
 
 export const documentConfigurationCache = new SettingsCache<TextDocument, RubyConfiguration>();
-export const workspaceRubyEnvironmentCache = new SettingsCache<WorkspaceFolder, RubyEnvironment>();
+export const workspaceRubyEnvironmentCache = new SettingsCache<WorkspaceFolder, IEnvironment>();

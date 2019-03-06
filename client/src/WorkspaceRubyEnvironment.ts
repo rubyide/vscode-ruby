@@ -5,14 +5,14 @@ import {
 	StaticFeature,
 } from 'vscode-languageclient';
 import { Uri, workspace, WorkspaceFolder } from 'vscode';
-import { loadEnv, RubyEnvironment } from './util/env';
+import { loadEnv, IEnvironment } from './util/env';
 
 interface WorkspaceRubyEnvironmentParams {
 	readonly folders: string[];
 }
 
 interface WorkspaceRubyEnvironmentResult {
-	[key: string]: RubyEnvironment;
+	[key: string]: IEnvironment;
 }
 
 namespace WorkspaceRubyEnvironmentRequest {

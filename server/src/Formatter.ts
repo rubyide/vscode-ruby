@@ -1,7 +1,7 @@
 import { Range, TextDocument, TextDocumentIdentifier, TextEdit } from 'vscode-languageserver';
 import {
 	documentConfigurationCache,
-	RubyEnvironment,
+	IEnvironment,
 	workspaceRubyEnvironmentCache,
 	RubyConfiguration,
 } from './SettingsCache';
@@ -19,7 +19,7 @@ const FORMATTER_MAP = {
 
 function getFormatter(
 	document: TextDocument,
-	env: RubyEnvironment,
+	env: IEnvironment,
 	config: RubyConfiguration,
 	range?: Range
 ): IFormatter {

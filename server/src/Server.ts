@@ -20,7 +20,7 @@ import {
 	documentConfigurationCache,
 	workspaceRubyEnvironmentCache,
 	RubyConfiguration,
-	RubyEnvironment,
+	IEnvironment,
 } from './SettingsCache';
 import DocumentFormattingProvider from './providers/DocumentFormattingProvider';
 
@@ -35,7 +35,7 @@ interface WorkspaceRubyEnvironmentParams {
 }
 
 interface WorkspaceRubyEnvironmentResult {
-	readonly [key: string]: RubyEnvironment;
+	readonly [key: string]: IEnvironment;
 }
 
 namespace WorkspaceRubyEnvironmentRequest {
@@ -78,7 +78,7 @@ export class Server implements ILanguageServer {
 		if (this.calculator.clientCapabilities.workspace.rubyEnvironment) {
 			workspaceRubyEnvironmentCache.fetcher = async (
 				folders: string[]
-			): Promise<RubyEnvironment[]> => {
+			): Promise<IEnvironment[]> => {
 				const result: WorkspaceRubyEnvironmentResult = await this.connection.sendRequest(
 					WorkspaceRubyEnvironmentRequest.type,
 					{
@@ -91,8 +91,8 @@ export class Server implements ILanguageServer {
 		} else {
 			workspaceRubyEnvironmentCache.fetcher = async (
 				folders: string[]
-			): Promise<RubyEnvironment[]> => {
-				return folders.map(_f => process.env as RubyEnvironment);
+			): Promise<IEnvironment[]> => {
+				return folders.map(_f => process.env as IEnvironment);
 			};
 		}
 	}

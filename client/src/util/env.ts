@@ -92,22 +92,11 @@ const RUBY_ENVIRONMENT_VARIABLES = [
 	'RUBOCOP_OPTS',
 ];
 
-export type RubyEnvironment = {
-	PATH: string;
-	RUBY_VERSION: string;
-	RUBY_ROOT: string;
-	GEM_HOME: string;
-	GEM_PATH: string;
-	GEM_ROOT: string;
-	HOME: string;
-	RUBOCOP_OPTS?: string;
-};
-
 export interface IEnvironment {
 	[key: string]: string;
 }
 
-export function loadEnv(cwd: string): RubyEnvironment {
+export function loadEnv(cwd: string): IEnvironment {
 	const shim: string = getShim();
 	const env: IEnvironment = {};
 	const { stdout, stderr } = execa.sync(shim, [], {
@@ -118,10 +107,11 @@ export function loadEnv(cwd: string): RubyEnvironment {
 
 	for (const line of stdout.split('\n')) {
 		const result: string[] = processExportLine(line);
-		if (RUBY_ENVIRONMENT_VARIABLES.indexOf(result[0]) >= 0) {
-			env[result[0]] = result[1];
+		const name = result[0];
+		if (RUBY_ENVIRONMENT_VARIABLES.indexOf(name) >= 0) {
+			env[name] = result[1];
 		}
 	}
 
-	return env as RubyEnvironment;
+	return env;
 }

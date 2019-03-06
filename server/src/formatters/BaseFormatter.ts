@@ -9,14 +9,14 @@ import {
 	DIFF_INSERT,
 	DIFF_EQUAL,
 } from 'diff-match-patch';
-import { RubyEnvironment, RubyCommandConfiguration } from '../SettingsCache';
+import { IEnvironment, RubyCommandConfiguration } from '../SettingsCache';
 
 export interface IFormatter {
 	format(): Observable<TextEdit[]>;
 }
 
 export type FormatterConfig = {
-	env: RubyEnvironment;
+	env: IEnvironment;
 	executionRoot: string;
 	config: RubyCommandConfiguration;
 	range?: Range;

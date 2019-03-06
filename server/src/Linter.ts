@@ -4,7 +4,7 @@ import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
 import {
 	documentConfigurationCache,
-	RubyEnvironment,
+	IEnvironment,
 	workspaceRubyEnvironmentCache,
 	RubyConfiguration,
 	RubyCommandConfiguration,
@@ -27,7 +27,7 @@ export type LintResult = {
 function getLinter(
 	name: string,
 	document: TextDocument,
-	env: RubyEnvironment,
+	env: IEnvironment,
 	config: RubyConfiguration
 ): ILinter {
 	const linter = LINTER_MAP[name];

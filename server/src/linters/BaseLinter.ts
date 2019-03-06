@@ -2,14 +2,14 @@ import { Diagnostic, TextDocument } from 'vscode-languageserver';
 import { spawn } from 'spawn-rx';
 import { of, Observable, empty } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { RubyEnvironment, RubyCommandConfiguration } from '../SettingsCache';
+import { IEnvironment, RubyCommandConfiguration } from '../SettingsCache';
 
 export interface ILinter {
 	lint(): Observable<Diagnostic[]>;
 }
 
 export type LinterConfig = {
-	env: RubyEnvironment;
+	env: IEnvironment;
 	executionRoot: string;
 	config: RubyCommandConfiguration;
 };
