@@ -13,6 +13,12 @@ export default class Standard extends RuboCop {
 		}
 	}
 
+	get args(): string[] {
+		const args = super.args;
+		args.push('--no-fix');
+		return args;
+	}
+
 	// This method is overridden to deal with the "notice" that is
 	// currently output
 	protected processResults(data): Diagnostic[] {
