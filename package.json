@@ -685,6 +685,11 @@
 								"type": "boolean",
 								"description": "Show output of the debugger in the console.",
 								"default": false
+							},
+							"keepRubyProcessOnDisconnect": {
+								"type": "boolean",
+								"description": "Keep ruby process on disconnect request.",
+								"default": false
 							}
 						}
 					}

@@ -452,7 +452,7 @@ class RubyDebugSession extends DebugSession {
     }
 
     protected disconnectRequest(response: DebugProtocol.DisconnectResponse, args: DebugProtocol.DisconnectArguments) {
-        if (this.rubyProcess.state !== SocketClientState.closed) {
+        if (!this.requestArguments.keepRubyProcessOnDisconnect && this.rubyProcess.state !== SocketClientState.closed) {
             this.rubyProcess.Run('quit');
         }
         this.sendResponse(response);

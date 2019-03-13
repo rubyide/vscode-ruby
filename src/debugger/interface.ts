@@ -27,6 +27,8 @@ export interface AttachRequestArguments extends DebugProtocol.AttachRequestArgum
     remoteWorkspaceRoot?: string;
 	/** Show debugger process output. If not specified, there will only be executable output */
     showDebuggerOutput?: boolean;
+    /** Keep ruby process on disconnect request */
+    keepRubyProcessOnDisconnect?: boolean;
 }
 
 export interface IRubyEvaluationResult {
