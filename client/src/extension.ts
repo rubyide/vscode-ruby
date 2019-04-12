@@ -15,7 +15,7 @@ import {
 } from 'vscode-languageclient';
 import { WorkspaceRubyEnvironmentFeature } from './WorkspaceRubyEnvironment';
 
-const RUBOCOP_ABSOLUTE_PATH_KEYS = ['only', 'except', 'require'];
+const RUBOCOP_ABSOLUTE_PATH_KEYS = ['require'];
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext): void {
