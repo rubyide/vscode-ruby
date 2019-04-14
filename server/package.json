@@ -1,27 +1,52 @@
 {
-  "name": "vscode-ruby-server",
-  "version": "1.0.0",
-  "description": "Language server for vscode-ruby",
-  "repository": "https://github.com/rubyide/vscode-ruby",
-  "author": "Stafford Brunk <stafford.brunk@gmail.com>",
-  "license": "MIT",
-  "private": false,
-  "dependencies": {
-    "diff-match-patch": "^1.0.4",
-    "prebuild-install": "^5.2.4",
-    "rxjs": "^6.4.0",
-    "spawn-rx": "^3.0.0",
-    "tree-sitter": "^0.13.23",
-    "tree-sitter-ruby": "^0.13.13",
-    "vscode-languageserver": "^5.2.1",
-    "vscode-uri": "^1.0.6"
-  },
-  "devDependencies": {
-    "@types/diff-match-patch": "^1.0.32",
-    "@types/execa": "^0.9.0",
-    "prebuild": "^7.6.0"
-  },
-  "scripts": {
-    "remove-binaries": "rm -rf node_modules/tree-sitter/build && rm -rf node_modules/tree-sitter-ruby/build"
-  }
+	"name": "vscode-ruby-server",
+	"version": "1.0.0",
+	"description": "Language server for vscode-ruby",
+	"repository": "https://github.com/rubyide/vscode-ruby",
+	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
+	"license": "MIT",
+	"private": false,
+	"dependencies": {
+		"diff-match-patch": "^1.0.4",
+		"prebuild-install": "^5.2.4",
+		"rxjs": "^6.4.0",
+		"spawn-rx": "^3.0.0",
+		"tree-sitter": "^0.13.23",
+		"tree-sitter-ruby": "^0.13.13",
+		"vscode-languageserver": "^5.2.1",
+		"vscode-uri": "^1.0.6"
+	},
+	"devDependencies": {
+		"@types/chai": "^4.1.7",
+		"@types/diff-match-patch": "^1.0.32",
+		"@types/execa": "^0.9.0",
+		"@types/mocha": "^5.2.6",
+		"chai": "^4.2.0",
+		"mocha": "^6.1.3",
+		"nyc": "^13.3.0",
+		"prebuild": "^7.6.0",
+		"source-map-support": "^0.5.12",
+		"ts-node": "^8.0.3"
+	},
+	"scripts": {
+		"remove-binaries": "rm -rf node_modules/tree-sitter/build && rm -rf node_modules/tree-sitter-ruby/build",
+		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts"
+	},
+	"nyc": {
+		"extension": [
+			".ts"
+		],
+		"exclude": [
+			"**/*.d.ts",
+			"**/*_spec.ts",
+			"out/**/*",
+			"coverage/**/*"
+		],
+		"reporter": [
+			"text",
+			"lcov",
+			"html"
+		],
+		"all": true
+	}
 }

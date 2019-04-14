@@ -7,3 +7,5 @@ npm-debug.log
 *.vsix
 *.zip
 *.tar.gz
+.nyc_output
+coverage
