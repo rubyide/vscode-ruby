@@ -9,12 +9,12 @@ let rakeFiles: Set<vscode.Uri> = new Set<vscode.Uri>();
 
 export async function registerTaskProvider(ctx: vscode.ExtensionContext) {
 	let rakePromise: Thenable<vscode.Task[]> | undefined = undefined;
-	let files = await vscode.workspace.findFiles("**/[rR]akefile{,.rb}");
+	let files = await vscode.workspace.findFiles("**/[rR]akefile{*,.rb}");
 	for (let i = 0; i < files.length; i++) {
 		rakeFiles.add(files[i]);
 	}
 
-	let fileWatcher = vscode.workspace.createFileSystemWatcher("**/[rR]akefile{,.rb}");
+	let fileWatcher = vscode.workspace.createFileSystemWatcher("**/[rR]akefile{*,.rb}");
 	fileWatcher.onDidChange(() => rakePromise = undefined);
 	fileWatcher.onDidCreate((uri) => {
 		rakeFiles.add(uri);
