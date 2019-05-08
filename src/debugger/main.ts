@@ -330,17 +330,15 @@ class RubyDebugSession extends DebugSession {
             return serverPath;
         }
 
-        let relativeRemotePath = path.relative(this.requestArguments.remoteWorkspaceRoot, serverPath)
+		let remotePathImplementation = this.getPathImplementation(this.requestArguments.remoteWorkspaceRoot);
+		let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
+
+		let relativeRemotePath = remotePathImplementation.relative(this.requestArguments.remoteWorkspaceRoot, serverPath)
 
         if (!this.isSubPath(relativeRemotePath)) {
             return serverPath;
         }
 
-        let remotePathImplementation = this.getPathImplementation(this.requestArguments.remoteWorkspaceRoot);
-        let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
-
-
-        // Path.join will convert the path using local OS preferred separator
         let relativePath = localPathImplementation.join.apply(
             null,
             [this.requestArguments.cwd].concat(
