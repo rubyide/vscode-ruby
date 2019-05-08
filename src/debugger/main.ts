@@ -293,42 +293,61 @@ class RubyDebugSession extends DebugSession {
         return localPath.replace(/\\/g, '/');
     }
 
+    private isSubPath(subPath: string): boolean {
+        return subPath && !subPath.startsWith('..') && !path.isAbsolute(subPath);
+    }
+
+    private getPathImplementation(absolutePath: string): any {
+        return path && path.posix.isAbsolute(absolutePath) ? path.posix : path.win32;
+    }
+
     protected convertClientPathToDebugger(localPath: string): string {
-        if (this.debugMode == Mode.launch) {
+        if (this.debugMode === Mode.launch) {
             return localPath;
         }
 
-        if (!localPath.startsWith(this.requestArguments.cwd)) {
+        let relativeLocalPath = path.relative(this.requestArguments.cwd, localPath)
+
+        if (!this.isSubPath(relativeLocalPath)) {
             return localPath;
         }
 
-        var relativePath = path.join(
-            this.requestArguments.remoteWorkspaceRoot, localPath.substring(this.requestArguments.cwd.length)
+        let remotePathImplementation = this.getPathImplementation(this.requestArguments.remoteWorkspaceRoot);
+        let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
+
+        let relativePath = remotePathImplementation.join.apply(
+            null,
+            [this.requestArguments.remoteWorkspaceRoot].concat(
+                relativeLocalPath.split(localPathImplementation.sep)
+            )
         );
-
-        var sepIndex = this.requestArguments.remoteWorkspaceRoot.lastIndexOf('/');
-
-        if (sepIndex !== -1) {
-            // *inx or darwin
-            relativePath = relativePath.replace(/\\/g, '/');
-        }
 
         return relativePath;
     }
 
-    protected convertDebuggerPathToClient(serverPath: string):string{
-        if (this.debugMode == Mode.launch) {
+    protected convertDebuggerPathToClient(serverPath: string): string {
+        if (this.debugMode === Mode.launch) {
             return serverPath;
         }
 
-        if (!serverPath.startsWith(this.requestArguments.remoteWorkspaceRoot)) {
+        let relativeRemotePath = path.relative(this.requestArguments.remoteWorkspaceRoot, serverPath)
+
+        if (!this.isSubPath(relativeRemotePath)) {
             return serverPath;
         }
+
+        let remotePathImplementation = this.getPathImplementation(this.requestArguments.remoteWorkspaceRoot);
+        let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
+
 
         // Path.join will convert the path using local OS preferred separator
-        var relativePath = path.join(
-            this.requestArguments.cwd, serverPath.substring(this.requestArguments.remoteWorkspaceRoot.length)
+        let relativePath = localPathImplementation.join.apply(
+            null,
+            [this.requestArguments.cwd].concat(
+                relativeRemotePath.split(remotePathImplementation.sep)
+            )
         );
+
         return relativePath;
     }
 
