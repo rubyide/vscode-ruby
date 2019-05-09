@@ -320,7 +320,8 @@ class RubyDebugSession extends DebugSession {
             return localPath;
         }
 
-        let remoteWorkspaceRoot = this.requestArguments.remoteWorkspaceRoot || this.requestArguments.cwd;
+		let remoteWorkspaceRoot =
+			this.requestArguments.remoteWorkspaceRoot || this.requestArguments.cwd;
 
         let remotePathImplementation = this.getPathImplementation(remoteWorkspaceRoot);
         let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
@@ -338,7 +339,8 @@ class RubyDebugSession extends DebugSession {
             return serverPath;
         }
 
-        let remoteWorkspaceRoot = this.requestArguments.remoteWorkspaceRoot || this.requestArguments.cwd;
+		let remoteWorkspaceRoot =
+			this.requestArguments.remoteWorkspaceRoot || this.requestArguments.cwd;
 
         let remotePathImplementation = this.getPathImplementation(remoteWorkspaceRoot);
 		let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
