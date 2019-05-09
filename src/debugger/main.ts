@@ -314,7 +314,7 @@ class RubyDebugSession extends DebugSession {
             return localPath;
         }
 
-        let relativeLocalPath = path.relative(this.requestArguments.cwd, localPath)
+        let relativeLocalPath = path.relative(this.requestArguments.cwd, localPath);
 
         if (!this.isSubPath(relativeLocalPath)) {
             return localPath;
