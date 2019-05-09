@@ -327,9 +327,7 @@ class RubyDebugSession extends DebugSession {
 
         let relativePath = remotePathImplementation.join.apply(
             null,
-            [this.requestArguments.remoteWorkspaceRoot].concat(
-                relativeLocalPath.split(localPathImplementation.sep)
-            )
+			[remoteWorkspaceRoot].concat(relativeLocalPath.split(localPathImplementation.sep))
         );
 
         return relativePath;
