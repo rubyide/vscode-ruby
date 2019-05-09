@@ -297,8 +297,16 @@ class RubyDebugSession extends DebugSession {
         return subPath && !subPath.startsWith('..') && !path.isAbsolute(subPath);
     }
 
-    private getPathImplementation(absolutePath: string): any {
-        return path && path.posix.isAbsolute(absolutePath) ? path.posix : path.win32;
+    private getPathImplementation(pathToCheck: string): any {
+        if (pathToCheck) {
+            if (pathToCheck.indexOf(path.posix.sep) >= 0) {
+                return path.posix;
+            } else if (pathToCheck.indexOf(path.win32.sep) >= 0) {
+                return path.win32;
+            }
+        }
+
+        return path;
     }
 
     protected convertClientPathToDebugger(localPath: string): string {
