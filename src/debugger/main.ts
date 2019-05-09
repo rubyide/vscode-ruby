@@ -297,8 +297,16 @@ class RubyDebugSession extends DebugSession {
         return subPath && !subPath.startsWith('..') && !path.isAbsolute(subPath);
     }
 
-    private getPathImplementation(absolutePath: string): any {
-        return path && path.posix.isAbsolute(absolutePath) ? path.posix : path.win32;
+    private getPathImplementation(pathToCheck: string): any {
+        if (pathToCheck) {
+            if (pathToCheck.indexOf(path.posix.sep) >= 0) {
+                return path.posix;
+            } else if (pathToCheck.indexOf(path.win32.sep) >= 0) {
+                return path.win32;
+            }
+        }
+
+        return path;
     }
 
     protected convertClientPathToDebugger(localPath: string): string {
@@ -306,20 +314,21 @@ class RubyDebugSession extends DebugSession {
             return localPath;
         }
 
-        let relativeLocalPath = path.relative(this.requestArguments.cwd, localPath)
+        let relativeLocalPath = path.relative(this.requestArguments.cwd, localPath);
 
         if (!this.isSubPath(relativeLocalPath)) {
             return localPath;
         }
 
-        let remotePathImplementation = this.getPathImplementation(this.requestArguments.remoteWorkspaceRoot);
+        let remoteWorkspaceRoot =
+            this.requestArguments.remoteWorkspaceRoot || this.requestArguments.cwd;
+
+        let remotePathImplementation = this.getPathImplementation(remoteWorkspaceRoot);
         let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
 
         let relativePath = remotePathImplementation.join.apply(
             null,
-            [this.requestArguments.remoteWorkspaceRoot].concat(
-                relativeLocalPath.split(localPathImplementation.sep)
-            )
+            [remoteWorkspaceRoot].concat(relativeLocalPath.split(localPathImplementation.sep))
         );
 
         return relativePath;
@@ -330,10 +339,14 @@ class RubyDebugSession extends DebugSession {
             return serverPath;
         }
 
-        let remotePathImplementation = this.getPathImplementation(this.requestArguments.remoteWorkspaceRoot);
+        let remoteWorkspaceRoot =
+            this.requestArguments.remoteWorkspaceRoot || this.requestArguments.cwd;
+
+        let remotePathImplementation = this.getPathImplementation(remoteWorkspaceRoot);
         let localPathImplementation = this.getPathImplementation(this.requestArguments.cwd);
 
-        let relativeRemotePath = remotePathImplementation.relative(this.requestArguments.remoteWorkspaceRoot, serverPath)
+        let relativeRemotePath = remotePathImplementation.relative(remoteWorkspaceRoot, serverPath);
+
 
         if (!this.isSubPath(relativeRemotePath)) {
             return serverPath;
@@ -341,9 +354,7 @@ class RubyDebugSession extends DebugSession {
 
         let relativePath = localPathImplementation.join.apply(
             null,
-            [this.requestArguments.cwd].concat(
-                relativeRemotePath.split(remotePathImplementation.sep)
-            )
+	          [this.requestArguments.cwd].concat(relativeRemotePath.split(remotePathImplementation.sep))
         );
 
         return relativePath;
