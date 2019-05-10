@@ -49,7 +49,7 @@ As of version v0.22.0, a new language server has been introduced into the extens
 * Document/selection formatting support for [rubocop](https://github.com/rubocop-hq/rubocop), [standard](https://github.com/testdouble/standard), and [rufo](https://github.com/ruby-formatter/rufo)
 * `DocumentSymbol` support which enables features line the Outline view
 
-The server is designed to slowly replace existing extension functionality. Users can choose to replace that functionality with that of the language server's via the `useLanguageServer` configuration option (set it to `true`). You can verify the server is running via the "Output" tab in VSCode (next to the Terminal).
+The server is designed to slowly replace existing extension functionality. Users can choose to replace that functionality with that of the language server's via the `useLanguageServer` configuration option (set it to `true`). You can verify the server is running via the "Output" tab in VSCode (next to the Terminal) and selecting "Ruby Language Server" from the dropdown to the right.
 
 ### Feature Requests
 The language server is under active development. You can check [Issue 317](https://github.com/rubyide/vscode-ruby/issues/317) to see the currently proposed feature list. Please do not open GitHub issues for unimplemented features that are already on that list!
