@@ -6,7 +6,7 @@ function Reek(opts) {
 	this.path = opts.path;
 	this.responsePath = "stdout";
 	this.errorPath = "stderr";
-	this.args = ["-f", "json"];
+	this.args = ["-f", "json", "--force-exclusion"];
 }
 
 Reek.prototype.processResult = function(data) {
