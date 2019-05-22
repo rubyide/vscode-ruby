@@ -5,7 +5,7 @@
 - Ruby version manager (if any):
 - VS Code version:
 - Operating System:
-- Using language server?
+- Using language server? (eg `useLanguageServer` is true?)
 
 ### Expected behavior
 
