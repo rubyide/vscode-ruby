@@ -10,7 +10,7 @@ import {
 } from 'vscode-languageserver';
 
 import { ILanguageServer } from './Server';
-import { rebuildTreeSitter } from './util/rebuilder';
+import { rebuildTreeSitter, NodeRuntime } from './util/rebuilder';
 
 const connection: IConnection = createConnection(ProposedFeatures.all);
 let server: ILanguageServer;
@@ -18,8 +18,9 @@ let server: ILanguageServer;
 connection.onInitialize(async (params: InitializeParams) => {
 	connection.console.info('Initializing Ruby language server...');
 
-	connection.console.info('Rebuilding tree-sitter for local Electron version');
-	const rebuildResult: [void | Error, void | Error] = await rebuildTreeSitter();
+	let nodeRuntime = params.initializationOptions ? params.initializationOptions.runtime : NodeRuntime.Electron;
+	connection.console.info(`Rebuilding tree-sitter for local ${nodeRuntime === NodeRuntime.Electron ? 'Electron' : 'Node.js'} version`);
+	const rebuildResult: [void | Error, void | Error] = await rebuildTreeSitter(nodeRuntime);
 	for (const result of rebuildResult) {
 		if (result) {
 			connection.console.error('Rebuild failed!');

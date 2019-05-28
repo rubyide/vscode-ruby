@@ -13,7 +13,7 @@ import {
 	TransportKind,
 	WorkspaceMiddleware,
 } from 'vscode-languageclient';
-import { WorkspaceRubyEnvironmentFeature } from './WorkspaceRubyEnvironment';
+import { WorkspaceRubyEnvironmentFeature, NodeRuntime } from './WorkspaceRubyEnvironment';
 
 const RUBOCOP_ABSOLUTE_PATH_KEYS = ['require'];
 let client: LanguageClient;
@@ -95,7 +95,8 @@ export function activate(context: ExtensionContext): void {
 	// Create the language client and start the client.
 	client = new LanguageClient('ruby', 'Ruby', serverOptions, clientOptions);
 	client.registerProposedFeatures();
-	client.registerFeature(new WorkspaceRubyEnvironmentFeature(client));
+	const nodeRuntime = (context as any).executionContext === 1 ? NodeRuntime.Electron : NodeRuntime.Node;
+	client.registerFeature(new WorkspaceRubyEnvironmentFeature(client, nodeRuntime));
 
 	// Push the disposable to the context's subscriptions so that the
 	// client can be deactivated on extension deactivation
