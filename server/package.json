@@ -11,8 +11,8 @@
 		"prebuild-install": "^5.2.4",
 		"rxjs": "^6.4.0",
 		"spawn-rx": "^3.0.0",
-		"tree-sitter": "^0.13.23",
-		"tree-sitter-ruby": "^0.13.13",
+		"tree-sitter": "^0.15.1",
+		"tree-sitter-ruby": "^0.15.0",
 		"vscode-languageserver": "^5.2.1",
 		"vscode-uri": "^1.0.6"
 	},
