@@ -49,12 +49,20 @@ export default abstract class BaseLinter implements ILinter {
 			env: this.config.env,
 			cwd: this.config.executionRoot,
 			stdin: of(this.document.getText()),
+			split: true,
 		}).pipe(
 			catchError(error => {
 				this.processError(error);
 				return empty();
 			}),
-			reduce((acc: string, value: string) => acc + value, ''),
+			reduce((acc: string, value: any) => {
+				if (value.source === 'stdout') {
+					return acc + value.text;
+				} else {
+					console.error(value.text);
+					return acc;
+				}
+			}, ''),
 			map((result: string) => this.processResults(result))
 		);
 	}
