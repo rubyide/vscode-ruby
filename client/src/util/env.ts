@@ -92,6 +92,7 @@ const RUBY_ENVIRONMENT_VARIABLES = [
 	'GEM_ROOT',
 	'HOME',
 	'RUBOCOP_OPTS',
+	'LANG',
 ];
 
 export interface IEnvironment {
