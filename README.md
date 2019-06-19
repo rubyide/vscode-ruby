@@ -151,7 +151,7 @@ Settings available (in your VSCode workspace) for each of the linters:
 }
 
 "rubocop": {
-	"lint": true, //enable all lint cops.
+	"lint": true, //Run only lint cops.
 	"only": [/* array: Run only the specified cop(s) and/or cops in the specified departments. */],
 	"except": [/* array: Run all cops enabled by configuration except the specified cop(s) and/or departments. */],
 	"forceExclusion": true, //Add --force-exclusion option
