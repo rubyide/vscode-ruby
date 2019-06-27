@@ -1,3 +1,16 @@
+### 0.24.0 - Jun 27 2019
+
+Bug Fixes:
+
+- Path manipulation via correct OS path class [#477](https://github.com/rubyide/vscode-ruby/pull/477)
+- Pass `LANG` environment variable to server [#494](https://github.com/rubyide/vscode-ruby/pull/494)
+- Add rake task definition to fix customization of auto-detected tasks [#497](https://github.com/rubyide/vscode-ruby/pull/497)
+- Fix bug in locate.js [#499](https://github.com/rubyide/vscode-ruby/pull/499)
+
+Documentation:
+
+- Clarify rubocop configuration for 'lint:true' [#492](https://github.com/rubyide/vscode-ruby/pull/492)
+
 ### 0.23.0 - Jun 11 2019
 
 Improvements:
