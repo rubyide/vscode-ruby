@@ -70,8 +70,10 @@ export class Locate {
 		this.parseQueue = async.queue((task, callback) => task().then(() => callback()), SINGLE_FILE_PARSE_CONCURRENCY);
 	}
 	listInFile(absPath) {
-		const waitForParse = (absPath in this.tree) ? Promise.resolve() : this.parse(absPath);
-		return waitForParse.then(() => _.clone(this.tree[absPath] || []));
+		if (!absPath in this.tree)
+			this.parse(absPath);
+
+		return Promise.resolve(_.clone(this.tree[absPath] || []));
 	}
 	find(name) {
 		return this._waitForWalk().then(() => this._find(name));
