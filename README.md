@@ -156,7 +156,7 @@ Settings available (in your VSCode workspace) for each of the linters:
 	"except": [/* array: Run all cops enabled by configuration except the specified cop(s) and/or departments. */],
 	"forceExclusion": true, //Add --force-exclusion option
 	"require": [/* array: Require Ruby files. */],
-	"rails": true //Run extra rails cops
+	"rails": true //Run extra rails cops. Note [this was removed in RuboCop 0.72.0](https://github.com/rubocop-hq/rubocop/issues/5976)
 }
 ```
 ## Formatting
