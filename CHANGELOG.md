@@ -1,3 +1,8 @@
+### 0.24.1 - Jul 11 2019
+
+Bug Fixes:
+- Upgrade `tree-sitter-ruby` to `^0.15.1` to get new prebuilt binaries
+
 ### 0.24.0 - Jun 27 2019
 
 Bug Fixes:
