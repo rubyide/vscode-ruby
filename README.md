@@ -16,6 +16,7 @@ markdown-toc --no-firsth1 --maxdepth 1 readme.md
 - [Formatting](#formatting)
 - [Autocomplete](#autocomplete)
 - [Intellisense (Go to/Peek Definition/Symbols)](#intellisense-go-topeek-definitionsymbols)
+- [Snippets](#snippets)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -234,6 +235,13 @@ We now provide go to definition within `erb` files, as well as syntax highlighti
 Solargraph now includes go to/peek definition and other language features. See the [Solargraph extension](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) for more information.
 
 When using Solargraph it is recommended to set `ruby.intellisense` to `false`.
+
+## Snippets
+
+This extension provides a series of snippets that you can use on ruby or erb files.
+
+
+
 
 ## Contributing
 
