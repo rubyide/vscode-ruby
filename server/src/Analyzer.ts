@@ -32,7 +32,7 @@ class Analyzer {
 	public analyze(tree: Tree): Analysis {
 		const cursor = tree.walk();
 		const walk = depth => {
-			this.analyzeNode(cursor.currentNode);
+			this.analyzeNode(cursor.currentNode());
 			if (cursor.gotoFirstChild()) {
 				do {
 					walk(depth + 1);
