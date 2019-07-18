@@ -2,12 +2,12 @@
  * Forest
  */
 
-import Parser, { Tree } from 'tree-sitter';
-import TreeSitterRuby from 'tree-sitter-ruby';
+import Parser, { Tree } from 'web-tree-sitter';
 import { TextDocument } from 'vscode-languageserver';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { documents, DocumentEvent, DocumentEventKind } from './DocumentManager';
+import TreeSitterFactory from './util/TreeSitterFactory';
 
 export interface IForest {
 	getTree(uri: string): Tree;
@@ -34,8 +34,7 @@ class Forest implements IForest {
 
 	constructor() {
 		this.trees = new Map();
-		this.parser = new Parser();
-		this.parser.setLanguage(TreeSitterRuby);
+		this.parser = TreeSitterFactory.build();
 	}
 
 	public getTree(uri: string): Tree {
@@ -65,7 +64,16 @@ class Forest implements IForest {
 	}
 
 	public deleteTree(uri: string): boolean {
+		const tree = this.getTree(uri);
+		if (tree) {
+			tree.delete();
+		}
 		return this.trees.delete(uri);
+	}
+
+	public release() {
+		this.trees.forEach(tree => tree.delete());
+		this.parser.delete();
 	}
 }
 

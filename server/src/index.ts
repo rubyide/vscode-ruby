@@ -10,7 +10,7 @@ import {
 } from 'vscode-languageserver';
 
 import { ILanguageServer } from './Server';
-import { rebuildTreeSitter, NodeRuntime } from './util/rebuilder';
+import TreeSitterFactory from './util/TreeSitterFactory';
 
 const connection: IConnection = createConnection(ProposedFeatures.all);
 let server: ILanguageServer;
@@ -18,18 +18,7 @@ let server: ILanguageServer;
 connection.onInitialize(async (params: InitializeParams) => {
 	connection.console.info('Initializing Ruby language server...');
 
-	let nodeRuntime = params.initializationOptions ? params.initializationOptions.runtime : NodeRuntime.Electron;
-	connection.console.info(`Rebuilding tree-sitter for local ${nodeRuntime === NodeRuntime.Electron ? 'Electron' : 'Node.js'} version`);
-	const rebuildResult: [void | Error, void | Error] = await rebuildTreeSitter(nodeRuntime);
-	for (const result of rebuildResult) {
-		if (result) {
-			connection.console.error('Rebuild failed!');
-			connection.console.error(result.toString());
-
-			return null;
-		}
-	}
-	connection.console.info('Rebuild succeeded!');
+	await TreeSitterFactory.initalize();
 
 	const { Server } = await import('./Server');
 	server = new Server(connection, params);
@@ -41,6 +30,9 @@ connection.onInitialize(async (params: InitializeParams) => {
 connection.onInitialized(() => {
 	server.registerInitializedProviders();
 });
+
+connection.onShutdown(() => server.shutdown());
+connection.onExit(() => server.shutdown());
 
 // Listen on the connection
 connection.listen();

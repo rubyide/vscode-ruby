@@ -23,11 +23,13 @@ import {
 	IEnvironment,
 } from './SettingsCache';
 import DocumentFormattingProvider from './providers/DocumentFormattingProvider';
+import { forest } from './Forest';
 
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
 	registerInitializeProviders();
 	registerInitializedProviders();
+	shutdown();
 }
 
 interface WorkspaceRubyEnvironmentParams {
@@ -125,5 +127,9 @@ export class Server implements ILanguageServer {
 
 		// Handle workspace changes
 		WorkspaceProvider.register(this.connection);
+	}
+
+	public shutdown(): void {
+		forest.release()
 	}
 }
