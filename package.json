@@ -79,7 +79,7 @@
 		"clean:server": "cd server && npm run remove-binaries",
 		"compile:legacy": "rm -rf out && tsc -p ./src",
 		"compile:client": "rm -rf ./client/out && tsc -p ./client/tsconfig.json",
-		"compile:server": "rm -rf ./server/out && tsc -p ./server/tsconfig.json",
+		"compile:server": "cd server && npm run build && cd -",
 		"watch": "tsc -w -p ./src",
 		"watch:client": "tsc -w -p ./client/tsconfig.json",
 		"watch:server": "tsc -w -p ./server/tsconfig.json",
