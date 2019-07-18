@@ -1,5 +1,5 @@
 import { DocumentSymbol } from 'vscode-languageserver';
-import { SyntaxNode } from 'tree-sitter';
+import { SyntaxNode } from 'web-tree-sitter';
 import BaseAnalyzer from './BaseAnalyzer';
 import { Position, Stack } from '../util';
 import RubyDocumentSymbol, { isWrapper } from '../util/RubyDocumentSymbol';

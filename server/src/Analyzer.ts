@@ -1,7 +1,7 @@
 import { DocumentSymbol, FoldingRange } from 'vscode-languageserver';
 import { Observer } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Tree, SyntaxNode } from 'tree-sitter';
+import { Tree, SyntaxNode } from 'web-tree-sitter';
 import DocumentSymbolAnalyzer from './analyzers/DocumentSymbolAnalyzer';
 import { forestStream, ForestEventKind } from './Forest';
 import FoldingRangeAnalyzer from './analyzers/FoldingRangeAnalyzer';

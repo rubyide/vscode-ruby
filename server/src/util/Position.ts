@@ -4,7 +4,7 @@
  * This class supports converting to/from VSCode and TreeSitter positions
  */
 
-import { Point as TSPosition } from 'tree-sitter';
+import { Point as TSPosition } from 'web-tree-sitter';
 import { Position as VSPosition } from 'vscode-languageserver';
 
 export default class Position {

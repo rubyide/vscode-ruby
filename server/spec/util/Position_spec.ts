@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import Position from '../../src/util/Position';
-import { Point as TSPosition } from 'tree-sitter';
+import { Point as TSPosition } from 'web-tree-sitter';
 import { Position as VSPosition } from 'vscode-languageserver';
 
 function generateRandomRowCol() {

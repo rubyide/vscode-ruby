@@ -1,5 +1,5 @@
 import { FoldingRange, FoldingRangeKind } from 'vscode-languageserver';
-import { SyntaxNode } from 'tree-sitter';
+import { SyntaxNode } from 'web-tree-sitter';
 import BaseAnalyzer from './BaseAnalyzer';
 
 interface IFoldHeuristic {

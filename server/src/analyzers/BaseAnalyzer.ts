@@ -1,4 +1,4 @@
-import { SyntaxNode } from 'tree-sitter';
+import { SyntaxNode } from 'web-tree-sitter';
 
 export default abstract class BaseAnalyzer<T> {
 	public diagnostics: T[];

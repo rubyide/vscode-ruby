@@ -1,5 +1,5 @@
 import { DocumentHighlight, DocumentHighlightKind, Range } from 'vscode-languageserver';
-import { SyntaxNode, Tree } from 'tree-sitter';
+import { SyntaxNode, Tree } from 'web-tree-sitter';
 import Position from '../util/Position';
 import { forest } from '../Forest';
 

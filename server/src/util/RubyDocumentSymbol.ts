@@ -1,5 +1,5 @@
 import { DocumentSymbol, Range, SymbolKind } from 'vscode-languageserver';
-import { SyntaxNode } from 'tree-sitter';
+import { SyntaxNode } from 'web-tree-sitter';
 import Position from './Position';
 
 const SYMBOLKINDS = {
