@@ -41,6 +41,7 @@ class Analyzer {
 			}
 		};
 		walk(0);
+		cursor.delete();
 
 		return this.analysis;
 	}
