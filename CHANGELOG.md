@@ -1,6 +1,17 @@
+### 0.24.2 - Jul 23 2019
+
+Improvements:
+
+- Update `decreaseIndentPattern` to match Atom [#509](https://github.com/rubyide/vscode-ruby/pull/509)
+
+Bug Fixes:
+
+- Upgrade `tree-sitter` to `^0.15.8` to get new prebuilt binaries
+
 ### 0.24.1 - Jul 11 2019
 
 Bug Fixes:
+
 - Upgrade `tree-sitter-ruby` to `^0.15.1` to get new prebuilt binaries
 
 ### 0.24.0 - Jun 27 2019
