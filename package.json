@@ -82,7 +82,7 @@
 		"compile:server": "cd server && npm run build && cd -",
 		"watch": "tsc -w -p ./src",
 		"watch:client": "tsc -w -p ./client/tsconfig.json",
-		"watch:server": "tsc -w -p ./server/tsconfig.json",
+		"watch:server": "cd server && npm run watch",
 		"compile": "npm run compile:legacy && npm run compile:client && npm run compile:server",
 		"test": "node ./node_modules/mocha/bin/mocha --recursive ./out/*.test.js",
 		"test-debugger": "node ./node_modules/mocha/bin/mocha --timeout 15000 -u tdd ./out/debugger/tests/*.js",
