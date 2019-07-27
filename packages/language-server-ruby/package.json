@@ -1,7 +1,7 @@
 {
-	"name": "vscode-ruby-server",
+	"name": "language-server-ruby",
 	"version": "1.0.0",
-	"description": "Language server for vscode-ruby",
+	"description": "Language server for Ruby",
 	"repository": "https://github.com/rubyide/vscode-ruby",
 	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
 	"license": "MIT",
@@ -28,8 +28,8 @@
 		"typescript": "^3.5.3"
 	},
 	"scripts": {
-		"build": "rm -rf ./server/out && tsc -p ./tsconfig.json",
-		"build:wasm": "cd out && tree-sitter build-wasm ../node_modules/tree-sitter-ruby && cd ",
+		"build": "rm -rf ./out && tsc -p ./tsconfig.json",
+		"build:wasm": "tree-sitter build-wasm node_modules/tree-sitter-ruby && mv tree-sitter-ruby.wasm out/",
 		"postbuild": "npm run build:wasm",
 		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts",
 		"watch": "tsc -w -p ./tsconfig.json"

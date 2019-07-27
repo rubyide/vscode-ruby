@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": false,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"lib": ["dom", "es2017", "es2019.string"],
+		"target": "es6",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"outDir": "out",
+		"rootDir": "src"
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}
