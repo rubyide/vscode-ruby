@@ -1,0 +1,30 @@
+{
+	"name": "vscode-ruby-debugger",
+	"version": "0.24.2",
+	"description": "Debugger implementation for vscode-ruby",
+	"main": "src/index.ts",
+	"repository": "https://github.com/rubyide/vscode-ruby",
+	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "rm -rf ./out && tsc -p ./tsconfig.json",
+		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts"
+	},
+	"dependencies": {
+		"vscode-debugadapter": "^1.35.0",
+		"vscode-debugprotocol": "^1.35.0",
+		"xmldom": "^0.1.27"
+	},
+	"devDependencies": {
+		"@types/mocha": "^5.2.7",
+		"@types/xmldom": "^0.1.29",
+		"chai": "^4.2.0",
+		"mocha": "^6.2.0",
+		"nyc": "^14.1.1",
+		"source-map-support": "^0.5.12",
+		"ts-node": "^8.3.0",
+		"typescript": "^3.5.3",
+		"vscode-debugadapter-testsupport": "^1.35.0"
+	}
+}
