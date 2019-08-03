@@ -4,12 +4,8 @@
 		"module": "commonjs",
 		"target": "es6",
 		"outDir": "out",
-		"rootDir": "src",
+		"rootDir": "src"
 	},
-	"include": [
-		"src"
-	],
-	"exclude": [
-		"node_modules"
-	]
+	"include": ["src"],
+	"exclude": ["node_modules"]
 }

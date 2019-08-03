@@ -95,7 +95,8 @@ export function activate(context: ExtensionContext): void {
 	// Create the language client and start the client.
 	client = new LanguageClient('ruby', 'Ruby', serverOptions, clientOptions);
 	client.registerProposedFeatures();
-	const nodeRuntime = (context as any).executionContext === 1 ? NodeRuntime.Electron : NodeRuntime.Node;
+	const nodeRuntime =
+		(context as any).executionContext === 1 ? NodeRuntime.Electron : NodeRuntime.Node;
 	client.registerFeature(new WorkspaceRubyEnvironmentFeature(client, nodeRuntime));
 
 	// Push the disposable to the context's subscriptions so that the

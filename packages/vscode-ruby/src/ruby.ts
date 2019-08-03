@@ -12,21 +12,19 @@ import { registerHighlightProvider } from './providers/highlight';
 import { registerIntellisenseProvider } from './providers/intellisense';
 import { registerLinters } from './providers/linters';
 import { registerTaskProvider } from './task/rake';
+import * as client from './client';
 
 const DOCUMENT_SELECTOR: { language: string; scheme: string }[] = [
 	{ language: 'ruby', scheme: 'file' },
 	{ language: 'ruby', scheme: 'untitled' },
 ];
 
-let client;
-
-export function activate(context: ExtensionContext): void {
+export async function activate(context: ExtensionContext) {
 	// register language config
 	languages.setLanguageConfiguration('ruby', languageConfiguration);
 	utils.getOutputChannel();
 
 	if (workspace.getConfiguration('ruby').useLanguageServer) {
-		client = require('../client/out/extension');
 		client.activate(context);
 	} else {
 		// Register legacy providers
