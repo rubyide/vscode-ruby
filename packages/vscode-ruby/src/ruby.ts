@@ -30,6 +30,7 @@ export async function activate(context: ExtensionContext) {
 		// Register legacy providers
 		registerHighlightProvider(context, DOCUMENT_SELECTOR);
 		registerFormatter(context, DOCUMENT_SELECTOR);
+		registerIntellisenseProvider(context);
 
 		if (workspace.rootPath) {
 			registerLinters(context);
@@ -41,7 +42,6 @@ export async function activate(context: ExtensionContext) {
 	registerConfigurationProvider();
 
 	if (workspace.rootPath) {
-		registerIntellisenseProvider(context);
 		registerTaskProvider(context);
 	}
 
