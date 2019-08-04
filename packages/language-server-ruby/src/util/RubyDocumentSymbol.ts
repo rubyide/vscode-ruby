@@ -3,6 +3,7 @@ import { SyntaxNode } from 'web-tree-sitter';
 import Position from './Position';
 
 const SYMBOLKINDS = {
+	singleton_method: SymbolKind.Method,
 	method: SymbolKind.Method,
 	class: SymbolKind.Class,
 	module: SymbolKind.Module,
@@ -14,6 +15,7 @@ const IDENTIFIER_NODES = {
 	module: 'constant',
 	class: 'constant',
 	method: 'identifier',
+	singleton_method: 'identifier',
 	assignment: 'constant',
 	method_call: 'identifier',
 };
@@ -40,6 +42,9 @@ export default class RubyDocumentSymbol {
 			if (identifierNode) {
 				symbol.children = [];
 				symbol.name = identifierNode.text;
+				if (node.type === 'singleton_method') {
+					symbol.name = `self.${identifierNode.text}`;
+				}
 				if (symbol.name === 'initialize') {
 					symbol.kind = SymbolKind.Constructor;
 				}
