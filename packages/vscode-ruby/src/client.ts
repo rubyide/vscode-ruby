@@ -19,7 +19,7 @@ const RUBOCOP_ABSOLUTE_PATH_KEYS = ['require'];
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext): void {
-	const serverModule: string = context.asAbsolutePath(path.join('server', 'out', 'index.js'));
+	const serverModule: string = context.asAbsolutePath(path.join('dist', 'server', 'index.js'));
 	const debugOptions: { execArgv: string[] } = { execArgv: ['--nolazy', '--inspect=6009'] };
 
 	// If the extension is launched in debug mode then the debug server options are used

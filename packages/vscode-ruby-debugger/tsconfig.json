@@ -8,8 +8,9 @@
 		"noImplicitReturns": false,
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
-		"outDir": "out",
+		"outDir": "dist",
 		"rootDir": "src"
 	},
-	"exclude": ["spec", "node_modules"]
+	"include": ["src"],
+	"exclude": ["node_modules"]
 }

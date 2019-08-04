@@ -1,11 +1,12 @@
 {
 	"name": "language-server-ruby",
-	"version": "1.0.0",
+	"version": "0.24.2",
 	"description": "Language server for Ruby",
 	"repository": "https://github.com/rubyide/vscode-ruby",
 	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
 	"license": "MIT",
 	"private": false,
+	"main": "dist/index.js",
 	"dependencies": {
 		"diff-match-patch": "^1.0.4",
 		"rxjs": "^6.4.0",
@@ -21,6 +22,7 @@
 		"chai": "^4.2.0",
 		"mocha": "^6.1.4",
 		"nyc": "^14.1.1",
+		"parcel-bundler": "^1.12.3",
 		"source-map-support": "^0.5.12",
 		"tree-sitter-cli": "^0.15.6",
 		"tree-sitter-ruby": "^0.15.1",
@@ -28,11 +30,12 @@
 		"typescript": "^3.5.3"
 	},
 	"scripts": {
-		"build": "rm -rf ./out && tsc -p ./tsconfig.json",
-		"build:wasm": "tree-sitter build-wasm node_modules/tree-sitter-ruby && mv tree-sitter-ruby.wasm out/",
+		"build": "parcel build -t node --bundle-node-modules src/index.ts",
+		"build:wasm": "tree-sitter build-wasm ../../node_modules/tree-sitter-ruby && mv tree-sitter-ruby.wasm dist/",
+		"clean": "mkdir -p dist && rm -rf dist/*",
 		"postbuild": "npm run build:wasm",
 		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts",
-		"watch": "tsc -w -p ./tsconfig.json"
+		"watch": "tsc -w"
 	},
 	"nyc": {
 		"extension": [

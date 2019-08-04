@@ -1,10 +1,6 @@
 .vscode/**/*
 .gitignore
-src/**/*
-client/src/**/*
-server/src/**/*
-out/tests/**/*
-**/*.js.map
+packages/**/*
 *.vsix
 appveyor.yml
 .travis.yml

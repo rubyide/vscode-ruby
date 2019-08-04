@@ -1,20 +1,14 @@
 {
 	"version": "0.2.0",
 	"configurations": [
-
 		{
+			"name": "Launch Extension",
 			"type": "extensionHost",
 			"request": "launch",
-			"name": "Launch Extension",
 			"runtimeExecutable": "${execPath}",
-			"args": [
-				"--extensionDevelopmentPath=${workspaceRoot}"
-			],
 			"sourceMaps": true,
-			"outFiles": [
-				"${workspaceRoot}/out/**/*.js",
-				"${workspaceRoot}/client/out/**/*.js"
-			]
+			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+			"outFiles": ["${workspaceFolder}/dist/extension/**/*.js"]
 		},
 		{
 			"type": "node",
@@ -22,13 +16,9 @@
 			"name": "Debug Server",
 			"cwd": "${workspaceRoot}",
 			"program": "${workspaceRoot}/src/debugger/main.ts",
-			"args": [
-				"--server=4711"
-			],
+			"args": ["--server=4711"],
 			"sourceMaps": true,
-			"outFiles": [
-				"${workspaceRoot}/out/**/*.js"
-			]
+			"outFiles": ["${workspaceRoot}/out/**/*.js"]
 		},
 		{
 			"name": "ruby test",
@@ -42,17 +32,8 @@
 			"type": "node",
 			"request": "launch",
 			"program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-			"runtimeArgs": [
-				"--nolazy"
-			],
-			"args": [
-				"-u",
-				"tdd",
-				"--timeout",
-				"999999",
-				"--colors",
-				"./out/tests/"
-			],
+			"runtimeArgs": ["--nolazy"],
+			"args": ["-u", "tdd", "--timeout", "999999", "--colors", "./out/tests/"],
 			"sourceMaps": true,
 			"outDir": "${workspaceRoot}/out",
 			"cwd": "${workspaceRoot}"
@@ -63,16 +44,17 @@
 			"request": "attach",
 			"port": 6009,
 			"sourceMaps": true,
-			"outFiles": [ "${workspaceRoot}/server/out/**/*.js" ]
+			"outFiles": ["${workspaceRoot}/dist/server/**/*.js"]
 		}
 	],
 	"compounds": [
 		{
 			"name": "Extension w/ Debug Server",
-			"configurations": [
-				"Launch Extension",
-				"Debug Server"
-			]
+			"configurations": ["Launch Extension", "Debug Server"]
+		},
+		{
+			"name": "Client + Server",
+			"configurations": ["Launch Extension", "Attach to Language Server"]
 		}
 	]
 }
