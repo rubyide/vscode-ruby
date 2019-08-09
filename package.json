@@ -469,16 +469,18 @@
 				"path": "./syntaxes/gemfile.cson.json"
 			}
 		],
+		"breakpoints": [
+			{
+				"language": "ruby"
+			},
+			{
+				"language": "erb"
+			}
+		],
 		"debuggers": [
 			{
 				"type": "Ruby",
 				"label": "Ruby",
-				"enableBreakpointsFor": {
-					"languageIds": [
-						"ruby",
-						"erb"
-					]
-				},
 				"program": "dist/debugger/main.js",
 				"runtime": "node",
 				"configurationSnippets": [
