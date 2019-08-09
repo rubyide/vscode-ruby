@@ -60,7 +60,7 @@
 		"build": "lerna run clean && lerna run build",
 		"update-all-grammars": "node scripts/update-all-grammars",
 		"update-grammar": "node scripts/update-grammar atom/language-ruby",
-		"vscode:prepublish": "yarn build && scripts/copy_dist.sh",
+		"vscode:prepublish": "yarn build && scripts/build-dist.sh",
 		"watch": "scripts/link-dist && lerna run clean && lerna run watch"
 	},
 	"activationEvents": [
