@@ -1,5 +1,6 @@
 import path from 'path';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 module.exports = {
 	entry: './src/ruby.ts',
@@ -29,5 +30,5 @@ module.exports = {
 	externals: {
 		vscode: 'commonjs vscode',
 	},
-	plugins: [new ForkTsCheckerWebpackPlugin()],
+	plugins: [new ForkTsCheckerWebpackPlugin(), new CleanWebpackPlugin()],
 };

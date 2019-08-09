@@ -10,7 +10,6 @@
 	"private": true,
 	"scripts": {
 		"build": "webpack -p",
-		"clean": "mkdir -p dist && rm -rf dist/*",
 		"lint": "eslint src/**/*",
 		"watch": "tsc -w -p tsconfig.json"
 	},
@@ -30,6 +29,7 @@
 		"@types/vscode": "^1.30.0",
 		"@typescript-eslint/eslint-plugin": "^1.13.0",
 		"@typescript-eslint/parser": "^1.13.0",
+		"clean-webpack-plugin": "^3.0.0",
 		"eslint": ">=6.0.1",
 		"eslint-config-prettier": "^6.0.0",
 		"eslint-config-standard": "^13.0.1",
