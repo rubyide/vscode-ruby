@@ -8,7 +8,7 @@ import {
 import { workspaceRubyEnvironmentCache } from '../SettingsCache';
 
 export default class WorkspaceProvider extends Provider {
-	static register(connection: IConnection) {
+	public static register(connection: IConnection): WorkspaceProvider {
 		return new WorkspaceProvider(connection);
 	}
 
