@@ -10,3 +10,4 @@ npm-debug.log
 coverage
 .cache
 lerna-debug.log
+*.wasm
