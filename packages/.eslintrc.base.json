@@ -12,6 +12,13 @@
 					"accessors": "off"
 				}
 			}
+		],
+		"@typescript-eslint/explicit-function-return-type": [
+			"error",
+			{
+				"allowTypedFunctionExpressions": true,
+				"allowHigherOrderFunctions": true
+			}
 		]
 	}
 }
