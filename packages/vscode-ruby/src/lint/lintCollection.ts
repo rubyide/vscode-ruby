@@ -1,8 +1,8 @@
 'use strict';
 
-const Linter = require('./lib/linter');
-const LintResults = require('./lib/lintResults');
 import { Config } from './lintConfig';
+import Linter from './lib/linter';
+import LintResults from './lib/lintResults';
 
 export class LintCollection {
 	private _results: any;

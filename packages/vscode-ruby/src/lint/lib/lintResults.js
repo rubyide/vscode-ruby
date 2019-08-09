@@ -10,7 +10,7 @@ const severities = {
 	fatal: vscode.DiagnosticSeverity.Error
 };
 
-class LintResults {
+export default class LintResults {
 	constructor(linter) {
 		this._fileDiagnostics = vscode.languages.createDiagnosticCollection(linter);
 	}
@@ -37,5 +37,3 @@ class LintResults {
 		this._fileDiagnostics.dispose();
 	}
 }
-
-module.exports = LintResults;

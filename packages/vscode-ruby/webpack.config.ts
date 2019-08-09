@@ -22,6 +22,9 @@ module.exports = {
 		libraryTarget: 'commonjs2',
 		devtoolModuleFilenameTemplate: '../[resource-path]',
 	},
+	node: {
+		__dirname: false,
+	},
 	devtool: 'source-map',
 	externals: {
 		vscode: 'commonjs vscode',

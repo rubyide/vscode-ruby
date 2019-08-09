@@ -7,16 +7,17 @@ const fs = require('./fsPromise'),
 	os = require('os'),
 	cp = require('child_process');
 
-//load linters
-let lintBuilders = {};
+// load linters
+const lintBuilders = {
+	debride: require('./linters/debride'),
+	fasterer: require('./linters/fasterer'),
+	reek: require('./linters/reek'),
+	rubocop: require('./linters/RuboCop'),
+	'ruby-lint': require('./linters/ruby-lint'),
+	ruby: require('./linters/Ruby')
+};
 
-fs.readdirSync(path.join(__dirname, 'linters'))
-	.forEach(file => {
-		if (!file.endsWith(".js")) return;
-		lintBuilders[file.slice(0, -3).toLowerCase()] = require(path.join(__dirname, 'linters', file));
-	});
-
-class Linter {
+export default class Linter {
 	constructor(doc, rootPath, cb) {
 		this.doc = doc;
 		this.rootPath = rootPath;
@@ -192,5 +193,3 @@ class Linter {
 		return executor.catch(e => console.log("Error linting:", e));
 	}
 }
-
-module.exports = Linter;
