@@ -11,6 +11,7 @@
 	"scripts": {
 		"build": "webpack -p",
 		"clean": "mkdir -p dist && rm -rf dist/*",
+		"lint": "eslint src/**/*",
 		"watch": "tsc -w -p tsconfig.json"
 	},
 	"dependencies": {
@@ -27,7 +28,18 @@
 		"@types/execa": "^2.0.0",
 		"@types/node": "^12.6.9",
 		"@types/vscode": "^1.30.0",
+		"@typescript-eslint/eslint-plugin": "^1.13.0",
+		"@typescript-eslint/parser": "^1.13.0",
+		"eslint": ">=6.0.1",
+		"eslint-config-prettier": "^6.0.0",
+		"eslint-config-standard": "^13.0.1",
+		"eslint-config-standard-with-typescript": "^8.0.0",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-node": "^9.1.0",
+		"eslint-plugin-promise": "^4.2.1",
+		"eslint-plugin-standard": "^4.0.0",
 		"fork-ts-checker-webpack-plugin": "^1.5.0",
+		"prettier": "^1.18.2",
 		"ts-loader": "^6.0.4",
 		"typescript": "^3.5.3",
 		"webpack": "^4.39.1",

@@ -1,0 +1,17 @@
+{
+	"extends": ["standard-with-typescript", "prettier/@typescript-eslint", "prettier"],
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"rules": {
+		"@typescript-eslint/explicit-member-accessibility": [
+			"error",
+			{
+				"overrides": {
+					"constructors": "off",
+					"accessors": "off"
+				}
+			}
+		]
+	}
+}

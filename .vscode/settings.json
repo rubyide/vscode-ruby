@@ -1,14 +1,22 @@
-// Place your settings in this file to overwrite default and user settings.FALSE
+// Place your settings in this file to overwrite default and user settings.
 {
-	"javascript.validate.enable": false,
-	"files.trimTrailingWhitespace": true,
-	"eslint.enable": false,
-	"editor.insertSpaces": false,
-	"[javascript]": {
-		"editor.formatOnSave": false
-	},
+	// ESLint
+	"eslint.enable": true,
+	"eslint.packageManager": "yarn",
+	"eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+	"eslint.provideLintTask": true,
+	"eslint.workingDirectories": [
+		{ "directory": "./packages/language-server-ruby", "changeProcessCWD": true },
+		{ "directory": "./packages/vscode-ruby", "changeProcessCWD": true },
+		{ "directory": "./packages/vscode-ruby-debugger", "changeProcessCWD": true }
+	],
+
+	// Prettier
+	"prettier.eslintIntegration": false,
+
+	// Format with Prettier
 	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true
-	},
-	"typescript.tsdk": "node_modules/typescript/lib"
+	}
 }
