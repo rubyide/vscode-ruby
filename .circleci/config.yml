@@ -10,7 +10,6 @@ orbs:
 jobs:
   setup:
     <<: *defaults
-    working_directory: ~/vscode-ruby
     steps:
       - restore_cache:
           name: Restore Yarn Package Cache
@@ -26,7 +25,7 @@ jobs:
             - ~/.cache/yarn
   test_language_server:
     <<: *defaults
-    working_directory: ~/vscode-ruby/packages/language-server-ruby
+    working_directory: packages/language-server-ruby
     steps:
       - restore_cache:
           name: Restore Yarn Package Cache
@@ -43,7 +42,7 @@ jobs:
           flags: language-server-ruby
   test_debugger:
     <<: *defaults
-    working_directory: ~/vscode-ruby/packages/vscode-ruby-debugger
+    working_directory: packages/vscode-ruby-debugger
     steps:
       - restore_cache:
           name: Restore Yarn Package Cache
@@ -60,7 +59,7 @@ jobs:
           command: yarn test
   test_extension:
     <<: *defaults
-    working_directory: ~/vscode-ruby/packages/vscode-ruby
+    working_directory: packages/vscode-ruby
     steps:
       - restore_cache:
           name: Restore Yarn Package Cache
