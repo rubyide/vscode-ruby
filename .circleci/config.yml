@@ -40,6 +40,9 @@ jobs:
       - codecov/upload:
           file: coverage/lcov.info
           flags: language-server-ruby
+      - store_artifacts:
+          path: coverage
+          destination: language-server-ruby
   test_debugger:
     <<: *defaults
     working_directory: packages/vscode-ruby-debugger

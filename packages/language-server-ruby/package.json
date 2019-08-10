@@ -55,19 +55,23 @@
 		"watch": "tsc -w"
 	},
 	"nyc": {
+		"cache": false,
 		"extension": [
 			".ts"
 		],
 		"exclude": [
 			"**/*.d.ts",
-			"**/*_spec.ts",
-			"out/**/*",
-			"coverage/**/*"
+			"coverage/**",
+			"packages/*/test/**",
+			"test/**",
+			"test{,-*}.ts",
+			"**/*{.,-}{test,spec}.ts",
+			"**/node_modules/**",
+			"webpack.config.ts"
 		],
 		"reporter": [
 			"text",
-			"lcov",
-			"html"
+			"lcov"
 		],
 		"all": true
 	}
