@@ -86,7 +86,7 @@
 			}
 		],
 		"configuration": {
-			"title": "Ruby configuration",
+			"title": "Ruby",
 			"properties": {
 				"ruby.locate": {
 					"type": "object",
