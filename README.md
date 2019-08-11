@@ -4,6 +4,15 @@
 
 This extension provides Ruby language and debugging support for Visual Studio Code.
 
+## Features
+
+- Automatic Ruby environment detection with support for rvm, rbenv, chruby, and asdf
+- Lint support via RuboCop, Standard, and Reek
+- Format support via RuboCop, Standard, and Rufo
+- Semantic code folding support
+- Semantic highlighting support
+- Basic Intellisense support
+
 ## Installation
 
 Search for `ruby` in the [VS Code Extension Gallery](https://code.visualstudio.com/docs/editor/extension-gallery) and install it!
@@ -33,6 +42,8 @@ Legacy functionality will most likely not receive additional improvements and wi
 },
 "ruby.format": "rubocop" // use rubocop for formatting
 ```
+
+Reviewing the [linting](https://github.com/rubyide/vscode-ruby/blob/master/docs/linting.md) and [formatting](https://github.com/rubyide/vscode-ruby/blob/master/docs/formatting.md) docs is recommended
 
 For full details on configuration options, please take a look at the `Ruby` section in the VS Code settings UI. Each option is associated with a name and description.
 
