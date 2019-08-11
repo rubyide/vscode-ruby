@@ -35,7 +35,7 @@
 			"configurations": ["Launch Extension", "Debug Server"]
 		},
 		{
-			"name": "Client + Server",
+			"name": "Launch Extension and attach to Language Server",
 			"configurations": ["Launch Extension", "Attach to Language Server"]
 		}
 	]
