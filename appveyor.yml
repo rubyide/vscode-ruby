@@ -1,5 +1,5 @@
 version: '{build}'
-image: Visual Studio 2017
+image: Windows Server 2019
 branches:
   only:
     - master
@@ -11,11 +11,6 @@ install:
   - gem install ruby-debug-ide
   - ps: Install-Product node lts
   - yarn install
-  - git clone https://github.com/emscripten-core/emsdk.git
-  - cd emsdk
-  - emsdk install latest --vs2017
-  - emsdk activate latest
-  - emsdk_env.bat --global
 build_script:
   - yarn build
 test_script:
