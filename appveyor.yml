@@ -8,6 +8,8 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem --version
+  - cinst msys2 --params "/NoUpdate"
+  - Update-SessionEnvironment
   - ridk install 2 3
   - gem install ruby-debug-ide
   - ps: Install-Product node lts
