@@ -13,6 +13,7 @@ install:
   - ridk install 2 3
   - gem install ruby-debug-ide
   - ps: Install-Product node lts
+  - cinst yarn
   - yarn install
 build_script:
   - ps: Switch-DockerLinux
