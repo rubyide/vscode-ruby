@@ -1,5 +1,9 @@
 trigger:
 - master
+- try_azure_pipelines
+
+pr:
+- master
 
 strategy:
   matrix:
