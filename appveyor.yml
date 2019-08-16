@@ -1,31 +1,28 @@
 version: '{build}'
-image: Windows Server 2019
+image: Visual Studio 2017
 branches:
   only:
     - master
 clone_depth: 10
 install:
+  - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem --version
-  - cinst msys2 --params "/NoUpdate"
-  - ps: Install-Product node lts
-  - cinst yarn
-  - refreshenv
-  - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
-  - ridk install 2 3
   - gem install ruby-debug-ide
+  - ps: Install-Product node lts
   - yarn install
+  - git clone https://github.com/emscripten-core/emsdk.git
+  - cd emsdk
+  - emsdk install latest --vs2017
+  - emsdk activate latest
+  - emsdk_env.bat --global
 build_script:
-  - ps: Switch-DockerLinux
-  - yarn build
+  - ps: yarn build
 test_script:
   - yarn test
 
 environment:
   matrix:
-    - ruby_version: '24'
     - ruby_version: '24-x64'
-    - ruby_version: '25'
     - ruby_version: '25-x64'
-    - ruby_version: '26'
     - ruby_version: '26-x64'
