@@ -87,6 +87,7 @@ jobs:
   test_macos:
     macos:
       xcode: '10.3.0'
+    shell: /bin/bash --login -eo pipefail
     steps:
       - checkout
       - restore_cache:
@@ -111,6 +112,12 @@ jobs:
       - run:
           name: Build Extension
           command: yarn build
+      - run:
+          name: Set Ruby to 2.6
+          command: echo "ruby-2.6" > ~/.ruby-version
+      - run:
+          name: Install ruby-debug-ide and debase
+          command: gem install ruby-debug-ide debase -N
       - run:
           name: Run Tests
           command: yarn test
