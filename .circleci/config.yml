@@ -42,7 +42,7 @@ jobs:
           command: yarn test
       - codecov/upload:
           file: coverage/lcov.info
-          flags: language-server-ruby
+          flags: language_server_ruby
       - store_artifacts:
           path: coverage
           destination: language-server-ruby
@@ -105,6 +105,7 @@ jobs:
           name: Install emscripten
           command: |
             brew install emscripten
+            emcc --help
             sed -i '' '/BINARYEN_ROOT/d' ~/.emscripten
       - run:
           name: Build Extension

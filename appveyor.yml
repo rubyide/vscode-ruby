@@ -8,10 +8,10 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem --version
+  - ridk install
   - gem install ruby-debug-ide
   - ps: Install-Product node lts
   - yarn install
-  - ridk install
 build_script:
   - ps: Switch-DockerLinux
   - yarn build
