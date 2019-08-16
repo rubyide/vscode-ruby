@@ -86,7 +86,7 @@ jobs:
           command: yarn test
   test_macos:
     macos:
-      xcode: '10.3'
+      xcode: '10.3.0'
     steps:
       - checkout
       - setup_remote_docker
