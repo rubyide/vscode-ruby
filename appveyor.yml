@@ -8,12 +8,12 @@ install:
   - ruby --version
   - gem --version
   - cinst msys2 --params "/NoUpdate"
+  - ps: Install-Product node lts
+  - cinst yarn
   - refreshenv
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ridk install 2 3
   - gem install ruby-debug-ide
-  - ps: Install-Product node lts
-  - cinst yarn
   - yarn install
 build_script:
   - ps: Switch-DockerLinux
