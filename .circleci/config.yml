@@ -58,6 +58,9 @@ jobs:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
       - run:
+          name: Install Ruby + ruby-debug-ide + debase
+          command: apt-get update && apt-get install -y ruby-full && gem install ruby-debug-ide debase
+      - run:
           name: Build
           command: yarn build
       - run:
