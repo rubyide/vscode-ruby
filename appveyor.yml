@@ -11,7 +11,9 @@ install:
   - gem install ruby-debug-ide
   - ps: Install-Product node lts
   - yarn install
+  - ridk install
 build_script:
+  - ps: Switch-DockerLinux
   - yarn build
 test_script:
   - yarn test
