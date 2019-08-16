@@ -15,13 +15,13 @@ jobs:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - vscode-ruby-{{ checksum "yarn.lock" }}
+            - vscode-ruby-{{ checksum "yarn.lock" }}-{{ arch }}
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
       - save_cache:
           name: Save Yarn Package Cache
-          key: vscode-ruby-{{ checksum "yarn.lock" }}
+          key: vscode-ruby-{{ checksum "yarn.lock" }}-{{ arch }}
           paths:
             - ~/.cache/yarn
   test_language_server:
@@ -33,7 +33,7 @@ jobs:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}-{{ arch }}
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
@@ -55,7 +55,7 @@ jobs:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}-{{ arch }}
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
@@ -77,10 +77,34 @@ jobs:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}-{{ arch }}
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
+      - run:
+          name: Run Tests
+          command: yarn test
+  test_macos:
+    macos:
+      xcode: '10.3'
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - vscode-ruby-{{ checksum "yarn.lock" }}-{{ arch }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: vscode-ruby-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          name: Build Extension
+          command: yarn build
       - run:
           name: Run Tests
           command: yarn test
@@ -89,6 +113,7 @@ workflows:
   build_and_test:
     jobs:
       - setup
+      - test_macos
       - test_language_server:
           requires:
             - setup
