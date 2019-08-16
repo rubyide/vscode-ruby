@@ -15,8 +15,8 @@ install:
   - cd emsdk
   - emsdk install latest --vs2015
   - emsdk activate latest
-  - emsdk_env.bat --global
 build_script:
+  - emsdk_env.bat
   - yarn build
 test_script:
   - yarn test
