@@ -63,8 +63,8 @@ describe('vscode-ruby-debugger', () => {
 	});
 
 	describe('launch', () => {
-		it('should run program to the end', done => {
-			return Promise.all<Promise<any>>([
+		it('should run program to the end', () => {
+			return Promise.all([
 				dc.configurationSequence(),
 				dc.launch({ program: PROGRAM }),
 				dc.waitForEvent('terminated'),
@@ -105,40 +105,26 @@ describe('vscode-ruby-debugger', () => {
 		// 		dc.waitForEvent('terminated')]);
 		// });
 
-		it('should get correct variables on a breakpoint', done => {
+		it('should get correct variables on a breakpoint', async () => {
 			const BREAKPOINT_LINE = 3;
+			let response;
 
-			return Promise.all([
-				dc.hitBreakpoint({ program: PROGRAM }, { path: PROGRAM, line: BREAKPOINT_LINE }),
-				dc
-					.assertStoppedLocation('breakpoint', { line: BREAKPOINT_LINE })
-					.then(response => {
-						return dc.scopesRequest({
-							frameId: response.body.stackFrames[0].id,
-						});
-					})
-					.then(response => {
-						return dc.variablesRequest({
-							variablesReference: response.body.scopes[0].variablesReference,
-						});
-					})
-					.then(response => {
-						assert.equal(response.body.variables.length, 3);
-						assert.equal(response.body.variables[0].name, 'a');
-						assert.equal(response.body.variables[0].value, '10');
-						assert.equal(response.body.variables[1].name, 'b');
-						assert.equal(response.body.variables[1].value, 'undefined');
-						assert.equal(response.body.variables[2].name, 'c');
-						assert.equal(response.body.variables[2].value, 'undefined');
-						dc.disconnectRequest({});
-						done();
-					})
-					.catch(err => {
-						// error expected
-						dc.disconnectRequest({});
-						done(new Error(err));
-					}),
-			]);
+			dc.hitBreakpoint({ program: PROGRAM }, { path: PROGRAM, line: BREAKPOINT_LINE });
+			response = await dc.assertStoppedLocation('breakpoint', { line: BREAKPOINT_LINE });
+			response = await dc.scopesRequest({
+				frameId: response.body.stackFrames[0].id,
+			});
+			response = await dc.variablesRequest({
+				variablesReference: response.body.scopes[0].variablesReference,
+			});
+			assert.strictEqual(response.body.variables.length, 3);
+			assert.strictEqual(response.body.variables[0].name, 'a');
+			assert.strictEqual(response.body.variables[0].value, '10');
+			assert.strictEqual(response.body.variables[1].name, 'b');
+			assert.strictEqual(response.body.variables[1].value, 'undefined');
+			assert.strictEqual(response.body.variables[2].name, 'c');
+			assert.strictEqual(response.body.variables[2].value, 'undefined');
+			dc.disconnectRequest({});
 		});
 	});
 });
