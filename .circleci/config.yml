@@ -33,7 +33,7 @@ jobs:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - vscode-ruby-{{ checksum "yarn.lock" }}
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
@@ -55,7 +55,7 @@ jobs:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - vscode-ruby-{{ checksum "yarn.lock" }}
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
@@ -77,7 +77,7 @@ jobs:
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
-            - vscode-ruby-{{ checksum "yarn.lock" }}
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
