@@ -11,6 +11,11 @@ install:
   - gem install ruby-debug-ide
   - ps: Install-Product node lts
   - yarn install
+  - git clone https://github.com/emscripten-core/emsdk.git
+  - cd emsdk
+  - emsdk install latest
+  - emsdk activate latest
+  - emsdk_env.bat
 build_script:
   - yarn build
 test_script:
