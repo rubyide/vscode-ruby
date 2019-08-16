@@ -8,14 +8,12 @@ install:
   - ruby --version
   - gem --version
   - gem install ruby-debug-ide
-  - ps: Install-Product node '8.11.3'
-  - npm install
-  - cd client && npm install && cd ..
-  - cd server && npm install && cd ..
+  - ps: Install-Product node lts
+  - yarn install
 build_script:
-  - npm run compile
+  - yarn build
 test_script:
-  - npm run test-debugger
+  - yarn test
 
 environment:
   matrix:
