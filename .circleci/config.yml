@@ -103,10 +103,14 @@ jobs:
             - ~/.cache/yarn
       - run:
           name: Install emscripten
-          command: brew install emscripten
+          command: |
+            brew install emscripten
+            sed -i '' '/BINARYEN_ROOT/d' ~/.emscripten
       - run:
           name: Build Extension
           command: yarn build
+          environment:
+            LLVM_ROOT: /usr/local/opt/emscripten/libexec/llvm/bin
       - run:
           name: Run Tests
           command: yarn test
