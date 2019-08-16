@@ -28,7 +28,8 @@ jobs:
     <<: *defaults
     working_directory: packages/language-server-ruby
     steps:
-      - checkout
+      - checkout:
+          path: ~/vscode-ruby
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
@@ -49,7 +50,8 @@ jobs:
     <<: *defaults
     working_directory: packages/vscode-ruby-debugger
     steps:
-      - checkout
+      - checkout:
+          path: ~/vscode-ruby
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
@@ -70,7 +72,8 @@ jobs:
     <<: *defaults
     working_directory: packages/vscode-ruby
     steps:
-      - checkout
+      - checkout:
+          path: ~/vscode-ruby
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
