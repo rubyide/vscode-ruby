@@ -9,7 +9,7 @@ install:
   - ruby --version
   - gem --version
   - cinst msys2 --params "/NoUpdate"
-  - Update-SessionEnvironment
+  - refreshenv
   - ridk install 2 3
   - gem install ruby-debug-ide
   - ps: Install-Product node lts
