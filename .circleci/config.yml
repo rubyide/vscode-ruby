@@ -26,7 +26,7 @@ jobs:
             - ~/.cache/yarn
   test_language_server:
     <<: *defaults
-    working_directory: packages/language-server-ruby
+    working_directory: ~/vscode-ruby/packages/language-server-ruby
     steps:
       - checkout:
           path: ~/vscode-ruby
@@ -48,7 +48,7 @@ jobs:
           destination: language-server-ruby
   test_debugger:
     <<: *defaults
-    working_directory: packages/vscode-ruby-debugger
+    working_directory: ~/vscode-ruby/packages/language-server-ruby
     steps:
       - checkout:
           path: ~/vscode-ruby
@@ -70,7 +70,7 @@ jobs:
           command: yarn test
   test_extension:
     <<: *defaults
-    working_directory: packages/vscode-ruby
+    working_directory: ~/vscode-ruby/packages/language-server-ruby
     steps:
       - checkout:
           path: ~/vscode-ruby
