@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: node:lts
+    - image: circleci/ruby:2.6-node
 
 version: 2.1
 
@@ -58,8 +58,8 @@ jobs:
           name: Install Dependencies
           command: yarn install --frozen-lockfile
       - run:
-          name: Install Ruby + ruby-debug-ide + debase
-          command: apt-get update && apt-get install -y ruby-full && gem install ruby-debug-ide debase
+          name: Install ruby-debug-ide and debase
+          command: gem install ruby-debug-ide debase -N
       - run:
           name: Build
           command: yarn build
