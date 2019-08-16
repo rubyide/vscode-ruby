@@ -104,10 +104,10 @@ jobs:
       - run:
           name: Install emscripten
           command: |
-            brew install emscripten
+            brew install emscripten binaryen
             emcc --help
-            sed -i '' '/BINARYEN_ROOT/d' ~/.emscripten
             sed -i '' "s/LLVM_ROOT.*/LLVM_ROOT = '\/usr\/local\/opt\/emscripten\/libexec\/llvm\/bin'/g" ~/.emscripten
+            sed -i '' "s/BINARYEN_ROOT.*/BINARYEN_ROOT = '\/usr\/local\/opt\/binaryen\/bin'/g" ~/.emscripten
       - run:
           name: Build Extension
           command: yarn build
