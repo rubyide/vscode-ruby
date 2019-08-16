@@ -89,7 +89,6 @@ jobs:
       xcode: '10.3.0'
     steps:
       - checkout
-      - setup_remote_docker
       - restore_cache:
           name: Restore Yarn Package Cache
           keys:
@@ -102,6 +101,9 @@ jobs:
           key: vscode-ruby-{{ checksum "yarn.lock" }}-{{ arch }}
           paths:
             - ~/.cache/yarn
+      - run:
+          name: Install emscripten
+          command: brew install emscripten
       - run:
           name: Build Extension
           command: yarn build
