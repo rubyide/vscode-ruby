@@ -11,7 +11,8 @@ import { DebugProtocol } from 'vscode-debugprotocol';
 import { DebugClient } from 'vscode-debugadapter-testsupport';
 
 const DATA_ROOT = path.join(__dirname, 'data');
-const DEBUG_ADAPTER = path.join(__dirname, '..', 'out', 'main.js');
+const DEBUG_ADAPTER = path.join(__dirname, '..', 'dist', 'main.js');
+const PROGRAM = path.join(DATA_ROOT, 'basic.rb');
 
 describe('vscode-ruby-debugger', () => {
 	let dc: DebugClient;
@@ -63,8 +64,6 @@ describe('vscode-ruby-debugger', () => {
 
 	describe('launch', () => {
 		it('should run program to the end', done => {
-			const PROGRAM = path.join(DATA_ROOT, 'basic.rb');
-
 			return Promise.all<Promise<any>>([
 				dc.configurationSequence(),
 				dc.launch({ program: PROGRAM }),
@@ -107,7 +106,6 @@ describe('vscode-ruby-debugger', () => {
 		// });
 
 		it('should get correct variables on a breakpoint', done => {
-			const PROGRAM = path.join(DATA_ROOT, 'basic.rb');
 			const BREAKPOINT_LINE = 3;
 
 			return Promise.all([
