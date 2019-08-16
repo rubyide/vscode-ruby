@@ -13,9 +13,9 @@ install:
   - yarn install
   - git clone https://github.com/emscripten-core/emsdk.git
   - cd emsdk
-  - emsdk install latest
+  - emsdk install latest --vs2017
   - emsdk activate latest
-  - emsdk_env.bat
+  - emsdk_env.bat --global
 build_script:
   - yarn build
 test_script:
