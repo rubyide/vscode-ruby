@@ -51,6 +51,7 @@
 		"build": "webpack -p",
 		"build:wasm": "tree-sitter build-wasm ../../node_modules/tree-sitter-ruby && mv tree-sitter-ruby.wasm src/",
 		"lint": "eslint src/**/*.ts",
+		"prebuild": "yarn build:wasm",
 		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts",
 		"watch": "tsc -w"
 	},

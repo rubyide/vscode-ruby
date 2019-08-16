@@ -57,11 +57,12 @@
 		"lerna": "^3.16.4"
 	},
 	"scripts": {
-		"build": "lerna run clean && lerna run build",
+		"build": "lerna run build",
+		"test": "lerna run test",
 		"update-all-grammars": "node scripts/update-all-grammars",
 		"update-grammar": "node scripts/update-grammar atom/language-ruby",
 		"vscode:prepublish": "yarn build && scripts/build-dist.sh",
-		"watch": "scripts/link-dist && lerna run clean && lerna run watch"
+		"watch": "scripts/link-dist && lerna run watch"
 	},
 	"activationEvents": [
 		"onLanguage:ruby",
