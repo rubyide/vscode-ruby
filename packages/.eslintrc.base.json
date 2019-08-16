@@ -4,6 +4,7 @@
 		"project": "./tsconfig.json"
 	},
 	"rules": {
+		"lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
 		"@typescript-eslint/explicit-member-accessibility": [
 			"error",
 			{
