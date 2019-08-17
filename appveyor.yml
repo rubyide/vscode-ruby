@@ -8,18 +8,23 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - gem --version
-  - gem install ruby-debug-ide
+  - gem install ruby-debug-ide -N
   - ps: Install-Product node lts
-  - yarn install
+  - yarn --cache-folder=.yarn-cache --no-progress --pure-lockfile
   - git clone https://github.com/emscripten-core/emsdk.git
   - cd emsdk
   - emsdk install latest --vs2015
   - emsdk activate latest
 build_script:
   - emsdk_env.bat
+  - cd packages/vscode-ruby-debugger
   - yarn build
+  - cd ../..
 test_script:
   - yarn test
+
+cache:
+  - .yarn-cache
 
 environment:
   matrix:
