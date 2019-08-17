@@ -12,7 +12,7 @@
 		"html.erb"
 	],
 	"injections": {
-		"text.html.erb - (meta.embedded.block.erb | meta.embedded.line.erb | meta.tag | comment), meta.tag string.quoted": {
+		"text.html.erb - (meta.embedded.block.erb | meta.embedded.line.erb | meta.tag | comment), meta.tag string.quoted, L:source.js.embedded.html": {
 			"patterns": [
 				{
 					"begin": "(^\\s*)(?=<%+#(?![^%]*%>))",
