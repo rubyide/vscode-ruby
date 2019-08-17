@@ -2064,6 +2064,7 @@
 		},
 		{
 			"begin": "(?<={|{\\s|[^A-Za-z0-9_]do|^do|[^A-Za-z0-9_]do\\s|^do\\s)(\\|)",
+			"name": "meta.block.parameters.ruby",
 			"captures": {
 				"1": {
 					"name": "punctuation.separator.variable.ruby"
@@ -2072,11 +2073,24 @@
 			"end": "(?<!\\|)(\\|)(?!\\|)",
 			"patterns": [
 				{
-					"include": "source.ruby"
-				},
-				{
-					"match": "[_a-zA-Z][_a-zA-Z0-9]*",
-					"name": "variable.other.block.ruby"
+					"begin": "(?![\\s,|(])",
+					"end": "(?=,|\\|\\s*)",
+					"patterns": [
+						{
+							"match": "\\G([&*]?)([a-zA-Z][\\w_]*)|(_[\\w_]*)",
+							"captures": {
+								"1": {
+									"name": "storage.type.variable.ruby"
+								},
+								"2": {
+									"name": "variable.other.block.ruby"
+								},
+								"3": {
+									"name": "variable.other.block.unused.ruby variable.other.constant.ruby"
+								}
+							}
+						}
+					]
 				},
 				{
 					"match": ",",
@@ -2201,7 +2215,7 @@
 			]
 		},
 		{
-			"comment": "This is kindof experimental. There really is no way to perfectly match all regular variables, but you can pretty well assume that any normal word in certain curcumstances that havnt already been scoped as something else are probably variables, and the advantages beat the potential errors",
+			"comment": "This is kindof experimental. There really is no way to perfectly match all regular variables, but you can pretty well assume that any normal word in certain curcumstances that haven't already been scoped as something else are probably variables, and the advantages beat the potential errors",
 			"match": "((?<=\\W)\\b|^)\\w+\\b(?=\\s*([\\]\\)\\}\\=\\+\\-\\*\\/\\^\\$\\,\\.]|<\\s|<<[\\s|\\.]))",
 			"name": "variable.other.ruby"
 		}
