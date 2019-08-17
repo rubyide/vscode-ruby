@@ -17,9 +17,9 @@ install:
   - emsdk activate latest
 build_script:
   - emsdk_env.bat
-  - cd packages/vscode-ruby-debugger
+  - cd packages\vscode-ruby-debugger
   - yarn build
-  - cd ../..
+  - cd ..\..
 test_script:
   - yarn test
 
