@@ -11,12 +11,12 @@ install:
   - gem install ruby-debug-ide -N
   - ps: Install-Product node lts
   - yarn --cache-folder=.yarn-cache --no-progress --pure-lockfile
-  - git clone https://github.com/emscripten-core/emsdk.git
-  - cd emsdk
-  - emsdk install latest --vs2015
-  - emsdk activate latest
+  # - git clone https://github.com/emscripten-core/emsdk.git
+  # - cd emsdk
+  # - emsdk install latest --vs2015
+  # - emsdk activate latest
 build_script:
-  - emsdk_env.bat
+  # - emsdk_env.bat
   - yarn run lerna run build --scope vscode-ruby-debugger
 test_script:
   - yarn test
