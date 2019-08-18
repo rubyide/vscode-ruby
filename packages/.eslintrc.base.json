@@ -20,6 +20,7 @@
 				"allowTypedFunctionExpressions": true,
 				"allowHigherOrderFunctions": true
 			}
-		]
+		],
+		"@typescript-eslint/array-type": ["error", "array"]
 	}
 }

@@ -81,7 +81,18 @@
 		"commands": [
 			{
 				"command": "ruby.reloadProject",
-				"title": "Ruby: Reload Project"
+				"category": "Ruby",
+				"title": "Reload Project"
+			},
+			{
+				"title": "Show Output Channel",
+				"category": "Ruby",
+				"command": "ruby.showOutputChannel"
+			},
+			{
+				"title": "Show Language Server Output Channel",
+				"category": "Ruby",
+				"command": "ruby.showLanguageServerOutputChannel"
 			}
 		],
 		"configuration": {

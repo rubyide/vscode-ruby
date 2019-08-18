@@ -17,6 +17,9 @@ let _channel: vscode.OutputChannel;
 export function getOutputChannel(): vscode.OutputChannel {
 	if (!_channel) {
 		_channel = vscode.window.createOutputChannel('Ruby');
+		vscode.commands.registerCommand('ruby.showOutputChannel', () => {
+			_channel.show();
+		});
 	}
 	return _channel;
 }
