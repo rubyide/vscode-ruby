@@ -13,3 +13,7 @@ The server is built to be extensible, accurate, and performant with such feature
 - Intellisense support
 
 Note that the language server is currently under active development!
+
+## Logs
+
+The extension exposes a command via the [VSCode Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) to view the Language Server's logs. Just use the `Ruby: Show Language Server Output Channel` command to view the server's logs

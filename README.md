@@ -52,6 +52,10 @@ For full details on configuration options, please take a look at the `Ruby` sect
 
 [docs/legacy.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/legacy.md) contains the documentation around the legacy functionality
 
+## Troubleshooting
+
+See [docs/troubleshooting.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/troubleshooting.md)
+
 ## Other Notable Extensions
 
 - [Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph) - Solargraph is a language server that provides intellisense, code completion, and inline documentation for Ruby.
