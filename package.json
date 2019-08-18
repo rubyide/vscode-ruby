@@ -60,7 +60,7 @@
 		"build": "lerna run build",
 		"test": "lerna run test",
 		"vscode:prepublish": "yarn build && scripts/build-dist.sh",
-		"watch": "scripts/link-dist && lerna run watch"
+		"watch": "scripts/link-dist.sh && lerna run watch"
 	},
 	"activationEvents": [
 		"onLanguage:ruby",

@@ -19,7 +19,7 @@ const DOCUMENT_SELECTOR: { language: string; scheme: string }[] = [
 	{ language: 'ruby', scheme: 'untitled' },
 ];
 
-export async function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext): Promise<void> {
 	// register language config
 	languages.setLanguageConfiguration('ruby', languageConfiguration);
 	utils.getOutputChannel();
