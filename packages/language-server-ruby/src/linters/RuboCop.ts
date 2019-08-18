@@ -3,17 +3,21 @@ import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
 import BaseLinter from './BaseLinter';
 import { RuboCopLintConfiguration } from '../SettingsCache';
 
-type RuboCopOffense = {
+interface RuboCopOffense {
 	severity: string; // FIXME make this a fixed option set
 	message: string;
 	cop_name: string;
 	corrected: boolean;
 	location: {
+		start_line: number;
+		start_column: number;
+		last_line: number;
+		last_column: number;
 		line: number;
 		column: number;
 		length: number;
 	};
-};
+}
 
 export interface IRuboCopResults {
 	summary: {
@@ -82,16 +86,15 @@ export default class RuboCop extends BaseLinter {
 	}
 
 	protected rubocopOffenseToDiagnostic(offense: RuboCopOffense): Diagnostic {
-		const offenseCharacter = offense.location.column - 1;
 		return {
 			range: {
 				start: {
-					line: offense.location.line - 1,
-					character: offenseCharacter,
+					line: offense.location.start_line - 1,
+					character: offense.location.start_column - 1,
 				},
 				end: {
-					line: offense.location.line - 1,
-					character: offenseCharacter + offense.location.length - 1,
+					line: offense.location.last_line - 1,
+					character: offense.location.last_column,
 				},
 			},
 			severity: this.DIAGNOSTIC_SEVERITIES[offense.severity],
