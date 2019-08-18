@@ -1,7 +1,15 @@
 import path from 'path';
+import fs from 'fs';
 import Parser from 'web-tree-sitter';
 
-const TREE_SITTER_RUBY_WASM = path.resolve(__dirname, 'tree-sitter-ruby.wasm');
+const TREE_SITTER_RUBY_WASM = ((): string => {
+	let wasmPath = path.resolve(__dirname, 'tree-sitter-ruby.wasm');
+	if (!fs.existsSync(wasmPath)) {
+		wasmPath = path.resolve(__dirname, '..', 'tree-sitter-ruby.wasm');
+	}
+
+	return wasmPath;
+})();
 
 const TreeSitterFactory = {
 	language: null,
