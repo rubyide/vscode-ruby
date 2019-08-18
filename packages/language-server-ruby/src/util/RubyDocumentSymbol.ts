@@ -38,6 +38,8 @@ export default class RubyDocumentSymbol {
 
 		if (isWrapper(node)) {
 			if (!node.childCount) return;
+			// Handle foo = Foo::Bar::Baz.bam showing Foo in the outline
+			if (node.type === 'assignment' && node.firstChild.type === 'identifier') return;
 			const identifierNode = node.descendantsOfType(IDENTIFIER_NODES[node.type])[0];
 			if (identifierNode) {
 				symbol.children = [];
