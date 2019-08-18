@@ -33,7 +33,9 @@ module.exports = {
 	},
 	plugins: [
 		new ForkTsCheckerWebpackPlugin(),
-		new CleanWebpackPlugin(),
+		new CleanWebpackPlugin({
+			cleanStaleWebpackAssets: false,
+		}),
 		// Workaround to Webpack not being able to figure out emscripten's environment export
 		new CopyPlugin([
 			{ from: '../../node_modules/web-tree-sitter/tree-sitter.wasm' },
