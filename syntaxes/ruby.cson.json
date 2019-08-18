@@ -2034,10 +2034,17 @@
 			]
 		},
 		{
-			"begin": "(?>((<<[-~]([\"'`]?)(\\w+)\\3,\\s?)*<<[-~]([\"'`]?)(\\w+)\\5))",
+			"begin": "(?>((<<[-~]([\"'`]?)(\\w+)\\3,\\s?)*<<[-~]([\"'`]?)(\\w+)\\5))(.*)",
 			"beginCaptures": {
-				"0": {
+				"1": {
 					"name": "punctuation.definition.string.begin.ruby"
+				},
+				"7": {
+					"patterns": [
+						{
+							"include": "source.ruby"
+						}
+					]
 				}
 			},
 			"comment": "heredoc with multiple inputs and indented terminator",
