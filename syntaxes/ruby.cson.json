@@ -2665,7 +2665,7 @@
 		"yard_name_types": {
 			"comment": "For YARD tags that follow the tag-name-types-comment pattern",
 			"begin": "^(\\s*)(#)(\\s*)(@)(attr|attr_reader|attr_writer|see|yieldparam)(?=\\s)(\\s+([a-z_][a-zA-Z_]*))?(\\s+((\\[).+(])))?",
-			"beginCaptures":{
+			"beginCaptures": {
 				"1": {
 					"name": "comment.line.yard.ruby"
 				},
@@ -2715,7 +2715,7 @@
 		"yard_param_types": {
 			"comment": "For YARD tags that follow the tag-param-types-comment pattern",
 			"begin": "^(\\s*)(#)(\\s*)(@)(option|param)(?=\\s)(\\s+([a-z_][a-zA-Z_]*:?))?(\\s+((\\[).+(])))?(\\s+(:[a-z_][a-zA-Z_]*))?",
-			"beginCaptures":{
+			"beginCaptures": {
 				"1": {
 					"name": "comment.line.yard.ruby"
 				},
@@ -2774,7 +2774,7 @@
 		"yard_tag": {
 			"comment": "For YARD tags that are just the tag",
 			"match": "^(\\s*)(#)(\\s*)(@)(private)$",
-			"captures":{
+			"captures": {
 				"1": {
 					"name": "comment.line.yard.ruby"
 				},
@@ -2793,7 +2793,7 @@
 			},
 			"name": "comment.line.number-sign.ruby"
 		},
-		"yard_types":{
+		"yard_types": {
 			"comment": "For YARD tags that follow the tag-types-comment pattern",
 			"begin": "^(\\s*)(#)(\\s*)(@)(raise|return|yield(?:return)?)(?=\\s)(\\s+((\\[).+(])))?",
 			"beginCaptures": {
@@ -2840,7 +2840,7 @@
 		"yard_directive": {
 			"comment": "For YARD directives",
 			"begin": "^(\\s*)(#)(\\s*)(@!)(attribute|endgroup|group|macro|method|parse|scope|visibility)(\\s+((\\[).+(])))?(?=\\s)",
-			"beginCaptures":{
+			"beginCaptures": {
 				"1": {
 					"name": "comment.line.yard.ruby"
 				},

@@ -7,10 +7,7 @@
 	"version": "https://github.com/atom/language-ruby/commit/94b56c2f7a835e9cfb0be6240efcd0be6c3fb45b",
 	"name": "HTML (Ruby - ERB)",
 	"scopeName": "text.html.erb",
-	"fileTypes": [
-		"rhtml",
-		"html.erb"
-	],
+	"fileTypes": ["rhtml", "html.erb"],
 	"injections": {
 		"text.html.erb - (meta.embedded.block.erb | meta.embedded.line.erb | meta.tag | comment), meta.tag string.quoted, L:source.js.embedded.html": {
 			"patterns": [

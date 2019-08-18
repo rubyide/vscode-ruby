@@ -7,9 +7,7 @@
 	"version": "https://github.com/atom/language-ruby/commit/3cb25d88e1173a29027eb52259415a3f851b8662",
 	"name": "Gemfile",
 	"scopeName": "source.ruby.gemfile",
-	"fileTypes": [
-		"Gemfile"
-	],
+	"fileTypes": ["Gemfile"],
 	"patterns": [
 		{
 			"include": "source.ruby"
