@@ -9,7 +9,7 @@ This extension provides Ruby language and debugging support for Visual Studio Co
 
 - Automatic Ruby environment detection with support for rvm, rbenv, chruby, and asdf
 - Lint support via RuboCop, Standard, and Reek
-- Format support via RuboCop, Standard, and Rufo
+- Format support via RuboCop, Standard, Rufo, and RubyFMT
 - Semantic code folding support
 - Semantic highlighting support
 - Basic Intellisense support
