@@ -24,12 +24,12 @@ export function isWrapper(node: SyntaxNode): boolean {
 	return IDENTIFIER_NODES.hasOwnProperty(node.type);
 }
 
-export default class RubyDocumentSymbol {
-	static build(node: SyntaxNode): DocumentSymbol | DocumentSymbol[] | void {
+const RubyDocumentSymbol = {
+	build(node: SyntaxNode): DocumentSymbol | DocumentSymbol[] | void {
 		const symbolKind = SYMBOLKINDS[node.type];
 		if (!symbolKind) return;
 
-		let symbol = new DocumentSymbol();
+		const symbol = new DocumentSymbol();
 		symbol.range = Range.create(
 			Position.fromTSPosition(node.startPosition).toVSPosition(),
 			Position.fromTSPosition(node.endPosition).toVSPosition()
@@ -44,9 +44,13 @@ export default class RubyDocumentSymbol {
 			if (identifierNode) {
 				symbol.children = [];
 				symbol.name = identifierNode.text;
+
+				// Prepend self. to class methods
 				if (node.type === 'singleton_method') {
 					symbol.name = `self.${identifierNode.text}`;
 				}
+
+				// Override constructor type
 				if (symbol.name === 'initialize') {
 					symbol.kind = SymbolKind.Constructor;
 				}
@@ -87,5 +91,7 @@ export default class RubyDocumentSymbol {
 		}
 
 		return symbol;
-	}
-}
+	},
+};
+
+export default RubyDocumentSymbol;
