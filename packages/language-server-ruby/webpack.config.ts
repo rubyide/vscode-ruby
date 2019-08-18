@@ -38,6 +38,7 @@ module.exports = {
 		new CopyPlugin([
 			{ from: '../../node_modules/web-tree-sitter/tree-sitter.wasm' },
 			{ from: 'src/tree-sitter-ruby.wasm' },
+			{ from: 'src/formatters/rubyfmt.rb' },
 		]),
 	],
 };

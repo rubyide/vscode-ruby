@@ -9,12 +9,21 @@ import { documents } from './DocumentManager';
 import URI from 'vscode-uri';
 import { from, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { IFormatter, FormatterConfig, NullFormatter, RuboCop, Standard, Rufo } from './formatters';
+import {
+	IFormatter,
+	FormatterConfig,
+	NullFormatter,
+	RuboCop,
+	Standard,
+	Rufo,
+	RubyFMT,
+} from './formatters';
 
 const FORMATTER_MAP = {
 	rubocop: RuboCop,
 	standard: Standard,
 	rufo: Rufo,
+	rubyfmt: RubyFMT,
 };
 
 function getFormatter(

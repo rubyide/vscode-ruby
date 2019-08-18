@@ -5,6 +5,7 @@ The language server currently supports formatting via the following formatters:
 - [RuboCop](https://github.com/rubocop-hq/rubocop)
 - [Standard](https://github.com/testdouble/standard)
 - [Rufo](https://github.com/ruby-formatter/rufo)
+- [RubyFMT](https://github.com/samphippen/rubyfmt)
 
 ## Configuration
 
