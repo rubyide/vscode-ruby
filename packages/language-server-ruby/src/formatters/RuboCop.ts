@@ -3,7 +3,7 @@ import { TextEdit } from 'vscode-languageserver';
 import BaseFormatter from './BaseFormatter';
 
 export default class RuboCop extends BaseFormatter {
-	protected FORMATTED_OUTPUT_DELIMITER = '====================';
+	protected FORMATTED_OUTPUT_DELIMITER = '====================\n';
 
 	get cmd(): string {
 		const command = 'rubocop';
