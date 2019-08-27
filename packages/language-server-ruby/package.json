@@ -8,15 +8,16 @@
 	"private": false,
 	"main": "dist/index.js",
 	"dependencies": {
+		"cross-spawn": "^6.0.5",
 		"diff-match-patch": "^1.0.4",
 		"rxjs": "^6.4.0",
-		"spawn-rx": "^3.0.0",
 		"vscode-languageserver": "^5.2.1",
 		"vscode-uri": "^1.0.6",
 		"web-tree-sitter": "^0.15.8"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.1.7",
+		"@types/cross-spawn": "^6.0.0",
 		"@types/diff-match-patch": "^1.0.32",
 		"@types/mocha": "^5.2.7",
 		"@typescript-eslint/eslint-plugin": "^1.13.0",

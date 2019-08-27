@@ -1,5 +1,4 @@
 import { Position, Range, TextDocument, TextEdit } from 'vscode-languageserver';
-import { spawn } from 'spawn-rx';
 import { of, Observable, throwError } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';
 import {
@@ -9,6 +8,7 @@ import {
 	DIFF_INSERT,
 	DIFF_EQUAL,
 } from 'diff-match-patch';
+import { spawn } from '../util/spawn';
 import { IEnvironment, RubyCommandConfiguration } from '../SettingsCache';
 
 export interface IFormatter {
@@ -74,7 +74,14 @@ export default abstract class BaseFormatter implements IFormatter {
 				const err: Error | null = this.processError(error, formatStr);
 				return err ? throwError(err) : of('');
 			}),
-			reduce((acc: string, value: string) => acc + value, ''),
+			reduce((acc: string, value: any) => {
+				if (value.source === 'stdout') {
+					return `${acc}${value.text}`;
+				} else {
+					console.error(value.text);
+					return acc;
+				}
+			}, ''),
 			map((result: string) => this.processResults(result))
 		);
 	}

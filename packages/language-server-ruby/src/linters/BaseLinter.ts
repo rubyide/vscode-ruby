@@ -1,6 +1,6 @@
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
-import { spawn } from 'spawn-rx';
 import { of, Observable, empty } from 'rxjs';
+import { spawn } from '../util/spawn';
 import { catchError, map, reduce } from 'rxjs/operators';
 import { IEnvironment, RubyCommandConfiguration } from '../SettingsCache';
 
