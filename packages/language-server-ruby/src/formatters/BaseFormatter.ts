@@ -15,12 +15,12 @@ export interface IFormatter {
 	format(): Observable<TextEdit[]>;
 }
 
-export type FormatterConfig = {
+export interface FormatterConfig {
 	env: IEnvironment;
 	executionRoot: string;
 	config: RubyCommandConfiguration;
 	range?: Range;
-};
+}
 
 export default abstract class BaseFormatter implements IFormatter {
 	protected document: TextDocument;
@@ -93,7 +93,7 @@ export default abstract class BaseFormatter implements IFormatter {
 		// this means position only gets moved for DIFF_EQUAL and DIFF_DELETE
 		// as insert is new and doesn't have a position in the original
 		let position = 0;
-		for (let diff of diffs) {
+		for (const diff of diffs) {
 			const [num, str] = diff;
 			const startPos = this.document.positionAt(position);
 
@@ -134,14 +134,14 @@ export default abstract class BaseFormatter implements IFormatter {
 	}
 
 	protected processError(error: any, formatStr: string): Error {
-		let code = error.code || error.toString().match(/code: (\d+)/)[1] || null;
-		let message = `\n    unable to execute ${formatStr}:\n    ${error.toString()} - ${this.messageForCode(
+		const code = error.code || error.toString().match(/code: (\d+)/)[1] || null;
+		const message = `\n    unable to execute ${formatStr}:\n    ${error.toString()} - ${this.messageForCode(
 			code
 		)}`;
 		return new Error(message);
 	}
 
-	protected messageForCode(code: string) {
+	protected messageForCode(code: string): string {
 		switch (code) {
 			case '127':
 				return 'missing gem executables';
@@ -153,7 +153,7 @@ export default abstract class BaseFormatter implements IFormatter {
 	}
 
 	// Modified from https://github.com/Microsoft/vscode/blob/master/src/vs/editor/common/core/range.ts#L90
-	private checkPositionInRange(position: Position) {
+	private checkPositionInRange(position: Position): boolean {
 		const { start, end } = this.range;
 
 		if (position.line < start.line || position.line > end.line) {
@@ -173,7 +173,7 @@ export default abstract class BaseFormatter implements IFormatter {
 
 	// If the selection range just has whitespace before it in the line,
 	// extend the range to account for that whitespace
-	private modifyRange() {
+	private modifyRange(): void {
 		const { start } = this.range;
 		const offset = this.document.offsetAt(start);
 		const prefixLineText = this.originalText.substring(offset - start.character, offset);

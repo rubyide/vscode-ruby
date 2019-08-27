@@ -1,6 +1,6 @@
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
-import { of, Observable, empty } from 'rxjs';
 import { spawn } from '../util/spawn';
+import { EMPTY, of, Observable } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';
 import { IEnvironment, RubyCommandConfiguration } from '../SettingsCache';
 
@@ -8,11 +8,11 @@ export interface ILinter {
 	lint(): Observable<Diagnostic[]>;
 }
 
-export type LinterConfig = {
+export interface LinterConfig {
 	env: IEnvironment;
 	executionRoot: string;
 	config: RubyCommandConfiguration;
-};
+}
 
 export default abstract class BaseLinter implements ILinter {
 	protected document: TextDocument;
@@ -45,19 +45,19 @@ export default abstract class BaseLinter implements ILinter {
 		}
 
 		console.info(`Lint: executing ${cmd} ${args.join(' ')}...`);
+		// console.debug(`Lint environment: ${this.config.env}`);
 		return spawn(cmd, args, {
 			env: this.config.env,
 			cwd: this.config.executionRoot,
 			stdin: of(this.document.getText()),
-			split: true,
 		}).pipe(
 			catchError(error => {
 				this.processError(error);
-				return empty();
+				return EMPTY;
 			}),
 			reduce((acc: string, value: any) => {
 				if (value.source === 'stdout') {
-					return acc + value.text;
+					return `${acc}${value.text}`;
 				} else {
 					console.error(value.text);
 					return acc;
@@ -75,7 +75,7 @@ export default abstract class BaseLinter implements ILinter {
 		return process.platform === 'win32';
 	}
 
-	protected processError(error: any) {
+	protected processError(error: any): void {
 		switch (error.code) {
 			case 'ENOENT':
 				console.log(

@@ -12,7 +12,7 @@ export default class RuboCop extends BaseFormatter {
 
 	get args(): string[] {
 		const documentPath = URI.parse(this.document.uri);
-		let args = ['-s', documentPath.fsPath, '-a'];
+		const args = ['-s', documentPath.fsPath, '-a'];
 		return args;
 	}
 
@@ -24,7 +24,7 @@ export default class RuboCop extends BaseFormatter {
 	}
 
 	protected processError(error: any, formatStr: string): Error {
-		let code = error.code || error.toString().match(/code: (\d+)/)[1] || null;
+		const code = error.code || error.toString().match(/code: (\d+)/)[1] || null;
 		if (code === '1') return null;
 		return super.processError(error, formatStr);
 	}
