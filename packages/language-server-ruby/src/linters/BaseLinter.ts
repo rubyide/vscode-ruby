@@ -63,7 +63,9 @@ export default abstract class BaseLinter implements ILinter {
 					return acc;
 				}
 			}, ''),
-			map((result: string) => this.processResults(result))
+			map((result: string) => {
+				return result.length ? this.processResults(result) : [];
+			})
 		);
 	}
 
