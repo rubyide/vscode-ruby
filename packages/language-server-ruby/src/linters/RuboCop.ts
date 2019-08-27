@@ -1,22 +1,24 @@
 import URI from 'vscode-uri';
-import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
+import { Diagnostic, DiagnosticSeverity, Range } from 'vscode-languageserver';
 import BaseLinter from './BaseLinter';
 import { RuboCopLintConfiguration } from '../SettingsCache';
+
+interface RuboCopOffenseLocation {
+	start_line: number;
+	start_column: number;
+	last_line: number;
+	last_column: number;
+	line: number;
+	column: number;
+	length: number;
+}
 
 interface RuboCopOffense {
 	severity: string; // FIXME make this a fixed option set
 	message: string;
 	cop_name: string;
 	corrected: boolean;
-	location: {
-		start_line: number;
-		start_column: number;
-		last_line: number;
-		last_column: number;
-		line: number;
-		column: number;
-		length: number;
-	};
+	location: RuboCopOffenseLocation;
 }
 
 export interface IRuboCopResults {
@@ -69,7 +71,7 @@ export default class RuboCop extends BaseLinter {
 		return this.config.config;
 	}
 
-	protected processResults(data): Diagnostic[] {
+	protected processResults(data: string): Diagnostic[] {
 		let results = [] as Diagnostic[];
 		try {
 			const offenses: IRuboCopResults = JSON.parse(data);
@@ -86,21 +88,43 @@ export default class RuboCop extends BaseLinter {
 	}
 
 	protected rubocopOffenseToDiagnostic(offense: RuboCopOffense): Diagnostic {
+		const range = this.mapRubocopOffenseToRange(offense.location);
 		return {
-			range: {
-				start: {
-					line: offense.location.start_line - 1,
-					character: offense.location.start_column - 1,
-				},
-				end: {
-					line: offense.location.last_line - 1,
-					character: offense.location.last_column,
-				},
-			},
+			range,
 			severity: this.DIAGNOSTIC_SEVERITIES[offense.severity],
 			message: offense.message,
 			source: offense.cop_name,
 			code: this.code,
 		};
+	}
+
+	private mapRubocopOffenseToRange(location: RuboCopOffenseLocation): Range {
+		// RuboCop >= v0.52.0
+		if (location.start_line) {
+			return {
+				start: {
+					line: location.start_line - 1,
+					character: location.start_column - 1,
+				},
+				end: {
+					line: location.last_line - 1,
+					character: location.last_column,
+				},
+			};
+		} else {
+			const line = location.line - 1;
+			const offenseCharacter = location.column - 1;
+
+			return {
+				start: {
+					line,
+					character: offenseCharacter,
+				},
+				end: {
+					line,
+					character: offenseCharacter + location.length,
+				},
+			};
+		}
 	}
 }
