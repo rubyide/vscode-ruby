@@ -4,6 +4,7 @@ import BaseFormatter from './BaseFormatter';
 
 export default class RuboCop extends BaseFormatter {
 	protected FORMATTED_OUTPUT_DELIMITER = '====================';
+	protected FORMATTED_OUTPUT_REGEX = new RegExp(`^${this.FORMATTED_OUTPUT_DELIMITER}$`, 'm');
 
 	get cmd(): string {
 		const command = 'rubocop';
@@ -18,7 +19,7 @@ export default class RuboCop extends BaseFormatter {
 
 	protected processResults(output: string): TextEdit[] {
 		const endOfDiagnostics =
-			output.lastIndexOf(this.FORMATTED_OUTPUT_DELIMITER) + this.FORMATTED_OUTPUT_DELIMITER.length;
+			output.search(this.FORMATTED_OUTPUT_REGEX) + this.FORMATTED_OUTPUT_DELIMITER.length;
 		const cleanOutput = output.substring(endOfDiagnostics).trimLeft();
 		return super.processResults(cleanOutput);
 	}
