@@ -6,6 +6,6 @@
 		"noUnusedParameters": true,
 		"sourceMap": true,
 		"esModuleInterop": true,
-		"lib": ["dom", "es2017", "es2019.string"]
+		"lib": ["dom", "es2017", "es2019.string", "esnext.array"]
 	}
 }

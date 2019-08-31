@@ -1,5 +1,5 @@
 import URI from 'vscode-uri';
-import { empty, iif, from, of, Observable } from 'rxjs';
+import { iif, from, forkJoin, of, Observable } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
 import {
@@ -44,24 +44,23 @@ function getLinter(
 
 function lint(document: TextDocument): Observable<LintResult> {
 	return from(documentConfigurationCache.get(document)).pipe(
-		mergeMap(
-			config => workspaceRubyEnvironmentCache.get(config.workspaceFolderUri),
-			(config, env) => {
-				return { config, env };
-			}
-		),
-		switchMap(({ config, env }) => {
-			return from(Object.keys(config.lint)).pipe(
-				mergeMap(l => {
-					return config.lint[l] ? getLinter(l, document, env, config).lint() : empty();
+		mergeMap(config => {
+			return from(workspaceRubyEnvironmentCache.get(config.workspaceFolderUri)).pipe(
+				map(env => {
+					return { config, env };
 				})
 			);
 		}),
-		map(diagnostics => {
-			return {
-				document,
-				diagnostics,
-			};
+		mergeMap(({ config, env }) => {
+			const linters = Object.keys(config.lint).map(l => getLinter(l, document, env, config).lint());
+			return forkJoin(linters).pipe(
+				map(diagnostics => {
+					return {
+						document,
+						diagnostics: diagnostics.flat(),
+					};
+				})
+			);
 		})
 	);
 }
