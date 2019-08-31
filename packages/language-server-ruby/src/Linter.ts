@@ -18,11 +18,11 @@ const LINTER_MAP = {
 	standard: Standard,
 };
 
-export type LintResult = {
+export interface LintResult {
 	document: TextDocument;
 	diagnostics: Diagnostic[];
 	error?: string;
-};
+}
 
 function getLinter(
 	name: string,
