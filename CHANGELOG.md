@@ -1,3 +1,39 @@
+### 0.25.0 - Sept 1 2019
+
+General Changes:
+
+- Repository rearranged to support a lerna/yarn workspaces workflow
+- Ruby grammar now vendored and not reliant on upstream Atom grammar
+- `tree-sitter` and `tree-sitter-ruby` are now vendored as WASM distributions [#506](https://github.com/rubyide/vscode-ruby/issues/506) and [#486](https://github.com/rubyide/vscode-ruby/issues/486)
+- Move from TravisCI to CircleCI
+- Add CodeCov
+- Move from tslint to eslint
+- Bundle extension with WebPack so the overall size is smaller
+- Drop testing on unsupported Ruby versions and 32-bit Ruby on Windows
+
+Improvements:
+
+- Support SLIM heredocs [#274](https://github.com/rubyide/vscode-ruby/issues/274)
+- Support heredocs defined inline during a method call [#183](https://github.com/rubyide/vscode-ruby/issues/183)
+- Drop `spawn-rx` for custom version which allows greater control over failed commands
+- Support [RubyFMT](https://github.com/samphippen/rubyfmt) as a formatter [#445](https://github.com/rubyide/vscode-ruby/issues/445)
+- Add command palette entries for viewing extension and language server logs (`Ruby: Show Output Channel` and `Ruby: Show Language Server Output Channel`)
+- Support multiline and keyword option YARD comments [#371](https://github.com/rubyide/vscode-ruby/pull/371)
+- Improve/Fix Block Parameter Highlighting [#514](https://github.com/rubyide/vscode-ruby/pull/514)
+
+Bug Fixes:
+
+- Support RuboCop's more detailed offense start/end locations [#466](https://github.com/rubyide/vscode-ruby/issues/466)
+- Fix assignments being incorrectly identified as constants in the outline [#473](https://github.com/rubyide/vscode-ruby/issues/473)
+- Change TextMate scope for safe navigation operator to be `keyword.operator.logical.ruby` [#288](https://github.com/rubyide/vscode-ruby/issues/288)
+
+- Fix for multiple linters' output not showing up at the same time [#524](https://github.com/rubyide/vscode-ruby/issues/524)
+- Better detection of RuboCop format output delimeter [#519](https://github.com/rubyide/vscode-ruby/issues/519)
+
+Documentation:
+
+- Complete overhaul of documentation including rewriting a majority of documentation around the formatting and linting configuration for the language server
+
 ### 0.24.2 - Jul 23 2019
 
 Improvements:
