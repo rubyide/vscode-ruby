@@ -1,6 +1,7 @@
 # Visual Studio Code Ruby Extension
 
-![CircleCI](https://circleci.com/gh/rubyide/vscode-ruby.svg?style=shield&circle-token=c9eaf03305b3fe24e8bc819f3f48060431e8e78f) [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
+[![CircleCI](https://img.shields.io/circleci/build/github/rubyide/vscode-ruby?label=circleci&token=c9eaf03305b3fe24e8bc819f3f48060431e8e78f)](https://circleci.com/gh/rubyide/vscode-ruby)
+[![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 [![codecov](https://codecov.io/gh/rubyide/vscode-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/rubyide/vscode-ruby)
 
 This extension provides Ruby language and debugging support for Visual Studio Code.
