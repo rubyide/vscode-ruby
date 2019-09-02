@@ -1,7 +1,7 @@
 {
 	"name": "ruby",
 	"displayName": "Ruby",
-	"version": "0.25.0",
+	"version": "0.25.1",
 	"publisher": "rebornix",
 	"description": "Ruby language support and debugging for Visual Studio Code",
 	"main": "dist/extension/ruby.js",

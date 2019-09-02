@@ -1,3 +1,12 @@
+### 0.25.1 - Sept 2 2019
+
+Bug Fixes:
+
+- Use shields.io badge for CircleCI as the VSCode documentation is wrong
+- Fix ERB syntax highlighting within HTML tags [#498](https://github.com/rubyide/vscode-ruby/issues/498)
+- Fix incorrect parsing of `attr_` calls with multiple arguments
+- Fixed regression with the RuboCop formatter where failed calls replaced the file's contents with the error
+
 ### 0.25.0 - Sept 1 2019
 
 General Changes:
