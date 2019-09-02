@@ -8,7 +8,7 @@ import {
 import { documents } from './DocumentManager';
 import URI from 'vscode-uri';
 import { from, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import {
 	IFormatter,
 	FormatterConfig,
@@ -52,18 +52,19 @@ function getFormatter(
 	}
 }
 
-export default class Formatter {
-	static format(ident: TextDocumentIdentifier, range?: Range): Observable<TextEdit[]> {
+const Formatter = {
+	format(ident: TextDocumentIdentifier, range?: Range): Observable<TextEdit[]> {
 		const document = documents.get(ident.uri);
 
 		return from(documentConfigurationCache.get(ident.uri)).pipe(
-			switchMap(config =>
+			mergeMap(config =>
 				from(workspaceRubyEnvironmentCache.get(config.workspaceFolderUri)).pipe(
-					switchMap(env => {
+					mergeMap(env => {
 						return getFormatter(document, env, config, range).format();
 					})
 				)
 			)
 		);
-	}
-}
+	},
+};
+export default Formatter;
