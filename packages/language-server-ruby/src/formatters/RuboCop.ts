@@ -18,8 +18,11 @@ export default class RuboCop extends BaseFormatter {
 	}
 
 	protected processResults(output: string): TextEdit[] {
-		const endOfDiagnostics =
-			output.search(this.FORMATTED_OUTPUT_REGEX) + this.FORMATTED_OUTPUT_DELIMITER.length;
+		let endOfDiagnostics = output.search(this.FORMATTED_OUTPUT_REGEX);
+		if (endOfDiagnostics <= -1) {
+			throw new Error(output);
+		}
+		endOfDiagnostics += this.FORMATTED_OUTPUT_DELIMITER.length;
 		const cleanOutput = output.substring(endOfDiagnostics).trimLeft();
 		return super.processResults(cleanOutput);
 	}
