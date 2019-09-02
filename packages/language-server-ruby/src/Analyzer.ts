@@ -6,11 +6,11 @@ import DocumentSymbolAnalyzer from './analyzers/DocumentSymbolAnalyzer';
 import { forestStream, ForestEventKind } from './Forest';
 import FoldingRangeAnalyzer from './analyzers/FoldingRangeAnalyzer';
 
-type Analysis = {
+interface Analysis {
 	uri: string;
 	foldingRanges?: FoldingRange[];
 	documentSymbols?: DocumentSymbol[];
-};
+}
 
 class Analyzer {
 	private foldingRangeAnalyzer: FoldingRangeAnalyzer;
@@ -21,7 +21,7 @@ class Analyzer {
 		this.documentSymbolAnalyzer = new DocumentSymbolAnalyzer();
 	}
 
-	get analysis() {
+	get analysis(): Analysis {
 		return {
 			uri: this.uri,
 			foldingRanges: this.foldingRangeAnalyzer.foldingRanges,
@@ -31,7 +31,7 @@ class Analyzer {
 
 	public analyze(tree: Tree): Analysis {
 		const cursor = tree.walk();
-		const walk = depth => {
+		const walk = (depth: number): void => {
 			this.analyzeNode(cursor.currentNode());
 			if (cursor.gotoFirstChild()) {
 				do {
