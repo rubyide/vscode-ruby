@@ -59,8 +59,7 @@ const RubyDocumentSymbol = {
 				if (symbol.name.indexOf('attr_') === 0) {
 					const argumentList = node.descendantsOfType('argument_list')[0];
 					const symbols = [];
-					for (const child of argumentList.children) {
-						if (!child.isNamed) continue;
+					for (const child of argumentList.namedChildren) {
 						const newSymbol = {
 							...symbol,
 						};
