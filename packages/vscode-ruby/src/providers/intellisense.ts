@@ -42,13 +42,16 @@ export function registerIntellisenseProvider(ctx: ExtensionContext) {
 		const symbolsConverter = matches => matches.slice(0, numOfSymbolLimit).map(match => {
 			const symbolKind = (symbolKindTable[match.type] || defaultSymbolKind)(match);
 			return new SymbolInformation(match.name, symbolKind, match.containerName, locationConverter(match));
-		});
-		const docSymbolProvider = {
-			provideDocumentSymbols: (document, token) => {
-				return locate.listInFile(document.fileName).then(symbolsConverter);
-			}
-		};
-		ctx.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(['ruby', 'erb'], docSymbolProvider));
+		}); 
+		// Gradually migrate intellisense features here as the langauge server supports more
+		if (!vscode.workspace.getConfiguration('ruby').useLanguageServer) {
+			const docSymbolProvider = {
+				provideDocumentSymbols: (document, token) => {
+					return locate.listInFile(document.fileName).then(symbolsConverter);
+				}
+			};
+			ctx.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(['ruby', 'erb'], docSymbolProvider));
+		}
 		const workspaceSymbolProvider = {
 			provideWorkspaceSymbols: (query, token) => {
 				return locate.query(query).then(symbolsConverter);

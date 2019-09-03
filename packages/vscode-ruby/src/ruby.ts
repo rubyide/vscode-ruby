@@ -30,7 +30,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
 		// Register legacy providers
 		registerHighlightProvider(context, DOCUMENT_SELECTOR);
 		registerFormatter(context, DOCUMENT_SELECTOR);
-		registerIntellisenseProvider(context);
 
 		if (workspace.rootPath) {
 			registerLinters(context);
@@ -38,6 +37,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 	}
 
 	// Register providers
+	registerIntellisenseProvider(context);
 	registerCompletionProvider(context, DOCUMENT_SELECTOR);
 	registerConfigurationProvider();
 
