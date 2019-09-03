@@ -1,3 +1,9 @@
+### 0.25.2 - Sept 3 2019
+
+Bug Fixes:
+
+- Fix regression with intellisense provider [#525](https://github.com/rubyide/vscode-ruby/issues/525)
+
 ### 0.25.1 - Sept 2 2019
 
 Bug Fixes:
