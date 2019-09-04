@@ -1,3 +1,9 @@
+### 0.25.3 - Sept 4 2019
+
+Bug Fixes:
+
+- Remove usage of Array.flat() [#528](https://github.com/rubyide/vscode-ruby/issues/528)
+
 ### 0.25.2 - Sept 3 2019
 
 Bug Fixes:
