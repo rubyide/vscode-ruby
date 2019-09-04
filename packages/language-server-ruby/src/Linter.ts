@@ -57,7 +57,7 @@ function lint(document: TextDocument): Observable<LintResult> {
 				map(diagnostics => {
 					return {
 						document,
-						diagnostics: diagnostics.flat(),
+						diagnostics: [].concat(...diagnostics),
 					};
 				})
 			);
