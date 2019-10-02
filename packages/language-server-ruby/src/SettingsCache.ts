@@ -16,6 +16,7 @@ export type RuboCopLintConfiguration = RubyCommandConfiguration & {
 	require?: string[];
 	rails?: boolean;
 	forceExclusion?: boolean;
+	configFile?: string;
 };
 
 export interface RubyConfiguration {

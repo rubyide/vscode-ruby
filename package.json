@@ -239,7 +239,7 @@
 							"properties": {
 								"command": {
 									"type": "string",
-									"description": "RuboCop command. Setting this will cause RuboCop to be executed this way and other settings will be ignored!"
+									"description": "RuboCop command. Setting this will cause RuboCop to be executed this way and other settings will be ignored! (only works if useLanguageServer is enabled)"
 								},
 								"useBundler": {
 									"type": "boolean",
@@ -276,7 +276,11 @@
 									"type": "boolean",
 									"default": false,
 									"description": "Rails cops are specific to the Ruby on Rails framework. These cops require the rubocop-rails gem for RuboCop >= 0.72.0"
-								}
+                },
+                "configFile": {
+                  "type": "string",
+                  "description": "Rubocop config file override (will be passed via -c argument)"
+                }
 							}
 						},
 						"standard": {

@@ -64,6 +64,7 @@ export default class RuboCop extends BaseLinter {
 		if (this.lintConfig.only) args = args.concat('--only', this.lintConfig.only.join(','));
 		if (this.lintConfig.except) args = args.concat('--except', this.lintConfig.except.join(','));
 		if (this.lintConfig.require) args = args.concat('-r', this.lintConfig.require.join(','));
+		if (this.lintConfig.configFile) args = args.concat('-c', this.lintConfig.configFile);
 		return args;
 	}
 

@@ -42,13 +42,14 @@ or
 ```json
 "ruby.lint": {
   "rubocop": {
-    "command": "rubocop",  // setting this will override automatic detection
+    "command": "rubocop",  // setting this will override automatic detection and only works if useLanguageServer is enabled
     "useBundler": true,
     "lint": true, // enable lint cops
     "only": ["array", "of", "cops", "to", "run"],
     "except": ["array", "of", "cops", "not", "to", "run"],
     "require": ["array", "of", "ruby", "files", "to", "require"],
-    "rails": true // requires rubocop-rails gem for RuboCop >= 0.72.0
+    "rails": true, // requires rubocop-rails gem for RuboCop >= 0.72.0
+    "configFile": "/path/to/.rubocop.yml"
   }
 }
 ```

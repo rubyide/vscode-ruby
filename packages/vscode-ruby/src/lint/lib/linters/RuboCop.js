@@ -13,7 +13,8 @@ function RuboCop(opts) {
 	if (opts.only) this.args = this.args.concat("--only", opts.only.join(','));
 	if (opts.except) this.args = this.args.concat("--except", opts.except.join(','));
 	if (opts.rails) this.args.push('-R');
-	if (opts.require) this.args = this.args.concat("-r", opts.require.join(','));
+  if (opts.require) this.args = this.args.concat("-r", opts.require.join(','));
+  if (opts.configFile) this.args = this.args.concat("-c", opts.configFile);
 }
 
 RuboCop.prototype.processResult = function (data) {
