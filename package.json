@@ -276,11 +276,11 @@
 									"type": "boolean",
 									"default": false,
 									"description": "Rails cops are specific to the Ruby on Rails framework. These cops require the rubocop-rails gem for RuboCop >= 0.72.0"
-                },
-                "configFile": {
-                  "type": "string",
-                  "description": "Rubocop config file override (will be passed via -c argument)"
-                }
+								},
+								"configFile": {
+									"type": "string",
+									"description": "Rubocop config file override (will be passed via -c argument)"
+								}
 							}
 						},
 						"standard": {

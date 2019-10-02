@@ -13,15 +13,15 @@ function RuboCop(opts) {
 	if (opts.only) this.args = this.args.concat("--only", opts.only.join(','));
 	if (opts.except) this.args = this.args.concat("--except", opts.except.join(','));
 	if (opts.rails) this.args.push('-R');
-  if (opts.require) this.args = this.args.concat("-r", opts.require.join(','));
-  if (opts.configFile) this.args = this.args.concat("-c", opts.configFile);
+	if (opts.require) this.args = this.args.concat("-r", opts.require.join(','));
+	if (opts.configFile) this.args = this.args.concat("-c", opts.configFile);
 }
 
 RuboCop.prototype.processResult = function (data) {
 	if (data == '') {
 		return [];
 	}
-	let offenses = JSON.parse(data);
+	const offenses = JSON.parse(data);
 	if (offenses.summary.offense_count == 0) {
 		return [];
 	}
