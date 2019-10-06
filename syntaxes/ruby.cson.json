@@ -2249,7 +2249,7 @@
 					"include": "#known_function_names"
 				},
 				{
-					"match": "([a-zA-Z0-9_!?]+)(?=\\()",
+					"match": "([a-zA-Z0-9_!?]+)((?=\\()|([!?]))",
 					"name": "entity.name.function.ruby"
 				},
 				{
