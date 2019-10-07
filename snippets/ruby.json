@@ -113,6 +113,19 @@
 			"end"
 		]
 	},
+	"case": {
+		"prefix": "case",
+		"body": [
+			"case ${1:test}",
+			"when $2",
+			"\t$3",
+			"when $4",
+			"\t$5",
+			"else",
+			"\t$6",
+			"end"
+		]
+	},
 	"forever loop": {
 		"prefix": "loop",
 		"body": [
