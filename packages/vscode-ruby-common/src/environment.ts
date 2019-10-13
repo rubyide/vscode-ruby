@@ -62,13 +62,8 @@ function mkShim(shell: string, shimPath: string): boolean {
 	return result;
 }
 
-// via https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
-function escapeRegExp(orig: string): string {
-	return orig.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
 function getShim(shell: string, shimDir: string): string {
-	let shellName: string = shell.replace(new RegExp(escapeRegExp(path.sep), 'g'), '.');
+	let shellName: string = shell.replace(/[\/\\]/g, '.');
 	if (shellName[0] === '.') shellName = shellName.slice(1);
 	const shimPath = path.join(shimDir, `env.${shellName}.${shimExtension(shellName)}`);
 	if (!fs.existsSync(shimDir)) {
