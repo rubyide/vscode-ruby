@@ -33,18 +33,27 @@ describe('environment', () => {
 				it('writes a shim to the file system', () => {
 					loadEnv(__dirname, { shimDir });
 					expect(path.join(shimDir, 'env.cmd.exe.cmd'))
-						.to.be.a.file(null)
+						.to.be.a.file('env.cmd.exe.cmd')
 						.with.content('SET');
 				});
 
 				it('correctly loads the environment', () => {
 					const environment = loadEnv(__dirname, { shimDir });
-					expect(environment.PATHEXT).to.eq(
-						'.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW'
-					);
-					// expect(environment.Path).to.eql(
-					// 	`C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Ruby26-x64\bin;C:\Users\someuser\AppData\Local\Microsoft\WindowsApps;;C:\Users\someuser\AppData\Local\Programs\Microsoft VS Code\bin`
-					// );
+					expect(environment).to.deep.eq({
+						PATHEXT: '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW',
+						Path:
+							'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Ruby26-x64\\bin;C:\\Users\\someuser\\AppData\\Local\\Microsoft\\WindowsApps;;C:\\Users\\someuser\\AppData\\Local\\Programs\\Microsoft VS Code\\bin',
+					});
+				});
+
+				context('with a custom shell specified', () => {
+					it('writes a shim with that custom shell path', () => {
+						const shell = `C:\\WINDOWS\\system32\\cmd.exe`;
+						loadEnv(__dirname, { shell, shimDir });
+						expect(path.join(shimDir, 'env.cmd.exe.cmd'))
+							.to.be.a.file('env.cmd.exe.cmd')
+							.with.content('SET');
+					});
 				});
 			});
 
