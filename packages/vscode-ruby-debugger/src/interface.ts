@@ -41,6 +41,8 @@ export interface IRubyEvaluationResult {
 export interface IDebugVariable {
     objectId?: number;
     variables?: IRubyEvaluationResult[];
+    variableName?: string;
+    variableType?: string;
 }
 
 export interface ICommand {

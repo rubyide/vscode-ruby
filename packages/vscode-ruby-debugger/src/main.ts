@@ -377,16 +377,32 @@ class RubyDebugSession extends DebugSession {
         return variable;
     }
 
-    protected createVariableReference(variables): IRubyEvaluationResult[]{
+    protected buildEvaluateName(variable, parentsPath?: string, parentType?: string) {
+        if (variable.kind === 'class') {
+            return `${parentsPath}.class.class_variable_get('${variable.name}')`;
+        } else if (parentType === 'Array') {
+            return `${parentsPath}${variable.name}`;
+        } else if (parentType === 'Hash') {
+            return `${parentsPath}[:${variable.name}]`;
+        } else {
+            return parentsPath ? `${parentsPath}.${variable.name.replace(/^@/, "")}` : variable.name;
+        }
+    }
+
+    protected createVariableReference(variables, parentsPath?: string, parentType?: string): IRubyEvaluationResult[] {
         if (!Array.isArray(variables)) { variables = []; }
-        return variables.map(this.varyVariable).map(variable=>({
-            name: variable.name,
-            kind: variable.kind,
-            type: variable.type,
-            value: variable.value === undefined ? 'undefined' : variable.value,
-            id: variable.objectId,
-            variablesReference: variable.hasChildren === 'true' ? this._variableHandles.create({objectId:variable.objectId}):0
-        }));
+        return variables.map(this.varyVariable).map(variable => {
+            const evaluateName = this.buildEvaluateName(variable, parentsPath, parentType);
+            return {
+                name: variable.name,
+                kind: variable.kind,
+                type: variable.type,
+                value: variable.value === undefined ? 'undefined' : variable.value,
+                id: variable.objectId,
+                evaluateName: evaluateName,
+                variablesReference: variable.hasChildren === 'true' ? this._variableHandles.create({ objectId: variable.objectId, variableName: evaluateName, variableType: variable.type }) : 0
+            }
+        });
     }
 
     /** Scopes request; value of command field is 'scopes'.
@@ -415,8 +431,8 @@ class RubyDebugSession extends DebugSession {
     protected variablesRequest(response: DebugProtocol.VariablesResponse, args: DebugProtocol.VariablesArguments): void {
         var varRef = this._variableHandles.get(args.variablesReference);
         let varPromise;
-        if ( varRef.objectId ){
-            varPromise = this.rubyProcess.Enqueue('var i ' + varRef.objectId).then(results => this.createVariableReference(results));
+        if (varRef.objectId) {
+            varPromise = this.rubyProcess.Enqueue('var i ' + varRef.objectId).then(results => this.createVariableReference(results, varRef.variableName, varRef.variableType));
         }
         else {
             varPromise = Promise.resolve(varRef.variables);
