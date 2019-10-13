@@ -1,0 +1,12 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"rootDir": "src",
+		"noEmit": true
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}

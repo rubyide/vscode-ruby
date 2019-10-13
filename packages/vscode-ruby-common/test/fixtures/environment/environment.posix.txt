@@ -1,0 +1,15 @@
+export GEM_HOME=/home/someuser/.gem/ruby/2.5.1
+export GEM_PATH=/home/someuser/.gem/ruby/2.5.1:/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0
+export GEM_ROOT=/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0
+export HOME=/home/someuser
+export LANG=en_US.UTF-8
+export OLDPWD=/foo/bar/baz
+export PAGER=less
+export PWD=/bar/baz/foo
+export RUBYOPT=''
+export RUBY_ENGINE=ruby
+export RUBY_ROOT=/home/someuser/.rubies/ruby-2.5.1
+export RUBY_VERSION=2.5.1
+export SHELL=/bin/zsh
+export TERM=xterm-256color
+export USER=someuser
