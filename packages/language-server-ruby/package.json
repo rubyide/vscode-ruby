@@ -16,7 +16,7 @@
 		"web-tree-sitter": "^0.15.8"
 	},
 	"devDependencies": {
-		"@types/chai": "^4.1.7",
+		"@types/chai": "^4.2.3",
 		"@types/cross-spawn": "^6.0.0",
 		"@types/diff-match-patch": "^1.0.32",
 		"@types/mocha": "^5.2.7",
