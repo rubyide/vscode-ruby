@@ -8,7 +8,7 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"test": "rm -rf test/shims && nyc mocha -r ts-node/register -r source-map-support/register test/**/*.ts"
+		"test": "rm -rf test/shims && nyc mocha -r ts-node/register -r source-map-support/register -r test/setup.ts test/**/*.ts"
 	},
 	"dependencies": {
 		"cross-spawn": "^7.0.1",

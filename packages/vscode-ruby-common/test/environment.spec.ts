@@ -1,14 +1,10 @@
-import chai from 'chai';
+import { expect } from 'chai';
 import path from 'path';
 import fs from 'fs';
 import sinon from 'sinon';
 import spawn from 'cross-spawn';
 import { SpawnSyncReturns } from 'child_process';
 import { loadEnv } from '../src/environment';
-
-// Setup for chai-fs
-chai.use(require('chai-fs'));
-const { expect } = chai;
 
 // Common directories
 const shimDir = path.resolve(__dirname, 'shims');
