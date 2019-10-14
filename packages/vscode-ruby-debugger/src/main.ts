@@ -384,13 +384,17 @@ class RubyDebugSession extends DebugSession {
             return `${parentsPath}${variable.name}`;
         } else if (parentType === 'Hash') {
             return `${parentsPath}[:${variable.name}]`;
+        } else if (parentsPath && variable.kind === 'instance') {
+            return `${parentsPath}.instance_variable_get('${variable.name}')`;
         } else {
-            return parentsPath ? `${parentsPath}.${variable.name.replace(/^@/, "")}` : variable.name;
+            return variable.name;
         }
     }
 
     protected createVariableReference(variables, parentsPath?: string, parentType?: string): IRubyEvaluationResult[] {
-        if (!Array.isArray(variables)) { variables = []; }
+        if (!Array.isArray(variables)) {
+            variables = [];
+        }
         return variables.map(this.varyVariable).map(variable => {
             const evaluateName = this.buildEvaluateName(variable, parentsPath, parentType);
             return {
@@ -400,8 +404,15 @@ class RubyDebugSession extends DebugSession {
                 value: variable.value === undefined ? 'undefined' : variable.value,
                 id: variable.objectId,
                 evaluateName: evaluateName,
-                variablesReference: variable.hasChildren === 'true' ? this._variableHandles.create({ objectId: variable.objectId, variableName: evaluateName, variableType: variable.type }) : 0
-            }
+                variablesReference:
+                    variable.hasChildren === 'true'
+                        ? this._variableHandles.create({
+                                objectId: variable.objectId,
+                                variableName: evaluateName,
+                                variableType: variable.type,
+                          })
+                        : 0,
+            };
         });
     }
 
