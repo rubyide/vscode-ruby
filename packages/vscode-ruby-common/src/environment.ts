@@ -62,8 +62,13 @@ function mkShim(shell: string, shimPath: string): boolean {
 	return result;
 }
 
+function getShellName(shell: string): string {
+	const cleanShell = isWindows() ? path.basename(shell) : shell;
+	return cleanShell.replace(/[\/\\]/g, '.');
+}
+
 function getShim(shell: string, shimDir: string): string {
-	let shellName: string = shell.replace(/[\/\\]/g, '.');
+	let shellName: string = getShellName(shell);
 	if (shellName[0] === '.') shellName = shellName.slice(1);
 	const shimPath = path.join(shimDir, `env.${shellName}.${shimExtension(shellName)}`);
 	if (!fs.existsSync(shimDir)) {
