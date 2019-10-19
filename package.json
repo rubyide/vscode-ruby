@@ -123,7 +123,7 @@
 					"default": "ruby",
 					"description": "Path to the Ruby interpreter.  Set this to an absolute path to select from multiple installed Ruby versions.",
 					"isExecutable": true,
-					"scope": "resource"
+					"scope": "machine-overridable"
 				},
 				"ruby.useLanguageServer": {
 					"type": "boolean",
@@ -158,24 +158,25 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Whether ruby tools should be started using Bundler",
-					"scope": "resource"
+					"scope": "machine-overridable"
 				},
 				"ruby.pathToBundler": {
 					"type": "string",
 					"default": "bundle",
 					"description": "Path to the bundler executable (used if useBundler is true)",
-					"scope": "resource"
+					"scope": "machine-overridable"
 				},
 				"ruby.rctComplete.commandPath": {
 					"type": "string",
 					"default": "rct-complete",
 					"description": "Path to the rct-complete command.  Set this to an absolute path to select from multiple installed Ruby versions.",
-					"isExecutable": true
+					"isExecutable": true,
+					"scope": "machine-overridable"
 				},
 				"ruby.lintDebounceTime": {
 					"type": "integer",
 					"default": 500,
-					"description": "Time (ms) to wait after keypress before running enabled linters. Ensures linters are only run when typing has finished and not for every keypress"
+					"description": "Time (ms) to wait after keypress before running enabled linters. Ensures linters are only run when typing has finished and not for every keypress. Not supported in language server"
 				},
 				"ruby.lint": {
 					"scope": "resource",
