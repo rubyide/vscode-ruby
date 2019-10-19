@@ -1,0 +1,15 @@
+GEM_HOME=/home/someuser/.gem/ruby/2.5.1
+GEM_PATH=/home/someuser/.gem/ruby/2.5.1:/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0
+GEM_ROOT=/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0
+HOME=/home/someuser
+LANG=en_US.UTF-8
+OLDPWD=/foo/bar/baz
+PAGER=less
+PWD=/bar/baz/foo
+RUBYOPT=''
+RUBY_ENGINE=ruby
+RUBY_ROOT=/home/someuser/.rubies/ruby-2.5.1
+RUBY_VERSION=2.5.1
+SHELL=/usr/local/bin/fish
+TERM=xterm-256color
+USER=someuser

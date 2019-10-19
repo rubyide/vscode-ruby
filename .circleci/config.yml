@@ -84,6 +84,28 @@ jobs:
       - run:
           name: Run Tests
           command: yarn test
+  test_common:
+    <<: *defaults
+    working_directory: ~/vscode-ruby/packages/vscode-ruby-common
+    steps:
+      - checkout:
+          path: ~/vscode-ruby
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}-{{ arch }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - run:
+          name: Run Tests
+          command: yarn test
+      - codecov/upload:
+          file: coverage/lcov.info
+          flags: vscode_ruby_common
+      - store_artifacts:
+          path: coverage
+          destination: vscode-ruby-common
   test_macos:
     macos:
       xcode: '10.3.0'
@@ -134,5 +156,8 @@ workflows:
           requires:
             - setup
       - test_extension:
+          requires:
+            - setup
+      - test_common:
           requires:
             - setup
