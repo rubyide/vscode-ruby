@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import path from 'path';
-import fs from 'fs';
+import fs from 'fs-extra';
 import sinon from 'sinon';
 import spawn from 'cross-spawn';
 import { SpawnSyncReturns } from 'child_process';
@@ -15,6 +15,9 @@ describe('environment', () => {
 
 	before(() => {
 		delete process.env.SHELL;
+
+		// Clean the shim directory
+		fs.emptyDirSync(shimDir);
 		spawnSyncStub = sinon.stub(spawn, 'sync').returns(spawnSyncReturnsFactory(''));
 	});
 
