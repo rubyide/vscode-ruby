@@ -456,6 +456,12 @@
 					"Gemfile"
 				],
 				"configuration": "./language-configuration-ruby.json"
+			},
+			{
+				"id": "ignore",
+				"filenames": [
+					".chefignore"
+				]
 			}
 		],
 		"grammars": [
