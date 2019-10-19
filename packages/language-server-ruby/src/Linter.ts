@@ -52,7 +52,9 @@ function lint(document: TextDocument): Observable<LintResult> {
 			);
 		}),
 		mergeMap(({ config, env }) => {
-			const linters = Object.keys(config.lint).map(l => getLinter(l, document, env, config).lint());
+			const linters = Object.keys(config.lint)
+				.filter(l => config.lint[l] !== false)
+				.map(l => getLinter(l, document, env, config).lint());
 			return forkJoin(linters).pipe(
 				map(diagnostics => {
 					return {
