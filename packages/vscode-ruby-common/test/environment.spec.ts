@@ -14,25 +14,37 @@ describe('environment', () => {
 	let spawnSyncStub;
 
 	before(() => {
+		// Clear any defaults coming from the OS
 		delete process.env.SHELL;
 
 		// Clean the shim directory
 		fs.emptyDirSync(shimDir);
+
+		// Stub spawn.sync
 		spawnSyncStub = sinon.stub(spawn, 'sync').returns(spawnSyncReturnsFactory(''));
+
+		// Default to a linux platform
+		mockPlatform('linux');
+	});
+
+	after(() => {
+		unmockPlatform();
 	});
 
 	describe('#loadEnv', () => {
-		context('the default shell is used', () => {
-			context('the platform is Windows', () => {
-				before(() => {
-					mockPlatform('win32');
-					spawnSyncStub.returns(spawnSyncReturnsFactory(loadEnvironmentFixture('win32')));
-				});
+		it('creates a shim directory if one does not exist', () => {
+			fs.removeSync(shimDir);
+			loadEnv(__dirname, { shimDir });
+			expect(shimDir).to.be.a.directory('shims').and.not.empty;
+		});
 
-				after(() => {
-					unmockPlatform();
-				});
+		context('the platform is Windows', () => {
+			before(() => {
+				mockPlatform('win32');
+				spawnSyncStub.returns(spawnSyncReturnsFactory(loadEnvironmentFixture('win32')));
+			});
 
+			context('the default shell is used', () => {
 				it('writes a shim to the file system', () => {
 					loadEnv(__dirname, { shimDir });
 					expect(path.join(shimDir, 'env.cmd.exe.cmd'))
@@ -48,49 +60,82 @@ describe('environment', () => {
 							'C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Ruby26-x64\\bin;C:\\Users\\someuser\\AppData\\Local\\Microsoft\\WindowsApps;;C:\\Users\\someuser\\AppData\\Local\\Programs\\Microsoft VS Code\\bin',
 					});
 				});
+			});
 
-				context('with a custom shell specified', () => {
-					it('writes a shim with that custom shell path', () => {
-						const shell = `C:\\WINDOWS\\system32\\cmd.exe`;
-						loadEnv(__dirname, { shell, shimDir });
-						expect(path.join(shimDir, 'env.cmd.exe.cmd'))
-							.to.be.a.file('env.cmd.exe.cmd')
-							.with.content('SET');
+			context('a custom shell is used', () => {
+				it('writes a shim with that custom shell path', () => {
+					const shell = `C:\\WINDOWS\\system32\\cmd.exe`;
+					loadEnv(__dirname, { shell, shimDir });
+					expect(path.join(shimDir, 'env.cmd.exe.cmd'))
+						.to.be.a.file('env.cmd.exe.cmd')
+						.with.content('SET');
+				});
+			});
+		});
+
+		context('the platform is darwin', () => {
+			before(() => {
+				mockPlatform('darwin');
+				spawnSyncStub.returns(spawnSyncReturnsFactory(loadEnvironmentFixture('posix')));
+			});
+
+			it('writes a shim to the file system', () => {
+				loadEnv(__dirname, { shimDir });
+				expect(path.join(shimDir, 'env.bin.bash.sh'))
+					.to.be.a.file('env.bin.bash.sh')
+					.with.content('#!/bin/bash -i\nexport -p');
+			});
+
+			it('correctly reads the environment', () => {
+				const environment = loadEnv(__dirname, { shimDir });
+				expect(environment).to.deep.eq({
+					GEM_HOME: '/home/someuser/.gem/ruby/2.5.1',
+					GEM_PATH:
+						'/home/someuser/.gem/ruby/2.5.1:/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
+					GEM_ROOT: '/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
+					HOME: '/home/someuser',
+					LANG: 'en_US.UTF-8',
+					RUBYOPT: '',
+					RUBY_ENGINE: 'ruby',
+					RUBY_ROOT: '/home/someuser/.rubies/ruby-2.5.1',
+					RUBY_VERSION: '2.5.1',
+				});
+				expect(environment.SHELL).to.be.undefined;
+			});
+		});
+
+		context('the platform is linux', () => {
+			before(() => {
+				mockPlatform('linux');
+			});
+
+			it('writes a shim to the file system', () => {
+				loadEnv(__dirname, { shimDir });
+				expect(path.join(shimDir, 'env.bin.sh.sh'))
+					.to.be.a.file('env.bin.sh.sh')
+					.with.content('#!/bin/sh -i\nexport -p');
+			});
+
+			context('the shell is POSIX compliant', () => {
+				before(() => {
+					spawnSyncStub.returns(spawnSyncReturnsFactory(loadEnvironmentFixture('posix')));
+				});
+
+				it('correctly reads the environment', () => {
+					const environment = loadEnv(__dirname, { shimDir });
+					expect(environment).to.deep.eq({
+						GEM_HOME: '/home/someuser/.gem/ruby/2.5.1',
+						GEM_PATH:
+							'/home/someuser/.gem/ruby/2.5.1:/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
+						GEM_ROOT: '/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
+						HOME: '/home/someuser',
+						LANG: 'en_US.UTF-8',
+						RUBYOPT: '',
+						RUBY_ENGINE: 'ruby',
+						RUBY_ROOT: '/home/someuser/.rubies/ruby-2.5.1',
+						RUBY_VERSION: '2.5.1',
 					});
-				});
-			});
-
-			context('the platform is darwin', () => {
-				before(() => {
-					mockPlatform('darwin');
-				});
-
-				after(() => {
-					unmockPlatform();
-				});
-
-				it('writes a shim to the file system', () => {
-					loadEnv(__dirname, { shimDir });
-					expect(path.join(shimDir, 'env.bin.bash.sh'))
-						.to.be.a.file('env.bin.bash.sh')
-						.with.content('#!/bin/bash -i\nexport -p');
-				});
-			});
-
-			context('the platform is a unix variant', () => {
-				before(() => {
-					mockPlatform('linux');
-				});
-
-				after(() => {
-					unmockPlatform();
-				});
-
-				it('writes a shim to the file system', () => {
-					loadEnv(__dirname, { shimDir });
-					expect(path.join(shimDir, 'env.bin.sh.sh'))
-						.to.be.a.file('env.bin.sh.sh')
-						.with.content('#!/bin/sh -i\nexport -p');
+					expect(environment.SHELL).to.be.undefined;
 				});
 			});
 
@@ -117,56 +162,16 @@ for name in (set -nx)
 	end
 end`);
 				});
-
-				it('correctly reads the environment', () => {
-					const environment = loadEnv(__dirname, { shimDir });
-					expect(environment).to.deep.eq({
-						GEM_HOME: '/home/someuser/.gem/ruby/2.5.1',
-						GEM_PATH:
-							'/home/someuser/.gem/ruby/2.5.1:/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
-						GEM_ROOT: '/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
-						HOME: '/home/someuser',
-						LANG: 'en_US.UTF-8',
-						RUBYOPT: '',
-						RUBY_ENGINE: 'ruby',
-						RUBY_ROOT: '/home/someuser/.rubies/ruby-2.5.1',
-						RUBY_VERSION: '2.5.1',
-					});
-					expect(environment.SHELL).to.be.undefined;
-				});
 			});
 
-			context('the shell is POSIX compliant', () => {
-				before(() => {
-					spawnSyncStub.returns(spawnSyncReturnsFactory(loadEnvironmentFixture('posix')));
+			context('a custom path to a shell is used', () => {
+				it('writes a shim with that custom shell path', () => {
+					const shell = '/usr/local/bin/zsh';
+					loadEnv(__dirname, { shell, shimDir });
+					expect(path.join(shimDir, 'env.usr.local.bin.zsh.sh'))
+						.to.be.a.file('env.usr.local.bin.zsh.sh')
+						.with.content(`#!${shell} -i\nexport -p`);
 				});
-
-				it('correctly reads the environment', () => {
-					const environment = loadEnv(__dirname, { shimDir });
-					expect(environment).to.deep.eq({
-						GEM_HOME: '/home/someuser/.gem/ruby/2.5.1',
-						GEM_PATH:
-							'/home/someuser/.gem/ruby/2.5.1:/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
-						GEM_ROOT: '/home/someuser/.rubies/ruby-2.5.1/lib/ruby/gems/2.5.0',
-						HOME: '/home/someuser',
-						LANG: 'en_US.UTF-8',
-						RUBYOPT: '',
-						RUBY_ENGINE: 'ruby',
-						RUBY_ROOT: '/home/someuser/.rubies/ruby-2.5.1',
-						RUBY_VERSION: '2.5.1',
-					});
-					expect(environment.SHELL).to.be.undefined;
-				});
-			});
-		});
-
-		context('a custom path to a shell is used', () => {
-			it('writes a shim with that custom shell path', () => {
-				const shell = '/usr/local/bin/zsh';
-				loadEnv(__dirname, { shell, shimDir });
-				expect(path.join(shimDir, 'env.usr.local.bin.zsh.sh'))
-					.to.be.a.file('env.usr.local.bin.zsh.sh')
-					.with.content(`#!${shell} -i\nexport -p`);
 			});
 		});
 	});
