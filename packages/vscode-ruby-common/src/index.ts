@@ -1,1 +1,1 @@
-export { loadEnv } from './environment';
+export { loadEnv, IEnvironment, RubyEnvironment } from './environment';

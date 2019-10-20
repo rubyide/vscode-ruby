@@ -1,6 +1,7 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
+		"composite": true,
 		"target": "esnext",
 		"module": "commonjs",
 		"moduleResolution": "node",

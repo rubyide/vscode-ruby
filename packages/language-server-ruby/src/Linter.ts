@@ -4,11 +4,11 @@ import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
 import {
 	documentConfigurationCache,
-	IEnvironment,
 	workspaceRubyEnvironmentCache,
 	RubyConfiguration,
 	RubyCommandConfiguration,
 } from './SettingsCache';
+import { RubyEnvironment } from 'vscode-ruby-common';
 import { ILinter, LinterConfig, RuboCop, Reek, Standard, NullLinter } from './linters';
 import { documents, DocumentEvent, DocumentEventKind } from './DocumentManager';
 
@@ -27,7 +27,7 @@ export interface LintResult {
 function getLinter(
 	name: string,
 	document: TextDocument,
-	env: IEnvironment,
+	env: RubyEnvironment,
 	config: RubyConfiguration
 ): ILinter {
 	const linter = LINTER_MAP[name];
@@ -39,7 +39,7 @@ function getLinter(
 		executionRoot: URI.parse(config.workspaceFolderUri).fsPath,
 		config: lintConfig,
 	};
-	return new linter(document, linterConfig);
+	return new linter(document, linterConfig); // eslint-disable-line new-cap
 }
 
 function lint(document: TextDocument): Observable<LintResult> {
