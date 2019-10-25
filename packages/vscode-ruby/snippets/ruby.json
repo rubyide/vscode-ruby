@@ -185,5 +185,28 @@
 			"\tend",
 			"end"
 		]
+	},
+	"Insert do … end block": {
+		"prefix": "do",
+		"body": [
+			"do",
+			"\t$0",
+			"end"
+		]
+	},
+	"Insert do |variable| … end block": {
+		"prefix": "dop",
+		"body": [
+			"do |${1:variable}|",
+			"\t$0",
+			"end"
+		]
+	},
+	"Insert curly braces block": {
+		"prefix": [
+			"{p",
+			"{P"
+		],
+		"body": "{ ${1:|${2:variable}| }$0 "
 	}
 }
