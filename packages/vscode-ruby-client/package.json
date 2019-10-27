@@ -1,9 +1,8 @@
 {
-	"name": "vscode-ruby",
+	"name": "vscode-ruby-client",
 	"displayName": "Ruby",
 	"version": "0.24.2",
-	"publisher": "rebornix",
-	"description": "Ruby language support and debugging for Visual Studio Code",
+	"description": "Advanced Ruby language support for VSCode",
 	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
 	"main": "src/ruby.ts",
 	"license": "MIT",
@@ -11,7 +10,7 @@
 	"scripts": {
 		"build": "webpack -p",
 		"lint": "eslint src/**/*",
-		"test": "echo 'vscode-ruby'",
+		"test": "echo 'vscode-ruby-client'",
 		"watch": "tsc -w -p tsconfig.json"
 	},
 	"dependencies": {
