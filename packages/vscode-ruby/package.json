@@ -1,133 +1,140 @@
 {
-	"name": "vscode-ruby",
-	"version": "0.26.0",
-	"description": "Syntax highlighing, snippet, and language configuration support for Ruby",
-	"repository": "https://github.com/rubyide/vscode-ruby",
-	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
-	"license": "MIT",
-	"private": true,
-	"extensionKind": "ui",
-	"engines": {
-		"vscode": "*"
-	},
-	"contributes": {
-		"snippets": [
-			{
-				"language": "ruby",
-				"path": "./snippets/ruby.json"
-			},
-			{
-				"language": "erb",
-				"path": "./snippets/erb.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "ruby",
-				"scopeName": "source.ruby",
-				"path": "./syntaxes/ruby.cson.json"
-			},
-			{
-				"language": "erb",
-				"scopeName": "text.html.erb",
-				"path": "./syntaxes/erb.cson.json",
-				"embeddedLanguages": {
-					"source.css": "css",
-					"source.js": "javascript",
-					"source.ruby": "ruby"
-				}
-			},
-			{
-				"language": "gemfile",
-				"scopeName": "source.ruby.gemfile",
-				"path": "./syntaxes/gemfile.cson.json"
-			}
-		],
-		"languages": [
-			{
-				"id": "ruby",
-				"aliases": [
-					"Ruby",
-					"ruby"
-				],
-				"firstLine": "^#!\\s*/.*(?:ruby|rbx|rake)\\b",
-				"extensions": [
-					".arb",
-					".builder",
-					".cgi",
-					".fcgi",
-					".gemspec",
-					".god",
-					".irbrc",
-					".jbuilder",
-					".mspec",
-					".pluginspec",
-					".podspec",
-					".prawn",
-					".pryrc",
-					".rabl",
-					".rake",
-					".rb",
-					".rbuild",
-					".rbw",
-					".rbx",
-					".rjs",
-					".ru",
-					".ruby",
-					".spec",
-					".thor",
-					".watchr"
-				],
-				"filenames": [
-					"appfile",
-					"appraisals",
-					"berksfile",
-					"brewfile",
-					"capfile",
-					"deliverfile",
-					"fastfile",
-					"guardfile",
-					"podfile",
-					"puppetfile",
-					"rakefile",
-					"snapfile",
-					"thorfile",
-					"vagrantfile",
-					"dangerfile"
-				],
-				"configuration": "./language-configuration-ruby.json"
-			},
-			{
-				"id": "erb",
-				"aliases": [
-					"erb",
-					"Encapsulated Ruby"
-				],
-				"extensions": [
-					".erb",
-					".rhtml",
-					".rhtm"
-				],
-				"configuration": "./language-configuration-erb.json"
-			},
-			{
-				"id": "gemfile",
-				"aliases": [
-					"Gemfile",
-					"Bundler",
-					"bundler"
-				],
-				"filenames": [
-					"Gemfile"
-				],
-				"configuration": "./language-configuration-ruby.json"
-			},
-			{
-				"id": "ignore",
-				"filenames": [
-					".chefignore"
-				]
-			}
-		]
-	}
+  "name": "vscode-ruby",
+  "displayName": "VSCode Ruby",
+  "publisher": "wingrunr21",
+  "version": "0.26.0",
+  "description": "Syntax highlighing, snippet, and language configuration support for Ruby",
+  "repository": "https://github.com/rubyide/vscode-ruby",
+  "author": "Stafford Brunk <stafford.brunk@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "extensionKind": "ui",
+  "icon": "images/logo.png",
+  "galleryBanner": {
+    "color": "#f05336",
+    "theme": "light"
+  },
+  "engines": {
+    "vscode": "*"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": "ruby",
+        "path": "./snippets/ruby.json"
+      },
+      {
+        "language": "erb",
+        "path": "./snippets/erb.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ruby",
+        "scopeName": "source.ruby",
+        "path": "./syntaxes/ruby.cson.json"
+      },
+      {
+        "language": "erb",
+        "scopeName": "text.html.erb",
+        "path": "./syntaxes/erb.cson.json",
+        "embeddedLanguages": {
+          "source.css": "css",
+          "source.js": "javascript",
+          "source.ruby": "ruby"
+        }
+      },
+      {
+        "language": "gemfile",
+        "scopeName": "source.ruby.gemfile",
+        "path": "./syntaxes/gemfile.cson.json"
+      }
+    ],
+    "languages": [
+      {
+        "id": "ruby",
+        "aliases": [
+          "Ruby",
+          "ruby"
+        ],
+        "firstLine": "^#!\\s*/.*(?:ruby|rbx|rake)\\b",
+        "extensions": [
+          ".arb",
+          ".builder",
+          ".cgi",
+          ".fcgi",
+          ".gemspec",
+          ".god",
+          ".irbrc",
+          ".jbuilder",
+          ".mspec",
+          ".pluginspec",
+          ".podspec",
+          ".prawn",
+          ".pryrc",
+          ".rabl",
+          ".rake",
+          ".rb",
+          ".rbuild",
+          ".rbw",
+          ".rbx",
+          ".rjs",
+          ".ru",
+          ".ruby",
+          ".spec",
+          ".thor",
+          ".watchr"
+        ],
+        "filenames": [
+          "appfile",
+          "appraisals",
+          "berksfile",
+          "brewfile",
+          "capfile",
+          "deliverfile",
+          "fastfile",
+          "guardfile",
+          "podfile",
+          "puppetfile",
+          "rakefile",
+          "snapfile",
+          "thorfile",
+          "vagrantfile",
+          "dangerfile"
+        ],
+        "configuration": "./language-configuration-ruby.json"
+      },
+      {
+        "id": "erb",
+        "aliases": [
+          "erb",
+          "Encapsulated Ruby"
+        ],
+        "extensions": [
+          ".erb",
+          ".rhtml",
+          ".rhtm"
+        ],
+        "configuration": "./language-configuration-erb.json"
+      },
+      {
+        "id": "gemfile",
+        "aliases": [
+          "Gemfile",
+          "Bundler",
+          "bundler"
+        ],
+        "filenames": [
+          "Gemfile"
+        ],
+        "configuration": "./language-configuration-ruby.json"
+      },
+      {
+        "id": "ignore",
+        "filenames": [
+          ".chefignore"
+        ]
+      }
+    ]
+  }
 }
