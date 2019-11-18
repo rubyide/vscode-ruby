@@ -25,6 +25,9 @@
 		"test": "echo 'vscode-ruby-client'",
 		"watch": "webpack -w --debug --output-pathinfo --mode development"
 	},
+	"extensionDependencies": [
+		"wingrunr21.vscode-ruby"
+	],
 	"dependencies": {
 		"async": "^2.6.1",
 		"default-shell": "^1.0.1",
