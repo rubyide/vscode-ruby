@@ -11,3 +11,4 @@ coverage
 .cache
 lerna-debug.log
 *.wasm
+build/*
