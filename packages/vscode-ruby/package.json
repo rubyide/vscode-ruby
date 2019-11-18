@@ -17,6 +17,9 @@
   "engines": {
     "vscode": "*"
   },
+  "scripts": {
+	  "package": "vsce package --yarn && mv ./*.vsix ../../build/"
+	},
   "contributes": {
     "snippets": [
       {
