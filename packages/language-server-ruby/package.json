@@ -54,7 +54,7 @@
 		"lint": "eslint src/**/*.ts",
 		"prebuild": "yarn build:wasm",
 		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts",
-		"watch": "webpack -w -d"
+		"watch": "webpack -w --debug --output-pathinfo --mode development"
 	},
 	"nyc": {
 		"cache": false,

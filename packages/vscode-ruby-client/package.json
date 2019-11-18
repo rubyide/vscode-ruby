@@ -23,7 +23,7 @@
 		"build": "webpack -p",
 		"lint": "eslint src/**/*",
 		"test": "echo 'vscode-ruby-client'",
-		"watch": "tsc -w -p tsconfig.json"
+		"watch": "webpack -w --debug --output-pathinfo --mode development"
 	},
 	"dependencies": {
 		"async": "^2.6.1",
