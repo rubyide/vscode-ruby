@@ -10,7 +10,6 @@
 		"build": "lerna run build",
 		"package": "mkdir -p build && rm -rf build/* && lerna run package",
 		"test": "lerna run test",
-		"vscode:prepublish": "yarn build && scripts/build-dist.sh",
-		"watch": "scripts/link-dist.sh && lerna run watch"
+		"watch": "lerna run watch"
 	}
 }

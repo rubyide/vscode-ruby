@@ -24,7 +24,8 @@
 		"lint": "eslint src/**/*",
 		"package": "vsce package --yarn && mv ./*.vsix ../../build/",
 		"test": "echo 'vscode-ruby-client'",
-		"watch": "webpack -w --debug --output-pathinfo --mode development"
+		"watch": "scripts/link-dist.sh && webpack -w --debug --output-pathinfo --mode development",
+		"vscode:prepublish": "lerna run build && scripts/build-dist.sh"
 	},
 	"extensionDependencies": [
 		"wingrunr21.vscode-ruby"
