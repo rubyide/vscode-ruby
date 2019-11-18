@@ -19,7 +19,7 @@ module.exports = {
 	},
 	output: {
 		filename: 'ruby.js',
-		path: path.resolve(__dirname, 'dist'),
+		path: path.resolve(__dirname, 'dist', 'client'),
 		libraryTarget: 'commonjs2',
 		devtoolModuleFilenameTemplate: '../[resource-path]',
 	},

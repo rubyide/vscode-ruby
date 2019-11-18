@@ -4,7 +4,7 @@
 	"publisher": "rebornix",
 	"version": "0.25.3",
 	"description": "Ruby language support and debugging for Visual Studio Code",
-	"main": "dist/extension/ruby.js",
+	"main": "dist/client/ruby.js",
 	"license": "MIT",
 	"icon": "images/ruby.png",
 	"categories": [
