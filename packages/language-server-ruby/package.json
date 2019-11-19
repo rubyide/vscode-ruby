@@ -42,7 +42,7 @@
 		"source-map-support": "^0.5.12",
 		"tree-sitter-cli": "^0.15.6",
 		"tree-sitter-ruby": "^0.15.1",
-		"ts-loader": "^6.0.4",
+		"ts-loader": "^6.2.1",
 		"ts-node": "^8.0.3",
 		"typescript": "^3.5.3",
 		"webpack": "^4.39.1",

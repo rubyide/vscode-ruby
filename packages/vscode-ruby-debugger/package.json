@@ -38,7 +38,7 @@
 		"nyc": "^14.1.1",
 		"prettier": "^1.18.2",
 		"source-map-support": "^0.5.12",
-		"ts-loader": "^6.0.4",
+		"ts-loader": "^6.2.1",
 		"ts-node": "^8.3.0",
 		"typescript": "^3.5.3",
 		"vscode-debugadapter-testsupport": "^1.35.0",

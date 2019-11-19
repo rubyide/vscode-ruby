@@ -57,7 +57,7 @@
 		"eslint-plugin-standard": "^4.0.0",
 		"fork-ts-checker-webpack-plugin": "^1.5.0",
 		"prettier": "^1.18.2",
-		"ts-loader": "^6.0.4",
+		"ts-loader": "^6.2.1",
 		"typescript": "^3.5.3",
 		"webpack": "^4.39.1",
 		"webpack-cli": "^3.3.6"
