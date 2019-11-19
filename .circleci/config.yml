@@ -159,7 +159,7 @@ jobs:
           command: gem install ruby-debug-ide debase -N
       - run:
           name: Run Tests
-          command: yarn test
+          command: PATH="/usr/local/opt/node@12/bin:$PATH"' yarn test
 workflows:
   version: 2
   build_and_test:
