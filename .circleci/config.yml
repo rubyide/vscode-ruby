@@ -84,6 +84,22 @@ jobs:
       - run:
           name: Run Tests
           command: yarn test
+  test_client:
+    <<: *defaults
+    working_directory: ~/vscode-ruby/packages/vscode-ruby-client
+    steps:
+      - checkout:
+          path: ~/vscode-ruby
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}-{{ arch }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - run:
+          name: Run Tests
+          command: yarn test
   test_common:
     <<: *defaults
     working_directory: ~/vscode-ruby/packages/vscode-ruby-common
@@ -153,6 +169,9 @@ workflows:
           requires:
             - setup
       - test_debugger:
+          requires:
+            - setup
+      - test_client:
           requires:
             - setup
       - test_extension:

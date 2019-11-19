@@ -5351,7 +5351,7 @@ mz@^2.5.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nan@^2.12.1:
+nan@^2.12.1, nan@^2.14.0:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
@@ -5753,6 +5753,13 @@ onetime@^5.1.0:
   integrity sha512-5NcSkPHhwTVFIQN+TUqXoS5+dlElHXdpAWu9I0HP20YOtIi+aZ0Ct82jdlILDxjLEAWwvm+qj1m6aEtsDVmm6Q==
   dependencies:
     mimic-fn "^2.1.0"
+
+oniguruma@^7.2.0:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/oniguruma/-/oniguruma-7.2.1.tgz#51775834f7819b6e31aa878706aa7f65ad16b07f"
+  integrity sha512-WPS/e1uzhswPtJSe+Zls/kAj27+lEqZjCmRSjnYk/Z4L2Mu+lJC2JWtkZhPJe4kZeTQfz7ClcLyXlI4J68MG2w==
+  dependencies:
+    nan "^2.14.0"
 
 optimist@^0.6.1:
   version "0.6.1"
@@ -7820,6 +7827,24 @@ vscode-languageserver@^5.2.1:
   dependencies:
     vscode-languageserver-protocol "3.14.1"
     vscode-uri "^1.0.6"
+
+vscode-textmate@^4.1.1:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/vscode-textmate/-/vscode-textmate-4.3.0.tgz#6e1f0f273d84148cfa1e9c7ed85bd16c974f9f61"
+  integrity sha512-MhEZ3hvxOVuYGsrRzW/PZLDR2VdtG2+V6TIKPvmE9JT+RAq/OtPlrFd1+ZQwBefoHEhjRNuRJ0OktcFezuxPmg==
+  dependencies:
+    oniguruma "^7.2.0"
+
+vscode-tmgrammar-test@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/vscode-tmgrammar-test/-/vscode-tmgrammar-test-0.0.6.tgz#19ccd56b4affff1289e638ea4c83b03202cf1c11"
+  integrity sha512-L3I1FCe2f9EHxfZsk+RHgUFsoSk5RSnLpGWDgq8xVQYjVZkcdBOP0AckTjk4gxivuTZa6byRVRs9JPLcLaFPOw==
+  dependencies:
+    chalk "^2.4.2"
+    commander "^2.20.0"
+    diff "^4.0.1"
+    glob "^7.1.4"
+    vscode-textmate "^4.1.1"
 
 vscode-uri@^1.0.6:
   version "1.0.8"

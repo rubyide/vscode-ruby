@@ -18,8 +18,12 @@
     "vscode": "*"
   },
   "scripts": {
-	  "package": "vsce package --yarn && mv ./*.vsix ../../build/"
-	},
+    "package": "vsce package --yarn && mv ./*.vsix ../../build/",
+    "test": "yarn test:ruby && yarn test:erb && yarn test:gemfile",
+    "test:ruby": "vscode-tmgrammar-test -s source.ruby -g syntaxes/ruby.cson.json -t test/**/*.rb",
+    "test:erb": "vscode-tmgrammar-test -s text.html.erb -g syntaxes/erb.cson.json -t test/**/*.erb",
+    "test:gemfile": "vscode-tmgrammar-test -s source.ruby.gemfile -g syntaxes/gemfile.cson.json -t test/Gemfile"
+  },
   "contributes": {
     "snippets": [
       {
@@ -139,5 +143,8 @@
         ]
       }
     ]
+  },
+  "devDependencies": {
+    "vscode-tmgrammar-test": "^0.0.6"
   }
 }
