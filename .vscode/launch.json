@@ -18,10 +18,10 @@
 			"request": "launch",
 			"name": "Debug Server",
 			"cwd": "${workspaceRoot}",
-			"program": "${workspaceRoot}/src/debugger/main.ts",
+			"program": "${workspaceRoot}/packages/vscode-ruby-debugger/src/main.ts",
 			"args": ["--server=4711"],
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/out/**/*.js"]
+			"outFiles": ["${workspaceRoot}/packages/vscode-ruby-debugger/dist/**/*.js"]
 		},
 		{
 			"name": "Attach to Language Server",
@@ -29,7 +29,7 @@
 			"request": "attach",
 			"port": 6009,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/dist/server/**/*.js"]
+			"outFiles": ["${workspaceRoot}/packages/language-server-ruby/dist/**/*.js"]
 		}
 	],
 	"compounds": [
