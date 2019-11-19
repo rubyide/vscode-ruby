@@ -5,7 +5,8 @@
 		"target": "esnext",
 		"module": "commonjs",
 		"moduleResolution": "node",
-		"rootDir": "src"
+		"rootDir": "src",
+		"outDir": "lib"
 	},
 	"include": ["src"],
 	"exclude": ["node_modules"]
