@@ -19,7 +19,7 @@ build_script:
   # - emsdk_env.bat
   - yarn run lerna run build --scope vscode-ruby-debugger
 test_script:
-  - yarn test
+  - ps: yarn test
 
 cache:
   - .yarn-cache
