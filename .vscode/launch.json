@@ -7,8 +7,11 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"sourceMaps": true,
-			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-			"outFiles": ["${workspaceFolder}/dist/extension/**/*.js"]
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-ruby-client",
+				"--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-ruby"
+			],
+			"outFiles": ["${workspaceFolder}/packages/vscode-ruby-client/dist/client/**/*.js"]
 		},
 		{
 			"type": "node",
