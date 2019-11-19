@@ -1,25 +1,22 @@
 import { TextDocument, WorkspaceFolder } from 'vscode-languageserver';
+import URI from 'vscode-uri';
+import { loadEnv, RubyEnvironment } from 'vscode-ruby-common';
 
-export interface IEnvironment {
-	[key: string]: string;
-}
-
-export type RubyCommandConfiguration = {
+export interface RubyCommandConfiguration {
 	command?: string;
 	useBundler?: boolean;
-};
+}
 
-export type RuboCopLintConfiguration = RubyCommandConfiguration & {
+export interface RuboCopLintConfiguration extends RubyCommandConfiguration {
 	lint?: boolean;
 	only?: string[];
 	except?: string[];
 	require?: string[];
 	rails?: boolean;
 	forceExclusion?: boolean;
-};
+}
 
-export interface RubyConfiguration {
-	useBundler: boolean;
+export interface RubyConfiguration extends RubyCommandConfiguration {
 	workspaceFolderUri: string;
 	interpreter?: {
 		commandPath?: string;
@@ -98,4 +95,7 @@ class SettingsCache<P extends WorkspaceFolder | TextDocument, T> {
 }
 
 export const documentConfigurationCache = new SettingsCache<TextDocument, RubyConfiguration>();
-export const workspaceRubyEnvironmentCache = new SettingsCache<WorkspaceFolder, IEnvironment>();
+export const workspaceRubyEnvironmentCache = new SettingsCache<WorkspaceFolder, RubyEnvironment>();
+workspaceRubyEnvironmentCache.fetcher = async (folders: string[]): Promise<RubyEnvironment[]> => {
+	return Promise.all(folders.map(async f => loadEnv(URI.parse(f).fsPath) as RubyEnvironment));
+};

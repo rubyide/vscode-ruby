@@ -8,25 +8,16 @@ import {
 	TextDocumentSyncKind,
 } from 'vscode-languageserver';
 
-type WorkspaceRubyEnvironmentCapability = {
-	workspace?: {
-		rubyEnvironment?: boolean;
-	};
-};
-
-type ClientCapabilitiesWithRubyEnvironment = ClientCapabilities &
-	WorkspaceRubyEnvironmentCapability;
-
 export class CapabilityCalculator {
-	public clientCapabilities: ClientCapabilitiesWithRubyEnvironment;
+	public clientCapabilities: ClientCapabilities;
 	public capabilities: ServerCapabilities;
 
 	constructor(clientCapabilities: ClientCapabilities) {
-		this.clientCapabilities = clientCapabilities as ClientCapabilitiesWithRubyEnvironment;
+		this.clientCapabilities = clientCapabilities;
 		this.calculateCapabilities();
 	}
 
-	private calculateCapabilities() {
+	private calculateCapabilities(): void {
 		this.capabilities = {
 			// Perform incremental syncs
 			// Incremental sync is disabled for now due to not being able to get the

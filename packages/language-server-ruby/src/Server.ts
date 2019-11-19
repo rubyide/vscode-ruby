@@ -3,7 +3,6 @@ import {
 	Connection,
 	InitializeParams,
 	InitializeResult,
-	RequestType,
 } from 'vscode-languageserver';
 
 import { CapabilityCalculator } from './CapabilityCalculator';
@@ -16,12 +15,7 @@ import DocumentSymbolProvider from './providers/DocumentSymbolProvider';
 import { documents } from './DocumentManager';
 import { LintResult, linter } from './Linter';
 
-import {
-	documentConfigurationCache,
-	workspaceRubyEnvironmentCache,
-	RubyConfiguration,
-	IEnvironment,
-} from './SettingsCache';
+import { documentConfigurationCache, RubyConfiguration } from './SettingsCache';
 import DocumentFormattingProvider from './providers/DocumentFormattingProvider';
 import { forest } from './Forest';
 
@@ -30,23 +24,6 @@ export interface ILanguageServer {
 	registerInitializeProviders();
 	registerInitializedProviders();
 	shutdown();
-}
-
-interface WorkspaceRubyEnvironmentParams {
-	readonly folders: string[];
-}
-
-interface WorkspaceRubyEnvironmentResult {
-	readonly [key: string]: IEnvironment;
-}
-
-namespace WorkspaceRubyEnvironmentRequest {
-	export const type = new RequestType<
-		WorkspaceRubyEnvironmentParams,
-		WorkspaceRubyEnvironmentResult,
-		void,
-		true
-	>('workspace/rubyEnvironment');
 }
 
 export class Server implements ILanguageServer {
@@ -60,7 +37,7 @@ export class Server implements ILanguageServer {
 		documents.listen(connection);
 
 		linter.subscribe({
-			next: (result: LintResult) => {
+			next: (result: LintResult): void => {
 				connection.sendDiagnostics({ uri: result.document.uri, diagnostics: result.diagnostics });
 			},
 		});
@@ -76,27 +53,6 @@ export class Server implements ILanguageServer {
 			});
 			return this.connection.workspace.getConfiguration(items);
 		};
-
-		if (this.calculator.clientCapabilities.workspace.rubyEnvironment) {
-			workspaceRubyEnvironmentCache.fetcher = async (
-				folders: string[]
-			): Promise<IEnvironment[]> => {
-				const result: WorkspaceRubyEnvironmentResult = await this.connection.sendRequest(
-					WorkspaceRubyEnvironmentRequest.type,
-					{
-						folders,
-					}
-				);
-
-				return Object.values(result);
-			};
-		} else {
-			workspaceRubyEnvironmentCache.fetcher = async (
-				folders: string[]
-			): Promise<IEnvironment[]> => {
-				return folders.map(_f => process.env as IEnvironment);
-			};
-		}
 	}
 
 	get capabilities(): InitializeResult {
@@ -130,6 +86,6 @@ export class Server implements ILanguageServer {
 	}
 
 	public shutdown(): void {
-		forest.release()
+		forest.release();
 	}
 }

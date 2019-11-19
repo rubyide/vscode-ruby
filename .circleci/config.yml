@@ -84,6 +84,22 @@ jobs:
       - run:
           name: Run Tests
           command: yarn test
+  test_client:
+    <<: *defaults
+    working_directory: ~/vscode-ruby/packages/vscode-ruby-client
+    steps:
+      - checkout:
+          path: ~/vscode-ruby
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - vscode-ruby-{{ checksum "~/vscode-ruby/yarn.lock" }}-{{ arch }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - run:
+          name: Run Tests
+          command: yarn test
   test_common:
     <<: *defaults
     working_directory: ~/vscode-ruby/packages/vscode-ruby-common
@@ -127,7 +143,8 @@ jobs:
       - run:
           name: Install emscripten
           command: |
-            brew install emscripten binaryen
+            brew unlink node
+            brew install emscripten binaryen node@12
             emcc --help
             sed -i '' "s/LLVM_ROOT.*/LLVM_ROOT = '\/usr\/local\/opt\/emscripten\/libexec\/llvm\/bin'/g" ~/.emscripten
             sed -i '' "s/BINARYEN_ROOT.*/BINARYEN_ROOT = '\/usr\/local\/opt\/binaryen'/g" ~/.emscripten
@@ -142,7 +159,7 @@ jobs:
           command: gem install ruby-debug-ide debase -N
       - run:
           name: Run Tests
-          command: yarn test
+          command: PATH="/usr/local/opt/node@12/bin:$PATH" yarn test
 workflows:
   version: 2
   build_and_test:
@@ -153,6 +170,9 @@ workflows:
           requires:
             - setup
       - test_debugger:
+          requires:
+            - setup
+      - test_client:
           requires:
             - setup
       - test_extension:

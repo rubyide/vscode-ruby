@@ -41,7 +41,7 @@ for name in (set -nx)
 	end
 end`;
 	} else {
-		template = `#!${shell} -i\nexport -p`;
+		template = `#!${shell} -i\nexport`;
 	}
 
 	return template;
@@ -166,7 +166,7 @@ export interface LoadEnvOptions {
 	shimDir?: string;
 }
 
-export function loadEnv(cwd: string, options?: LoadEnvOptions): IEnvironment {
+export function loadEnv(cwd: string, options = {} as LoadEnvOptions): IEnvironment {
 	const { shell = defaultShell(), shimDir = SHIM_DIR } = options;
 	const shim: string = getShim(shell, shimDir);
 

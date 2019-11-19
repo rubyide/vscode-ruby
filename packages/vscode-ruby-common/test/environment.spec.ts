@@ -83,7 +83,7 @@ describe('environment', () => {
 				loadEnv(__dirname, { shimDir });
 				expect(path.join(shimDir, 'env.bin.bash.sh'))
 					.to.be.a.file('env.bin.bash.sh')
-					.with.content('#!/bin/bash -i\nexport -p');
+					.with.content('#!/bin/bash -i\nexport');
 			});
 
 			it('correctly reads the environment', () => {
@@ -113,7 +113,7 @@ describe('environment', () => {
 				loadEnv(__dirname, { shimDir });
 				expect(path.join(shimDir, 'env.bin.sh.sh'))
 					.to.be.a.file('env.bin.sh.sh')
-					.with.content('#!/bin/sh -i\nexport -p');
+					.with.content('#!/bin/sh -i\nexport');
 			});
 
 			context('the shell is POSIX compliant', () => {
@@ -170,7 +170,7 @@ end`);
 					loadEnv(__dirname, { shell, shimDir });
 					expect(path.join(shimDir, 'env.usr.local.bin.zsh.sh'))
 						.to.be.a.file('env.usr.local.bin.zsh.sh')
-						.with.content(`#!${shell} -i\nexport -p`);
+						.with.content(`#!${shell} -i\nexport`);
 				});
 			});
 		});

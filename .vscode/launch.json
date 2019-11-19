@@ -7,18 +7,21 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"sourceMaps": true,
-			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-			"outFiles": ["${workspaceFolder}/dist/extension/**/*.js"]
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-ruby-client",
+				"--extensionDevelopmentPath=${workspaceFolder}/packages/vscode-ruby"
+			],
+			"outFiles": ["${workspaceFolder}/packages/vscode-ruby-client/dist/client/**/*.js"]
 		},
 		{
 			"type": "node",
 			"request": "launch",
 			"name": "Debug Server",
 			"cwd": "${workspaceRoot}",
-			"program": "${workspaceRoot}/src/debugger/main.ts",
+			"program": "${workspaceRoot}/packages/vscode-ruby-debugger/src/main.ts",
 			"args": ["--server=4711"],
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/out/**/*.js"]
+			"outFiles": ["${workspaceRoot}/packages/vscode-ruby-debugger/dist/**/*.js"]
 		},
 		{
 			"name": "Attach to Language Server",
@@ -26,7 +29,7 @@
 			"request": "attach",
 			"port": 6009,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/dist/server/**/*.js"]
+			"outFiles": ["${workspaceRoot}/packages/language-server-ruby/dist/**/*.js"]
 		}
 	],
 	"compounds": [

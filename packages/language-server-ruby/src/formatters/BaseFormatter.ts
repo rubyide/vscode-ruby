@@ -8,15 +8,16 @@ import {
 	DIFF_INSERT,
 	DIFF_EQUAL,
 } from 'diff-match-patch';
+import { RubyEnvironment } from 'vscode-ruby-common';
 import { spawn } from '../util/spawn';
-import { IEnvironment, RubyCommandConfiguration } from '../SettingsCache';
+import { RubyCommandConfiguration } from '../SettingsCache';
 
 export interface IFormatter {
 	format(): Observable<TextEdit[]>;
 }
 
 export interface FormatterConfig {
-	env: IEnvironment;
+	env: RubyEnvironment;
 	executionRoot: string;
 	config: RubyCommandConfiguration;
 	range?: Range;

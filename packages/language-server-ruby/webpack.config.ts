@@ -10,7 +10,12 @@ module.exports = {
 		rules: [
 			{
 				test: /\.ts$/,
-				use: 'ts-loader',
+				use: {
+					loader: 'ts-loader',
+					options: {
+						projectReferences: true,
+					},
+				},
 				exclude: /node_modules/,
 			},
 		],
@@ -34,13 +39,18 @@ module.exports = {
 	plugins: [
 		new ForkTsCheckerWebpackPlugin(),
 		new CleanWebpackPlugin({
-			cleanStaleWebpackAssets: false,
+			cleanAfterEveryBuildPatterns: ['!**/*.wasm', '!**/*.rb'],
 		}),
 		// Workaround to Webpack not being able to figure out emscripten's environment export
-		new CopyPlugin([
-			{ from: '../../node_modules/web-tree-sitter/tree-sitter.wasm' },
-			{ from: 'src/tree-sitter-ruby.wasm' },
-			{ from: 'src/formatters/rubyfmt.rb' },
-		]),
+		new CopyPlugin(
+			[
+				{ from: '../../node_modules/web-tree-sitter/tree-sitter.wasm' },
+				{ from: 'src/tree-sitter-ruby.wasm' },
+				{ from: 'src/formatters/rubyfmt.rb' },
+			],
+			{
+				copyUnmodified: true,
+			}
+		),
 	],
 };

@@ -42,9 +42,9 @@
 		"source-map-support": "^0.5.12",
 		"tree-sitter-cli": "^0.15.6",
 		"tree-sitter-ruby": "^0.15.1",
-		"ts-loader": "^6.0.4",
-		"ts-node": "^8.0.3",
-		"typescript": "^3.5.3",
+		"ts-loader": "^6.2.1",
+		"ts-node": "^8.5.2",
+		"typescript": "^3.7.2",
 		"webpack": "^4.39.1",
 		"webpack-cli": "^3.3.6"
 	},
@@ -54,7 +54,7 @@
 		"lint": "eslint src/**/*.ts",
 		"prebuild": "yarn build:wasm",
 		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts",
-		"watch": "webpack -w -d"
+		"watch": "webpack -w --debug --output-pathinfo --mode development"
 	},
 	"nyc": {
 		"cache": false,
