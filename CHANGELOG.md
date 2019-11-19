@@ -1,3 +1,23 @@
+### 0.26.0 - Nov 19 2019
+
+General Changes:
+
+- Official support for remote environments [#551](https://github.com/rubyide/vscode-ruby/pull/551)
+- Fish shell support [#523](https://github.com/rubyide/vscode-ruby/issues/523)
+- The grammar, language configuration, and snippets are moved into the `vscode-ruby` package. This package is specified as a UI only package. Resolves [#537](https://github.com/rubyide/vscode-ruby/issues/537) [#483](https://github.com/rubyide/vscode-ruby/issues/483)
+- Environment detection is moved into the language server so that it will run within the workspace [#488](https://github.com/rubyide/vscode-ruby/issues/488)
+
+Improvements:
+
+- Flags appropriate configuration settings as `machine-overridable` [#490](https://github.com/rubyide/vscode-ruby/issues/490)
+- Add `.chefignore` as an `Ignore` file type
+- Improve syntax highlighting regex for functions ending in `!` or `?` [#541](https://github.com/rubyide/vscode-ruby/pull/541)
+- Add switch case statement snippet [#542](https://github.com/rubyide/vscode-ruby/pull/542)
+
+Bug Fixes:
+
+- Filter out linters that are disabled in configuration [550](https://github.com/rubyide/vscode-ruby/pull/550)
+
 ### 0.25.3 - Sept 4 2019
 
 Bug Fixes:
