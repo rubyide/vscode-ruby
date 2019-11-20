@@ -32,7 +32,8 @@ function getFormatter(
 	config: RubyConfiguration,
 	range?: Range
 ): IFormatter {
-	if (typeof config.format === 'string') {
+	// Only format if we have a formatter to use and an execution root
+	if (typeof config.format === 'string' && config.workspaceFolderUri) {
 		const formatterConfig: FormatterConfig = {
 			env,
 			executionRoot: URI.parse(config.workspaceFolderUri).fsPath,

@@ -3,14 +3,14 @@ import { Observable, of } from 'rxjs';
 import { Diagnostic } from 'vscode-languageserver';
 
 export default class NullLinter implements ILinter {
-	private name: string;
+	private msg: string;
 
-	constructor(name: string) {
-		this.name = name;
+	constructor(msg: string) {
+		this.msg = msg;
 	}
 
 	lint(): Observable<Diagnostic[]> {
-		console.error(`Lint: attempted to lint with unsupported linter: ${this.name}`);
+		console.error(`Lint: ${this.msg}`);
 		return of([]);
 	}
 }

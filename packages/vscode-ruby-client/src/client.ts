@@ -63,6 +63,12 @@ export function activate(context: ExtensionContext): void {
 					}
 					let resource = client.protocol2CodeConverter.asUri(scopeUri);
 					let workspaceFolder = workspace.getWorkspaceFolder(resource);
+
+					// If the resource doesn't have a workspace folder, fall back to the root if available
+					if (!workspaceFolder && workspace.workspaceFolders) {
+						workspaceFolder = workspace.workspaceFolders[0];
+					}
+
 					if (workspaceFolder) {
 						// Save the file's workspace folder
 						const protocolUri = client.code2ProtocolConverter.asUri(workspaceFolder.uri);

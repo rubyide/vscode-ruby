@@ -30,8 +30,13 @@ function getLinter(
 	env: RubyEnvironment,
 	config: RubyConfiguration
 ): ILinter {
+	if (!config.workspaceFolderUri) {
+		return new NullLinter(
+			`unable to lint ${document.uri} with ${name} as its workspace root folder could not be determined`
+		);
+	}
 	const linter = LINTER_MAP[name];
-	if (!linter) return new NullLinter(name);
+	if (!linter) return new NullLinter(`attempted to lint with unsupported linter: ${name}`);
 	const lintConfig: RubyCommandConfiguration =
 		typeof config.lint[name] === 'object' ? config.lint[name] : {};
 	const linterConfig: LinterConfig = {
