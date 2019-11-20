@@ -1,4 +1,4 @@
-import URI from 'vscode-uri';
+import { URI } from 'vscode-uri';
 import { TextEdit } from 'vscode-languageserver';
 import BaseFormatter from './BaseFormatter';
 

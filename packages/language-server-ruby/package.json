@@ -12,7 +12,7 @@
 		"diff-match-patch": "^1.0.4",
 		"rxjs": "^6.4.0",
 		"vscode-languageserver": "^5.2.1",
-		"vscode-uri": "^1.0.6",
+		"vscode-uri": "^2.1.1",
 		"web-tree-sitter": "^0.15.8"
 	},
 	"devDependencies": {

@@ -1,4 +1,4 @@
-import URI from 'vscode-uri';
+import { URI } from 'vscode-uri';
 import { Diagnostic, DiagnosticSeverity, Range } from 'vscode-languageserver';
 import BaseLinter from './BaseLinter';
 import { RuboCopLintConfiguration } from '../SettingsCache';

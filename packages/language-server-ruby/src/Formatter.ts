@@ -6,7 +6,7 @@ import {
 	RubyConfiguration,
 } from './SettingsCache';
 import { documents } from './DocumentManager';
-import URI from 'vscode-uri';
+import { URI } from 'vscode-uri';
 import { from, Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import {

@@ -1,5 +1,5 @@
 import { TextDocument, WorkspaceFolder } from 'vscode-languageserver';
-import URI from 'vscode-uri';
+import { URI } from 'vscode-uri';
 import { loadEnv, RubyEnvironment } from 'vscode-ruby-common';
 
 export interface RubyCommandConfiguration {

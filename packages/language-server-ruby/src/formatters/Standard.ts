@@ -1,4 +1,4 @@
-import URI from 'vscode-uri';
+import { URI } from 'vscode-uri';
 import RuboCop from './RuboCop';
 
 export default class Standard extends RuboCop {
