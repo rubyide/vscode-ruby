@@ -21,7 +21,7 @@ module.exports = {
 		filename: 'ruby.js',
 		path: path.resolve(__dirname, 'dist', 'client'),
 		libraryTarget: 'commonjs2',
-		devtoolModuleFilenameTemplate: '../[resource-path]',
+		devtoolModuleFilenameTemplate: '../../[resource-path]',
 	},
 	node: {
 		__dirname: false,

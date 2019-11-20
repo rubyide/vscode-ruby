@@ -10,7 +10,7 @@
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
 		"rootDir": "src",
-		"outDir": "dist"
+		"outDir": "dist/client"
 	},
 	"include": ["src"],
 	"exclude": ["node_modules"]
