@@ -49,6 +49,10 @@ Reviewing the [linting](https://github.com/rubyide/vscode-ruby/blob/master/docs/
 
 For full details on configuration options, please take a look at the `Ruby` section in the VS Code settings UI. Each option is associated with a name and description.
 
+### Debug Configuration
+
+See [docs/debugger.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/debugger.md).
+
 ### Legacy Configuration
 
 [docs/legacy.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/legacy.md) contains the documentation around the legacy functionality
