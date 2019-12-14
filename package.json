@@ -4,7 +4,8 @@
 		"packages/*"
 	],
 	"devDependencies": {
-		"lerna": "^3.16.4"
+		"lerna": "^3.16.4",
+		"vsce": "^1.71.0"
 	},
 	"scripts": {
 		"build": "lerna run build",
