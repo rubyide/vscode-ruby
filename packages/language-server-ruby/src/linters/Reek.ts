@@ -1,3 +1,4 @@
+import { URI } from 'vscode-uri';
 import BaseLinter from './BaseLinter';
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
 
@@ -24,7 +25,8 @@ export default class Reek extends BaseLinter {
 	}
 
 	get args(): string[] {
-		return ['-f', 'json'];
+		const documentPath = URI.parse(this.document.uri);
+		return ['-f', 'json', '--stdin-filename', documentPath.fsPath];
 	}
 
 	protected processResults(data): Diagnostic[] {
