@@ -40,6 +40,7 @@ function getFormatter(
 			config: {
 				command: config.format,
 				useBundler: config.useBundler,
+				pathToBundler: config.pathToBundler
 			},
 		};
 

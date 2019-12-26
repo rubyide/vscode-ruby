@@ -5,6 +5,7 @@ import { loadEnv, RubyEnvironment } from 'vscode-ruby-common';
 export interface RubyCommandConfiguration {
 	command?: string;
 	useBundler?: boolean;
+	pathToBundler: string;
 }
 
 export interface RuboCopLintConfiguration extends RubyCommandConfiguration {
@@ -21,7 +22,6 @@ export interface RubyConfiguration extends RubyCommandConfiguration {
 	interpreter?: {
 		commandPath?: string;
 	};
-	pathToBundler: string;
 	lint: {
 		fasterer?: boolean | RubyConfiguration;
 		reek?: boolean | RubyConfiguration;
