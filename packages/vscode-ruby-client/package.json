@@ -666,6 +666,10 @@
 								"description": "Port for remote debugging.",
 								"default": "1234"
 							},
+							"localSocketPath": {
+								"type": "string",
+								"description": "Path to UNIX domain socket for remote debugging."
+							},
 							"remoteWorkspaceRoot": {
 								"type": "string",
 								"description": "Remote workspace root, this parameter is required for remote debugging.",
