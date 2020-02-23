@@ -164,6 +164,7 @@ export interface RubyEnvironment extends IEnvironment {
 	HOME: string;
 	RUBOCOP_OPTS: string;
 	LANG: string;
+	BUNDLE_PATH?: string;
 	RBENV_ROOT?: string;
 	ASDF_DATA_DIR?: string;
 	ASDF_CONFIG_FILE?: string;
