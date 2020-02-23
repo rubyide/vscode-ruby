@@ -140,6 +140,10 @@ const RUBY_ENVIRONMENT_VARIABLES = [
 	'RUBOCOP_OPTS',
 	'LANG',
 	'BUNDLE_PATH',
+	'RBENV_ROOT',
+	'ASDF_DATA_DIR',
+	'ASDF_CONFIG_FILE',
+	'ASDF_DEFAULT_TOOL_VERSIONS_FILENAME',
 ];
 
 export interface IEnvironment {
@@ -160,6 +164,10 @@ export interface RubyEnvironment extends IEnvironment {
 	HOME: string;
 	RUBOCOP_OPTS: string;
 	LANG: string;
+	RBENV_ROOT?: string;
+	ASDF_DATA_DIR?: string;
+	ASDF_CONFIG_FILE?: string;
+	ASDF_DEFAULT_TOOL_VERSIONS_FILENAME?: string;
 }
 
 export interface LoadEnvOptions {
