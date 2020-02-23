@@ -93,6 +93,7 @@ const RUBY_ENVIRONMENT_VARIABLES = [
 	'HOME',
 	'RUBOCOP_OPTS',
 	'LANG',
+	'BUNDLE_PATH',
 ];
 
 export interface IEnvironment {
