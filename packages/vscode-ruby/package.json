@@ -2,7 +2,7 @@
   "name": "vscode-ruby",
   "displayName": "VSCode Ruby",
   "publisher": "wingrunr21",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "description": "Syntax highlighing, snippet, and language configuration support for Ruby",
   "repository": "https://github.com/rubyide/vscode-ruby",
   "author": "Stafford Brunk <stafford.brunk@gmail.com>",

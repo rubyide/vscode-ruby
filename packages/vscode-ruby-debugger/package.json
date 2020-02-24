@@ -1,6 +1,6 @@
 {
 	"name": "vscode-ruby-debugger",
-	"version": "0.26.0",
+	"version": "0.27.0",
 	"description": "Debugger implementation for vscode-ruby",
 	"main": "src/index.ts",
 	"repository": "https://github.com/rubyide/vscode-ruby",

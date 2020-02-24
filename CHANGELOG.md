@@ -1,3 +1,21 @@
+### 0.27.0 - Feb 23 2020
+
+Improvements:
+
+- Provide evaluateName property, so variable values can be copied from debugger. [#546](https://github.com/rubyide/vscode-ruby/pull/546)
+- Add reference to debug configuration doc. [#564](https://github.com/rubyide/vscode-ruby/pull/564)
+- Add stdin-filename arg to Reek linter. [#575](https://github.com/rubyide/vscode-ruby/pull/575)
+- Add Unix domain socket support to the debugger. [#586](https://github.com/rubyide/vscode-ruby/pull/586)
+- Whitelist `BUNDLE_PATH` env variable. [#588](https://github.com/rubyide/vscode-ruby/pull/588)
+- Whitelist additional variables for asdf and rbenv. Resolves [#572](https://github.com/rubyide/vscode-ruby/issues/572)
+
+Bug Fixes:
+
+- Handle undefined workspace root folders. Resolves [#533](https://github.com/rubyide/vscode-ruby/issues/533)
+- Identify 1 or more ! as keyword.operator.logical.ruby. Resolves [#573](https://github.com/rubyide/vscode-ruby/issues/573)
+- Add additional meta.function-call.ruby scope matching. Resolves [#579](https://github.com/rubyide/vscode-ruby/issues/579)
+- Match variable.other.ruby through the end of the line. Resolves [#579](https://github.com/rubyide/vscode-ruby/issues/579)
+
 ### 0.26.0 - Nov 19 2019
 
 General Changes:
