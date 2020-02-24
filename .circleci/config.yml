@@ -144,6 +144,7 @@ jobs:
           name: Install emscripten
           command: |
             brew unlink node
+            brew unlink python@2
             brew install emscripten binaryen node@12
             emcc --help
             sed -i '' "s/LLVM_ROOT.*/LLVM_ROOT = '\/usr\/local\/opt\/emscripten\/libexec\/llvm\/bin'/g" ~/.emscripten
