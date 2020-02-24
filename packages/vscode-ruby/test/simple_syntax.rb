@@ -31,3 +31,6 @@ foo(bar(baz()))
 #      ^ punctuation.section.function.ruby
 #       ^^^ meta.function-call.ruby entity.name.function.ruby
 #          ^^^^ punctuation.section.function.ruby
+
+!!!!true('foo')
+# <---- keyword.operator.logical.ruby

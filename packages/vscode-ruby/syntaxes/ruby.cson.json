@@ -2162,7 +2162,7 @@
 			"name": "keyword.operator.logical.ruby"
 		},
 		{
-			"match": "(?<=^|[ \\t])!|&&|\\|\\||\\^",
+			"match": "(?<=^|[ \\t!])!|&&|\\|\\||\\^",
 			"name": "keyword.operator.logical.ruby"
 		},
 		{

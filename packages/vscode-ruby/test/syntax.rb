@@ -66,4 +66,9 @@ class ExampleClass < AnotherClass
     end
 
   end
+
+  def true?(obj)
+    !!obj
+#   ^^ keyword.operator.logical.ruby
+  end
 end
