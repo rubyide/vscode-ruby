@@ -1,3 +1,4 @@
+import path from 'path';
 import { Range, TextDocument, TextDocumentIdentifier, TextEdit } from 'vscode-languageserver';
 import { RubyEnvironment } from 'vscode-ruby-common';
 import {
@@ -34,9 +35,10 @@ function getFormatter(
 ): IFormatter {
 	// Only format if we have a formatter to use and an execution root
 	if (typeof config.format === 'string' && config.workspaceFolderUri) {
+		const executionRoot = path.dirname(URI.parse(document.uri).fsPath);
 		const formatterConfig: FormatterConfig = {
 			env,
-			executionRoot: URI.parse(config.workspaceFolderUri).fsPath,
+			executionRoot,
 			config: {
 				command: config.format,
 				useBundler: config.useBundler,
