@@ -21,6 +21,10 @@ Head on over to the [Ruby extension README](https://github.com/rubyide/vscode-ru
 
 Documentation is available in the [docs](https://github.com/rubyide/vscode-ruby/tree/master/docs) folder
 
+## Troubleshooting
+
+Troubleshooting documentation is available [here](https://github.com/rubyide/vscode-ruby/tree/master/docs/troubleshooting.md) folder
+
 ## Developing
 
 See the [developing](https://github.com/rubyide/vscode-ruby/blob/master/docs/developing.md) docs

@@ -125,6 +125,12 @@ function processEnvironment(output: string): IEnvironment {
 
 // Whitelist environment variables to pass on
 // Don't want to pull in potentially secret variables
+// If updating this make sure the RubyEnvironment interface
+// also gets updated.
+//
+// It'd be really nice if there was a way
+// of generating the correct constant and/or TypeScript interface
+// from a single declaration
 const RUBY_ENVIRONMENT_VARIABLES = [
 	'PATH',
 	'Path', // Windows

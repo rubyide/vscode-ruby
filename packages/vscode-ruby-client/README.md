@@ -45,7 +45,7 @@ Legacy functionality will most likely not receive additional improvements and wi
 "ruby.format": "rubocop" // use rubocop for formatting
 ```
 
-Reviewing the [linting](https://github.com/rubyide/vscode-ruby/blob/master/docs/linting.md) and [formatting](https://github.com/rubyide/vscode-ruby/blob/master/docs/formatting.md) docs is recommended
+Reviewing the [linting](https://github.com/rubyide/vscode-ruby/blob/master/docs/linting.md), [formatting](https://github.com/rubyide/vscode-ruby/blob/master/docs/formatting.md), and [environment detection](https://github.com/rubyide/vscode-ruby/blob/master/docs/language-server.md) docs is recommended
 
 For full details on configuration options, please take a look at the `Ruby` section in the VS Code settings UI. Each option is associated with a name and description.
 

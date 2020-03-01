@@ -15,6 +15,10 @@ VSCode has good documentation on how grammars work and how to troubleshoot gramm
 
 If you believe the extension is incorrectly assigning TextMate Scopes, please fix the grammar and open a PR!
 
+## Environment is incorrectly detected
+
+Please read over the [documentation](https://github.com/rubyide/vscode-ruby/blob/master/docs/language-server.md) on Environment Detection in the language server to ensure you understand its features and limitations.
+
 ## Linting or Formatting is incorrect
 
 ### Language Server
