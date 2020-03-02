@@ -1,17 +1,14 @@
 name: CI
 on: [push, pull_request]
 
-defaults: &defaults
-  runs-on: ${{ matrix.os }}
-  strategy:
-    matrix:
-      os: [ubuntu-latest, windows-latest, macos-latest]
-      ruby: [2.4, 2.5, 2.6, 2.7]
-
 jobs:
   test_language_server:
-    <<: *defaults
     name: 'Test Language Server'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        ruby: [2.4, 2.5, 2.6, 2.7]
     steps:
       - uses: actions/setup-ruby@v1
         with:
@@ -41,8 +38,11 @@ jobs:
           file: packages/language-server-ruby/coverage/lcov.info
           flags: language_server_ruby
   test_extension:
-    <<: *defaults
-    name: 'Test UI Extension'
+    name: 'Test VSCode Ruby'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -64,9 +64,12 @@ jobs:
       - name: Run Tests
         run: yarn test
         working-directory: packages/vscode-ruby
-
   test_client:
-    <<: *defaults
+    name: 'Test VSCode Ruby Client'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -88,9 +91,12 @@ jobs:
       - name: Run Tests
         run: yarn test
         working-directory: packages/vscode-ruby-client
-
   test_common:
-    <<: *defaults
+    name: 'Test VSCode Ruby Common'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v2
       - name: Run Tests
@@ -102,8 +108,12 @@ jobs:
           file: coverage/lcov.info
           flags: vscode_ruby_common
   test_debugger:
-    <<: *defaults
     name: 'Test Debugger'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        ruby: [2.4, 2.5, 2.6, 2.7]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
