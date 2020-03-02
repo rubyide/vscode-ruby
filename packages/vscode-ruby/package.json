@@ -8,7 +8,10 @@
   "author": "Stafford Brunk <stafford.brunk@gmail.com>",
   "license": "MIT",
   "private": true,
-  "extensionKind": "ui",
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
   "icon": "images/logo.png",
   "galleryBanner": {
     "color": "#f05336",

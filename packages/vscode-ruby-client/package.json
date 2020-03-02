@@ -17,7 +17,9 @@
 	"engines": {
 		"vscode": "^1.30.0"
 	},
-	"extensionKind": "workspace",
+	"extensionKind": [
+		"workspace"
+	],
 	"private": true,
 	"scripts": {
 		"build": "webpack -p",
