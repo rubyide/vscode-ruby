@@ -11,7 +11,7 @@ OTHERTEXT
 
 function_call <<-EOS.strip, false, nil, :foo => :bar
 #             ^^^^^^ string.unquoted.heredoc.ruby punctuation.definition.string.begin.ruby
-#                    ^^^^^ string.unquoted.heredoc.ruby meta.function-call.ruby support.function.core.ruby
+#                    ^^^^^ string.unquoted.heredoc.ruby meta.function-call.ruby entity.name.function.ruby
 #                           ^^^^^ string.unquoted.heredoc.ruby constant.language.boolean.ruby
 #                                  ^^^ string.unquoted.heredoc.ruby constant.language.nil.ruby
 #                                       ^^^^ string.unquoted.heredoc.ruby constant.language.symbol.hashkey.ruby
