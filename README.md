@@ -1,7 +1,5 @@
 # Visual Studio Code Ruby Extensions
 
-[![CircleCI](https://img.shields.io/circleci/build/github/rubyide/vscode-ruby?label=circleci&token=c9eaf03305b3fe24e8bc819f3f48060431e8e78f)](https://circleci.com/gh/rubyide/vscode-ruby)
-[![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
 [![CI](https://img.shields.io/github/workflow/status/rubyide/vscode-ruby/CI.svg?logo=github)](https://github.com/rubyide/vscode-ruby/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/rubyide/vscode-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/rubyide/vscode-ruby)
 
