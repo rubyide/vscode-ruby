@@ -22,13 +22,13 @@ connection.onInitialize(async (params: InitializeParams) => {
 
 	const { Server } = await import('./Server');
 	server = new Server(connection, params);
-	server.registerInitializeProviders();
+	server.initialize();
 
 	return server.capabilities;
 });
 
 connection.onInitialized(() => {
-	server.registerInitializedProviders();
+	server.setup();
 });
 
 connection.onShutdown(() => server.shutdown());

@@ -21,8 +21,8 @@ import { forest } from './Forest';
 
 export interface ILanguageServer {
 	readonly capabilities: InitializeResult;
-	registerInitializeProviders();
-	registerInitializedProviders();
+	initialize();
+	setup();
 	shutdown();
 }
 
@@ -61,8 +61,27 @@ export class Server implements ILanguageServer {
 		};
 	}
 
+	/**
+	 * Initialize should be run during the initialization phase of the client connection
+	 */
+	public initialize(): void {
+		this.registerInitializeProviders();
+	}
+
+	/**
+	 * Setup should be run after the client connection has been initialized. We can do things here like
+	 * handle changes to the workspace and query configuration settings
+	 */
+	public setup(): void {
+		this.registerInitializedProviders();
+	}
+
+	public shutdown(): void {
+		forest.release();
+	}
+
 	// registers providers on the initialize step
-	public registerInitializeProviders(): void {
+	private registerInitializeProviders(): void {
 		// Handles highlight requests
 		DocumentHighlightProvider.register(this.connection);
 
@@ -77,15 +96,13 @@ export class Server implements ILanguageServer {
 	}
 
 	// registers providers on the initialized step
-	public registerInitializedProviders(): void {
-		// Handles configuration changes
-		ConfigurationProvider.register(this.connection);
-
+	private registerInitializedProviders(): void {
 		// Handle workspace changes
 		WorkspaceProvider.register(this.connection);
-	}
 
-	public shutdown(): void {
-		forest.release();
+		// Handle configuration change notifications
+		if (this.calculator.supportsWorkspaceConfiguration) {
+			ConfigurationProvider.register(this.connection);
+		}
 	}
 }
