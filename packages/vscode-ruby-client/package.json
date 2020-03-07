@@ -155,6 +155,26 @@
 					"default": false,
 					"description": "Use built-in language server"
 				},
+				"ruby.languageServer": {
+					"scope": "machine",
+					"type": "object",
+					"description": "Set individual ruby linters to use",
+					"properties": {
+						"logLevel": {
+							"type": "string",
+							"default": "info",
+							"description": "Set the language server's log level",
+							"enum": [
+								"trace",
+								"debug",
+								"info",
+								"warn",
+								"error",
+								"silent"
+							]
+						}
+					}
+				},
 				"ruby.codeCompletion": {
 					"type": [
 						"boolean",

@@ -4,6 +4,7 @@ import {
 	InitializeParams,
 	InitializeResult,
 } from 'vscode-languageserver';
+import log from 'loglevel';
 
 import { CapabilityCalculator } from './CapabilityCalculator';
 import DocumentHighlightProvider from './providers/DocumentHighlightProvider';
@@ -118,6 +119,8 @@ export class Server implements ILanguageServer {
 	private async loadGlobalConfig(): Promise<void> {
 		const config: RubyConfiguration = await this.connection.workspace.getConfiguration('ruby');
 		try {
+			const { logLevel = 'info' } = config.languageServer;
+			log.setLevel(logLevel);
 		} catch (e) {
 			log.error(e);
 		}

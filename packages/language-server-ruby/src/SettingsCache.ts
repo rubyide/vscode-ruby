@@ -1,6 +1,7 @@
 import { TextDocument, WorkspaceFolder } from 'vscode-languageserver';
 import { URI } from 'vscode-uri';
 import { loadEnv, RubyEnvironment } from 'vscode-ruby-common';
+import { LogLevelDesc } from 'loglevel';
 
 export interface RubyCommandConfiguration {
 	command?: string;
@@ -28,6 +29,9 @@ export interface RubyConfiguration extends RubyCommandConfiguration {
 		rubocop?: boolean | RuboCopLintConfiguration;
 	};
 	format: boolean | 'rubocop' | 'standard' | 'rufo';
+	languageServer: {
+		logLevel: LogLevelDesc;
+	};
 }
 
 class SettingsCache<P extends WorkspaceFolder | TextDocument, T> {

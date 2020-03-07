@@ -10,6 +10,7 @@
 	"dependencies": {
 		"cross-spawn": "^6.0.5",
 		"diff-match-patch": "^1.0.4",
+		"loglevel": "^1.6.7",
 		"rxjs": "^6.4.0",
 		"vscode-languageserver": "^5.2.1",
 		"vscode-uri": "^2.1.1",
