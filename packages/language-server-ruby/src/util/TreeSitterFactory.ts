@@ -1,4 +1,5 @@
 import path from 'path';
+import log from 'loglevel';
 import Parser from 'web-tree-sitter';
 
 const TREE_SITTER_RUBY_WASM = path.resolve(__dirname, 'tree-sitter-ruby.wasm');
@@ -8,7 +9,7 @@ const TreeSitterFactory = {
 
 	async initalize(): Promise<void> {
 		await Parser.init();
-		console.debug(`Loading Ruby tree-sitter syntax from ${TREE_SITTER_RUBY_WASM}`);
+		log.debug(`Loading Ruby tree-sitter syntax from ${TREE_SITTER_RUBY_WASM}`);
 		this.language = await Parser.Language.load(TREE_SITTER_RUBY_WASM);
 	},
 

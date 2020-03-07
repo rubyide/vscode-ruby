@@ -1,6 +1,7 @@
 import { URI } from 'vscode-uri';
 import BaseLinter from './BaseLinter';
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
+import log from 'loglevel';
 
 type ReekOffense = {
 	context: string;
@@ -38,7 +39,7 @@ export default class Reek extends BaseLinter {
 				results = results.concat(diagnostics);
 			}
 		} catch (e) {
-			console.error(`Lint: Received invalid JSON from reek:\n\n${data}`);
+			log.error(`Lint: Received invalid JSON from reek:\n\n${data}`);
 		}
 
 		return results;

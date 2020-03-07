@@ -1,4 +1,5 @@
 import { Diagnostic, TextDocument } from 'vscode-languageserver';
+import log from 'loglevel';
 import { spawn } from '../util/spawn';
 import { EMPTY, of, Observable } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';
@@ -45,8 +46,8 @@ export default abstract class BaseLinter implements ILinter {
 			cmd = 'bundle';
 		}
 
-		console.info(`Lint: executing ${cmd} ${args.join(' ')}...`);
-		// console.debug(`Lint environment: ${this.config.env}`);
+		log.info(`Lint: executing ${cmd} ${args.join(' ')}...`);
+		log.debug(`Lint environment: ${JSON.stringify(this.config.env, null, 2)}`);
 		return spawn(cmd, args, {
 			env: this.config.env,
 			cwd: this.config.executionRoot,
@@ -60,7 +61,7 @@ export default abstract class BaseLinter implements ILinter {
 				if (value.source === 'stdout') {
 					return `${acc}${value.text}`;
 				} else {
-					console.error(value.text);
+					log.error(value.text);
 					return acc;
 				}
 			}, ''),
@@ -81,7 +82,7 @@ export default abstract class BaseLinter implements ILinter {
 	protected processError(error: any): void {
 		switch (error.code) {
 			case 'ENOENT':
-				console.log(
+				log.warn(
 					`Lint: unable to execute ${error.path} ${error.spawnargs.join(
 						' '
 					)} as the command could not be found`

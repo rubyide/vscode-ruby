@@ -1,4 +1,5 @@
 import { Position, Range, TextDocument, TextEdit } from 'vscode-languageserver';
+import log from 'loglevel';
 import { of, Observable, throwError } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';
 import {
@@ -65,7 +66,7 @@ export default abstract class BaseFormatter implements IFormatter {
 		}
 
 		const formatStr = `${cmd} ${args.join(' ')}`;
-		console.info(`Format: executing ${formatStr}...`);
+		log.info(`Format: executing ${formatStr}...`);
 		return spawn(cmd, args, {
 			env: this.config.env,
 			cwd: this.config.executionRoot,
@@ -79,7 +80,7 @@ export default abstract class BaseFormatter implements IFormatter {
 				if (value.source === 'stdout') {
 					return `${acc}${value.text}`;
 				} else {
-					console.error(value.text);
+					log.error(value.text);
 					return acc;
 				}
 			}, ''),

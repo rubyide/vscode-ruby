@@ -4,6 +4,7 @@ import {
 	IConnection,
 	WorkspaceFoldersChangeEvent,
 } from 'vscode-languageserver';
+import log from 'loglevel';
 
 import { workspaceRubyEnvironmentCache } from '../SettingsCache';
 
@@ -30,8 +31,8 @@ export default class WorkspaceProvider extends Provider {
 	private handleDidChangeWatchedFiles = async (
 		params: DidChangeWatchedFilesParams
 	): Promise<void> => {
-		console.log('Watched file change!');
-		console.log(params);
+		log.info('Watched file change!');
+		log.info(params);
 		// TODO load workspace environment again based on workspace where the file changed
 	};
 }

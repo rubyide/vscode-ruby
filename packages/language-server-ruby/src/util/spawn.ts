@@ -2,6 +2,7 @@ import { of, merge, Observer, Observable, Subscription, Subject, AsyncSubject } 
 import { reduce } from 'rxjs/operators';
 import { default as crossSpawn } from 'cross-spawn'; // eslint-disable-line import/no-named-default
 import { SpawnOptions } from 'child_process';
+import log from 'loglevel';
 
 export type SpawnOpts = {
 	stdin?: Observable<string>;
@@ -36,7 +37,7 @@ export function spawn<T = string>(
 ): Observable<T> {
 	return Observable.create((subj: Observer<SpawnReturn>) => {
 		const { stdin, ...optsWithoutStdIn } = opts;
-		// console.debug(`spawning process: ${cmd} ${args.join()}, ${JSON.stringify(optsWithoutStdIn)}`);
+		log.trace(`spawning process: ${cmd} ${args.join()}, ${JSON.stringify(optsWithoutStdIn)}`);
 
 		const proc = crossSpawn(cmd, args, optsWithoutStdIn);
 
@@ -136,7 +137,7 @@ export function spawn<T = string>(
 					return;
 				}
 
-				// console.debug(`Killing process: ${cmd} ${args.join()}`);
+				log.trace(`Killing process: ${cmd} ${args.join()}`);
 				proc.kill();
 			})
 		);

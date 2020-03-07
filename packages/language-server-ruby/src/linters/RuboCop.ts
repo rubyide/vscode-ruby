@@ -1,5 +1,6 @@
 import { URI } from 'vscode-uri';
 import { Diagnostic, DiagnosticSeverity, Range } from 'vscode-languageserver';
+import log from 'loglevel';
 import BaseLinter from './BaseLinter';
 import { RuboCopLintConfiguration } from '../SettingsCache';
 
@@ -81,7 +82,7 @@ export default class RuboCop extends BaseLinter {
 				results = results.concat(diagnostics);
 			}
 		} catch (e) {
-			console.error(`Lint: Received invalid JSON from rubocop:\n\n${data}`);
+			log.error(`Lint: Received invalid JSON from rubocop:\n\n${data}`);
 		}
 
 		return results;

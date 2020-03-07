@@ -8,6 +8,7 @@ import {
 	InitializeParams,
 	ProposedFeatures,
 } from 'vscode-languageserver';
+import log from 'loglevel';
 
 import { ILanguageServer } from './Server';
 import TreeSitterFactory from './util/TreeSitterFactory';
@@ -16,7 +17,8 @@ const connection: IConnection = createConnection(ProposedFeatures.all);
 let server: ILanguageServer;
 
 connection.onInitialize(async (params: InitializeParams) => {
-	connection.console.info('Initializing Ruby language server...');
+	log.setDefaultLevel('info');
+	log.info('Initializing Ruby language server...');
 
 	await TreeSitterFactory.initalize();
 
@@ -39,11 +41,11 @@ connection.listen();
 
 // Don't die on unhandled Promise rejections
 process.on('unhandledRejection', (reason, p) => {
-	connection.console.error(`Unhandled Rejection at: Promise ${p} reason:, ${reason}`);
+	log.error(`Unhandled Rejection at: Promise ${p} reason:, ${reason}`);
 });
 
 // Don't die when attempting to pipe stdin to a bad spawn
 // https://github.com/electron/electron/issues/13254
 process.on('SIGPIPE', () => {
-	// console.log('SIGPIPE!!');
+	log.error('SIGPIPE received');
 });

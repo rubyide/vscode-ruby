@@ -7,9 +7,7 @@ export default abstract class BaseAnalyzer<T> {
 		this.diagnostics = [] as T[];
 	}
 
-	public analyze(node: SyntaxNode): void {
-		console.log(node);
-	}
+	public analyze(_node: SyntaxNode): void {}
 
 	public flush(): void {
 		this.diagnostics = [] as T[];

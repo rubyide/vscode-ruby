@@ -1,4 +1,5 @@
 import { Diagnostic } from 'vscode-languageserver';
+import log from 'loglevel';
 import RuboCop, { IRuboCopResults } from './RuboCop';
 
 export default class Standard extends RuboCop {
@@ -32,7 +33,7 @@ export default class Standard extends RuboCop {
 				results = results.concat(diagnostics);
 			}
 		} catch (e) {
-			console.error(`Lint: Received invalid JSON from standardrb:\n\n${data}`);
+			log.error(`Lint: Received invalid JSON from standardrb:\n\n${data}`);
 		}
 
 		return results;

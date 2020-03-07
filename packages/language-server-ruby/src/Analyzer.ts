@@ -1,4 +1,5 @@
 import { DocumentSymbol, FoldingRange } from 'vscode-languageserver';
+import log from 'loglevel';
 import { Observer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Tree, SyntaxNode } from 'web-tree-sitter';
@@ -66,7 +67,7 @@ class Analyses implements Observer<Analysis> {
 	}
 
 	public error(err: any): void {
-		console.log(err);
+		log.error(err);
 	}
 
 	public complete(): void {

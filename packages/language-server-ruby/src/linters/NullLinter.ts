@@ -1,6 +1,7 @@
 import { ILinter } from './BaseLinter';
 import { Observable, of } from 'rxjs';
 import { Diagnostic } from 'vscode-languageserver';
+import log from 'loglevel';
 
 export default class NullLinter implements ILinter {
 	private msg: string;
@@ -10,7 +11,7 @@ export default class NullLinter implements ILinter {
 	}
 
 	lint(): Observable<Diagnostic[]> {
-		console.error(`Lint: ${this.msg}`);
+		log.warn(`Lint: ${this.msg}`);
 		return of([]);
 	}
 }
