@@ -7,12 +7,16 @@ import Provider from './Provider';
 import { documentConfigurationCache } from '../SettingsCache';
 
 export default class ConfigurationProvider extends Provider {
-	static register(connection: IConnection) {
-		return new ConfigurationProvider(connection);
+	private configChangeCallback: () => void;
+
+	static register(connection: IConnection, callback?: () => void) {
+		return new ConfigurationProvider(connection, callback);
 	}
 
-	constructor(connection: IConnection) {
+	constructor(connection: IConnection, callback?: () => void) {
 		super(connection);
+
+		this.configChangeCallback = callback || (() => {});
 
 		this.connection.client.register(DidChangeConfigurationNotification.type, undefined);
 		this.connection.onDidChangeConfiguration(this.handleDidChangeConfiguration);
@@ -22,5 +26,6 @@ export default class ConfigurationProvider extends Provider {
 		_params: DidChangeConfigurationParams // params is empty in the pull config model
 	): Promise<void> => {
 		documentConfigurationCache.flush();
+		this.configChangeCallback();
 	};
 }
