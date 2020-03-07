@@ -17,6 +17,16 @@ export class CapabilityCalculator {
 		this.calculateCapabilities();
 	}
 
+	get supportsWorkspaceFolders(): boolean {
+		return (
+			this.clientCapabilities.workspace && !!this.clientCapabilities.workspace.workspaceFolders
+		);
+	}
+
+	get supportsWorkspaceConfiguration(): boolean {
+		return this.clientCapabilities.workspace && !!this.clientCapabilities.workspace.configuration;
+	}
+
 	private calculateCapabilities(): void {
 		this.capabilities = {
 			// Perform incremental syncs
