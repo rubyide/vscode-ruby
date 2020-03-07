@@ -74,6 +74,7 @@ export class Server implements ILanguageServer {
 	 */
 	public setup(): void {
 		this.registerInitializedProviders();
+		this.loadGlobalConfig();
 	}
 
 	public shutdown(): void {
@@ -102,7 +103,23 @@ export class Server implements ILanguageServer {
 
 		// Handle configuration change notifications
 		if (this.calculator.supportsWorkspaceConfiguration) {
-			ConfigurationProvider.register(this.connection);
+			ConfigurationProvider.register(this.connection, () => {
+				this.loadGlobalConfig();
+			});
+		}
+	}
+
+	/**
+	 * Loads configuration from the client and sets up global language server configuration
+	 *
+	 * Over time we'll use this method to allow users to enable/disable specific features
+	 * if they are running this language server alongside another one: eg Solargraph or Sorbet
+	 */
+	private async loadGlobalConfig(): Promise<void> {
+		const config: RubyConfiguration = await this.connection.workspace.getConfiguration('ruby');
+		try {
+		} catch (e) {
+			log.error(e);
 		}
 	}
 }
