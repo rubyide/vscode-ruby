@@ -6,6 +6,7 @@ import { LogLevelDesc } from 'loglevel';
 export interface RubyCommandConfiguration {
 	command?: string;
 	useBundler?: boolean;
+	pathToBundler?: string;
 }
 
 export interface RuboCopLintConfiguration extends RubyCommandConfiguration {

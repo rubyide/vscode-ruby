@@ -43,7 +43,7 @@ export default abstract class BaseLinter implements ILinter {
 
 		if (!this.lintConfig.command && this.lintConfig.useBundler) {
 			args.unshift('exec', cmd);
-			cmd = 'bundle';
+			cmd = this.config.config.pathToBundler || 'bundle';
 		}
 
 		log.info(`Lint: executing ${cmd} ${args.join(' ')}...`);

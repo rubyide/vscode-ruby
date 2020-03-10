@@ -44,7 +44,10 @@ function getLinter(
 	const linterConfig: LinterConfig = {
 		env,
 		executionRoot,
-		config: lintConfig,
+		config: {
+			pathToBundler: config.pathToBundler,
+			...lintConfig,
+		},
 	};
 	return new linter(document, linterConfig); // eslint-disable-line new-cap
 }
