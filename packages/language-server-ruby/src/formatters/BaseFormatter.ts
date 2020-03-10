@@ -62,7 +62,7 @@ export default abstract class BaseFormatter implements IFormatter {
 
 		if (this.useBundler) {
 			args.unshift('exec', cmd);
-			cmd = 'bundle';
+			cmd = this.config.config.pathToBundler || 'bundle';
 		}
 
 		const formatStr = `${cmd} ${args.join(' ')}`;
