@@ -31,7 +31,7 @@ Legacy functionality will most likely not receive additional improvements and wi
 
 ### Example Initial Configuration:
 
-```json
+```jsonc
 "ruby.useBundler": true, //run non-lint commands with bundle exec
 "ruby.useLanguageServer": true, // use the internal language server (see below)
 "ruby.lint": {
