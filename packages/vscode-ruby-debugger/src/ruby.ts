@@ -18,7 +18,7 @@ type ExecutableCommandConfiguration = {
     pathToRuby: string;
     useBundler: boolean;
     pathToBundler: string;
-    rdebugIdePath: string;
+    pathToRDebugIDE: string;
 };
 
 export class RubyProcess extends EventEmitter {
@@ -62,7 +62,7 @@ export class RubyProcess extends EventEmitter {
             pathToRuby: 'ruby',
             useBundler: false,
             pathToBundler: 'bundle',
-            rdebugIdePath: rdebugIdeDefault
+            pathToRDebugIDE: rdebugIdeDefault
         }
 
         if (args.pathToRuby) {
@@ -74,8 +74,8 @@ export class RubyProcess extends EventEmitter {
         if (args.pathToBundler) {
             result.pathToBundler = args.pathToBundler;
         }
-        if (args.rdebugIdePath) {
-            result.rdebugIdePath = args.rdebugIdePath;
+        if (args.pathToRDebugIDE) {
+            result.pathToRDebugIDE = args.pathToRDebugIDE;
         }
 
         return result;
@@ -207,7 +207,7 @@ export class RubyProcess extends EventEmitter {
                 runtimeArgs = [];
             }
             else {
-                runtimeExecutable = executableCommandConfiguration.rdebugIdePath;
+                runtimeExecutable = executableCommandConfiguration.pathToRDebugIDE;
                 runtimeArgs = ['--evaluation-timeout', '10']
 
                 if (args.showDebuggerOutput) {
