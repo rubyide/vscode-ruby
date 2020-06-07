@@ -7,7 +7,7 @@ The server is built to be extensible, accurate, and performant with such feature
 - Automatic Ruby environment detection with support for rvm, rbenv, chruby, and asdf
 - Robust language feature extraction powered by the [tree-sitter](https://tree-sitter.github.io/tree-sitter/) project
 - Lint support via RuboCop, Reek, and Standard
-- Format support via RuboCop, Standard, and Rufo
+- Format support via RuboCop, Standard, Rubyfmt, and Rufo
 - Semantic code folding support
 - Semantic highlighting support
 - Intellisense support

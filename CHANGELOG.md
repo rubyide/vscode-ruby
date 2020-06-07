@@ -75,7 +75,7 @@ Improvements:
 - Support SLIM heredocs [#274](https://github.com/rubyide/vscode-ruby/issues/274)
 - Support heredocs defined inline during a method call [#183](https://github.com/rubyide/vscode-ruby/issues/183)
 - Drop `spawn-rx` for custom version which allows greater control over failed commands
-- Support [RubyFMT](https://github.com/samphippen/rubyfmt) as a formatter [#445](https://github.com/rubyide/vscode-ruby/issues/445)
+- Support [RubyFMT](https://github.com/penelopezone/rubyfmt) as a formatter [#445](https://github.com/rubyide/vscode-ruby/issues/445)
 - Add command palette entries for viewing extension and language server logs (`Ruby: Show Output Channel` and `Ruby: Show Language Server Output Channel`)
 - Support multiline and keyword option YARD comments [#371](https://github.com/rubyide/vscode-ruby/pull/371)
 - Improve/Fix Block Parameter Highlighting [#514](https://github.com/rubyide/vscode-ruby/pull/514)
