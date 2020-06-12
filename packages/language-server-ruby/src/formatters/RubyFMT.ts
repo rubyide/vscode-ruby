@@ -1,4 +1,3 @@
-import { URI } from 'vscode-uri'
 import BaseFormatter from './BaseFormatter';
 
 export default class RubyFMT extends BaseFormatter {
@@ -7,8 +6,7 @@ export default class RubyFMT extends BaseFormatter {
 	}
 
 	get args(): string[] {
-		const documentPath = URI.parse(this.document.uri);
-		return [documentPath.fsPath];
+		return [];
 	}
 
 	get useBundler(): boolean {
