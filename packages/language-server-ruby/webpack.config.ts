@@ -39,14 +39,13 @@ module.exports = {
 	plugins: [
 		new ForkTsCheckerWebpackPlugin(),
 		new CleanWebpackPlugin({
-			cleanAfterEveryBuildPatterns: ['!**/*.wasm', '!**/*.rb'],
+			cleanAfterEveryBuildPatterns: ['!**/*.wasm'],
 		}),
 		// Workaround to Webpack not being able to figure out emscripten's environment export
 		new CopyPlugin(
 			[
 				{ from: '../../node_modules/web-tree-sitter/tree-sitter.wasm' },
 				{ from: 'src/tree-sitter-ruby.wasm' },
-				{ from: 'src/formatters/rubyfmt.rb' },
 			],
 			{
 				copyUnmodified: true,
