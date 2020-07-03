@@ -53,6 +53,17 @@ const rubyConfigurations: vscode.DebugConfiguration[] = [
 		args: ['server'],
 	},
 	{
+		name: 'Minitest - current line',
+		type: 'Ruby',
+		cwd: '${workspaceRoot}',
+		request: 'launch',
+		program: '${workspaceRoot}/bin/rails',
+		args: [
+			'test',
+			'${file}:${lineNumber}'
+		]
+	},
+	{
 		name: 'RSpec - all',
 		type: 'Ruby',
 		request: 'launch',
