@@ -70,15 +70,13 @@ See the [standard docs](https://github.com/testdouble/standard#what-you-might-do
 or
 
 ```json
-{
-  "ruby.lint": {
-    "standard": {
-      "command": "standard",  // setting this will override automatic detection
-      "useBundler": true,
-      "only": ["array", "of", "cops", "to", "run"],
-      "except": ["array", "of", "cops", "not", "to", "run"],
-      "require": ["array", "of", "ruby", "files", "to, "require"]
-    }
+"ruby.lint": {
+  "standard": {
+    "command": "standard",  // setting this will override automatic detection
+    "useBundler": true,
+    "only": ["array", "of", "cops", "to", "run"],
+    "except": ["array", "of", "cops", "not", "to", "run"],
+    "require": ["array", "of", "ruby", "files", "to, "require"]
   }
 }
 ```
