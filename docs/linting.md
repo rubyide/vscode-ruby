@@ -70,7 +70,7 @@ See the [standard docs](https://github.com/testdouble/standard#what-you-might-do
 or
 
 ```json
-{
+"ruby.lint": {
   "standard": {
     "command": "standard",  // setting this will override automatic detection
     "useBundler": true,
