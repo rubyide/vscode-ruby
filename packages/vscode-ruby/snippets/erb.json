@@ -82,5 +82,313 @@
 			"<% $1 %>"
 		],
 		"description": "erb exec block"
+	},
+	"a": {
+		"prefix": "a",
+		"body": [
+			"<a></a>"
+		],
+		"description": "Defines a hyperlink"
+	},
+	"b": {
+		"prefix": "b",
+		"body": [
+			"<b></b>"
+		],
+		"description": "Defines bold text"
+	},
+	"body": {
+		"prefix": "body",
+		"body": [
+			"<body></body>"
+		],
+		"description": "Defines the document's body"
+	},
+	"br": {
+		"prefix": "br",
+		"body": [
+			"<br></br>"
+		],
+		"description": "Defines a single line break"
+	},
+	"button": {
+		"prefix": "button",
+		"body": [
+			"<button></button>"
+		],
+		"description": "Defines a clickable button"
+	},
+	"div": {
+		"prefix": "div",
+		"body": [
+			"<div></div>"
+		],
+		"description": "Defines a section in a document"
+	},
+	"em": {
+		"prefix": "em",
+		"body": [
+			"<em></em>"
+		],
+		"description": "Defines emphasized text"
+	},
+	"footer": {
+		"prefix": "footer",
+		"body": [
+			"<footer></footer>"
+		],
+		"description": "Defines a footer for a document or section"
+	},
+	"form": {
+		"prefix": "form",
+		"body": [
+			"<form></form>"
+		],
+		"description": "Defines an HTML form for user input"
+	},
+	"h1": {
+		"prefix": "h1",
+		"body": [
+			"<h1></h1>"
+		],
+		"description": "Defines h1 headings"
+	},
+	"h2": {
+		"prefix": "h2",
+		"body": [
+			"<h2></h2>"
+		],
+		"description": "Defines h2 headings"
+	},
+	"h3": {
+		"prefix": "h3",
+		"body": [
+			"<h3></h3>"
+		],
+		"description": "Defines h3 headings"
+	},
+	"h4": {
+		"prefix": "h4",
+		"body": [
+			"<h3></h3>"
+		],
+		"description": "Defines h4 headings"
+	},
+	"h5": {
+		"prefix": "h5",
+		"body": [
+			"<h3></h3>"
+		],
+		"description": "Defines h5 headings"
+	},
+	"h6": {
+		"prefix": "h6",
+		"body": [
+			"<h3></h3>"
+		],
+		"description": "Defines h6 headings"
+	},
+	"head": {
+		"prefix": "head",
+		"body": [
+			"<head></head>"
+		],
+		"description": "Contains metadata/information for the document"
+	},
+	"header": {
+		"prefix": "header",
+		"body": [
+			"<header></header>"
+		],
+		"description": "Defines a header for a document or section"
+	},
+	"hr": {
+		"prefix": "hr",
+		"body": [
+			"<hr></hr>"
+		],
+		"description": "Defines a thematic change in the content"
+	},
+	"html": {
+		"prefix": "html",
+		"body": [
+			"<html></html>"
+		],
+		"description": "Defines the root of an HTML document"
+	},
+	"img": {
+		"prefix": "img",
+		"body": [
+			"<img></img>"
+		],
+		"description": "Defines an image"
+	},
+	"input": {
+		"prefix": "input",
+		"body": [
+			"<input></input>"
+		],
+		"description": "Defines an input control"
+	},
+	"label": {
+		"prefix": "label",
+		"body": [
+			"<label></label>"
+		],
+		"description": "Defines a label for an <input> element"
+	},
+	"li": {
+		"prefix": "li",
+		"body": [
+			"<li></li>"
+		],
+		"description": "Defines a list item"
+	},
+	"meta": {
+		"prefix": "meta",
+		"body": [
+			"<meta></meta>"
+		],
+		"description": "Defines metadata about an HTML document"
+	},
+	"nav": {
+		"prefix": "nav",
+		"body": [
+			"<nav></nav>"
+		],
+		"description": "Defines navigation links"
+	},
+	"ol": {
+		"prefix": "ol",
+		"body": [
+			"<ol></ol>"
+		],
+		"description": "Defines an ordered list"
+	},
+	"option": {
+		"prefix": "option",
+		"body": [
+			"<option></option>"
+		],
+		"description": "Defines an option in a drop-down list"
+	},
+	"p": {
+		"prefix": "p",
+		"body": [
+			"<p></p>"
+		],
+		"description": "Defines a paragraph"
+	},
+	"pre": {
+		"prefix": "pre",
+		"body": [
+			"<pre></pre>"
+		],
+		"description": "Defines preformatted text"
+	},
+	"section": {
+		"prefix": "section",
+		"body": [
+			"<section></section>"
+		],
+		"description": "Defines a section in a document"
+	},
+	"select": {
+		"prefix": "select",
+		"body": [
+			"<select></select>"
+		],
+		"description": "Defines a drop-down list"
+	},
+	"small": {
+		"prefix": "small",
+		"body": [
+			"<small></small>"
+		],
+		"description": "Defines smaller text"
+	},
+	"span": {
+		"prefix": "span",
+		"body": [
+			"<span></span>"
+		],
+		"description": "Defines a section in a document"
+	},
+	"strong": {
+		"prefix": "strong",
+		"body": [
+			"<strong></strong>"
+		],
+		"description": "Defines important text"
+	},
+	"table": {
+		"prefix": "table",
+		"body": [
+			"<table></table>"
+		],
+		"description": "Defines a table"
+	},
+	"tbody": {
+		"prefix": "tbody",
+		"body": [
+			"<tbody></tbody>"
+		],
+		"description": "Groups the body content in a table"
+	},
+	"td": {
+		"prefix": "td",
+		"body": [
+			"<td></td>"
+		],
+		"description": "Defines a cell in a table"
+	},
+	"textarea": {
+		"prefix": "textarea",
+		"body": [
+			"<textarea></textarea>"
+		],
+		"description": "Defines a multiline input control (text area)"
+	},
+	"tfoot": {
+		"prefix": "tfoot",
+		"body": [
+			"<tfoot></tfoot>"
+		],
+		"description": "Groups the footer content in a table"
+	},
+	"th": {
+		"prefix": "th",
+		"body": [
+			"<th></th>"
+		],
+		"description": "Defines a header cell in a table"
+	},
+	"thead": {
+		"prefix": "thead",
+		"body": [
+			"<thead></thead>"
+		],
+		"description": "Groups the header content in a table"
+	},
+	"title": {
+		"prefix": "title",
+		"body": [
+			"<title></title>"
+		],
+		"description": "Defines a title for the document"
+	},
+	"tr": {
+		"prefix": "tr",
+		"body": [
+			"<tr></tr>"
+		],
+		"description": "Defines a row in a table"
+	},
+	"ul": {
+		"prefix": "ul",
+		"body": [
+			"<ul></ul>"
+		],
+		"description": "Defines an unordered list"
 	}
 }
