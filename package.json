@@ -4,12 +4,39 @@
 		"packages/*"
 	],
 	"devDependencies": {
-		"lerna": "^3.16.4"
+		"@commitlint/cli": "^9.0.1",
+		"@commitlint/config-conventional": "^9.0.1",
+		"@semantic-release/changelog": "^5.0.1",
+		"commitizen": "^4.1.2",
+		"cz-conventional-changelog": "^3.2.0",
+		"husky": "^4.2.5",
+		"lerna": "^3.16.4",
+		"semantic-release": "^17.0.8",
+		"semantic-release-vsce": "^3.0.1",
+		"vsce": "^1.76.0"
+	},
+	"engines": {
+		"node": ">=10.21.0"
 	},
 	"scripts": {
 		"build": "lerna run build",
 		"package": "mkdir -p build && rm -rf build/* && lerna run package",
 		"test": "lerna run test",
 		"watch": "lerna run watch"
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
+		}
+	},
+	"husky": {
+		"hooks": {
+			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+		}
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
 	}
 }
