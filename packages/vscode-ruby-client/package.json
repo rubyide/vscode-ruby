@@ -158,7 +158,7 @@
 				"ruby.languageServer": {
 					"scope": "machine",
 					"type": "object",
-					"description": "Set individual ruby linters to use",
+					"description": "Language server configuration",
 					"properties": {
 						"logLevel": {
 							"type": "string",
@@ -409,7 +409,8 @@
 				"ruby.format": {
 					"type": [
 						"boolean",
-						"string"
+						"string",
+						"object"
 					],
 					"enum": [
 						false,
