@@ -27,7 +27,7 @@ export default class Reek extends BaseLinter {
 
 	get args(): string[] {
 		const documentPath = URI.parse(this.document.uri);
-		return ['-f', 'json', '--stdin-filename', documentPath.fsPath];
+		return ['-f', 'json', '--stdin-filename', `'${documentPath.fsPath}'`];
 	}
 
 	protected processResults(data): Diagnostic[] {
