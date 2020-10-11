@@ -286,7 +286,7 @@
 									"name": "variable.parameter.function.ruby"
 								}
 							},
-							"match": "\\G([&*]?)(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
+							"match": "\\G(&|\\*\\*?)?(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
 						},
 						{
 							"include": "$self"
@@ -328,7 +328,7 @@
 									"name": "variable.parameter.function.ruby"
 								}
 							},
-							"match": "\\G([&*]?)(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
+							"match": "\\G(&|\\*\\*?)?(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
 						},
 						{
 							"include": "$self"

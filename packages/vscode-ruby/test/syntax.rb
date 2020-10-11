@@ -67,6 +67,32 @@ class ExampleClass < AnotherClass
 
   end
 
+  def b_method(*a, **b, &block)
+# ^^^ meta.function.method.with-arguments.ruby keyword.control.def.ruby
+#     ^^^^^^^^ meta.function.method.with-arguments.ruby entity.name.function.ruby
+#             ^ meta.function.method.with-arguments.ruby punctuation.definition.parameters.ruby
+#              ^ meta.function.method.with-arguments.ruby storage.type.variable.ruby
+#               ^ meta.function.method.with-arguments.ruby variable.parameter.function.ruby
+#                  ^^ meta.function.method.with-arguments.ruby storage.type.variable.ruby
+#                    ^ meta.function.method.with-arguments.ruby variable.parameter.function.ruby
+#                       ^ meta.function.method.with-arguments.ruby storage.type.variable.ruby
+#                        ^^^^^ meta.function.method.with-arguments.ruby variable.parameter.function.ruby
+#                             ^ meta.function.method.with-arguments.ruby punctuation.definition.parameters.ruby
+    nil
+  end
+
+  def c_method *a, **b, &block
+# ^^^ meta.function.method.with-arguments.ruby keyword.control.def.ruby
+#     ^^^^^^^^ meta.function.method.with-arguments.ruby entity.name.function.ruby
+#              ^ meta.function.method.with-arguments.ruby storage.type.variable.ruby
+#               ^ meta.function.method.with-arguments.ruby variable.parameter.function.ruby
+#                  ^^ meta.function.method.with-arguments.ruby storage.type.variable.ruby
+#                    ^ meta.function.method.with-arguments.ruby variable.parameter.function.ruby
+#                       ^ meta.function.method.with-arguments.ruby storage.type.variable.ruby
+#                        ^^^^^ meta.function.method.with-arguments.ruby variable.parameter.function.ruby
+    nil
+  end
+
   def true?(obj)
     !!obj
 #   ^^ keyword.operator.logical.ruby
