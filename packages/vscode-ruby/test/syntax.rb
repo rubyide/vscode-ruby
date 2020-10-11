@@ -71,4 +71,24 @@ class ExampleClass < AnotherClass
     !!obj
 #   ^^ keyword.operator.logical.ruby
   end
+
+  def self.do
+# ^^^ keyword.control.def.ruby
+#     ^^^^^^^ meta.function.method.without-arguments.ruby entity.name.function.ruby
+    @do ||= {}
+#   ^ variable.other.readwrite.instance.ruby punctuation.definition.variable.ruby
+#    ^^ variable.other.readwrite.instance.ruby
+#       ^^^ keyword.operator.assignment.augmented.ruby
+#           ^ punctuation.section.scope.begin.ruby
+#            ^ punctuation.section.scope.end.ruby
+  end
+# ^^^ keyword.control.ruby
 end
+
+
+  weird_method :do || true
+# ^^^^^^^^^^^^ variable.other.ruby
+#              ^ constant.language.symbol.ruby punctuation.definition.constant.ruby
+#               ^^ constant.language.symbol.ruby
+#                  ^^ keyword.operator.logical.ruby
+#                     ^^^^ constant.language.boolean.ruby
