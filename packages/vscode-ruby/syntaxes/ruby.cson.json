@@ -51,65 +51,6 @@
 		{
 			"captures": {
 				"1": {
-					"name": "keyword.control.class.ruby"
-				},
-				"2": {
-					"name": "entity.name.type.class.ruby"
-				},
-				"4": {
-					"name": "entity.other.inherited-class.ruby"
-				},
-				"5": {
-					"name": "punctuation.separator.inheritance.ruby"
-				},
-				"6": {
-					"name": "variable.other.object.ruby"
-				},
-				"7": {
-					"name": "punctuation.definition.variable.ruby"
-				}
-			},
-			"match": "(?x)\n^\\s*(class)\\s+\n(\n  (\n    [.a-zA-Z0-9_:]+\n    (\\s*(<)\\s*[.a-zA-Z0-9_:]+)?   # class A < B\n  )\n  |\n  ((<<)\\s*[.a-zA-Z0-9_:]+)         # class << C\n)",
-			"name": "meta.class.ruby"
-		},
-		{
-			"captures": {
-				"1": {
-					"name": "keyword.control.module.ruby"
-				},
-				"2": {
-					"name": "entity.name.type.module.ruby"
-				},
-				"3": {
-					"name": "entity.other.inherited-class.module.first.ruby"
-				},
-				"4": {
-					"name": "punctuation.separator.inheritance.ruby"
-				},
-				"5": {
-					"name": "entity.other.inherited-class.module.second.ruby"
-				},
-				"6": {
-					"name": "punctuation.separator.inheritance.ruby"
-				},
-				"7": {
-					"name": "entity.other.inherited-class.module.third.ruby"
-				},
-				"8": {
-					"name": "punctuation.separator.inheritance.ruby"
-				}
-			},
-			"match": "(?x)\n^\\s*(module)\\s+\n(\n  ([A-Z]\\w*(::))?\n  ([A-Z]\\w*(::))?\n  ([A-Z]\\w*(::))*\n  [A-Z]\\w*\n)",
-			"name": "meta.module.ruby"
-		},
-		{
-			"comment": "else if is a common mistake carried over from other languages. it works if you put in a second end, but it’s never what you want.",
-			"match": "(?<!\\.)\\belse(\\s)+if\\b",
-			"name": "invalid.deprecated.ruby"
-		},
-		{
-			"captures": {
-				"1": {
 					"name": "punctuation.definition.constant.hashkey.ruby"
 				}
 			},
@@ -128,14 +69,585 @@
 			"name": "constant.language.symbol.hashkey.ruby"
 		},
 		{
-			"comment": "everything being a reserved word, not a value and needing a 'end' is a..",
-			"match": "(?<!\\.)\\b(BEGIN|begin|case|class|else|elsif|END|end|ensure|for|if|in|module|rescue|then|unless|until|when|while)\\b(?![?!])",
-			"name": "keyword.control.ruby"
+			"begin": "(?<!^\\.|[^.]\\.|::)\\b(class)\\b(?![?!])",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.class.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.class.end.ruby"
+				}
+			},
+			"name": "meta.class.ruby",
+			"patterns": [
+				{
+					"match": "\\G\\s+(?:([.a-zA-Z0-9_:]+)(?:\\s*(<)\\s*([.a-zA-Z0-9_:]+))?|(<<)\\s*([.a-zA-Z0-9_:]+))",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.class.ruby",
+							"patterns": [
+								{
+									"captures": {
+										"1": {
+											"name": "punctuation.separator.namespace.ruby"
+										}
+									},
+									"comment": "Mark as namespace separator if double colons followed by capital letter",
+									"match": "(::)\\s*(?=[A-Z])"
+								},
+								{
+									"include": "$self"
+								}
+							]
+						},
+						"2": {
+							"name": "punctuation.separator.inheritance.ruby"
+						},
+						"3": {
+							"name": "entity.other.inherited-class.ruby",
+							"patterns": [
+								{
+									"captures": {
+										"1": {
+											"name": "punctuation.separator.namespace.ruby"
+										}
+									},
+									"comment": "Mark as namespace separator if double colons followed by capital letter",
+									"match": "(::)\\s*(?=[A-Z])"
+								},
+								{
+									"include": "$self"
+								}
+							]
+						},
+						"4": {
+							"name": "punctuation.accessor.singleton.ruby"
+						},
+						"5": {
+							"name": "variable.other.object.ruby",
+							"patterns": [
+								{
+									"include": "$self"
+								}
+							]
+						}
+					}
+				},
+				{
+					"include": "$self"
+				}
+			]
 		},
 		{
-			"comment": "contextual smart pair support for block parameters",
-			"match": "(?<!\\.)\\bdo\\b",
-			"name": "keyword.control.start-block.ruby"
+			"begin": "(?<!^\\.|[^.]\\.|::)\\b(module)\\b(?![?!])",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.module.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.module.end.ruby"
+				}
+			},
+			"name": "meta.module.ruby",
+			"patterns": [
+				{
+					"match": "\\G\\s+(([A-Z]\\w*(::))?([A-Z]\\w*(::))?([A-Z]\\w*(::))*[A-Z]\\w*)",
+					"captures": {
+						"1": {
+							"name": "entity.name.type.module.ruby"
+						},
+						"2": {
+							"name": "entity.other.inherited-class.module.first.ruby"
+						},
+						"3": {
+							"name": "punctuation.separator.inheritance.ruby"
+						},
+						"4": {
+							"name": "entity.other.inherited-class.module.second.ruby"
+						},
+						"5": {
+							"name": "punctuation.separator.inheritance.ruby"
+						},
+						"6": {
+							"name": "entity.other.inherited-class.module.third.ruby"
+						},
+						"7": {
+							"name": "punctuation.separator.inheritance.ruby"
+						}
+					}
+				},
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"comment": "else if is a common mistake carried over from other languages. it works if you put in a second end, but it’s never what you want.",
+			"match": "(?<!\\.)\\belse(\\s)+if\\b",
+			"name": "invalid.deprecated.ruby"
+		},
+		{
+			"begin": "(?x)\n(?<![\\w)])((/))(?![?*+])\n(?=\n  (?:\\\\/|[^/])*+          # Do NOT change the order\n  /[eimnosux]*\\s*\n  (?:\n    [)\\]}#.,?:]|\\|\\||&&|<=>|=>|==|=~|!~|!=|;|$|\n    if|else|elsif|then|do|end|unless|while|until|or|and\n  )\n  |\n  $\n)",
+			"captures": {
+				"1": {
+					"name": "string.regexp.interpolated.ruby"
+				},
+				"2": {
+					"name": "punctuation.section.regexp.ruby"
+				}
+			},
+			"comment": "regular expression literal with interpolation",
+			"contentName": "string.regexp.interpolated.ruby",
+			"end": "((/[eimnosux]*))(?:\\s+(?:\\b(if)|(unless)\\b(?![?!]))|\\s+(?:\\b(while)|(until)\\b(?![?!])))?",
+			"endCaptures": {
+				"1": {
+					"name": "string.regexp.interpolated.ruby"
+				},
+				"2": {
+					"name": "punctuation.section.regexp.ruby"
+				},
+				"3": {
+					"name": "keyword.control.modifier.conditional.if.ruby"
+				},
+				"4": {
+					"name": "keyword.control.modifier.conditional.unless.ruby"
+				},
+				"5": {
+					"name": "keyword.control.modifier.while.ruby"
+				},
+				"6": {
+					"name": "keyword.control.modifier.until.ruby"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#regex_sub"
+				}
+			]
+		},
+		{
+			"begin": "%r{",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.begin.ruby"
+				}
+			},
+			"end": "}[eimnosux]*",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.end.ruby"
+				}
+			},
+			"name": "string.regexp.interpolated.ruby",
+			"patterns": [
+				{
+					"include": "#regex_sub"
+				},
+				{
+					"include": "#nest_curly_r"
+				}
+			]
+		},
+		{
+			"begin": "%r\\[",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.begin.ruby"
+				}
+			},
+			"end": "][eimnosux]*",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.end.ruby"
+				}
+			},
+			"name": "string.regexp.interpolated.ruby",
+			"patterns": [
+				{
+					"include": "#regex_sub"
+				},
+				{
+					"include": "#nest_brackets_r"
+				}
+			]
+		},
+		{
+			"begin": "%r\\(",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.begin.ruby"
+				}
+			},
+			"end": "\\)[eimnosux]*",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.end.ruby"
+				}
+			},
+			"name": "string.regexp.interpolated.ruby",
+			"patterns": [
+				{
+					"include": "#regex_sub"
+				},
+				{
+					"include": "#nest_parens_r"
+				}
+			]
+		},
+		{
+			"begin": "%r<",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.begin.ruby"
+				}
+			},
+			"end": "(>[eimnosux]*)(?:\\s+(?:\\b(if)|(unless)\\b(?![?!]))|\\s+(?:\\b(while)|(until)\\b(?![?!])))?",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.section.regexp.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.modifier.conditional.if.ruby"
+				},
+				"3": {
+					"name": "keyword.control.modifier.conditional.unless.ruby"
+				},
+				"4": {
+					"name": "keyword.control.modifier.while.ruby"
+				},
+				"5": {
+					"name": "keyword.control.modifier.until.ruby"
+				}
+			},
+			"name": "string.regexp.interpolated.ruby",
+			"patterns": [
+				{
+					"include": "#regex_sub"
+				},
+				{
+					"include": "#nest_ltgt_r"
+				}
+			]
+		},
+		{
+			"begin": "%r([^\\w])",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.begin.ruby"
+				}
+			},
+			"end": "\\1[eimnosux]*",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.section.regexp.end.ruby"
+				}
+			},
+			"name": "string.regexp.interpolated.ruby",
+			"patterns": [
+				{
+					"include": "#regex_sub"
+				}
+			]
+		},
+		{
+			"begin": "(?<!^\\.|[^.]\\.|::)\\b(for)\\b(?![?!])",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.for.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.for.end.ruby"
+				}
+			},
+			"name": "meta.block.for.ruby",
+			"patterns": [
+				{
+					"begin": "\\G\\s+(.+?)\\s+\\b(in)\\b",
+					"beginCaptures": {
+						"1": {
+							"patterns": [
+								{
+									"include": "$self"
+								}
+							]
+						},
+						"2": {
+							"name": "keyword.control.in.ruby"
+						}
+					},
+					"end": "(?<![^.]\\.|::)(\\bdo\\b)(?![?!])|(?=;|$)",
+					"endCaptures": {
+						"1": {
+							"name": "keyword.control.optional.do.ruby"
+						}
+					},
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"begin": "(?<!^\\.|[^.]\\.|::)\\b(do)\\b(?![?!])\\s*(\\|[^|]*\\|)?",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.do.begin.ruby"
+				},
+				"2": {
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.do.end.ruby"
+				}
+			},
+			"name": "meta.block.do.ruby",
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"begin": "(?<!^\\.|[^.]\\.|::)\\b(begin)\\b(?![?!])",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.begin.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.begin.end.ruby"
+				}
+			},
+			"name": "meta.block.begin.ruby",
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"begin": "(?<!^\\.|[^.]\\.|::)\\b(case)\\b(?![?!])",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.conditional.case.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.conditional.case.end.ruby"
+				}
+			},
+			"name": "meta.block.case.ruby",
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"begin": "(?x)\n              (?=\\s*if\\b)\n\t\t\t\t\t\t\t(?<!::)\n\t\t\t\t\t\t\t(?<=<|&|\\||=|>|~|\\^|[+\\-*/%]|\\.{2}|\\.{3}|^|;|:|\\[|\\(|\\{|,|\n\t\t\t\t\t\t\t\t\t\t \\Wif|^if|\t\t\t\t\t\t\t\t\t\t\t\t\t\t# \\WX|^X is equivalent to \\bX\n\t\t\t\t\t\t\t\t\t\t \\Wunless|^unless|\t\t\t\t\t\t\t\t\t\t# this is workaround for code editors which doesn't support onigomo\n\t\t\t\t\t\t\t\t\t\t \\Wcase|^case|\t\t\t\t\t\t\t\t\t\t\t\t# https://github.com/microsoft/vscode-textmate/issues/121#issuecomment-565689295\n\t\t\t\t\t\t\t\t\t\t \\Wwhen|^when|\n\t\t\t\t\t\t\t\t\t\t \\Wwhile|^while|\n\t\t\t\t\t\t\t\t\t\t \\Wuntil|^until|\n\t\t\t\t\t\t\t\t\t\t \\Wfor|^for|\n\t\t\t\t\t\t\t\t\t\t \\Wbegin|^begin|\n\t\t\t\t\t\t\t\t\t\t \\Wand|^and|\n\t\t\t\t\t\t\t\t\t\t \\Wnot|^not|\n\t\t\t\t\t\t\t\t\t\t \\Wor|^or|\n\t\t\t\t\t\t\t\t\t\t \\Win|^in|\n\t\t\t\t\t\t\t\t\t\t \\W!|^!|\n\t\t\t\t\t\t\t\t\t\t \\W\\?|^\\?)\n\t\t\t\t\t\t\t\\s*\\b(if)\\b(?![?!:])\n\t\t\t",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.conditional.if.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.conditional.if.end.ruby"
+				}
+			},
+			"name": "meta.block.if.ruby",
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"begin": "(?x)\n              (?=\\s*unless\\b)\n\t\t\t\t\t\t\t(?<!::)\n\t\t\t\t\t\t\t(?<=<|&|\\||=|>|~|\\^|[+\\-*/%]|\\.{2}|\\.{3}|^|;|:|\\[|\\(|\\{|,|\n\t\t\t\t\t\t\t\t\t\t \\Wif|^if|\t\t\t\t\t\t\t\t\t\t\t\t\t\t# \\WX|^X is equivalent to \\bX\n\t\t\t\t\t\t\t\t\t\t \\Wunless|^unless|\t\t\t\t\t\t\t\t\t\t# this is workaround for code editors which doesn't support onigomo\n\t\t\t\t\t\t\t\t\t\t \\Wcase|^case|\t\t\t\t\t\t\t\t\t\t\t\t# https://github.com/microsoft/vscode-textmate/issues/121#issuecomment-565689295\n\t\t\t\t\t\t\t\t\t\t \\Wwhen|^when|\n\t\t\t\t\t\t\t\t\t\t \\Wwhile|^while|\n\t\t\t\t\t\t\t\t\t\t \\Wuntil|^until|\n\t\t\t\t\t\t\t\t\t\t \\Wfor|^for|\n\t\t\t\t\t\t\t\t\t\t \\Wbegin|^begin|\n\t\t\t\t\t\t\t\t\t\t \\Wand|^and|\n\t\t\t\t\t\t\t\t\t\t \\Wnot|^not|\n\t\t\t\t\t\t\t\t\t\t \\Wor|^or|\n\t\t\t\t\t\t\t\t\t\t \\Win|^in|\n\t\t\t\t\t\t\t\t\t\t \\W!|^!|\n\t\t\t\t\t\t\t\t\t\t \\W\\?|^\\?)\n\t\t\t\t\t\t\t\\s*\\b(unless)\\b(?![?!:])\n\t\t\t",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.conditional.unless.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.conditional.unless.end.ruby"
+				}
+			},
+			"name": "meta.block.unless.ruby",
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"captures": {
+				"1": {
+					"name": "keyword.control.modifier.conditional.if.ruby"
+				},
+				"2": {
+					"name": "keyword.control.modifier.conditional.unless.ruby"
+				}
+			},
+			"match": "(?x)\n              (?=\\s*if\\b|\\s*unless\\b)\n\t\t\t\t\t\t\t(?<=[}\\])\\w?!\"'`])\n\t\t\t\t\t\t\t\\s*\\b(if)|(unless)\\b(?![?!])\n\t\t\t"
+		},
+		{
+			"begin": "(?x)\n              (?=\\s*while\\b)\n\t\t\t\t\t\t\t(?<!::)\n\t\t\t\t\t\t\t(?<=<|&|\\||=|>|~|\\^|[+\\-*/%]|\\.{2}|\\.{3}|^|;|:|\\[|\\(|\\{|,|\n\t\t\t\t\t\t\t\t\t\t \\Wif|^if|\t\t\t\t\t\t\t\t\t\t\t\t\t\t# \\WX|^X is equivalent to \\bX\n\t\t\t\t\t\t\t\t\t\t \\Wunless|^unless|\t\t\t\t\t\t\t\t\t\t# this is workaround for code editors which doesn't support onigomo\n\t\t\t\t\t\t\t\t\t\t \\Wcase|^case|\t\t\t\t\t\t\t\t\t\t\t\t# https://github.com/microsoft/vscode-textmate/issues/121#issuecomment-565689295\n\t\t\t\t\t\t\t\t\t\t \\Wwhen|^when|\n\t\t\t\t\t\t\t\t\t\t \\Wwhile|^while|\n\t\t\t\t\t\t\t\t\t\t \\Wuntil|^until|\n\t\t\t\t\t\t\t\t\t\t \\Wfor|^for|\n\t\t\t\t\t\t\t\t\t\t \\Wbegin|^begin|\n\t\t\t\t\t\t\t\t\t\t \\Wand|^and|\n\t\t\t\t\t\t\t\t\t\t \\Wnot|^not|\n\t\t\t\t\t\t\t\t\t\t \\Wor|^or|\n\t\t\t\t\t\t\t\t\t\t \\Win|^in|\n\t\t\t\t\t\t\t\t\t\t \\W!|^!|\n\t\t\t\t\t\t\t\t\t\t \\W\\?|^\\?)\n\t\t\t\t\t\t\t\\s*\\b(while)\\b(?![?!:])\n\t\t\t",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.while.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.while.end.ruby"
+				}
+			},
+			"name": "meta.block.while.ruby",
+			"patterns": [
+				{
+					"begin": "\\G",
+					"end": "(?<![^.]\\.|::)(\\bdo\\b)(?![?!])|(?=;|$)",
+					"endCaptures": {
+						"1": {
+							"name": "keyword.control.optional.do.ruby"
+						}
+					},
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"begin": "(?x)\n              (?=\\s*until\\b)\n\t\t\t\t\t\t\t(?<!::)\n\t\t\t\t\t\t\t(?<=<|&|\\||=|>|~|\\^|[+\\-*/%]|\\.{2}|\\.{3}|^|;|:|\\[|\\(|\\{|,|\n\t\t\t\t\t\t\t\t\t\t \\Wif|^if|\t\t\t\t\t\t\t\t\t\t\t\t\t\t# \\WX|^X is equivalent to \\bX\n\t\t\t\t\t\t\t\t\t\t \\Wunless|^unless|\t\t\t\t\t\t\t\t\t\t# this is workaround for code editors which doesn't support onigomo\n\t\t\t\t\t\t\t\t\t\t \\Wcase|^case|\t\t\t\t\t\t\t\t\t\t\t\t# https://github.com/microsoft/vscode-textmate/issues/121#issuecomment-565689295\n\t\t\t\t\t\t\t\t\t\t \\Wwhen|^when|\n\t\t\t\t\t\t\t\t\t\t \\Wwhile|^while|\n\t\t\t\t\t\t\t\t\t\t \\Wuntil|^until|\n\t\t\t\t\t\t\t\t\t\t \\Wfor|^for|\n\t\t\t\t\t\t\t\t\t\t \\Wbegin|^begin|\n\t\t\t\t\t\t\t\t\t\t \\Wand|^and|\n\t\t\t\t\t\t\t\t\t\t \\Wnot|^not|\n\t\t\t\t\t\t\t\t\t\t \\Wor|^or|\n\t\t\t\t\t\t\t\t\t\t \\Win|^in|\n\t\t\t\t\t\t\t\t\t\t \\W!|^!|\n\t\t\t\t\t\t\t\t\t\t \\W\\?|^\\?)\n\t\t\t\t\t\t\t\\s*\\b(until)\\b(?![?!:])\n\t\t\t",
+			"beginCaptures": {
+				"1": {
+					"name": "keyword.control.until.begin.ruby"
+				}
+			},
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.until.end.ruby"
+				}
+			},
+			"name": "meta.block.until.ruby",
+			"patterns": [
+				{
+					"begin": "\\G",
+					"end": "(?<![^.]\\.|::)(\\bdo\\b)(?![?!])|(?=;|$)",
+					"endCaptures": {
+						"1": {
+							"name": "keyword.control.optional.do.ruby"
+						}
+					},
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				},
+				{
+					"include": "$self"
+				}
+			]
+		},
+		{
+			"captures": {
+				"1": {
+					"name": "keyword.control.modifier.while.ruby"
+				},
+				"2": {
+					"name": "keyword.control.modifier.until.ruby"
+				}
+			},
+			"match": "(?x)\n              (?=\\s*while\\b|\\s*until\\b)\n\t\t\t\t\t\t\t(?<=[}\\])\\w?!\"'`])\n\t\t\t\t\t\t\t\\s*\\b(while)|(until)\\b(?![?!])\n\t\t\t"
+		},
+		{
+			"match": "(?<!\\.|::)\\brescue\\b(?![?!])",
+			"name": "keyword.control.rescue.ruby"
+		},
+		{
+			"match": "(?<!\\.|::)\\bensure\\b(?![?!])",
+			"name": "keyword.control.ensure.ruby"
+		},
+		{
+			"match": "(?<!\\.|::)\\b(else|elsif|when|then)\\b(?![?!])",
+			"name": "keyword.control.conditional.$1.ruby"
+		},
+		{
+			"comment": "\n\t\t\t\tAll structures that are closed with keyword 'end' already defined higher.\n\t\t\t\tThis rule is made to match freestanding 'end'.\n\t\t\t",
+			"match": "(?<!\\.|::)\\bend\\b(?![?!:])",
+			"name": "keyword.control.end.ruby"
+		},
+		{
+			"match": "(?<!\\.)\\b(BEGIN|END)\\b(?![?!])",
+			"name": "keyword.control.$1.ruby"
 		},
 		{
 			"comment": "contextual smart pair support",
@@ -246,10 +758,10 @@
 			"name": "variable.other.constant.ruby"
 		},
 		{
-			"begin": "(?x)\n(?=def\\b)                          # optimization to help Oniguruma fail fast\n(?<=^|\\s)(def)\\s+\n(\n  (?>[a-zA-Z_]\\w*(?>\\.|::))?      # method prefix\n  (?>                               # method name\n    [a-zA-Z_]\\w*(?>[?!]|=(?!>))?\n    |\n    ===?|!=|>[>=]?|<=>|<[<=]?|[%&`/\\|]|\\*\\*?|=?~|[-+]@?|\\[]=?\n  )\n)\n\\s*(\\()",
+			"begin": "(?x)\n\t\t\t\t\t\t         (?=def\\b)                                                      # an optimization to help Oniguruma fail fast\n\t\t\t\t\t\t         (?<=^|\\s)(def)\\s+                                              # the def keyword\n\t\t\t\t\t\t         ( (?>[a-zA-Z_]\\w*(?>\\.|::))?                                   # a method name prefix\n\t\t\t\t\t\t           (?>[a-zA-Z_]\\w*(?>[?!]|=(?!>))?                              # the method name\n\t\t\t\t\t\t           |===?|!=|!~|>[>=]?|<=>|<[<=]?|[%&`/\\|^]|\\*\\*?|=?~|[-+]@?|\\[\\]=?) )  # …or an operator method\n\t\t\t\t\t\t         \\s*(\\()                                                        # the openning parenthesis for arguments\n\t\t\t\t\t\t        ",
 			"beginCaptures": {
 				"1": {
-					"name": "keyword.control.def.ruby"
+					"name": "keyword.control.def.begin.ruby"
 				},
 				"2": {
 					"name": "entity.name.function.ruby"
@@ -258,69 +770,117 @@
 					"name": "punctuation.definition.parameters.ruby"
 				}
 			},
-			"comment": "The method pattern comes from the symbol pattern. See there for an explanation.",
-			"end": "\\)",
+			"comment": "the method pattern comes from the symbol pattern, see there for a explaination",
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
 			"endCaptures": {
-				"0": {
-					"name": "punctuation.definition.parameters.ruby"
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.def.end.ruby"
 				}
 			},
 			"name": "meta.function.method.with-arguments.ruby",
 			"patterns": [
 				{
-					"begin": "(?=[&*_a-zA-Z])",
-					"end": "(?=[,)])",
+					"begin": "\\G(?<=\\()",
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.parameters.ruby"
+						}
+					},
 					"patterns": [
 						{
-							"include": "#method_parameters"
+							"begin": "(?=[&*_a-zA-Z])",
+							"end": "(?=[,)])",
+							"patterns": [
+								{
+									"include": "#method_parameters"
+								}
+							]
+						},
+						{
+							"include": "$self"
 						}
 					]
 				},
 				{
-					"include": "#method_parameters"
+					"include": "$self"
 				}
 			]
 		},
 		{
-			"begin": "(?x)\n(?=def\\b)                          # optimization to help Oniguruma fail fast\n(?<=^|\\s)(def)\\s+\n(\n  (?>[a-zA-Z_]\\w*(?>\\.|::))?      # method prefix\n  (?>                               # method name\n    [a-zA-Z_]\\w*(?>[?!]|=(?!>))?\n    |\n    ===?|!=|>[>=]?|<=>|<[<=]?|[%&`/\\|]|\\*\\*?|=?~|[-+]@?|\\[]=?\n  )\n)\n[ \\t]\n(?=[ \\t]*[^\\s#;])                 # make sure the following is not comment",
+			"begin": "(?x)\n\t\t\t\t\t\t         (?=def\\b)                                                      # an optimization to help Oniguruma fail fast\n\t\t\t\t\t\t         (?<=^|\\s)(def)\\s+                                              # the def keyword\n\t\t\t\t\t\t         ( (?>[a-zA-Z_]\\w*(?>\\.|::))?                                   # a method name prefix\n\t\t\t\t\t\t           (?>[a-zA-Z_]\\w*(?>[?!]|=(?!>))?                              # the method name\n\t\t\t\t\t\t           |===?|!=|!~|>[>=]?|<=>|<[<=]?|[%&`/\\|^]|\\*\\*?|=?~|[-+]@?|\\[\\]=?) )  # …or an operator method\n\t\t\t\t\t\t         [ \\t]                                                          # the space separating the arguments\n\t\t\t\t\t\t         (?=[ \\t]*[^\\s#;])                                              # make sure arguments and not a comment follow\n\t\t\t\t\t\t        ",
 			"beginCaptures": {
 				"1": {
-					"name": "keyword.control.def.ruby"
+					"name": "keyword.control.def.begin.ruby"
 				},
 				"2": {
 					"name": "entity.name.function.ruby"
 				}
 			},
 			"comment": "same as the previous rule, but without parentheses around the arguments",
-			"end": "(?=;)|(?<=[\\w\\])}`'\"!?])(?=\\s*#|\\s*$)",
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.def.end.ruby"
+				}
+			},
 			"name": "meta.function.method.with-arguments.ruby",
 			"patterns": [
 				{
-					"begin": "(?=[&*_a-zA-Z])",
-					"end": "(?=,|;|\\s*#|\\s*$)",
+					"begin": "\\G(?<=[ \\t])",
+					"end": "(?=;)|(?<=[\\w\\])}`'\"!?])(?=\\s*#|\\s*$)",
 					"patterns": [
 						{
-							"include": "#method_parameters"
+							"begin": "(?=[&*_a-zA-Z])",
+							"end": "(?=,|;|\\s*#|\\s*$)",
+							"patterns": [
+								{
+									"include": "#method_parameters"
+								}
+							]
+						},
+						{
+							"include": "$self"
 						}
 					]
 				},
 				{
-					"include": "#method_parameters"
+					"include": "$self"
 				}
 			]
 		},
 		{
-			"captures": {
+			"begin": "(?x)\n\t\t\t\t\t\t         (?=def\\b)                                                           # an optimization to help Oniguruma fail fast\n\t\t\t\t\t\t         (?<=^|\\s)(def)\\b                                                    # the def keyword\n\t\t\t\t\t\t         ( \\s+                                                               # an optional group of whitespace followed by…\n\t\t\t\t\t\t           ( (?>[a-zA-Z_]\\w*(?>\\.|::))?                                      # a method name prefix\n\t\t\t\t\t\t             (?>[a-zA-Z_]\\w*(?>[?!]|=(?!>))?                                 # the method name\n\t\t\t\t\t\t             |===?|!=|!~|>[>=]?|<=>|<[<=]?|[%&`/\\|^]|\\*\\*?|=?~|[-+]@?|\\[\\]=?) ) )?  # …or an operator method\n\t\t\t\t\t\t        ",
+			"beginCaptures": {
 				"1": {
-					"name": "keyword.control.def.ruby"
+					"name": "keyword.control.def.begin.ruby"
 				},
 				"3": {
 					"name": "entity.name.function.ruby"
 				}
 			},
 			"comment": " the optional name is just to catch the def also without a method-name",
-			"match": "(?x)\n(?=def\\b)                            # optimization to help Oniguruma fail fast\n(?<=^|\\s)(def)\\b\n(\n  \\s+\n  (\n    (?>[a-zA-Z_]\\w*(?>\\.|::))?      # method prefix\n    (?>                               # method name\n      [a-zA-Z_]\\w*(?>[?!]|=(?!>))?\n      |\n      ===?|!=|>[>=]?|<=>|<[<=]?|[%&`/\\|]|\\*\\*?|=?~|[-+]@?|\\[]=?\n    )\n  )\n)?",
-			"name": "meta.function.method.without-arguments.ruby"
+			"end": "(?<!\\.|::)\\b((end))\\b(?![?!:])",
+			"endCaptures": {
+				"1": {
+					"name": "keyword.control.end.ruby"
+				},
+				"2": {
+					"name": "keyword.control.def.end.ruby"
+				}
+			},
+			"name": "meta.function.method.without-arguments.ruby",
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
 		},
 		{
 			"match": "(?x)\n\\b\n(\n  [\\d](?>_?\\d)*                             # 100_000\n  (\\.(?![^[:space:][:digit:]])(?>_?\\d)*)?   # fractional part\n  ([eE][-+]?\\d(?>_?\\d)*)?                   # 1.23e-4\n  |\n  0\n  (?:\n    [xX]\\h(?>_?\\h)*|\n    [oO]?[0-7](?>_?[0-7])*|\n    [bB][01](?>_?[01])*|\n    [dD]\\d(?>_?\\d)*\n  )                                           # A base indicator can only be used with an integer\n)\\b",
@@ -444,137 +1004,6 @@
 				},
 				{
 					"include": "#escaped_char"
-				}
-			]
-		},
-		{
-			"begin": "(?x)\n(?<![\\w)])((/))(?![?*+])\n(?=\n  (?:\\\\/|[^/])*+          # Do NOT change the order\n  /[eimnosux]*\\s*\n  (?:\n    [)\\]}#.,?:]|\\|\\||&&|<=>|=>|==|=~|!~|!=|;|$|\n    if|else|elsif|then|do|end|unless|while|until|or|and\n  )\n  |\n  $\n)",
-			"captures": {
-				"1": {
-					"name": "string.regexp.interpolated.ruby"
-				},
-				"2": {
-					"name": "punctuation.section.regexp.ruby"
-				}
-			},
-			"comment": "regular expression literal with interpolation",
-			"contentName": "string.regexp.interpolated.ruby",
-			"end": "((/[eimnosux]*))",
-			"patterns": [
-				{
-					"include": "#regex_sub"
-				}
-			]
-		},
-		{
-			"begin": "%r{",
-			"beginCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.begin.ruby"
-				}
-			},
-			"end": "}[eimnosux]*",
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.end.ruby"
-				}
-			},
-			"name": "string.regexp.interpolated.ruby",
-			"patterns": [
-				{
-					"include": "#regex_sub"
-				},
-				{
-					"include": "#nest_curly_r"
-				}
-			]
-		},
-		{
-			"begin": "%r\\[",
-			"beginCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.begin.ruby"
-				}
-			},
-			"end": "][eimnosux]*",
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.end.ruby"
-				}
-			},
-			"name": "string.regexp.interpolated.ruby",
-			"patterns": [
-				{
-					"include": "#regex_sub"
-				},
-				{
-					"include": "#nest_brackets_r"
-				}
-			]
-		},
-		{
-			"begin": "%r\\(",
-			"beginCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.begin.ruby"
-				}
-			},
-			"end": "\\)[eimnosux]*",
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.end.ruby"
-				}
-			},
-			"name": "string.regexp.interpolated.ruby",
-			"patterns": [
-				{
-					"include": "#regex_sub"
-				},
-				{
-					"include": "#nest_parens_r"
-				}
-			]
-		},
-		{
-			"begin": "%r<",
-			"beginCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.begin.ruby"
-				}
-			},
-			"end": ">[eimnosux]*",
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.end.ruby"
-				}
-			},
-			"name": "string.regexp.interpolated.ruby",
-			"patterns": [
-				{
-					"include": "#regex_sub"
-				},
-				{
-					"include": "#nest_ltgt_r"
-				}
-			]
-		},
-		{
-			"begin": "%r([^\\w])",
-			"beginCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.begin.ruby"
-				}
-			},
-			"end": "\\1[eimnosux]*",
-			"endCaptures": {
-				"0": {
-					"name": "punctuation.section.regexp.end.ruby"
-				}
-			},
-			"name": "string.regexp.interpolated.ruby",
-			"patterns": [
-				{
-					"include": "#regex_sub"
 				}
 			]
 		},
@@ -2253,6 +2682,9 @@
 		"method_parameters": {
 			"patterns": [
 				{
+					"include": "#params"
+				},
+				{
 					"include": "#parens"
 				},
 				{
@@ -2260,9 +2692,6 @@
 				},
 				{
 					"include": "#brackets"
-				},
-				{
-					"include": "#params"
 				},
 				{
 					"include": "$self"

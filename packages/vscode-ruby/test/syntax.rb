@@ -9,21 +9,22 @@ foo bar baz
 # <---- comment.block.documentation.ruby punctuation.definition.comment.ruby
 
 module Blam
-# <------ meta.module.ruby keyword.control.module.ruby
+# <------ meta.module.ruby keyword.control.module.begin.ruby
 #      ^^^^ meta.module.ruby entity.name.type.module.ruby
   class Rawr
-# ^^^^^ meta.class.ruby keyword.control.class.ruby
-#       ^^^^ meta.class.ruby entity.name.type.class.ruby
+# ^^^^^ meta.module.ruby meta.class.ruby keyword.control.class.begin.ruby
+#       ^^^^ meta.module.ruby meta.class.ruby entity.name.type.class.ruby
   end
-# ^^^ keyword.control.ruby
+# ^^^ meta.module.ruby meta.class.ruby keyword.control.end.ruby keyword.control.class.end.ruby
 end
+# <------ meta.module.ruby keyword.control.end.ruby keyword.control.module.end.ruby
 class MoreExamples
   FOO = :bar
 # ^^^ variable.other.constant.ruby
 #       ^^^^ constant.language.symbol.ruby
 end
 class ExampleClass < AnotherClass
-#                  ^ entity.other.inherited-class.ruby
+#                  ^ punctuation.separator.inheritance.ruby
 #                    ^^^^^^^^^^^^ entity.other.inherited-class.ruby
   attr_reader :foo, :bar
 # ^^^^^^^^^^^ keyword.other.special-method.ruby
@@ -33,7 +34,7 @@ class ExampleClass < AnotherClass
 # ^^^^^^^^^^^^^ keyword.other.special-method.ruby
 
   def initialize
-# ^^^ keyword.control.def.ruby
+# ^^^ keyword.control.def.begin.ruby
 #     ^^^^^^^^^^ meta.function.method.without-arguments.ruby entity.name.function.ruby
     a_method(arg1)
 #   ^^^^^^^^ meta.function-call.ruby entity.name.function.ruby
@@ -62,10 +63,11 @@ class ExampleClass < AnotherClass
     [].each do
 #   ^ punctuation.section.array.begin.ruby
 #    ^ punctuation.section.array.end.ruby
-#           ^^ keyword.control.start-block.ruby
+#           ^^ meta.block.do.ruby keyword.control.do.begin.ruby
     end
-
+#   ^^^ keyword.control.do.end.ruby
   end
+# ^^^ keyword.control.def.end.ruby
 
   def true?(obj)
     !!obj
@@ -73,7 +75,7 @@ class ExampleClass < AnotherClass
   end
 
   def self.do
-# ^^^ keyword.control.def.ruby
+# ^^^ keyword.control.def.begin.ruby
 #     ^^^^^^^ meta.function.method.without-arguments.ruby entity.name.function.ruby
     @do ||= {}
 #   ^ variable.other.readwrite.instance.ruby punctuation.definition.variable.ruby
@@ -82,7 +84,7 @@ class ExampleClass < AnotherClass
 #           ^ punctuation.section.scope.begin.ruby
 #            ^ punctuation.section.scope.end.ruby
   end
-# ^^^ keyword.control.ruby
+# ^^^ keyword.control.def.end.ruby
 end
 
 
