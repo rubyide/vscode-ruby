@@ -9,6 +9,6 @@ export default class Rubocop extends BaseFormatter {
 
 	get args(): string[] {
 		const documentPath = URI.parse(this.document.uri);
-		return [`--filename=${documentPath.fsPath}`, '-x'];
+		return [`--filename='${documentPath.fsPath}'`, '-x'];
 	}
 }
