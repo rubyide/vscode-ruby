@@ -268,30 +268,16 @@
 			"name": "meta.function.method.with-arguments.ruby",
 			"patterns": [
 				{
-					"begin": "(?![\\s,)])",
-					"end": "(?=,|\\)\\s*$)",
+					"begin": "(?=[&*_a-zA-Z])",
+					"end": "(?=[,)])",
 					"patterns": [
 						{
-							"captures": {
-								"1": {
-									"name": "storage.type.variable.ruby"
-								},
-								"2": {
-									"name": "constant.language.symbol.hashkey.parameter.function.ruby"
-								},
-								"3": {
-									"name": "punctuation.definition.constant.hashkey.ruby"
-								},
-								"4": {
-									"name": "variable.parameter.function.ruby"
-								}
-							},
-							"match": "\\G(&|\\*\\*?)?(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
-						},
-						{
-							"include": "$self"
+							"include": "#method_parameters"
 						}
 					]
+				},
+				{
+					"include": "#method_parameters"
 				}
 			]
 		},
@@ -306,34 +292,20 @@
 				}
 			},
 			"comment": "same as the previous rule, but without parentheses around the arguments",
-			"end": "$",
+			"end": "(?=;)|(?<=[\\w\\])}`'\"!?])(?=\\s*#|\\s*$)",
 			"name": "meta.function.method.with-arguments.ruby",
 			"patterns": [
 				{
-					"begin": "(?![\\s,])",
-					"end": "(?=,|$)",
+					"begin": "(?=[&*_a-zA-Z])",
+					"end": "(?=,|;|\\s*#|\\s*$)",
 					"patterns": [
 						{
-							"captures": {
-								"1": {
-									"name": "storage.type.variable.ruby"
-								},
-								"2": {
-									"name": "constant.language.symbol.hashkey.parameter.function.ruby"
-								},
-								"3": {
-									"name": "punctuation.definition.constant.hashkey.ruby"
-								},
-								"4": {
-									"name": "variable.parameter.function.ruby"
-								}
-							},
-							"match": "\\G(&|\\*\\*?)?(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
-						},
-						{
-							"include": "$self"
+							"include": "#method_parameters"
 						}
 					]
+				},
+				{
+					"include": "#method_parameters"
 				}
 			]
 		},
@@ -2106,7 +2078,7 @@
 			]
 		},
 		{
-			"begin": "(?<={|{\\s|[^A-Za-z0-9_]do|^do|[^A-Za-z0-9_]do\\s|^do\\s)(\\|)",
+			"begin": "(?<={|{\\s|[^A-Za-z0-9_:@$]do|^do|[^A-Za-z0-9_:@$]do\\s|^do\\s)(\\|)",
 			"name": "meta.block.parameters.ruby",
 			"captures": {
 				"1": {
@@ -2269,6 +2241,128 @@
 		}
 	],
 	"repository": {
+		"method_parameters": {
+			"patterns": [
+				{
+					"include": "#parens"
+				},
+				{
+					"include": "#braces"
+				},
+				{
+					"include": "#brackets"
+				},
+				{
+					"include": "#params"
+				},
+				{
+					"include": "$self"
+				}
+			],
+			"repository": {
+				"params": {
+					"captures": {
+						"1": {
+							"name": "storage.type.variable.ruby"
+						},
+						"2": {
+							"name": "constant.other.symbol.hashkey.parameter.function.ruby"
+						},
+						"3": {
+							"name": "punctuation.definition.constant.ruby"
+						},
+						"4": {
+							"name": "variable.parameter.function.ruby"
+						}
+					},
+					"match": "\\G(&|\\*\\*?)?(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
+				},
+				"braces": {
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.section.scope.begin.ruby"
+						}
+					},
+					"end": "\\}",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.scope.end.ruby"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#parens"
+						},
+						{
+							"include": "#braces"
+						},
+						{
+							"include": "#brackets"
+						},
+						{
+							"include": "$self"
+						}
+					]
+				},
+				"brackets": {
+					"begin": "\\[",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.section.array.begin.ruby"
+						}
+					},
+					"end": "\\]",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.array.end.ruby"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#parens"
+						},
+						{
+							"include": "#braces"
+						},
+						{
+							"include": "#brackets"
+						},
+						{
+							"include": "$self"
+						}
+					]
+				},
+				"parens": {
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.section.function.begin.ruby"
+						}
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.section.function.end.ruby"
+						}
+					},
+					"patterns": [
+						{
+							"include": "#parens"
+						},
+						{
+							"include": "#braces"
+						},
+						{
+							"include": "#brackets"
+						},
+						{
+							"include": "$self"
+						}
+					]
+				}
+			}
+		},
 		"escaped_char": {
 			"match": "\\\\(?:[0-7]{1,3}|x[\\da-fA-F]{1,2}|.)",
 			"name": "constant.character.escape.ruby"

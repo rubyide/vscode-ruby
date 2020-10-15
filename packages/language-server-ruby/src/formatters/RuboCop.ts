@@ -13,7 +13,7 @@ export default class RuboCop extends BaseFormatter {
 
 	get args(): string[] {
 		const documentPath = URI.parse(this.document.uri);
-		const args = ['-s', documentPath.fsPath, '-a'];
+		const args = ['-s', `'${documentPath.fsPath}'`, '-a'];
 		return args;
 	}
 

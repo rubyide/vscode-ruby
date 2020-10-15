@@ -58,7 +58,7 @@ export default class RuboCop extends BaseLinter {
 
 	get args(): string[] {
 		const documentPath = URI.parse(this.document.uri);
-		let args = ['-s', documentPath.fsPath, '-f', 'json'];
+		let args = ['-s', `'${documentPath.fsPath}'`, '-f', 'json'];
 		if (this.lintConfig.rails) args.push('-R');
 		if (this.lintConfig.forceExclusion) args.push('--force-exclusion');
 		if (this.lintConfig.lint) args.push('-l');
