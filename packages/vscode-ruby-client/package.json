@@ -40,7 +40,9 @@
 		"lodash": "^4.17.15",
 		"minimatch": "^3.0.4",
 		"ruby-method-locate": "^0.0.6",
-		"vscode-languageclient": "^5.2.1"
+		"vscode-languageclient": "^5.2.1",
+		"vscode-oniguruma": "^1.4.0",
+		"vscode-textmate": "^5.2.0"
 	},
 	"devDependencies": {
 		"@types/execa": "^2.0.0",

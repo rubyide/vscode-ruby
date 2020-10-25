@@ -10785,12 +10785,22 @@ vscode-languageserver@^5.2.1:
     vscode-languageserver-protocol "3.14.1"
     vscode-uri "^1.0.6"
 
+vscode-oniguruma@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/vscode-oniguruma/-/vscode-oniguruma-1.4.0.tgz#3795fd1ef9633a4a33f208bce92c008e64a6fc8f"
+  integrity sha512-VvTl/jIAADEqWWpEYRsOI1sXiYOTDA8KYNgK60+Mb3T+an9zPz3Cqc6RVJeYgOx/P5G+4M4jygB3X5xLLfYD0g==
+
 vscode-textmate@^4.1.1:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/vscode-textmate/-/vscode-textmate-4.3.0.tgz#6e1f0f273d84148cfa1e9c7ed85bd16c974f9f61"
   integrity sha512-MhEZ3hvxOVuYGsrRzW/PZLDR2VdtG2+V6TIKPvmE9JT+RAq/OtPlrFd1+ZQwBefoHEhjRNuRJ0OktcFezuxPmg==
   dependencies:
     oniguruma "^7.2.0"
+
+vscode-textmate@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/vscode-textmate/-/vscode-textmate-5.2.0.tgz#01f01760a391e8222fe4f33fbccbd1ad71aed74e"
+  integrity sha512-Uw5ooOQxRASHgu6C7GVvUxisKXfSgW4oFlO+aa+PAkgmH89O3CXxEEzNRNtHSqtXFTl0nAC1uYj0GMSH27uwtQ==
 
 vscode-tmgrammar-test@^0.0.6:
   version "0.0.6"

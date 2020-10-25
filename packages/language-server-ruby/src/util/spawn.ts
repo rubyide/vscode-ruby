@@ -50,7 +50,8 @@ export function spawn<T = string>(
 				if (typeof b === 'string') {
 					chunk = b.toString();
 				} else {
-					chunk = b.toString(optsWithoutStdIn.encoding || 'utf8');
+					// chunk = b.toString(optsWithoutStdIn.encoding || 'utf8'); // didnt work for me
+					chunk = b.toString();
 				}
 			} catch (e) {
 				chunk = `<< Lost chunk of process output for ${cmd} - length was ${b.length}>>`;
