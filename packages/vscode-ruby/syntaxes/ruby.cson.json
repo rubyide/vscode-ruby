@@ -2221,14 +2221,23 @@
 			]
 		},
 		{
-			"begin": "(?=[a-zA-Z0-9_!?]+\\()",
-			"end": "(?<=\\))",
-			"name": "meta.function-call.ruby",
-			"patterns": [
-				{
-					"match": "([a-zA-Z0-9_!?]+)((?=\\()|([!?]))",
+			"begin": "([a-zA-Z]\\w*[!?]?)(\\()",
+			"beginCaptures": {
+				"1": {
 					"name": "entity.name.function.ruby"
 				},
+				"2": {
+					"name": "punctuation.section.function.ruby"
+				}
+			},
+			"end": "(\\))",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.section.function.ruby"
+				}
+			},
+			"name": "meta.function-call.ruby",
+			"patterns": [
 				{
 					"include": "$self"
 				}
@@ -2275,7 +2284,7 @@
 							"name": "variable.parameter.function.ruby"
 						}
 					},
-					"match": "\\G(&|\\*\\*?)?(?:([_a-zA-Z]\\w*(:))|([_a-zA-Z]\\w*))"
+					"match": "\\G(&|\\*\\*?)?(?:([_a-zA-Z]\\w*[?!]?(:))|([_a-zA-Z]\\w*))"
 				},
 				"braces": {
 					"begin": "\\{",
