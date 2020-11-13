@@ -420,7 +420,7 @@
 						"rubyfmt"
 					],
 					"default": false,
-					"description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature.",
+					"description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature. Language server must be enabled for this option to take effect.",
 					"scope": "resource"
 				}
 			}
