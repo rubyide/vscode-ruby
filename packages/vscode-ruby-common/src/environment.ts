@@ -41,7 +41,7 @@ for name in (set -nx)
 	end
 end`;
 	} else {
-		template = `#!${shell} -i\nexport`;
+		template = `#!${shell} -i -l\nexport`;
 	}
 
 	return template;
