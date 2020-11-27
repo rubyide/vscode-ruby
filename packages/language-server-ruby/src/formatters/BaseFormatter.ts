@@ -1,5 +1,7 @@
 import { Position, Range, TextDocument, TextEdit } from 'vscode-languageserver';
 import log from 'loglevel';
+import eol from 'eol';
+import detectNewline from 'detect-newline';
 import { of, Observable, throwError } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';
 import {
@@ -88,7 +90,44 @@ export default abstract class BaseFormatter implements IFormatter {
 		);
 	}
 
+	private convertToOriginalNewline(output: string): string {
+		// This method implements a workaround for formatters that change the
+		// line endings of files. Since changing the line ending type doesn't
+		// yet seem possible by TextEdits alone, we can instead "undo" the line
+		// ending changes the formatters do, while still determining the other
+		// changes.
+		const originalNewline = detectNewline(this.originalText);
+		const outputNewline = detectNewline(output);
+
+		// This addresses an issue with rubocop and standardrb on Windows where
+		// stdin inputs that contain CRLFs will produce outputs that contain
+		// CRCRLF. This "fixes" the issue by removing the double CR.
+		if (originalNewline === '\r\n' && outputNewline === '\r\n' && output.includes('\r\r\n')) {
+			const r = new RegExp('\r\r\n', 'g');
+			output = output.replace(r, '\r\n');
+		}
+
+		// If the new lines look to be in the same format, make no changes
+		if (originalNewline === outputNewline) {
+			return output;
+		}
+
+		// Convert the output to the original line endings where possible
+		switch (originalNewline) {
+			case '\n':
+				return eol.lf(output);
+
+			case '\r\n':
+				return eol.crlf(output);
+
+			default:
+				return output;
+		}
+	}
+
 	protected processResults(output: string): TextEdit[] {
+		output = this.convertToOriginalNewline(output);
+
 		const diffs: Diff[] = this.differ.diff_main(this.originalText, output);
 		const edits: TextEdit[] = [];
 		// VSCode wants TextEdits on the original document

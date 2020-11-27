@@ -9,7 +9,9 @@
 	"main": "dist/index.js",
 	"dependencies": {
 		"cross-spawn": "^6.0.5",
+		"detect-newline": "^3.1.0",
 		"diff-match-patch": "^1.0.4",
+		"eol": "^0.9.1",
 		"loglevel": "^1.6.7",
 		"rxjs": "^6.4.0",
 		"vscode-languageserver": "^5.2.1",

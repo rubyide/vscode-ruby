@@ -6,7 +6,7 @@ import log from 'loglevel';
 
 export type SpawnOpts = {
 	stdin?: Observable<string>;
-	encoding?: string;
+	encoding?: BufferEncoding;
 } & SpawnOptions;
 
 export interface SpawnReturn {
