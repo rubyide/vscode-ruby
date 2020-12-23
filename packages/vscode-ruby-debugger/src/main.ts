@@ -176,7 +176,7 @@ class RubyDebugSession extends DebugSession {
         var breakpointsToRemove = existingBreakpoints.filter(bp => requestedLines.indexOf(bp.line) < 0);
         var breakpointsToAdd = requestedBreakpoints.filter(bp => existingLines.indexOf(bp.line) < 0);
 
-        console.assert(breakpointsToRemove.length > 0 || breakpointsToAdd.length > 0);
+        var addRemovePromises = [];
 
         // Handle the removal of old breakpoints.
         if (breakpointsToRemove.length > 0) {
@@ -185,16 +185,11 @@ class RubyDebugSession extends DebugSession {
             this._existingBreakpoints.set(key, existingBreakpoints);
 
             var removePromises = breakpointsToRemove.map(bp => this.rubyProcess.Enqueue('delete ' + bp.id));
-            Promise.all(removePromises).then(results => {
+            addRemovePromises.push(Promise.all(removePromises).then(results => {
                 let removedIds = results.map(attr => +attr.no);
                 let unremovedBreakpoints = breakpointsToRemove.filter(bp => removedIds.indexOf(bp.id) < 0);
                 console.assert(unremovedBreakpoints.length == 0);
-
-                response.body = {
-                    breakpoints: existingBreakpoints.map(bp => bp.convertForResponse())
-                };
-                this.sendResponse(response);
-            });
+            }));
         }
 
         // Handle the addition of new breakpoints.
@@ -206,7 +201,7 @@ class RubyDebugSession extends DebugSession {
                 if (bp.condition) command += ' if ' + bp.condition;
                 return this.rubyProcess.Enqueue(command);
             });
-            Promise.all(addPromises).then(results => {
+            addRemovePromises.push(Promise.all(addPromises).then(results => {
                 var addedBreakpoints = results.map(attr => {
                     var line = +(attr.location + '').split(':').pop();
                     var id = +attr.no;
@@ -221,13 +216,16 @@ class RubyDebugSession extends DebugSession {
 
                 existingBreakpoints = existingBreakpoints.concat(breakpointsToAdd);
                 this._existingBreakpoints.set(key, existingBreakpoints);
-
-                response.body = {
-                    breakpoints: existingBreakpoints.map(bp => bp.convertForResponse())
-                };
-                this.sendResponse(response);
-            });
+            }));
         }
+
+        // Once all requested breakpoints are added and removed (if any), send a single response.
+        Promise.all(addRemovePromises).then(_ => {
+            response.body = {
+                breakpoints: existingBreakpoints.map(bp => bp.convertForResponse())
+            };
+            this.sendResponse(response);
+        });
     }
 
     protected threadsRequest(response: DebugProtocol.ThreadsResponse): void {
