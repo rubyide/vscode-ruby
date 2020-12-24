@@ -21,6 +21,6 @@
 				"allowHigherOrderFunctions": true
 			}
 		],
-		"@typescript-eslint/array-type": ["error", "array"]
+		"@typescript-eslint/array-type": ["error", { "default": "array" }]
 	}
 }

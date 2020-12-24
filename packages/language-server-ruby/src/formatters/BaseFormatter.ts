@@ -26,9 +26,9 @@ export interface FormatterConfig {
 
 export default abstract class BaseFormatter implements IFormatter {
 	protected document: TextDocument;
-	private originalText: string;
+	private readonly originalText: string;
 	protected config: FormatterConfig;
-	private differ: DiffMatchPatch;
+	private readonly differ: DiffMatchPatch;
 
 	constructor(document: TextDocument, config: FormatterConfig) {
 		this.document = document;
@@ -73,10 +73,12 @@ export default abstract class BaseFormatter implements IFormatter {
 			stdin: of(this.originalText),
 		}).pipe(
 			catchError(error => {
+				console.log(error);
 				const err: Error | null = this.processError(error, formatStr);
 				return err ? throwError(err) : of('');
 			}),
 			reduce((acc: string, value: any) => {
+				console.log(value);
 				if (value.source === 'stdout') {
 					return `${acc}${value.text}`;
 				} else {
