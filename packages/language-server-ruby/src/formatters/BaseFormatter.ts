@@ -73,12 +73,10 @@ export default abstract class BaseFormatter implements IFormatter {
 			stdin: of(this.originalText),
 		}).pipe(
 			catchError(error => {
-				console.log(error);
 				const err: Error | null = this.processError(error, formatStr);
 				return err ? throwError(err) : of('');
 			}),
 			reduce((acc: string, value: any) => {
-				console.log(value);
 				if (value.source === 'stdout') {
 					return `${acc}${value.text}`;
 				} else {
