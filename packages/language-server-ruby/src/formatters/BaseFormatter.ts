@@ -26,9 +26,9 @@ export interface FormatterConfig {
 
 export default abstract class BaseFormatter implements IFormatter {
 	protected document: TextDocument;
-	private originalText: string;
+	private readonly originalText: string;
 	protected config: FormatterConfig;
-	private differ: DiffMatchPatch;
+	private readonly differ: DiffMatchPatch;
 
 	constructor(document: TextDocument, config: FormatterConfig) {
 		this.document = document;

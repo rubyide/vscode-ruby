@@ -18,6 +18,7 @@ import {
 	Standard,
 	Rufo,
 	RubyFMT,
+	Prettier,
 } from './formatters';
 
 const FORMATTER_MAP = {
@@ -25,6 +26,7 @@ const FORMATTER_MAP = {
 	standard: Standard,
 	rufo: Rufo,
 	rubyfmt: RubyFMT,
+	prettier: Prettier,
 };
 
 function getFormatter(

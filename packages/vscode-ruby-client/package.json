@@ -417,7 +417,8 @@
 						"rubocop",
 						"standard",
 						"rufo",
-						"rubyfmt"
+						"rubyfmt",
+						"prettier"
 					],
 					"default": false,
 					"description": "Which system to use for formatting. Use `false` to disable or if another extension provides this feature.",

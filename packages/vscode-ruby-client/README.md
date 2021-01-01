@@ -10,7 +10,7 @@ This extension provides enhanced Ruby language and debugging support for Visual 
 
 - Automatic Ruby environment detection with support for rvm, rbenv, chruby, and asdf
 - Lint support via RuboCop, Standard, and Reek
-- Format support via RuboCop, Standard, Rufo, and RubyFMT
+- Format support via RuboCop, Standard, Rufo, Prettier and RubyFMT
 - Semantic code folding support
 - Semantic highlighting support
 - Basic Intellisense support

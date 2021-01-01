@@ -28,7 +28,7 @@ export interface RubyConfiguration extends RubyCommandConfiguration {
 		reek?: boolean | RubyConfiguration;
 		rubocop?: boolean | RuboCopLintConfiguration;
 	};
-	format: boolean | 'rubocop' | 'standard' | 'rufo';
+	format: boolean | 'rubocop' | 'standard' | 'rufo' | 'prettier';
 	languageServer: {
 		logLevel: LogLevelDesc;
 	};
