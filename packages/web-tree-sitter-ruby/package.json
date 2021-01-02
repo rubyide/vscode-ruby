@@ -1,0 +1,28 @@
+{
+	"name": "web-tree-sitter-ruby",
+	"version": "0.17.0",
+	"description": "Tree-sitter bindings for the web",
+	"main": "index.js",
+	"types": "index.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/rubyide/vscode-ruby"
+	},
+	"scripts": {
+		"build": "tree-sitter build-wasm ../../node_modules/tree-sitter-ruby"
+	},
+	"keywords": [
+		"incremental",
+		"parsing"
+	],
+	"author": "Stafford Brunk <stafford.brunk@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/rubyide/vscode-ruby/issues"
+	},
+	"homepage": "https://github.com/rubyide/vscode-ruby",
+	"devDependencies": {
+		"tree-sitter-cli": "^0.17.3",
+		"tree-sitter-ruby": "0.17.0"
+	}
+}

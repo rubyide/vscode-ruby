@@ -10365,7 +10365,7 @@ tree-sitter-cli@^0.17.3:
   resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.17.3.tgz#ea03ee93216b0cf3187503d8a4dbff15df4dfc0a"
   integrity sha512-AsQhjwRwWK5wtymwVc2H5E8/Q7yzMebSj7CQyeSg50k4h7m8HHwao1i/eKlh8aGTJ3IWbGjSwBAUZTSbzcSW6Q==
 
-tree-sitter-ruby@^0.17.0:
+tree-sitter-ruby@0.17.0, tree-sitter-ruby@^0.17.0:
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/tree-sitter-ruby/-/tree-sitter-ruby-0.17.0.tgz#3da62b5cfdfe62ac2e0e2e04ca7220161e40cea6"
   integrity sha512-Hpjnp7vfRjRsULeYWtDcwR6nb/lPeQfaY2jo9V3npUiaSlqYFJxlC5d45FfZ60aHxv74CI3ziocs9kMfjPS2oQ==
