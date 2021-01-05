@@ -10281,15 +10281,15 @@ traverse@~0.6.6:
   resolved "https://registry.yarnpkg.com/traverse/-/traverse-0.6.6.tgz#cbdf560fd7b9af632502fed40f918c157ea97137"
   integrity sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=
 
-tree-sitter-cli@^0.15.6:
-  version "0.15.7"
-  resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.15.7.tgz#3cda2910460243ad633c73c81460391ef7ec5798"
-  integrity sha512-6to6Hz4uOdmKd+Co4Y/nQps/u4pBG7oFKSmSVScJXtz+M76bFi1n9pB8s16Kdv55KJi4ur6pK4SGMfNdTKywsw==
+tree-sitter-cli@^0.17.3:
+  version "0.17.3"
+  resolved "https://registry.yarnpkg.com/tree-sitter-cli/-/tree-sitter-cli-0.17.3.tgz#ea03ee93216b0cf3187503d8a4dbff15df4dfc0a"
+  integrity sha512-AsQhjwRwWK5wtymwVc2H5E8/Q7yzMebSj7CQyeSg50k4h7m8HHwao1i/eKlh8aGTJ3IWbGjSwBAUZTSbzcSW6Q==
 
-tree-sitter-ruby@^0.15.1:
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/tree-sitter-ruby/-/tree-sitter-ruby-0.15.2.tgz#fbbdb2438a4b90df36f7cdc288511b1bc6a7bd5c"
-  integrity sha512-/b/j45uC/TBNqkZqgOHKv+WxMOPTzUsagLOgp5ey5sFoN+v5MeHEeGQKd8lCsD/b/814IV8BncaoV6aGj7F3RA==
+tree-sitter-ruby@^0.17.0:
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/tree-sitter-ruby/-/tree-sitter-ruby-0.17.0.tgz#3da62b5cfdfe62ac2e0e2e04ca7220161e40cea6"
+  integrity sha512-Hpjnp7vfRjRsULeYWtDcwR6nb/lPeQfaY2jo9V3npUiaSlqYFJxlC5d45FfZ60aHxv74CI3ziocs9kMfjPS2oQ==
   dependencies:
     nan "^2.12.1"
     prebuild-install "^5.0.0"
@@ -10829,10 +10829,10 @@ wcwidth@^1.0.0:
   dependencies:
     defaults "^1.0.3"
 
-web-tree-sitter@^0.15.8:
-  version "0.15.9"
-  resolved "https://registry.yarnpkg.com/web-tree-sitter/-/web-tree-sitter-0.15.9.tgz#f93ec2e02cfc01ca3fa85d600114b982eef7b33c"
-  integrity sha512-1lf4lnmi8oxuEzI6gpUok2FQlHXOmV1iipltkQvmR785JWnUbjhw1sZnwSCkisQP+/g/aezpMGcW3mjz0uVhMw==
+web-tree-sitter@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/web-tree-sitter/-/web-tree-sitter-0.17.1.tgz#99ef4650eeebb0fc1d0a08c80d3540e0bfa2cb59"
+  integrity sha512-QgaeV+wmlB1Qaw9rS5a0ZDBt8GRcKkF+hGNSVxQ/HLm1lPCow3BKOhoILaXkYm7YozCcL7TjppRADBwFJugbuA==
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
