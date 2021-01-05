@@ -1,3 +1,23 @@
+### 0.28.0 - Jan 5 2021
+
+Improvements:
+
+- when a setBreakpoint requests is received, only respond once [#688](https://github.com/rubyide/vscode-ruby/issues/688)
+- Support Prettier for Ruby [#690](https://github.com/rubyide/vscode-ruby/issues/690)
+- Grammar improvements:
+  - `:`, `@`, and `$` before `do` [#660](https://github.com/rubyide/vscode-ruby/issues/660)
+  - method parameter detection and multiline parameters [#664](https://github.com/rubyide/vscode-ruby/issues/664)
+  - fix hashkey with trailing `!` or `?` [#672](https://github.com/rubyide/vscode-ruby/issues/672)
+  - yard syntax improvements [#673](https://github.com/rubyide/vscode-ruby/issues/673)
+- Add default debug configuration for minitest [#631](https://github.com/rubyide/vscode-ruby/issues/631)
+- Modern rubyfmt support [#628](https://github.com/rubyide/vscode-ruby/issues/628). Note that `rubyfmt` is no longer shipped with this extension!
+- Add log level support. Resolves [#526](https://github.com/rubyide/vscode-ruby/issues/526). Log level is set in the `ruby.languageServer.logLevel` configuration option.
+
+Bug Fixes:
+
+- wrap `documentPath.fsPath` in single quotes to support file paths with spaces [#647](https://github.com/rubyide/vscode-ruby/issues/647)]
+- Drops `known_function_names` matcher in grammar. Resolves [#591](https://github.com/rubyide/vscode-ruby/issues/591)
+
 ### 0.27.0 - Feb 23 2020
 
 Improvements:

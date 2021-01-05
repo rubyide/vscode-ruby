@@ -2,7 +2,7 @@
 	"name": "ruby",
 	"displayName": "Ruby",
 	"publisher": "rebornix",
-	"version": "0.27.0",
+	"version": "0.28.0",
 	"description": "Ruby language support and debugging for Visual Studio Code",
 	"main": "dist/client/ruby.js",
 	"license": "MIT",
