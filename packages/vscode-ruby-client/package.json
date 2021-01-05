@@ -36,7 +36,7 @@
 		"async": "^2.6.1",
 		"default-shell": "^1.0.1",
 		"execa": "^2.0.3",
-		"language-server-ruby": "^0.27.0",
+		"language-server-ruby": "^0.28.0",
 		"lodash": "^4.17.15",
 		"minimatch": "^3.0.4",
 		"ruby-method-locate": "^0.0.6",
