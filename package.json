@@ -4,14 +4,14 @@
 		"packages/*"
 	],
 	"devDependencies": {
-		"@commitlint/cli": "^9.0.1",
-		"@commitlint/config-conventional": "^9.0.1",
+		"@commitlint/cli": "^11.0.0",
+		"@commitlint/config-conventional": "^11.0.0",
 		"@semantic-release/changelog": "^5.0.1",
-		"commitizen": "^4.1.2",
-		"cz-conventional-changelog": "^3.2.0",
-		"husky": "^4.2.5",
+		"commitizen": "^4.2.2",
+		"cz-conventional-changelog": "^3.3.0",
+		"husky": "^4.3.6",
 		"lerna": "^3.16.4",
-		"semantic-release": "^17.0.8",
+		"semantic-release": "^17.3.1",
 		"semantic-release-vsce": "^3.0.1",
 		"vsce": "^1.76.0"
 	},
