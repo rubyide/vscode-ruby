@@ -48,7 +48,8 @@ or
     "only": ["array", "of", "cops", "to", "run"],
     "except": ["array", "of", "cops", "not", "to", "run"],
     "require": ["array", "of", "ruby", "files", "to", "require"],
-    "rails": true // requires rubocop-rails gem for RuboCop >= 0.72.0
+    "rails": true, // requires rubocop-rails gem for RuboCop >= 0.72.0
+    "forceExclusion": true // for ignoring the excluded files from rubocop.yml
   }
 }
 ```
