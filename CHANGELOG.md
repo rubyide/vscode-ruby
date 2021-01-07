@@ -1,8 +1,14 @@
+### 0.28.1 - Jan 7 2021
+
+Bug Fixes:
+
+- Downgrade `tree-sitter` and `tree-sitter-ruby` as it was erroring when parsing `<<` syntax [#693](https://github.com/rubyide/vscode-ruby/issues/693)
+
 ### 0.28.0 - Jan 5 2021
 
 Improvements:
 
-- when a setBreakpoint requests is received, only respond once [#688](https://github.com/rubyide/vscode-ruby/issues/688)
+- when a setBreakpoint request is received, only respond once [#688](https://github.com/rubyide/vscode-ruby/issues/688)
 - Support Prettier for Ruby [#690](https://github.com/rubyide/vscode-ruby/issues/690)
 - Grammar improvements:
   - `:`, `@`, and `$` before `do` [#660](https://github.com/rubyide/vscode-ruby/issues/660)
@@ -15,7 +21,7 @@ Improvements:
 
 Bug Fixes:
 
-- wrap `documentPath.fsPath` in single quotes to support file paths with spaces [#647](https://github.com/rubyide/vscode-ruby/issues/647)]
+- wrap `documentPath.fsPath` in single quotes to support file paths with spaces [#647](https://github.com/rubyide/vscode-ruby/issues/647)
 - Drops `known_function_names` matcher in grammar. Resolves [#591](https://github.com/rubyide/vscode-ruby/issues/591)
 
 ### 0.27.0 - Feb 23 2020
