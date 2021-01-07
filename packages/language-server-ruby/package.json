@@ -14,7 +14,7 @@
 		"rxjs": "^6.4.0",
 		"vscode-languageserver": "^5.2.1",
 		"vscode-uri": "^2.1.1",
-		"web-tree-sitter": "^0.17.1"
+		"web-tree-sitter": "^0.15.8"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.5",
@@ -41,8 +41,8 @@
 		"nyc": "^14.1.1",
 		"prettier": "^1.19.1",
 		"source-map-support": "^0.5.16",
-		"tree-sitter-cli": "^0.17.3",
-		"tree-sitter-ruby": "^0.17.0",
+		"tree-sitter-cli": "^0.15.6",
+		"tree-sitter-ruby": "^0.15.1",
 		"ts-loader": "^6.2.1",
 		"ts-node": "^8.5.2",
 		"typescript": "^3.7.2",

@@ -22,7 +22,7 @@
 	},
 	"homepage": "https://github.com/rubyide/vscode-ruby",
 	"devDependencies": {
-		"tree-sitter-cli": "^0.17.3",
-		"tree-sitter-ruby": "0.17.0"
+		"tree-sitter-cli": "^0.15.6",
+		"tree-sitter-ruby": "^0.15.1"
 	}
 }
