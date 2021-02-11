@@ -165,7 +165,7 @@ export class Locate {
 	_walkNode(dir, file, callback) {
 		const absPath = path.join(dir, file);
 		const relPath = path.relative(this.root, absPath);
-		fs.stat(absPath, (err, stats) => {
+		fs.lstat(absPath, (err, stats) => {
 			if (err) {
 				callback(err);
 				return;
