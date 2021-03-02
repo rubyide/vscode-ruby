@@ -29,7 +29,7 @@ The global `useBundler` flag does not apply to linters. This is an outstanding i
 
 ### Configuration Options
 
-See the [RuboCop CLI args](https://docs.rubocop.org/en/latest/basic_usage/#other-useful-command-line-flags) for more details on the support configuration options
+See the [RuboCop CLI args](https://docs.rubocop.org/rubocop/usage/basic_usage.html#command-line-flags) for more details on the support configuration options
 
 ```json
 "ruby.lint": {
