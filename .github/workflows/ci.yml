@@ -11,7 +11,7 @@ jobs:
         ruby: [2.4, 2.5, 2.6, 2.7]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - uses: actions/setup-node@v1
@@ -149,7 +149,7 @@ jobs:
       - name: Install Dependencies
         # if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - name: Install ruby-debug-ide and debase
