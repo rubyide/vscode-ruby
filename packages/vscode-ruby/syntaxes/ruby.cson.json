@@ -817,7 +817,7 @@
 			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
-					"comment": "Cant be named because its not neccesarily an escape.",
+					"comment": "Cant be named because its not necessarily an escape.",
 					"match": "\\\\."
 				}
 			]
@@ -1061,7 +1061,7 @@
 			"name": "string.quoted.other.ruby",
 			"patterns": [
 				{
-					"comment": "Cant be named because its not neccesarily an escape.",
+					"comment": "Cant be named because its not necessarily an escape.",
 					"match": "\\\\."
 				}
 			]
@@ -1328,7 +1328,7 @@
 			"name": "string.quoted.other.ruby",
 			"patterns": [
 				{
-					"comment": "Cant be named because its not neccesarily an escape.",
+					"comment": "Cant be named because its not necessarily an escape.",
 					"match": "\\\\."
 				}
 			]
@@ -1445,7 +1445,7 @@
 			"name": "constant.language.symbol.ruby",
 			"patterns": [
 				{
-					"comment": "Cant be named because its not neccesarily an escape.",
+					"comment": "Cant be named because its not necessarily an escape.",
 					"match": "\\\\."
 				}
 			]
