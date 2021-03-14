@@ -65,6 +65,13 @@ class ExampleClass < AnotherClass
 #           ^^ keyword.control.start-block.ruby
     end
 
+  [].each do ||
+    #   ^ punctuation.section.array.begin.ruby
+    #    ^ punctuation.section.array.end.ruby
+    #           ^^ keyword.control.start-block.ruby
+  end
+# ^^^ keyword.control.ruby
+
   end
 
   def true?(obj)
