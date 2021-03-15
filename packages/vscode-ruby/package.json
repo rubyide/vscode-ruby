@@ -3,7 +3,7 @@
   "displayName": "VSCode Ruby",
   "publisher": "wingrunr21",
   "version": "0.28.0",
-  "description": "Syntax highlighing, snippet, and language configuration support for Ruby",
+  "description": "Syntax highlighting, snippet, and language configuration support for Ruby",
   "repository": "https://github.com/rubyide/vscode-ruby",
   "author": "Stafford Brunk <stafford.brunk@gmail.com>",
   "license": "MIT",
