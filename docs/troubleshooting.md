@@ -23,14 +23,16 @@ Please read over the [documentation](https://github.com/rubyide/vscode-ruby/blob
 
 ### Language Server
 
-The language server will log all commands it attempts to run as well as any errors that command generates. Each type of command is prefixed with it's type (eg `Lint` or `Format`). All commands are run with a `cwd` of the workspace root. This is important if you attempt to run the command in your own shell.
+The language server will log all commands it attempts to run as well as any errors that command generates. Each type of command is prefixed with it's type (eg `Lint` or `Format`). All commands are run with a `cwd` of the currently open document. This is important if you attempt to run the command in your own shell.
+
+> Note: running commands from the directory of the open document, as opposed to the workspace root, is intentional. This allows people to put multiple linter configuration files in the project. We expect linters to look recursively up the directory tree to find their configuration file.
 
 The one thing to keep in mind is that all of those commands are configured to accept editor content via `stdin` and cannot be run verbatim in your terminal.
 
 For example, if you see the following in the logs:
 
 ```
-Lint: executing rubocop -s /Users/wingrunr21/someproject/rubyfile.rb -f json...
+Lint: executing rubocop -s /Users/wingrunr21/someproject/subdir/rubyfile.rb -f json...
 ```
 
 That is the language server running rubocop against `rubyfile.rb`.
@@ -38,8 +40,8 @@ That is the language server running rubocop against `rubyfile.rb`.
 If you'd like to run that command yourself, you can do something similar to the following:
 
 ```shell
-$ cd /Users/wingrunr21/someproject
-$ cat rubyfile.rb | rubocop -s /Users/wingrunr21/someproject/rubyfile.rb -f json
+$ cd /Users/wingrunr21/someproject/subdir
+$ cat rubyfile.rb | rubocop -s /Users/wingrunr21/someproject/subdir/rubyfile.rb -f json
 ```
 
 The file must be piped into `rubocop` or other utilities. This methodology is the best representation of how the language server runs these commands. If the command succeeds here but not in the language server, additional steps will be necessary to troubleshoot. Please open an issue.
