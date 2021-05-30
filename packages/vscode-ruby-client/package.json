@@ -523,6 +523,7 @@
 				"label": "Ruby",
 				"program": "dist/debugger/main.js",
 				"runtime": "node",
+				"languages": ["ruby"],
 				"configurationSnippets": [
 					{
 						"label": "Ruby: Debug Local File",
