@@ -5,10 +5,10 @@ This extension provides improved syntax highlighting, language configuration, an
 ## Syntax Highlighting
 
 Before:
-![syntax_before](https://raw.githubusercontent.com/rubyide/vscode-ruby/master/images/syntax_before.png)
+![syntax_before](https://raw.githubusercontent.com/rubyide/vscode-ruby/main/images/syntax_before.png)
 
 After:
-![syntax_after](https://raw.githubusercontent.com/rubyide/vscode-ruby/master/images/syntax_after.png)
+![syntax_after](https://raw.githubusercontent.com/rubyide/vscode-ruby/main/images/syntax_after.png)
 
 ## Using with the Ruby extension
 

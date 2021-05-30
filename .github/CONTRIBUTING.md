@@ -3,7 +3,7 @@ Feel free to open issues or PRs! We welcome all contributions, even from beginne
 ## Prereqs
 
 1. Check out the [VS Code Extension Docs](https://code.visualstudio.com/docs/extensions/overview), especially [Running and Debugging Extensions](https://code.visualstudio.com/docs/extensions/debugging-extensions).
-1. Read the [development docs](https://github.com/rubyide/vscode-ruby/blob/master/docs/developing.md)
+1. Read the [development docs](https://github.com/rubyide/vscode-ruby/blob/main/docs/developing.md)
 
 ## Contributing
 

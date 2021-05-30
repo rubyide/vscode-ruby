@@ -65,7 +65,7 @@ Relevant configuration files:
 - ruby: _none_
 - reek: [\*.reek](https://github.com/troessner/reek)
 - fasterer: [.fasterer.yml](https://github.com/DamirSvrtan/fasterer)
-- ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/master/doc/configuration.md)
+- ruby-lint: [ruby-lint.yml](https://github.com/YorickPeterse/ruby-lint/blob/main/doc/configuration.md)
 - rubocop: [.rubocop.yml](http://rubocop.readthedocs.io/en/latest/configuration/)
 
 Settings available (in your VSCode workspace) for each of the linters:

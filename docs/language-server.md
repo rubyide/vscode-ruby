@@ -38,7 +38,7 @@ Due to limitations in how node's internal `spawn` function works, a shim file ne
 
 ### More Information
 
-The [`vscode-ruby-common`](https://github.com/rubyide/vscode-ruby/blob/master/packages/vscode-ruby-common) package contains the utilities and shims that facilitate this functionality. See [`environment.ts`](https://github.com/rubyide/vscode-ruby/blob/master/packages/vscode-ruby-common/src/environment.ts)
+The [`vscode-ruby-common`](https://github.com/rubyide/vscode-ruby/blob/main/packages/vscode-ruby-common) package contains the utilities and shims that facilitate this functionality. See [`environment.ts`](https://github.com/rubyide/vscode-ruby/blob/main/packages/vscode-ruby-common/src/environment.ts)
 
 ## Logs
 

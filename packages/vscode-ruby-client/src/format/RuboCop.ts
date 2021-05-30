@@ -35,7 +35,7 @@ export class AutoCorrect {
 
 	// What's the exe name for rubocop?
 	get exe(): string[] {
-		const opts:any = this.opts;
+		const opts: any = this.opts;
 		if (opts.exe) {
 			return [opts.exe];
 		}
@@ -90,16 +90,17 @@ export class AutoCorrect {
 
 	private spawn = (args: string[], options?: cp.SpawnOptions): cp.ChildProcess => {
 		const exe: string[] = this.exe;
-		const spawnOpt: cp.SpawnOptions = options ? options : {}
+		const spawnOpt: cp.SpawnOptions = options ? options : {};
 
-		if (!spawnOpt.cwd) { spawnOpt.cwd = vscode.workspace.rootPath }
+		if (!spawnOpt.cwd) {
+			spawnOpt.cwd = vscode.workspace.rootPath;
+		}
 
 		return cp.spawn(exe.shift(), exe.concat(args), spawnOpt);
 	};
 
 	public test(): Promise<any> {
 		return new Promise((resolve, reject) => {
-
 			const rubo = this.spawn(['-v']);
 
 			rubo.on('error', err => {
@@ -172,7 +173,7 @@ export class AutoCorrect {
 					});
 
 					rubo.on('exit', code => {
-						// https://github.com/bbatsov/rubocop/blob/master/manual/basic_usage.md
+						// https://github.com/bbatsov/rubocop/blob/main/manual/basic_usage.md
 						if (code && code !== 1) {
 							vscode.window.showErrorMessage(`rubocop failed with code=${code}`);
 							return reject();

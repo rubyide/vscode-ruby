@@ -17,7 +17,7 @@ If you believe the extension is incorrectly assigning TextMate Scopes, please fi
 
 ## Environment is incorrectly detected
 
-Please read over the [documentation](https://github.com/rubyide/vscode-ruby/blob/master/docs/language-server.md) on Environment Detection in the language server to ensure you understand its features and limitations.
+Please read over the [documentation](https://github.com/rubyide/vscode-ruby/blob/main/docs/language-server.md) on Environment Detection in the language server to ensure you understand its features and limitations.
 
 ## Linting or Formatting is incorrect
 

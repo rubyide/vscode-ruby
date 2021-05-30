@@ -6,12 +6,12 @@ This repository uses [`lerna`](https://github.com/lerna/lerna) combined with [ya
 
 The overall extension is broken out into several packages within the `packages` directory:
 
-- [`vscode-ruby`](https://github.com/rubyide/vscode-ruby/blob/master/packages/vscode-ruby) - extension providing syntax highlighting, language configuration, and snippets for Ruby
-- [`vscode-ruby-client`](https://github.com/rubyide/vscode-ruby/blob/master/packages/vscode-ruby-client) - extension logic including the language server client
-- [`vscode-ruby-common`](https://github.com/rubyide/vscode-ruby/blob/master/packages/vscode-ruby-common) - common utilities that are shared among several other packages (eg environment detection)
-- [`vscode-ruby-debugger`](https://github.com/rubyide/vscode-ruby/blob/master/packages/vscode-ruby-debugger) - implementation of the debugger
-- [`language-server-ruby`](https://github.com/rubyide/vscode-ruby/blob/master/packages/language-server-ruby) - language server implementation
-  <!-- - [`ruby-debug-ide-protocol`](https://github.com/rubyide/vscode-ruby/blob/master/packages/ruby-debug-ide-protocol) - implementation of the [ruby-debug-ide protocol](https://github.com/ruby-debug/ruby-debug-ide/blob/master/protocol-spec.md) -->
+- [`vscode-ruby`](https://github.com/rubyide/vscode-ruby/blob/main/packages/vscode-ruby) - extension providing syntax highlighting, language configuration, and snippets for Ruby
+- [`vscode-ruby-client`](https://github.com/rubyide/vscode-ruby/blob/main/packages/vscode-ruby-client) - extension logic including the language server client
+- [`vscode-ruby-common`](https://github.com/rubyide/vscode-ruby/blob/main/packages/vscode-ruby-common) - common utilities that are shared among several other packages (eg environment detection)
+- [`vscode-ruby-debugger`](https://github.com/rubyide/vscode-ruby/blob/main/packages/vscode-ruby-debugger) - implementation of the debugger
+- [`language-server-ruby`](https://github.com/rubyide/vscode-ruby/blob/main/packages/language-server-ruby) - language server implementation
+  <!-- - [`ruby-debug-ide-protocol`](https://github.com/rubyide/vscode-ruby/blob/main/packages/ruby-debug-ide-protocol) - implementation of the [ruby-debug-ide protocol](https://github.com/ruby-debug/ruby-debug-ide/blob/main/protocol-spec.md) -->
 
 Each package utilizes `esbuild` or `tsc` to build the `dist` directory.
 

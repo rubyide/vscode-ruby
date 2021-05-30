@@ -154,7 +154,7 @@ export default abstract class BaseFormatter implements IFormatter {
 		}
 	}
 
-	// Modified from https://github.com/Microsoft/vscode/blob/master/src/vs/editor/common/core/range.ts#L90
+	// Modified from https://github.com/Microsoft/vscode/blob/main/src/vs/editor/common/core/range.ts#L90
 	private checkPositionInRange(position: Position): boolean {
 		const { start, end } = this.range;
 

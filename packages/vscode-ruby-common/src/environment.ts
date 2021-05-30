@@ -82,7 +82,7 @@ function getShim(shell: string, shimDir: string): string {
 }
 
 // Based on the dotenv parse function:
-// https://github.com/motdotla/dotenv/blob/master/lib/main.js#L32
+// https://github.com/motdotla/dotenv/blob/main/lib/main.js#L32
 // modified to not have to deal with Buffers and to handle stuff
 // like export and declare -x at the start of the line
 function processExportLine(line: string): string[] {

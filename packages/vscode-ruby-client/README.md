@@ -2,7 +2,7 @@
 
 [![CircleCI](https://img.shields.io/circleci/build/github/rubyide/vscode-ruby?label=circleci&token=c9eaf03305b3fe24e8bc819f3f48060431e8e78f)](https://circleci.com/gh/rubyide/vscode-ruby)
 [![Build status](https://ci.appveyor.com/api/projects/status/vlgs2y7tsc4xpj4c?svg=true)](https://ci.appveyor.com/project/rebornix/vscode-ruby)
-[![codecov](https://codecov.io/gh/rubyide/vscode-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/rubyide/vscode-ruby)
+[![codecov](https://codecov.io/gh/rubyide/vscode-ruby/branch/main/graph/badge.svg)](https://codecov.io/gh/rubyide/vscode-ruby)
 
 This extension provides enhanced Ruby language and debugging support for Visual Studio Code.
 
@@ -25,7 +25,7 @@ By default, the extension provides sensible defaults for developers to get a bet
 
 ### Using the Language Server
 
-It is **highly recommended** that you enable the Ruby language server (via the Use Language Server setting or `ruby.useLanguageServer` config option). The server does not default to enabled while it is under development but it provides a significantly better experience than the legacy extension functionality. See [docs/language-server.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/language-server.md) for more information on the language server.
+It is **highly recommended** that you enable the Ruby language server (via the Use Language Server setting or `ruby.useLanguageServer` config option). The server does not default to enabled while it is under development but it provides a significantly better experience than the legacy extension functionality. See [docs/language-server.md](https://github.com/rubyide/vscode-ruby/blob/main/docs/language-server.md) for more information on the language server.
 
 Legacy functionality will most likely not receive additional improvements and will be fully removed when the extension hits v1.0
 
@@ -45,21 +45,21 @@ Legacy functionality will most likely not receive additional improvements and wi
 "ruby.format": "rubocop" // use rubocop for formatting
 ```
 
-Reviewing the [linting](https://github.com/rubyide/vscode-ruby/blob/master/docs/linting.md), [formatting](https://github.com/rubyide/vscode-ruby/blob/master/docs/formatting.md), and [environment detection](https://github.com/rubyide/vscode-ruby/blob/master/docs/language-server.md) docs is recommended
+Reviewing the [linting](https://github.com/rubyide/vscode-ruby/blob/main/docs/linting.md), [formatting](https://github.com/rubyide/vscode-ruby/blob/main/docs/formatting.md), and [environment detection](https://github.com/rubyide/vscode-ruby/blob/main/docs/language-server.md) docs is recommended
 
 For full details on configuration options, please take a look at the `Ruby` section in the VS Code settings UI. Each option is associated with a name and description.
 
 ### Debug Configuration
 
-See [docs/debugger.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/debugger.md).
+See [docs/debugger.md](https://github.com/rubyide/vscode-ruby/blob/main/docs/debugger.md).
 
 ### Legacy Configuration
 
-[docs/legacy.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/legacy.md) contains the documentation around the legacy functionality
+[docs/legacy.md](https://github.com/rubyide/vscode-ruby/blob/main/docs/legacy.md) contains the documentation around the legacy functionality
 
 ## Troubleshooting
 
-See [docs/troubleshooting.md](https://github.com/rubyide/vscode-ruby/blob/master/docs/troubleshooting.md)
+See [docs/troubleshooting.md](https://github.com/rubyide/vscode-ruby/blob/main/docs/troubleshooting.md)
 
 ## Other Notable Extensions
 
