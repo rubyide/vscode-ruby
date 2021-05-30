@@ -13,9 +13,9 @@ The overall extension is broken out into several packages within the `packages` 
 - [`language-server-ruby`](https://github.com/rubyide/vscode-ruby/blob/master/packages/language-server-ruby) - language server implementation
   <!-- - [`ruby-debug-ide-protocol`](https://github.com/rubyide/vscode-ruby/blob/master/packages/ruby-debug-ide-protocol) - implementation of the [ruby-debug-ide protocol](https://github.com/ruby-debug/ruby-debug-ide/blob/master/protocol-spec.md) -->
 
-Each package utilizes `webpack` or `tsc` to build the `dist` directory, depending up on whether `node_modules` needs to be bundled
+Each package utilizes `esbuild` or `tsc` to build the `dist` directory.
 
-Packages that use `webpack` are consumed directly by VS Code. VS Code does not run `npm install` for packages and thus any code must make sure its dependencies are bundled alongside it.
+Packages that use `esbuild` are consumed directly by VS Code. VS Code does not run `npm install` for packages and thus any code must make sure its dependencies are bundled alongside it.
 
 Packages that just use `tsc` are dependencies of other packages.
 
@@ -25,7 +25,7 @@ Packages that just use `tsc` are dependencies of other packages.
 - run `yarn install`
 - run `yarn watch`
 
-`yarn watch` will symlink the `dist` directories from the required packages and start webpack (via `lerna`) in each package. You can look at the `scripts/link-dist.sh` script to see what is happening there.
+`yarn watch` will symlink the `dist` directories from the required packages and start esbuild (via `lerna`) in each package. You can look at the `scripts/link-dist.sh` script to see what is happening there.
 
 ## Developing
 
