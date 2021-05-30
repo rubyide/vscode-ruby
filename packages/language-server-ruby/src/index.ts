@@ -4,7 +4,7 @@
 
 import {
 	createConnection,
-	IConnection,
+	Connection,
 	InitializeParams,
 	ProposedFeatures,
 } from 'vscode-languageserver';
@@ -13,7 +13,7 @@ import log from 'loglevel';
 import { ILanguageServer } from './Server';
 import TreeSitterFactory from './util/TreeSitterFactory';
 
-const connection: IConnection = createConnection(ProposedFeatures.all);
+const connection: Connection = createConnection(ProposedFeatures.all);
 let server: ILanguageServer;
 
 connection.onInitialize(async (params: InitializeParams) => {

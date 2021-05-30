@@ -12,7 +12,7 @@ import {
 	ServerOptions,
 	TransportKind,
 	WorkspaceMiddleware,
-} from 'vscode-languageclient';
+} from 'vscode-languageclient/node';
 
 let client: LanguageClient;
 

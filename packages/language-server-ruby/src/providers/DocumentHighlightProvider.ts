@@ -4,7 +4,7 @@
  * Super basic highlight provider
  */
 
-import { DocumentHighlight, IConnection, TextDocumentPositionParams } from 'vscode-languageserver';
+import { DocumentHighlight, Connection, TextDocumentPositionParams } from 'vscode-languageserver';
 import Position from '../util/Position';
 import Provider from './Provider';
 import DocumentHighlightAnalyzer from '../analyzers/DocumentHighlightAnalyzer';
@@ -12,11 +12,11 @@ import DocumentHighlightAnalyzer from '../analyzers/DocumentHighlightAnalyzer';
 // TODO support more highlight use cases than just balanced pairs
 
 export default class DocumentHighlightProvider extends Provider {
-	static register(connection: IConnection) {
+	static register(connection: Connection): DocumentHighlightProvider {
 		return new DocumentHighlightProvider(connection);
 	}
 
-	constructor(connection: IConnection) {
+	constructor(connection: Connection) {
 		super(connection);
 		this.connection.onDocumentHighlight(this.handleDocumentHighlight);
 	}

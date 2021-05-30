@@ -1,4 +1,5 @@
-import { TextDocument, WorkspaceFolder } from 'vscode-languageserver';
+import { WorkspaceFolder } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { URI } from 'vscode-uri';
 import { loadEnv, RubyEnvironment } from 'vscode-ruby-common';
 import { LogLevelDesc } from 'loglevel';
@@ -35,7 +36,7 @@ export interface RubyConfiguration extends RubyCommandConfiguration {
 }
 
 class SettingsCache<P extends WorkspaceFolder | TextDocument, T> {
-	private cache: Map<string, T>;
+	private readonly cache: Map<string, T>;
 	public fetcher: (target: string[]) => Promise<T[]>;
 
 	constructor() {

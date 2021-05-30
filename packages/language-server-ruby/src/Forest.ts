@@ -3,7 +3,7 @@
  */
 
 import Parser, { Tree } from 'web-tree-sitter';
-import { TextDocument } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { documents, DocumentEvent, DocumentEventKind } from './DocumentManager';
@@ -22,22 +22,22 @@ export enum ForestEventKind {
 	DELETE,
 }
 
-export type ForestEvent = {
+export interface ForestEvent {
 	kind: ForestEventKind;
 	document: TextDocument;
 	tree?: Tree;
-};
+}
 
 class Forest implements IForest {
-	private parser: Parser;
-	private trees: Map<string, Tree>;
+	public parser: Parser;
+	private readonly trees: Map<string, Tree>;
 
 	constructor() {
 		this.trees = new Map();
 		this.parser = TreeSitterFactory.build();
 	}
 
-	public getTree(uri: string): Tree {
+	public getTree(uri: string): Tree | undefined {
 		return this.trees.get(uri);
 	}
 
@@ -53,7 +53,7 @@ class Forest implements IForest {
 	// edit functionality
 	public updateTree(uri: string, content: string): Tree {
 		let tree: Tree = this.getTree(uri);
-		if (tree) {
+		if (tree !== undefined) {
 			tree = this.parser.parse(content);
 			this.trees.set(uri, tree);
 		} else {
@@ -65,13 +65,13 @@ class Forest implements IForest {
 
 	public deleteTree(uri: string): boolean {
 		const tree = this.getTree(uri);
-		if (tree) {
+		if (tree !== undefined) {
 			tree.delete();
 		}
 		return this.trees.delete(uri);
 	}
 
-	public release() {
+	public release(): void {
 		this.trees.forEach(tree => tree.delete());
 		this.parser.delete();
 	}

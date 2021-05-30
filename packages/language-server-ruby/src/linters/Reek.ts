@@ -3,7 +3,7 @@ import BaseLinter from './BaseLinter';
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
 import log from 'loglevel';
 
-type ReekOffense = {
+interface ReekOffense {
 	context: string;
 	lines: number[];
 	message: string;
@@ -11,7 +11,7 @@ type ReekOffense = {
 	source: string;
 	depth: number;
 	wiki_link: string;
-};
+}
 
 export default class Reek extends BaseLinter {
 	protected code = 'Reek';

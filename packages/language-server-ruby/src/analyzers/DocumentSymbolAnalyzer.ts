@@ -5,8 +5,8 @@ import { Position, Stack } from '../util';
 import RubyDocumentSymbol, { isWrapper } from '../util/RubyDocumentSymbol';
 
 export default class DocumentSymbolAnalyzer extends BaseAnalyzer<DocumentSymbol> {
-	private symbolStack: Stack<DocumentSymbol>;
-	private nodeStack: Stack<SyntaxNode>;
+	private readonly symbolStack: Stack<DocumentSymbol>;
+	private readonly nodeStack: Stack<SyntaxNode>;
 
 	constructor() {
 		super();
@@ -14,7 +14,7 @@ export default class DocumentSymbolAnalyzer extends BaseAnalyzer<DocumentSymbol>
 		this.nodeStack = new Stack();
 	}
 
-	get symbols() {
+	get symbols(): DocumentSymbol[] {
 		return this.diagnostics;
 	}
 

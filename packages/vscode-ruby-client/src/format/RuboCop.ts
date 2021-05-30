@@ -130,6 +130,7 @@ export class AutoCorrect {
 
 				// success!
 				console.log(`rubocop is ready to go!`);
+				// @ts-ignore
 				resolve();
 			});
 		});

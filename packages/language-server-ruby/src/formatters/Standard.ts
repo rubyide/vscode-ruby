@@ -9,7 +9,7 @@ export default class Standard extends RuboCop {
 
 	get args(): string[] {
 		const documentPath = URI.parse(this.document.uri);
-		let args = ['-s', `'${documentPath.fsPath}'`, '--fix'];
+		const args = ['-s', `'${documentPath.fsPath}'`, '--fix'];
 		return args;
 	}
 }

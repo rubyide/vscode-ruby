@@ -1,13 +1,13 @@
-import { DocumentSymbol, DocumentSymbolParams, IConnection } from 'vscode-languageserver';
+import { DocumentSymbol, DocumentSymbolParams, Connection } from 'vscode-languageserver';
 import Provider from './Provider';
 import { analyses } from '../Analyzer';
 
 export default class DocumentSymbolProvider extends Provider {
-	static register(connection: IConnection) {
+	static register(connection: Connection): DocumentSymbolProvider {
 		return new DocumentSymbolProvider(connection);
 	}
 
-	constructor(connection: IConnection) {
+	constructor(connection: Connection) {
 		super(connection);
 		this.connection.onDocumentSymbol(this.handleDocumentSymbol);
 	}

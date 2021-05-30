@@ -1,7 +1,7 @@
 import Provider from './Provider';
 import {
 	DidChangeWatchedFilesParams,
-	IConnection,
+	Connection,
 	WorkspaceFoldersChangeEvent,
 } from 'vscode-languageserver';
 import log from 'loglevel';
@@ -9,11 +9,11 @@ import log from 'loglevel';
 import { workspaceRubyEnvironmentCache } from '../SettingsCache';
 
 export default class WorkspaceProvider extends Provider {
-	public static register(connection: IConnection): WorkspaceProvider {
+	public static register(connection: Connection): WorkspaceProvider {
 		return new WorkspaceProvider(connection);
 	}
 
-	constructor(connection: IConnection) {
+	constructor(connection: Connection) {
 		super(connection);
 
 		this.connection.workspace.onDidChangeWorkspaceFolders(this.handleWorkspaceFoldersChange);

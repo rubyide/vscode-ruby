@@ -1,9 +1,5 @@
-import {
-	TextDocument,
-	TextDocuments,
-	IConnection,
-	TextDocumentIdentifier,
-} from 'vscode-languageserver';
+import { TextDocuments, Connection, TextDocumentIdentifier } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { Subject } from 'rxjs';
 
 export enum DocumentEventKind {
@@ -12,17 +8,17 @@ export enum DocumentEventKind {
 	CLOSE,
 }
 
-export type DocumentEvent = {
+export interface DocumentEvent {
 	kind: DocumentEventKind;
 	document: TextDocument;
-};
+}
 
 export default class DocumentManager {
-	private documents: TextDocuments;
+	private readonly documents: TextDocuments<TextDocument>;
 	public subject: Subject<DocumentEvent>;
 
 	constructor() {
-		this.documents = new TextDocuments();
+		this.documents = new TextDocuments(TextDocument);
 		this.subject = new Subject<DocumentEvent>();
 
 		this.documents.onDidOpen(this.emitDocumentEvent(DocumentEventKind.OPEN));
@@ -35,7 +31,7 @@ export default class DocumentManager {
 		return this.documents.get(docId);
 	}
 
-	public listen(connection: IConnection): void {
+	public listen(connection: Connection): void {
 		this.documents.listen(connection);
 	}
 

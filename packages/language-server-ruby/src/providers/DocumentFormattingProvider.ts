@@ -1,5 +1,5 @@
 import {
-	IConnection,
+	Connection,
 	DocumentFormattingParams,
 	DocumentRangeFormattingParams,
 	TextEdit,
@@ -8,11 +8,11 @@ import Provider from './Provider';
 import Formatter from '../Formatter';
 
 export default class DocumentFormattingProvider extends Provider {
-	static register(connection: IConnection) {
+	static register(connection: Connection): DocumentFormattingProvider {
 		return new DocumentFormattingProvider(connection);
 	}
 
-	constructor(connection: IConnection) {
+	constructor(connection: Connection) {
 		super(connection);
 		this.connection.onDocumentFormatting(this.handleDocumentFormattingRequest);
 		this.connection.onDocumentRangeFormatting(this.handleDocumentRangeFormattingRequest);

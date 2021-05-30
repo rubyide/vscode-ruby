@@ -4,7 +4,7 @@ import { Diagnostic } from 'vscode-languageserver';
 import log from 'loglevel';
 
 export default class NullLinter implements ILinter {
-	private msg: string;
+	private readonly msg: string;
 
 	constructor(msg: string) {
 		this.msg = msg;

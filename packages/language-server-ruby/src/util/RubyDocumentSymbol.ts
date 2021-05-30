@@ -29,7 +29,7 @@ const RubyDocumentSymbol = {
 		const symbolKind = SYMBOLKINDS[node.type];
 		if (!symbolKind) return;
 
-		const symbol = new DocumentSymbol();
+		const symbol = DocumentSymbol.create(null, null, null, null, null);
 		symbol.range = Range.create(
 			Position.fromTSPosition(node.startPosition).toVSPosition(),
 			Position.fromTSPosition(node.endPosition).toVSPosition()

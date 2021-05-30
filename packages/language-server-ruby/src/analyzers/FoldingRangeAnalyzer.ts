@@ -13,8 +13,8 @@ interface IFoldHeuristic {
 	};
 }
 
-class FoldHeuristic {
-	private heuristic: IFoldHeuristic;
+export class FoldHeuristic {
+	private readonly heuristic: IFoldHeuristic;
 	private readonly defaultHeuristic = {
 		row: 0,
 		column: 0,

@@ -1,5 +1,5 @@
 import {
-	IConnection,
+	Connection,
 	DidChangeConfigurationParams,
 	DidChangeConfigurationNotification,
 } from 'vscode-languageserver';
@@ -9,11 +9,11 @@ import { documentConfigurationCache } from '../SettingsCache';
 export default class ConfigurationProvider extends Provider {
 	private configChangeCallback: () => void;
 
-	static register(connection: IConnection, callback?: () => void) {
+	static register(connection: Connection, callback?: () => void): ConfigurationProvider {
 		return new ConfigurationProvider(connection, callback);
 	}
 
-	constructor(connection: IConnection, callback?: () => void) {
+	constructor(connection: Connection, callback?: () => void) {
 		super(connection);
 
 		this.configChangeCallback = callback || (() => {});

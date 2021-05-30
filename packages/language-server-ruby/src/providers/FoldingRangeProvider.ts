@@ -6,17 +6,17 @@ import {
 	FoldingRange,
 	FoldingRangeRequest,
 	FoldingRangeParams,
-	IConnection,
+	Connection,
 } from 'vscode-languageserver';
 import Provider from './Provider';
 import { analyses } from '../Analyzer';
 
 export default class FoldingRangeProvider extends Provider {
-	static register(connection: IConnection) {
+	static register(connection: Connection): FoldingRangeProvider {
 		return new FoldingRangeProvider(connection);
 	}
 
-	constructor(connection: IConnection) {
+	constructor(connection: Connection) {
 		super(connection);
 
 		this.connection.onRequest(FoldingRangeRequest.type, this.handleFoldingRange);

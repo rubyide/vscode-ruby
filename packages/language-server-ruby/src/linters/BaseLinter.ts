@@ -1,4 +1,5 @@
-import { Diagnostic, TextDocument } from 'vscode-languageserver';
+import { Diagnostic } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import log from 'loglevel';
 import { spawn } from '../util/spawn';
 import { EMPTY, of, Observable } from 'rxjs';

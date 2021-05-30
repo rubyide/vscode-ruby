@@ -24,7 +24,7 @@
 	"scripts": {
 		"lint": "eslint src/**/*",
 		"package": "vsce package --yarn && mv ./*.vsix ../../build/",
-		"test": "echo 'vscode-ruby-client'",
+		"test": "nyc mocha -r ts-node/register -r source-map-support/register src/**/*.test.ts",
 		"build": "yarn compile --minify",
 		"compile": "esbuild ./src/ruby.ts --bundle --outfile=dist/client/ruby.js --external:vscode --format=cjs --platform=node",
 		"watch": "yarn compile --sourcemap --watch",
@@ -42,7 +42,7 @@
 		"lodash": "^4.17.15",
 		"minimatch": "^3.0.4",
 		"ruby-method-locate": "^0.0.6",
-		"vscode-languageclient": "^5.2.1"
+		"vscode-languageclient": "^7.0.0"
 	},
 	"devDependencies": {
 		"@types/execa": "^2.0.0",
@@ -58,6 +58,8 @@
 		"eslint-plugin-node": "^10.0.0",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
+		"mocha": "^8.4.0",
+		"nyc": "^15.1.0",
 		"prettier": "^1.19.1",
 		"typescript": "^3.7.2"
 	},
@@ -528,7 +530,9 @@
 				"label": "Ruby",
 				"program": "dist/debugger/main.js",
 				"runtime": "node",
-				"languages": ["ruby"],
+				"languages": [
+					"ruby"
+				],
 				"configurationSnippets": [
 					{
 						"label": "Ruby: Debug Local File",

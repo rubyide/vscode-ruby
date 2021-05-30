@@ -1,4 +1,5 @@
-import { Position, Range, TextDocument, TextEdit } from 'vscode-languageserver';
+import { Position, Range, TextEdit } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import log from 'loglevel';
 import { of, Observable, throwError } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';

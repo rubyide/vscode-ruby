@@ -2,7 +2,8 @@ import path from 'path';
 import { URI } from 'vscode-uri';
 import { iif, from, forkJoin, of, Observable } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
-import { Diagnostic, TextDocument } from 'vscode-languageserver';
+import { Diagnostic } from 'vscode-languageserver';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import {
 	documentConfigurationCache,
 	workspaceRubyEnvironmentCache,

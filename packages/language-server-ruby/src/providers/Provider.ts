@@ -1,9 +1,9 @@
-import { IConnection } from 'vscode-languageserver';
+import { Connection } from 'vscode-languageserver';
 
 export default abstract class Provider {
-	protected connection: IConnection;
+	protected connection: Connection;
 
-	constructor(connection: IConnection) {
+	constructor(connection: Connection) {
 		this.connection = connection;
 	}
 }
