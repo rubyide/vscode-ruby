@@ -15,11 +15,11 @@
 		}
 	},
 	"scripts": {
-		"build": "webpack -p",
-		"compile": "tsc -p tsconfig.json",
 		"lint": "eslint src/**/*.ts",
 		"test": "nyc mocha --timeout 5000 -r ts-node/register -r source-map-support/register spec/**/*.ts",
-		"watch": "tsc -w -p tsconfig.json"
+		"build": "yarn compile --minify",
+		"compile": "esbuild ./src/main.ts --bundle --outfile=dist/main.js --external:vscode --format=cjs --platform=node",
+		"watch": "yarn compile --sourcemap --watch"
 	},
 	"dependencies": {
 		"vscode-debugadapter": "^1.35.0",
@@ -32,7 +32,6 @@
 		"@typescript-eslint/eslint-plugin": "^2.8.0",
 		"@typescript-eslint/parser": "^2.8.0",
 		"chai": "^4.2.0",
-		"clean-webpack-plugin": "^3.0.0",
 		"eslint": ">=6.6.0",
 		"eslint-config-standard": "^14.1.0",
 		"eslint-config-standard-with-typescript": "^11.0.1",
@@ -40,16 +39,12 @@
 		"eslint-plugin-node": "^10.0.0",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
-		"fork-ts-checker-webpack-plugin": "^3.1.0",
 		"mocha": "^6.2.2",
 		"nyc": "^14.1.1",
 		"prettier": "^1.19.1",
 		"source-map-support": "^0.5.16",
-		"ts-loader": "^6.2.1",
 		"ts-node": "^8.5.2",
 		"typescript": "^3.7.2",
-		"vscode-debugadapter-testsupport": "^1.35.0",
-		"webpack": "^4.41.2",
-		"webpack-cli": "^3.3.10"
+		"vscode-debugadapter-testsupport": "^1.35.0"
 	}
 }

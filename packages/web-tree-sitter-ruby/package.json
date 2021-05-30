@@ -1,6 +1,6 @@
 {
 	"name": "web-tree-sitter-ruby",
-	"version": "0.17.0",
+	"version": "0.19.0",
 	"description": "Tree-sitter bindings for the web",
 	"main": "index.js",
 	"types": "index.d.ts",
@@ -9,7 +9,7 @@
 		"url": "git+https://github.com/rubyide/vscode-ruby"
 	},
 	"scripts": {
-		"build": "tree-sitter build-wasm ../../node_modules/tree-sitter-ruby"
+		"build": "tree-sitter build-wasm --docker ../../node_modules/tree-sitter-ruby"
 	},
 	"keywords": [
 		"incremental",
@@ -22,7 +22,7 @@
 	},
 	"homepage": "https://github.com/rubyide/vscode-ruby",
 	"devDependencies": {
-		"tree-sitter-cli": "^0.15.6",
-		"tree-sitter-ruby": "^0.15.1"
+		"tree-sitter-cli": "^0.19.5",
+		"tree-sitter-ruby": "^0.19.0"
 	}
 }

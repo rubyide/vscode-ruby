@@ -57,8 +57,7 @@
 			"test/**",
 			"test{,-*}.ts",
 			"**/*{.,-}{test,spec}.ts",
-			"**/node_modules/**",
-			"webpack.config.ts"
+			"**/node_modules/**"
 		],
 		"reporter": [
 			"text",

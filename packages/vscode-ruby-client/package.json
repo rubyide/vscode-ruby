@@ -22,11 +22,13 @@
 	],
 	"private": true,
 	"scripts": {
-		"build": "webpack -p",
 		"lint": "eslint src/**/*",
 		"package": "vsce package --yarn && mv ./*.vsix ../../build/",
 		"test": "echo 'vscode-ruby-client'",
-		"watch": "scripts/link-dist.sh && webpack -w --debug --output-pathinfo --mode development",
+		"build": "yarn compile --minify",
+		"compile": "esbuild ./src/ruby.ts --bundle --outfile=dist/client/ruby.js --external:vscode --format=cjs --platform=node",
+		"watch": "yarn compile --sourcemap --watch",
+		"prewatch": "scripts/link-dist.sh",
 		"vscode:prepublish": "lerna run build && scripts/build-dist.sh"
 	},
 	"extensionDependencies": [
@@ -48,7 +50,6 @@
 		"@types/vscode": "^1.30.0",
 		"@typescript-eslint/eslint-plugin": "^2.8.0",
 		"@typescript-eslint/parser": "^2.8.0",
-		"clean-webpack-plugin": "^3.0.0",
 		"eslint": ">=6.6.0",
 		"eslint-config-prettier": "^6.7.0",
 		"eslint-config-standard": "^14.1.0",
@@ -57,12 +58,8 @@
 		"eslint-plugin-node": "^10.0.0",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
-		"fork-ts-checker-webpack-plugin": "^3.1.0",
 		"prettier": "^1.19.1",
-		"ts-loader": "^6.2.1",
-		"typescript": "^3.7.2",
-		"webpack": "^4.41.2",
-		"webpack-cli": "^3.3.10"
+		"typescript": "^3.7.2"
 	},
 	"repository": {
 		"type": "git",

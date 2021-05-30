@@ -14,7 +14,8 @@
 		"rxjs": "^6.4.0",
 		"vscode-languageserver": "^5.2.1",
 		"vscode-uri": "^2.1.1",
-		"web-tree-sitter": "^0.15.8"
+		"web-tree-sitter": "^0.19.4",
+		"web-tree-sitter-ruby": "^0.19.0"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.5",
@@ -24,8 +25,7 @@
 		"@typescript-eslint/eslint-plugin": "^2.8.0",
 		"@typescript-eslint/parser": "^2.8.0",
 		"chai": "^4.2.0",
-		"clean-webpack-plugin": "^3.0.0",
-		"copy-webpack-plugin": "^5.0.5",
+		"esbuild": "^0.12.5",
 		"eslint": ">=6.6.0",
 		"eslint-config-prettier": "^6.7.0",
 		"eslint-config-standard": "^14.1.0",
@@ -34,28 +34,19 @@
 		"eslint-plugin-node": "^10.0.0",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
-		"exports-loader": "^0.7.0",
-		"file-loader": "^4.2.0",
-		"fork-ts-checker-webpack-plugin": "^3.1.0",
 		"mocha": "^6.2.2",
 		"nyc": "^14.1.1",
 		"prettier": "^1.19.1",
 		"source-map-support": "^0.5.16",
-		"tree-sitter-cli": "^0.15.6",
-		"tree-sitter-ruby": "^0.15.1",
-		"ts-loader": "^6.2.1",
 		"ts-node": "^8.5.2",
-		"typescript": "^3.7.2",
-		"webpack": "^4.41.2",
-		"webpack-cli": "^3.3.10"
+		"typescript": "^3.7.2"
 	},
 	"scripts": {
-		"build": "webpack -p",
-		"build:wasm": "tree-sitter build-wasm ../../node_modules/tree-sitter-ruby && mv tree-sitter-ruby.wasm src/",
 		"lint": "eslint src/**/*.ts",
-		"prebuild": "yarn build:wasm",
 		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts",
-		"watch": "webpack -w --debug --output-pathinfo --mode development"
+		"build": "NODE_ENV=production node esbuild.js",
+		"compile": "node esbuild.js",
+		"watch": "ESBUILD_WATCH=true node esbuild.js"
 	},
 	"nyc": {
 		"cache": false,
@@ -70,7 +61,7 @@
 			"test{,-*}.ts",
 			"**/*{.,-}{test,spec}.ts",
 			"**/node_modules/**",
-			"webpack.config.ts"
+			"esbuild.js"
 		],
 		"reporter": [
 			"text",
