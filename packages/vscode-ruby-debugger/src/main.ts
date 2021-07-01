@@ -48,6 +48,8 @@ class RubyDebugSession extends DebugSession {
     private rubyProcess: RubyProcess;
     private requestArguments: any;
     private debugMode: Mode;
+    private skipFiles: RegExp[];
+    private finishFiles: RegExp[];
 
     /**
      * Creates a new debug adapter.
@@ -75,8 +77,8 @@ class RubyDebugSession extends DebugSession {
         this.sendResponse(response);
     }
 
-	protected setupProcessHanlders() {
-		this.rubyProcess.on('debuggerComplete', () => {
+    protected setupProcessHanlders() {
+        this.rubyProcess.on('debuggerComplete', () => {
             this.sendEvent(new TerminatedEvent());
         }).on('debuggerProcessExit', () => {
             this.sendEvent(new TerminatedEvent());
@@ -95,13 +97,31 @@ class RubyDebugSession extends DebugSession {
             this.sendEvent(new OutputEvent("Debugger terminal error: " + error))
             this.sendEvent(new TerminatedEvent());
         });
-	}
+    }
 
+    private printToConsole(line: String): void {
+        this.sendEvent(new OutputEvent(`${line}\n`, 'console'));
+    }
+
+    private constructRegExps(strings: string[]): RegExp[] {
+        if (strings === undefined || strings === null || strings.length === 0) {
+            return [];
+        } else {
+            return strings.map(x => new RegExp(x));
+        }
+    }
+
+    private stackFrameGetsSpecialTreatment(regexes: RegExp[], file: string): boolean {
+        return regexes.findIndex(re => re.test(file)) > -1;
+    }
 
     protected launchRequest(response: DebugProtocol.LaunchResponse, args: LaunchRequestArguments): void {
-		this.debugMode = Mode.launch;
-		this.requestArguments = args;
+        this.debugMode = Mode.launch;
+        this.requestArguments = args;
         this.rubyProcess = new RubyProcess(Mode.launch, args);
+        this.setupOptionalOutputHandlers();
+        this.skipFiles = this.constructRegExps(args.skipFiles);
+        this.finishFiles = this.constructRegExps(args.finishFiles);
 
         this.rubyProcess.on('debuggerConnect', () => {
             this.sendEvent(new InitializedEvent());
@@ -111,35 +131,64 @@ class RubyDebugSession extends DebugSession {
                 this.sendEvent(new StoppedEvent('entry', result.threadId));
             }
             else {
-                this.sendEvent(new StoppedEvent('step', result.threadId));
+                this.onSuspended(result);
             }
 
             this._firstSuspendReceived = true;
         });
 
-		this.setupProcessHanlders();
-
-        if (args.showDebuggerOutput) {
-            this.rubyProcess.on('debuggerOutput', (data: Buffer) => {
-                this.sendEvent(new OutputEvent(data.toString() + '\n', 'console'));
-            });
-        }
+        this.setupProcessHanlders();
     }
 
-	protected attachRequest(response: DebugProtocol.AttachResponse, args: AttachRequestArguments): void {
-		this.requestArguments = args;
-		this.debugMode = Mode.attach;
+    protected attachRequest(response: DebugProtocol.AttachResponse, args: AttachRequestArguments): void {
+        this.debugMode = Mode.attach;
+        this.requestArguments = args;
         this.rubyProcess = new RubyProcess(Mode.attach, args);
+        this.setupOptionalOutputHandlers();
+        this.skipFiles = this.constructRegExps(args.skipFiles);
+        this.finishFiles = this.constructRegExps(args.finishFiles);
 
         this.rubyProcess.on('debuggerConnect', () => {
             this.sendEvent(new InitializedEvent());
             this.sendResponse(response);
         }).on('suspended', result => {
-            this.sendEvent(new StoppedEvent('step', result.threadId));
+            this.onSuspended(result);
         });
+        
+        this.setupProcessHanlders();
+    }
 
-		this.setupProcessHanlders();
-	}
+    protected setupOptionalOutputHandlers(): void {
+        if (this.requestArguments.showDebuggerOutput) {
+            this.rubyProcess.on('debuggerOutput', (data: Buffer) => {
+                this.printToConsole(data.toString());
+            });
+        }
+
+        if (this.requestArguments.showDebuggerCommands) {
+            this.rubyProcess.on('debuggerCommands', (data: Buffer) => {
+                this.printToConsole(data.toString());
+            });
+        }
+    }
+
+    protected onSuspended(suspendMetadataFromRuby: any): void {
+        const currentFile = suspendMetadataFromRuby.file;
+
+        // If the file matches a regex in both, favor finish over skip.
+        const shouldFinish = this.stackFrameGetsSpecialTreatment(this.finishFiles, currentFile);
+        const shouldSkip = !shouldFinish && this.stackFrameGetsSpecialTreatment(this.skipFiles, currentFile);
+        if (shouldFinish || shouldSkip) {
+            // This will trigger a subsequent 'suspend' event - as a result, we'll keep stepping until we
+            // reach a non-skipped file.
+            this.rubyProcess.Run(shouldSkip ? 'step' : 'finish');
+
+            // Don't send the StoppedEvent - that will happen on a subsequent suspended event (one that
+            // doesn't get special treatment) in the else clause below.
+        } else {
+            this.sendEvent(new StoppedEvent('step', suspendMetadataFromRuby.threadId));
+        }
+    }
 
     // Executed after all breakpints have been set by VS Code
     protected configurationDoneRequest(response: DebugProtocol.ConfigurationDoneResponse, args:
@@ -247,11 +296,24 @@ class RubyDebugSession extends DebugSession {
     */
     protected stackTraceRequest(response: DebugProtocol.StackTraceResponse, args: DebugProtocol.StackTraceArguments): void {
         this.rubyProcess.Enqueue('where').then(results => {
-            //drop rdbug frames
-            results = results.filter(stack => !(
-				endsWith(stack.file, '/rdebug-ide', null) ||
-				endsWith(stack.file, '/ruby-debug-ide.rb', null))
-			);
+            //drop rdbug frames or user-specified skipped files
+            let skipped = false;
+            results = results.filter(stack => {
+                // drop rdbug frames
+                if (endsWith(stack.file, '/rdebug-ide', null) || endsWith(stack.file, '/ruby-debug-ide.rb', null)) {
+                    return false;
+                }
+
+                // drop frames from user-specified skipFiles. Don't drop frames from finishFiles - either the user
+                // has no breakpoints down-stack from them so they never appear, or the user does have such breakpoints
+                // and probably wants to see these frames.
+                if (this.stackFrameGetsSpecialTreatment(this.skipFiles, stack.file)) {
+                    skipped = true;
+                    return false;
+                }
+
+                return true;
+            });
 
             //get the current frame
             results.some(stack=> stack.current ? this._frameId = +stack.no: 0);
@@ -279,8 +341,14 @@ class RubyDebugSession extends DebugSession {
             };
             if (response.body.stackFrames.length){
                 this.sendResponse(response);
-            }
-            else {
+            } else if (skipped) {
+                // If the stack was empty because of skipFiles, display a synthetic frame to let the user know
+                response.body.stackFrames = [
+                    new StackFrame(0, "[all frames filtered by skipFiles in extension config]", null, 0)
+                ];
+                this.sendResponse(response);
+            } else {
+                // If the stack was empty and we didn't honor any skipFiles, something is wrong. Give up.
                 this.sendEvent(new TerminatedEvent());
             }
             return;

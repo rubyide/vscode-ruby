@@ -12,6 +12,12 @@ export interface LaunchRequestArguments extends DebugProtocol.LaunchRequestArgum
     stopOnEntry?: boolean;
     /** Show debugger process output. If not specified, there will only be executable output */
     showDebuggerOutput?: boolean;
+    /** Show commands issued by the IDE to the debugger. If not specified, no commands will be shown. */
+    showDebuggerCommands?: boolean;
+    /** Omit files matching any of these regexes from stack traces, and automatically step through them when debugging. */
+    skipFiles: string[];
+    /** Automatically step out of files matching these regexes during debugging. */
+    finishFiles: string[];
     /** Executable working directory. */
     cwd?: string;
 }
@@ -29,6 +35,12 @@ export interface AttachRequestArguments extends DebugProtocol.AttachRequestArgum
     remoteWorkspaceRoot?: string;
     /** Show debugger process output. If not specified, there will only be executable output */
     showDebuggerOutput?: boolean;
+    /** Show commands issued by the IDE to the debugger. If not specified, no commands will be shown. */
+    showDebuggerCommands?: boolean;
+    /** Omit files matching any of these regexes from stack traces, and automatically step through them when debugging. */
+    skipFiles: string[];
+    /** Automatically step out of files matching these regexes during debugging. */
+    finishFiles: string[];
 }
 
 export interface IRubyEvaluationResult {

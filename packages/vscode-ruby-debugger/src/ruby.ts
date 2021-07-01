@@ -296,6 +296,7 @@ export class RubyProcess extends EventEmitter {
     }
 
     public Run(cmd: string): void {
+        this.emit('debuggerCommands', 'command: "' + cmd + '"');
         if (this.state !== SocketClientState.connected) {
             var newCommand = {
                 command: cmd,
@@ -310,6 +311,7 @@ export class RubyProcess extends EventEmitter {
     }
 
     public Enqueue(cmd: string): Promise<any> {
+        this.emit('debuggerCommands', 'command(async): "' + cmd + '"');
         var pro = new Promise<any>((resolve, reject) => {
             var newCommand = {
                 command: cmd,

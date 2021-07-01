@@ -615,6 +615,21 @@
 								"description": "Show output of the debugger in the console.",
 								"default": false
 							},
+							"showDebuggerCommands": {
+								"type": "boolean",
+								"description": "Show commands issued by the IDE to the debugger.",
+								"default": false
+							},
+							"skipFiles": {
+								"type": "array",
+								"description": "Omit files matching any of these regexes from stack traces, and automatically step through them when debugging.",
+								"default": []
+							},
+							"finishFiles": {
+								"type": "array",
+								"description": "Automatically step out of files matching these regexes during debugging.",
+								"default": []
+							},
 							"args": {
 								"type": "array",
 								"description": "Command line arguments passed to the program.",
@@ -701,6 +716,21 @@
 								"type": "boolean",
 								"description": "Show output of the debugger in the console.",
 								"default": false
+							},
+							"showDebuggerCommands": {
+								"type": "boolean",
+								"description": "Show commands issued by the IDE to the debugger.",
+								"default": false
+							},
+							"skipFiles": {
+								"type": "array",
+								"description": "Omit files matching any of these regexes from stack traces, and automatically step through them when debugging.",
+								"default": []
+							},
+							"finishFiles": {
+								"type": "array",
+								"description": "Automatically step out of files matching these regexes during debugging.",
+								"default": []
 							}
 						}
 					}
