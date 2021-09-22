@@ -24,7 +24,7 @@
 	"dependencies": {
 		"vscode-debugadapter": "^1.35.0",
 		"vscode-debugprotocol": "^1.35.0",
-		"xmldom": "^0.1.27"
+		"xmldom": "^0.6.0"
 	},
 	"devDependencies": {
 		"@types/mocha": "^5.2.7",
