@@ -26,6 +26,32 @@ Read following instructions about how to debug ruby/rails/etc locally or remotel
 
 ## Debugger F.A.Q.
 
+Q: What's the difference between 'skipFiles' and 'finishFiles'?  
+A: The debugger will automatically step through skipFiles, whereas it will automatically step out of finishFiles.
+
+Q: What are skipFiles and finishFiles useful for?  
+A: They are two different tools for avoiding parts of the code while stepping. skipFiles helps you skip stack frames that sit between frames that you are interested in (e.g. [https://sorbet.org/](sorbet)). finishFiles, on the other hand, help you avoid stack frames (and everything deeper than them) entirely.
+
+Q: Can I see an example?  
+A: In the listing below, assume the debugger is suspended at line 2. Here's what happens if you 'Step Into' (F11) when...
+
+* `b.rb` is in neither: the debugger suspends at line 5.
+* `b.rb` is in `skipFiles`: the program prints "1" then the debugger suspends at line 9.
+* `b.rb` is in `finishFiles`: the program prints "12" then the debugger suspends at line 3. 
+
+```
+1:   def methodA
+2: =>  methodB
+3:     puts "3"
+# Assume methodB is in b.rb
+4:   def methodB:
+5:     puts "1"
+6:     methodC
+# Assume methodC is in c.rb
+8:   def methodC:
+9:     puts "2"
+```
+
 ### Conditional breakpoint doesn't work
 
 You need use Ruby `2.0` or above and you need to update `debase` to latest beta version `gem install debase -v 0.2.2.beta10`.
