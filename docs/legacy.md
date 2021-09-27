@@ -149,3 +149,5 @@ The defaults will include all files with the `rb` extension, but avoids searchin
 If you change these settings, currently you will need to reload your workspace.
 
 We now provide go to definition within `erb` files, as well as syntax highlighting for `erb`.
+
+There is no built-in 'non-legacy' replacement for `rubyLocate`, but the Solargraph project is a possible alternative.
