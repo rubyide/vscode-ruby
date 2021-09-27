@@ -284,6 +284,11 @@
 									"type": "string",
 									"description": "RuboCop command. Setting this will cause RuboCop to be executed this way and other settings will be ignored!"
 								},
+								"forceExclusion": {
+									"type": "boolean",
+									"default": false,
+									"description": "Add the `--force-exclusion` option to the RuboCop command to prevent running RuboCop on the excluded files from rubocop.yml."
+								},
 								"useBundler": {
 									"type": "boolean",
 									"default": false,
