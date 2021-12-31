@@ -16,7 +16,7 @@
 		"vsce": "^1.83.0"
 	},
 	"engines": {
-		"node": ">=10.21.0"
+		"node": ">=16.13.1"
 	},
 	"scripts": {
 		"build": "lerna run build",
