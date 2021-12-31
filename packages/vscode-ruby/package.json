@@ -148,6 +148,6 @@
     ]
   },
   "devDependencies": {
-    "vscode-tmgrammar-test": "^0.0.6"
+    "vscode-tmgrammar-test": "^0.0.11"
   }
 }
