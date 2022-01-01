@@ -42,8 +42,8 @@
 		"prettier": "^1.19.1",
 		"sinon": "^7.5.0",
 		"source-map-support": "^0.5.16",
-		"ts-node": "^8.5.2",
-		"typescript": "^3.7.2"
+		"ts-node": "^10.4.0",
+		"typescript": "^4.5.4"
 	},
 	"nyc": {
 		"cache": false,
