@@ -7,7 +7,7 @@
 		"outDir": "dist",
 		"rootDir": "src"
 	},
-	"include": ["src"],
+	"include": ["src", "spec"],
 	"exclude": ["node_modules"],
 	"references": [{ "path": "../vscode-ruby-common" }]
 }

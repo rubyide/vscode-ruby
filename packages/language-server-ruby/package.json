@@ -35,8 +35,8 @@
 		"eslint-plugin-node": "^10.0.0",
 		"eslint-plugin-promise": "^4.2.1",
 		"eslint-plugin-standard": "^4.0.1",
-		"mocha": "^6.2.2",
-		"nyc": "^14.1.1",
+		"mocha": "^8.4.0",
+		"nyc": "^15.1.0",
 		"prettier": "^1.19.1",
 		"source-map-support": "^0.5.16",
 		"ts-node": "^8.5.2",
@@ -44,7 +44,7 @@
 	},
 	"scripts": {
 		"lint": "eslint src/**/*.ts",
-		"test": "nyc mocha -r ts-node/register -r source-map-support/register spec/**/*.ts",
+		"test": "nyc mocha -r ts-node/register -r source-map-support/register -r spec/hooks.js spec/**/*.ts",
 		"build": "NODE_ENV=production node esbuild.js",
 		"compile": "node esbuild.js",
 		"watch": "ESBUILD_WATCH=true node esbuild.js"
@@ -58,8 +58,8 @@
 			"**/*.d.ts",
 			"coverage/**",
 			"packages/*/test/**",
-			"test/**",
-			"test{,-*}.ts",
+			"spec/**",
+			"spec{,-*}.ts",
 			"**/*{.,-}{test,spec}.ts",
 			"**/node_modules/**",
 			"esbuild.js"

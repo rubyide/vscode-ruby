@@ -2,15 +2,14 @@ import { FoldingRange, FoldingRangeKind } from 'vscode-languageserver';
 import { SyntaxNode } from 'web-tree-sitter';
 import BaseAnalyzer from './BaseAnalyzer';
 
+interface IFoldLocation {
+	row?: number;
+	column?: number;
+}
+
 interface IFoldHeuristic {
-	start?: {
-		row?: number;
-		column?: number;
-	};
-	end?: {
-		row?: number;
-		column?: number;
-	};
+	start?: IFoldLocation;
+	end?: IFoldLocation;
 }
 
 export class FoldHeuristic {
@@ -24,14 +23,14 @@ export class FoldHeuristic {
 		this.heuristic = heuristic;
 	}
 
-	get start() {
+	get start(): IFoldLocation {
 		return {
 			...this.defaultHeuristic,
 			...this.heuristic.start,
 		};
 	}
 
-	get end() {
+	get end(): IFoldLocation {
 		return {
 			...this.defaultHeuristic,
 			...this.heuristic.end,
@@ -40,7 +39,7 @@ export class FoldHeuristic {
 }
 
 export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
-	private FOLD_NODES: Map<string, FoldHeuristic> = new Map([
+	private readonly FOLD_NODES: Map<string, FoldHeuristic> = new Map([
 		[
 			'array',
 			new FoldHeuristic({
@@ -58,6 +57,7 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 				},
 			}),
 		],
+		['when', new FoldHeuristic()],
 		[
 			'class',
 			new FoldHeuristic({
@@ -122,9 +122,10 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 			}),
 		],
 	]);
+
 	private lastNodeAnalyzed: SyntaxNode;
 
-	get foldingRanges() {
+	get foldingRanges(): FoldingRange[] {
 		return this.diagnostics;
 	}
 
@@ -136,13 +137,21 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 				foldingRange.endLine = node.endPosition.row;
 				foldingRange.endCharacter = node.endPosition.column;
 			} else {
-				this.diagnostics.push({
+				const foldingRange = {
 					startLine: node.startPosition.row + heuristic.start.row,
 					startCharacter: node.startPosition.column + heuristic.start.column,
 					endLine: node.endPosition.row + heuristic.end.row,
 					endCharacter: node.endPosition.column + heuristic.end.column,
 					kind: this.getFoldKind(node.type),
-				});
+				};
+
+				// Fold end - fold start must be >= 1 or they must be comments
+				if (
+					foldingRange.endLine > foldingRange.startLine ||
+					foldingRange.kind === FoldingRangeKind.Comment
+				) {
+					this.diagnostics.push(foldingRange);
+				}
 			}
 			this.lastNodeAnalyzed = node;
 		}
@@ -159,10 +168,15 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 		}
 	}
 
+	/**
+	 * Tree Sitter does not identify block comments as blocks. This will collect them together
+	 * into one fold
+	 */
 	private determineImplicitBlock(node: SyntaxNode, lastNode: SyntaxNode): boolean {
 		return (
 			node.type === 'comment' &&
 			node.text[0] === '#' &&
+			// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 			lastNode &&
 			lastNode.type === 'comment' &&
 			lastNode.text[0] === '#'
