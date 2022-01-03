@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { FoldingRange } from 'vscode-languageserver';
 
 import FoldingRangeAnalyzer, { FoldHeuristic } from '../../src/analyzers/FoldingRangeAnalyzer';
-import { loadFixture, walkTSTree, Fixture } from '../helper';
+import { getParser, loadFixture, Fixture } from '../helper';
 
 /**
  * NOTICE
@@ -60,8 +60,8 @@ describe('FoldingRangeAnalyzer', () => {
 
 	before(() => {
 		fixture = loadFixture('folds.rb');
-		analyzer = new FoldingRangeAnalyzer();
-		walkTSTree(fixture.tree, analyzer.analyze.bind(analyzer));
+		analyzer = new FoldingRangeAnalyzer(getParser().getLanguage());
+		analyzer.analyze(fixture.tree.rootNode);
 	});
 
 	after(() => {
@@ -85,7 +85,11 @@ describe('FoldingRangeAnalyzer', () => {
 			]);
 		});
 
-		describe('blocks', () => {});
+		describe('requires', () => {
+			itIdentifiesFolds([
+				FoldingRange.create(0, 2, 0, 14, 'imports'), // require()...
+			]);
+		});
 
 		describe('case statements', () => {
 			itIdentifiesFolds([
@@ -96,12 +100,12 @@ describe('FoldingRangeAnalyzer', () => {
 
 		describe('when statements', () => {
 			itIdentifiesFolds([
-				FoldingRange.create(51, 52, 12, 18, 'region'), // method1, case a, when 1
-				FoldingRange.create(53, 54, 12, 18, 'region'), // method1, case a, when 2
-				FoldingRange.create(55, 56, 12, 18, 'region'), // method1, case a, when 3
-				FoldingRange.create(60, 61, 17, 18, 'region'), // method1, case, when a == 1
-				FoldingRange.create(62, 63, 17, 18, 'region'), // method1, case, when a == 2
-				FoldingRange.create(64, 65, 17, 18, 'region'), // method1, case, when a == 3
+				FoldingRange.create(51, 52, 6, 18, 'region'), // method1, case a, when 1
+				FoldingRange.create(53, 54, 6, 18, 'region'), // method1, case a, when 2
+				FoldingRange.create(55, 56, 6, 18, 'region'), // method1, case a, when 3
+				FoldingRange.create(60, 61, 6, 18, 'region'), // method1, case, when a == 1
+				FoldingRange.create(62, 63, 6, 18, 'region'), // method1, case, when a == 2
+				FoldingRange.create(64, 65, 6, 18, 'region'), // method1, case, when a == 3
 			]);
 		});
 
@@ -121,13 +125,13 @@ describe('FoldingRangeAnalyzer', () => {
 
 		describe('begin blocks', () => {
 			itIdentifiesFolds([
-				FoldingRange.create(127, 130, 6, 9, 'region'), // method5, begin...
+				FoldingRange.create(127, 128, 6, undefined, 'region'), // method5, begin...
 			]);
 		});
 
 		describe('rescue blocks', () => {
 			itIdentifiesFolds([
-				FoldingRange.create(129, 130, 12, 33, 'region'), // method5, rescue...
+				FoldingRange.create(129, 130, 6, 33, 'region'), // method5, rescue...
 			]);
 		});
 
@@ -145,21 +149,21 @@ describe('FoldingRangeAnalyzer', () => {
 
 		describe('heredocs', () => {
 			itIdentifiesFolds([
-				FoldingRange.create(69, 72, 19, 4, 'region'), // method2, text
-				FoldingRange.create(73, 75, 21, 10, 'region'), // method2, text2
-				FoldingRange.create(77, 79, 21, 10, 'region'), // method2, text3
+				FoldingRange.create(70, 72, 19, 4, 'region'), // method2, text
+				FoldingRange.create(74, 75, 21, 10, 'region'), // method2, text2
+				FoldingRange.create(78, 79, 21, 10, 'region'), // method2, text3
 			]);
 		});
 
 		describe('if blocks', () => {
 			itIdentifiesFolds([
-				FoldingRange.create(84, 88, 12, 11, 'region'), // method3, if (a)
-				FoldingRange.create(116, 117, 10, 18, 'region'), // method4, if a
+				FoldingRange.create(84, 88, 6, undefined, 'region'), // method3, if (a)
+				FoldingRange.create(116, 117, 6, 9, 'region'), // method4, if a
 			]);
 
 			describe('then blocks', () => {
 				itIdentifiesFolds([
-					FoldingRange.create(97, 98, 13, 22, 'region'), // method3, if (b) then
+					FoldingRange.create(97, 98, 6, 9, 'region'), // method3, if (b) then
 				]);
 			});
 
@@ -174,13 +178,13 @@ describe('FoldingRangeAnalyzer', () => {
 
 		describe('unless blocks', () => {
 			itIdentifiesFolds([
-				FoldingRange.create(93, 94, 16, 22, 'region'), // method3, unless (a)
-				FoldingRange.create(119, 120, 15, 18, 'region'), // method4, unless a
+				FoldingRange.create(93, 94, 6, 9, 'region'), // method3, unless (a)
+				FoldingRange.create(119, 120, 6, 9, 'region'), // method4, unless a
 			]);
 
 			describe('then blocks', () => {
 				itIdentifiesFolds([
-					FoldingRange.create(101, 102, 17, 26, 'region'), // method3, unless (b) then
+					FoldingRange.create(101, 102, 6, 9, 'region'), // method3, unless (b) then
 				]);
 			});
 		});

@@ -4,7 +4,7 @@ import { Observer } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Tree, SyntaxNode } from 'web-tree-sitter';
 import DocumentSymbolAnalyzer from './analyzers/DocumentSymbolAnalyzer';
-import { forestStream, ForestEventKind } from './Forest';
+import { forest, forestStream, ForestEventKind } from './Forest';
 import FoldingRangeAnalyzer from './analyzers/FoldingRangeAnalyzer';
 
 interface Analysis {
@@ -18,7 +18,7 @@ class Analyzer {
 	private documentSymbolAnalyzer: DocumentSymbolAnalyzer;
 
 	constructor(public uri: string) {
-		this.foldingRangeAnalyzer = new FoldingRangeAnalyzer();
+		this.foldingRangeAnalyzer = new FoldingRangeAnalyzer(forest.parser.getLanguage());
 		this.documentSymbolAnalyzer = new DocumentSymbolAnalyzer();
 	}
 
@@ -31,6 +31,8 @@ class Analyzer {
 	}
 
 	public analyze(tree: Tree): Analysis {
+		this.foldingRangeAnalyzer.analyze(tree.rootNode);
+
 		const cursor = tree.walk();
 		const walk = (depth: number): void => {
 			this.analyzeNode(cursor.currentNode());
@@ -48,7 +50,6 @@ class Analyzer {
 	}
 
 	private analyzeNode(node: SyntaxNode): void {
-		this.foldingRangeAnalyzer.analyze(node);
 		this.documentSymbolAnalyzer.analyze(node);
 	}
 }

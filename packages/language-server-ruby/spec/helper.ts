@@ -1,4 +1,4 @@
-import { SyntaxNode, Tree } from 'web-tree-sitter';
+import Parser, { SyntaxNode, Tree } from 'web-tree-sitter';
 
 export interface Fixture {
 	content: string;
@@ -22,4 +22,8 @@ export function walkTSTree(tree: Tree, action: (node: SyntaxNode) => void): void
 	};
 	walk(0);
 	cursor.delete();
+}
+
+export function getParser(): Parser {
+	return (global as any).loader.parser;
 }

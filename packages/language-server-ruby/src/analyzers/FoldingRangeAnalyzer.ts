@@ -1,6 +1,7 @@
 import { FoldingRange, FoldingRangeKind } from 'vscode-languageserver';
-import { SyntaxNode } from 'web-tree-sitter';
+import Parser, { Query, SyntaxNode } from 'web-tree-sitter';
 import BaseAnalyzer from './BaseAnalyzer';
+import FOLDS_QUERY from './queries/folds';
 
 interface IFoldLocation {
 	row?: number;
@@ -38,7 +39,22 @@ export class FoldHeuristic {
 	}
 }
 
+/**
+ * This is an analyzer for determining fold regions for VSCode
+ *
+ * The FOLD_NODES map is used to offset the tree-sitter end points to make sure
+ * keywords like "end" are not folded. This works similarly to the way {} are folded
+ * for languages like JavaScript in VSCode
+ */
+
 export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
+	private readonly tsQuery: Query;
+
+	constructor(language: Parser.Language) {
+		super();
+		this.tsQuery = language.query(FOLDS_QUERY);
+	}
+
 	private readonly FOLD_NODES: Map<string, FoldHeuristic> = new Map([
 		[
 			'array',
@@ -48,7 +64,6 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 				},
 			}),
 		],
-		['block', new FoldHeuristic()],
 		[
 			'case',
 			new FoldHeuristic({
@@ -57,7 +72,6 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 				},
 			}),
 		],
-		['when', new FoldHeuristic()],
 		[
 			'class',
 			new FoldHeuristic({
@@ -66,7 +80,6 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 				},
 			}),
 		],
-		['comment', new FoldHeuristic()],
 		[
 			'begin',
 			new FoldHeuristic({
@@ -75,7 +88,6 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 				},
 			}),
 		],
-		['do_block', new FoldHeuristic()],
 		[
 			'hash',
 			new FoldHeuristic({
@@ -87,16 +99,11 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 		[
 			'heredoc_body',
 			new FoldHeuristic({
-				start: {
-					row: -1,
-				},
 				end: {
 					row: -1,
 				},
 			}),
 		],
-		['then', new FoldHeuristic()], // body of an if and unless statement
-		['else', new FoldHeuristic()],
 		[
 			'method',
 			new FoldHeuristic({
@@ -121,8 +128,26 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 				},
 			}),
 		],
+		[
+			'if',
+			new FoldHeuristic({
+				end: {
+					row: -1,
+				},
+			}),
+		],
+		[
+			'unless',
+			new FoldHeuristic({
+				end: {
+					row: -1,
+				},
+			}),
+		],
 	]);
 
+	// Used to build "implicit blocks", such as a block comment
+	// made up of multiple lines of # style comments
 	private lastNodeAnalyzed: SyntaxNode;
 
 	get foldingRanges(): FoldingRange[] {
@@ -130,14 +155,22 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 	}
 
 	public analyze(node: SyntaxNode): void {
-		if (this.FOLD_NODES.has(node.type)) {
-			const heuristic: IFoldHeuristic = this.FOLD_NODES.get(node.type);
+		const captures = this.tsQuery.captures(node);
+		for (const capture of captures) {
+			const { name, node } = capture;
+
+			// The tree-sitter query captures the call and the identifier nodes
+			// just skip the named identifier node
+			if (name === 'require') continue;
+
+			// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+			const heuristic: IFoldHeuristic = this.FOLD_NODES.get(node.type) || new FoldHeuristic();
 			if (this.determineImplicitBlock(node, this.lastNodeAnalyzed) && this.diagnostics.length > 0) {
 				const foldingRange: FoldingRange = this.diagnostics[this.diagnostics.length - 1];
 				foldingRange.endLine = node.endPosition.row;
 				foldingRange.endCharacter = node.endPosition.column;
 			} else {
-				const foldingRange = {
+				const foldingRange: FoldingRange = {
 					startLine: node.startPosition.row + heuristic.start.row,
 					startCharacter: node.startPosition.column + heuristic.start.column,
 					endLine: node.endPosition.row + heuristic.end.row,
@@ -145,13 +178,14 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 					kind: this.getFoldKind(node.type),
 				};
 
-				// Fold end - fold start must be >= 1 or they must be comments
-				if (
-					foldingRange.endLine > foldingRange.startLine ||
-					foldingRange.kind === FoldingRangeKind.Comment
-				) {
-					this.diagnostics.push(foldingRange);
+				// handle shortening a fold for nested nodes
+				if (node.type === 'begin') {
+					this.handleNestedNode(node, 'rescue', foldingRange);
+				} else if (node.type === 'if') {
+					this.handleNestedNode(node, 'else', foldingRange);
 				}
+
+				this.diagnostics.push(foldingRange);
 			}
 			this.lastNodeAnalyzed = node;
 		}
@@ -161,10 +195,21 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 		switch (nodeType) {
 			case 'comment':
 				return FoldingRangeKind.Comment;
-			case 'require':
+			case 'call':
 				return FoldingRangeKind.Imports;
 			default:
 				return FoldingRangeKind.Region;
+		}
+	}
+
+	private handleNestedNode(node: SyntaxNode, nodeType: string, range: FoldingRange): void {
+		const descendants = node.descendantsOfType(nodeType);
+		if (descendants.length > 0) {
+			const {
+				startPosition: { row },
+			} = descendants[0];
+			range.endLine = row - 1;
+			delete range.endCharacter;
 		}
 	}
 
@@ -174,12 +219,15 @@ export default class FoldingRangeAnalyzer extends BaseAnalyzer<FoldingRange> {
 	 */
 	private determineImplicitBlock(node: SyntaxNode, lastNode: SyntaxNode): boolean {
 		return (
-			node.type === 'comment' &&
-			node.text[0] === '#' &&
-			// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-			lastNode &&
-			lastNode.type === 'comment' &&
-			lastNode.text[0] === '#'
+			lastNode !== undefined &&
+			((node.type === 'comment' &&
+				node.text[0] === '#' &&
+				lastNode.type === 'comment' &&
+				lastNode.text[0] === '#') ||
+				(node.type === 'call' &&
+					node.text.indexOf('require') === 0 &&
+					lastNode.type === 'call' &&
+					lastNode.text.indexOf('require') === 0))
 		);
 	}
 }

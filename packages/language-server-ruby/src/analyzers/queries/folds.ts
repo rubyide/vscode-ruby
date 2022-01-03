@@ -1,0 +1,22 @@
+const FOLDS_QUERY = `[
+  (method)
+  (singleton_method)
+  (class)
+  (module)
+  (if)
+  (else)
+  (unless)
+  (case)
+  (when)
+  (do_block)
+  (singleton_class)
+  (lambda)
+  (comment)
+  (heredoc_body)
+  (begin)
+  (rescue)
+  (hash)
+  (array)
+  (call method: (identifier) @require (#match? @require "require"))
+] @fold`;
+export default FOLDS_QUERY;
