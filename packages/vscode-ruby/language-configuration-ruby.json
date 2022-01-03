@@ -6,7 +6,15 @@
 	"brackets": [
 		["{", "}"],
 		["[", "]"],
-		["(", ")"]
+		["(", ")"],
+		["begin","end"],
+		["def","end"],
+		["if","end"],
+		["case","end"],
+		["unless","end"],
+		["do","end"],
+		["class","end"],
+		["module","end"]
 	],
 	"autoClosingPairs": [
 		["{", "}"],
