@@ -21,9 +21,10 @@ const treeSitterWasmPlugin = {
 require('esbuild').build({
   entryPoints: ['src/index.ts'],
   bundle: true,
-  sourcemap: process.env.NODE_ENV !== 'production',
+  sourcemap: true,
   minify: true,
   outfile: `${outDir}/index.js`,
+  logLevel: 'info',
   external: ['vscode'],
   format: 'cjs',
   platform: 'node',
