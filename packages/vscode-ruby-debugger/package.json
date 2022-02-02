@@ -22,8 +22,8 @@
 		"watch": "yarn compile --sourcemap --watch"
 	},
 	"dependencies": {
-		"vscode-debugadapter": "^1.35.0",
-		"vscode-debugprotocol": "^1.35.0",
+		"vscode-debugadapter": "^1.51.0",
+		"vscode-debugprotocol": "^1.51.0",
 		"xmldom": "^0.1.27"
 	},
 	"devDependencies": {
@@ -45,6 +45,6 @@
 		"source-map-support": "^0.5.16",
 		"ts-node": "^10.4.0",
 		"typescript": "^4.5.4",
-		"vscode-debugadapter-testsupport": "^1.35.0"
+		"vscode-debugadapter-testsupport": "^1.51.0"
 	}
 }
