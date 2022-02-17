@@ -10,11 +10,11 @@ const treeSitterWasmPlugin = {
       require.resolve('web-tree-sitter/tree-sitter.wasm'),
       require.resolve('web-tree-sitter-ruby/tree-sitter-ruby.wasm')
     ];
-    // build.onEnd(result => {
-    wasmPaths.forEach(wasmPath => {
-      fs.copyFileSync(wasmPath, path.join(outDir, path.basename(wasmPath)))
-    });
-    // })
+    build.onEnd(() => {
+      wasmPaths.forEach(wasmPath => {
+        fs.copyFileSync(wasmPath, path.join(outDir, path.basename(wasmPath)))
+      });
+    })
   }
 }
 
