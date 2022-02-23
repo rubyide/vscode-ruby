@@ -88,7 +88,11 @@ async function getRakeTasks(): Promise<vscode.Task[]> {
 		}
 	}
 
-	let commandLine = 'rake -AT';
+	const useBundler = vscode.workspace.getConfiguration('ruby').useBundler;
+	const ext: string = process.platform === 'win32' ? '.bat' : '';
+	const pathToBundler: string = vscode.workspace.getConfiguration('ruby').pathToBundler || 'bundle';
+
+	let commandLine = useBundler ? `${pathToBundler}${ext} exec rake -AT` : 'rake -AT';
 	try {
 		let { stdout, stderr } = await exec(commandLine, { cwd: workspaceRoot });
 		if (stderr && stderr.length > 0) {
