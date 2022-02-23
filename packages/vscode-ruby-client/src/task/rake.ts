@@ -113,7 +113,7 @@ async function getRakeTasks(): Promise<vscode.Task[]> {
 						type: 'rake',
 						task: taskName
 					};
-					let task = new vscode.Task(kind, taskName, 'rake', new vscode.ShellExecution(`rake ${taskName}`));
+					let task = new vscode.Task(kind, taskName, 'rake', new vscode.ShellExecution(`${useBundler ? `${pathToBundler}${ext} exec ` : ''}rake ${taskName}`));
 					result.push(task);
 					let lowerCaseLine = line.toLowerCase();
 					if (isBuildTask(lowerCaseLine)) {
