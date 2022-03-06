@@ -180,7 +180,7 @@
 		"body": [
 			"namespace :${1} do",
 			"\tdesc \"${2}\"",
-			"\ttask ${3}: :environment do",
+			"\ttask :${3} do",
 			"\t\t${4}",
 			"\tend",
 			"end"
