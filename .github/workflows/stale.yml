@@ -7,14 +7,20 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v3.0.19
+      - uses: actions/stale@v5.0.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-issue-message: 'This issue has not had activity for 30 days. It will be automatically closed in 7 days.'
-          stale-pr-message: 'This PR has not had activity for 30 days. It will be automatically closed in 7 days.'
+          stale-issue-message: 'This issue has not had activity for 30 days. It will be automatically closed in 30 days.'
+          stale-pr-message: 'This PR has not had activity for 30 days. It will be automatically closed in 30 days.'
           exempt-issue-labels: 'bug,enhancement,feature-request,help-wanted,upstream'
+          exempt-pr-labels: 'bug,enhancement,feature-request,help-wanted,upstream'
+          exempt-draft-pr: true
           stale-issue-label: 'stale'
           stale-pr-label: 'stale'
-          days-before-stale: 60
-          days-before-close: 14
+          days-before-stale: 120
+          days-before-close: 30
           remove-stale-when-updated: true
+
+permissions:
+  issues: write
+  pull-requests: write
