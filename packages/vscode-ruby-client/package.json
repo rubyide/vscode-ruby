@@ -304,7 +304,7 @@
 								},
 								"executionRoot": {
 									"type": "string",
-									"default": "File Path",
+									"default": "file path",
 									"oneOf": ["file path", "workspace root"],
 									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								},
@@ -360,7 +360,7 @@
 								},
 								"executionRoot": {
 									"type": "string",
-									"default": "File Path",
+									"default": "file path",
 									"oneOf": ["file path", "workspace root"],
 									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								},
