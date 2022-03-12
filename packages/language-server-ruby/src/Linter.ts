@@ -41,7 +41,10 @@ function getLinter(
 	if (!linter) return new NullLinter(`attempted to lint with unsupported linter: ${name}`);
 	const lintConfig: RubyCommandConfiguration =
 		typeof config.lint[name] === 'object' ? config.lint[name] : {};
-	const executionRoot = path.dirname(URI.parse(document.uri).fsPath);
+	const executionRoot =
+		lintConfig.executionRoot.toLowerCase() === 'workspace root'
+			? URI.parse(config.workspaceFolderUri).fsPath
+			: path.dirname(URI.parse(document.uri).fsPath);
 	const linterConfig: LinterConfig = {
 		env,
 		executionRoot,

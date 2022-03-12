@@ -271,6 +271,12 @@
 									"type": "boolean",
 									"default": false,
 									"description": "Prefix the `reek` command with `bundle exec`"
+								},
+								"executionRoot": {
+									"type": "string",
+									"default": "file path",
+									"oneOf": ["file path", "workspace root"],
+									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								}
 							}
 						},
@@ -295,6 +301,12 @@
 									"type": "boolean",
 									"default": false,
 									"description": "Prefix the `rubocop` command with `bundle exec`"
+								},
+								"executionRoot": {
+									"type": "string",
+									"default": "File Path",
+									"oneOf": ["file path", "workspace root"],
+									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								},
 								"lint": {
 									"type": "boolean",
@@ -345,6 +357,12 @@
 									"type": "boolean",
 									"default": false,
 									"description": "Prefix the `standard` command with `bundle exec`"
+								},
+								"executionRoot": {
+									"type": "string",
+									"default": "File Path",
+									"oneOf": ["file path", "workspace root"],
+									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								},
 								"only": {
 									"type": "array",
