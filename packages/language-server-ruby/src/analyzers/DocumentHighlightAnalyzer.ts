@@ -28,7 +28,7 @@ export default class DocumentHighlightAnalyzer {
 		if (node.type === 'end') {
 			highlights = highlights.concat(this.computeEndHighlight(node));
 		}
-		if (!node.isNamed && this.BEGIN_TYPES.has(node.type)) {
+		if (!node.isNamed() && this.BEGIN_TYPES.has(node.type)) {
 			highlights = highlights.concat(this.computeBeginHighlight(node));
 		}
 		return highlights;
