@@ -17,7 +17,9 @@ export default class DocumentHighlightAnalyzer {
 
 	public static async analyze(uri: string, position: Position): Promise<DocumentHighlight[]> {
 		const tree: Tree = forest.getTree(uri);
-
+    		if (tree === undefined) {
+      			return []
+    		}
 		return this.computeHighlights(tree, position);
 	}
 
