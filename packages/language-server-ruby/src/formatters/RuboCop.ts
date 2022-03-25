@@ -7,8 +7,12 @@ export default class RuboCop extends BaseFormatter {
 	protected FORMATTED_OUTPUT_REGEX = new RegExp(`^${this.FORMATTED_OUTPUT_DELIMITER}$`, 'm');
 
 	get cmd(): string {
-		const command = 'rubocop';
-		return this.isWindows() ? command + '.bat' : command;
+		if (this.lintConfig.command) {
+			return this.lintConfig.command;
+		} else {
+			const command = 'rubocop';
+			return this.isWindows() ? command + '.bat' : command;
+		}
 	}
 
 	get args(): string[] {
