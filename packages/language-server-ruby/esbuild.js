@@ -3,6 +3,10 @@ const path = require('path');
 
 const outDir = 'dist';
 
+if (!fs.existsSync(outDir)) {
+  fs.mkdirSync(outDir);
+}
+
 const treeSitterWasmPlugin = {
   name: 'treeSitterWasm',
   setup(build) {
