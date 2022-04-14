@@ -35,7 +35,7 @@
 		"wingrunr21.vscode-ruby"
 	],
 	"dependencies": {
-		"async": "^2.6.1",
+		"async": "^3.2.2",
 		"default-shell": "^1.0.1",
 		"execa": "^2.0.3",
 		"language-server-ruby": "^0.28.1",
