@@ -1,7 +1,15 @@
 # Visual Studio Code Ruby Extensions
 
-[![CI](https://img.shields.io/github/workflow/status/rubyide/vscode-ruby/CI.svg?logo=github)](https://github.com/rubyide/vscode-ruby/actions?query=workflow%3ACI)
-[![codecov](https://codecov.io/gh/rubyide/vscode-ruby/branch/main/graph/badge.svg)](https://codecov.io/gh/rubyide/vscode-ruby)
+<!-- [![CI](https://img.shields.io/github/workflow/status/rubyide/vscode-ruby/CI.svg?logo=github)](https://github.com/rubyide/vscode-ruby/actions?query=workflow%3ACI) -->
+<!-- [![codecov](https://codecov.io/gh/rubyide/vscode-ruby/branch/main/graph/badge.svg)](https://codecov.io/gh/rubyide/vscode-ruby) -->
+
+# LOOKING FOR MAINTAINERS
+
+I ([wingrunr21](https://github.com/wingrunr21)) unfortunately do not have enough time to maintain this extension. I am looking for folks with experience to step in and help.
+
+If you are interested, please send me an email. Contributors to the project are preferred.
+
+## Readme
 
 This is the monorepo for the Visual Studio Code Ruby extensions.
 
