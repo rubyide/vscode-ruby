@@ -457,6 +457,7 @@
 				],
 				"firstLine": "^#!\\s*/.*(?:ruby|rbx|rake)\\b",
 				"extensions": [
+					".rb",
 					".arb",
 					".builder",
 					".cgi",
@@ -472,7 +473,6 @@
 					".pryrc",
 					".rabl",
 					".rake",
-					".rb",
 					".rbuild",
 					".rbw",
 					".rbx",
