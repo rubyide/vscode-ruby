@@ -44,7 +44,7 @@ or
   "rubocop": {
     "command": "rubocop",  // setting this will override automatic detection
     "useBundler": true,
-    "lint": true, // enable lint cops
+    "lint": true, // run only lint cops
     "only": ["array", "of", "cops", "to", "run"],
     "except": ["array", "of", "cops", "not", "to", "run"],
     "require": ["array", "of", "ruby", "files", "to", "require"],
