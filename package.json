@@ -11,7 +11,7 @@
 		"cz-conventional-changelog": "^3.3.0",
 		"husky": "^4.3.6",
 		"lerna": "^3.16.4",
-		"semantic-release": "^17.3.1",
+		"semantic-release": "^19.0.3",
 		"semantic-release-vsce": "^3.0.1",
 		"vsce": "^1.83.0"
 	},
