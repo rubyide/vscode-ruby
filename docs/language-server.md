@@ -1,6 +1,6 @@
 # Language Server
 
-`language-server-ruby` is an implementation of the [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) in TypeScript with the intention of targetting the Ruby programming language.
+`language-server-ruby` is an implementation of the [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) in TypeScript with the intention of targeting the Ruby programming language.
 
 The server is built to be extensible, accurate, and performant with such features as:
 
