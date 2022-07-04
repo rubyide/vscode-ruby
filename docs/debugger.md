@@ -2,7 +2,7 @@
 
 ## Install Ruby Dependencies
 
-In this extension, we implement [ruby debug ide protocol](https://github.com/ruby-debug/ruby-debug-ide/blob/main/doc/protocol-spec.texi) to allow VS Code to communicate with ruby debug, it requires `ruby-debug-ide` to be installed on your machine. This is also how RubyMine/NetBeans does by default.
+In this extension, we implement [ruby debug ide protocol](https://github.com/ruby-debug/ruby-debug-ide/blob/master/protocol-spec.md) to allow VS Code to communicate with ruby debug, it requires `ruby-debug-ide` to be installed on your machine. This is also how RubyMine/NetBeans does by default.
 
 - If you are using JRuby or Ruby v1.8.x (`jruby`, `ruby_18`, `mingw_18`), run `gem install ruby-debug-ide`.
 - If you are using Ruby v1.9.x (`ruby_19`, `mingw_19`), run `gem install ruby-debug-ide`. Make sure `ruby-debug-base19x` is installed together with `ruby-debug-ide`.
