@@ -65,6 +65,9 @@ export class RubyProcess extends EventEmitter {
             rdebugIdePath: rdebugIdeDefault
         }
 
+        if (args.pathToRDebugIDE) {
+            result.rdebugIdePath = args.pathToRDebugIDE;
+        }
         if (args.pathToRuby) {
             result.pathToRuby = args.pathToRuby;
         }
