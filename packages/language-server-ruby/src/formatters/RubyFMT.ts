@@ -6,7 +6,8 @@ export default class RubyFMT extends BaseFormatter {
 	}
 
 	get args(): string[] {
-		return [];
+		const args = ['--header-opt-out'];
+		return args;
 	}
 
 	get useBundler(): boolean {
