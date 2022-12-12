@@ -50,6 +50,7 @@
 		"@types/vscode": "^1.58.0",
 		"@typescript-eslint/eslint-plugin": "^2.8.0",
 		"@typescript-eslint/parser": "^2.8.0",
+		"@vscode/vsce": "^2.15.0",
 		"eslint": ">=6.6.0",
 		"eslint-config-prettier": "^6.7.0",
 		"eslint-config-standard": "^14.1.0",
@@ -275,7 +276,10 @@
 								"executionRoot": {
 									"type": "string",
 									"default": "file path",
-									"oneOf": ["file path", "workspace root"],
+									"oneOf": [
+										"file path",
+										"workspace root"
+									],
 									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								}
 							}
@@ -305,7 +309,10 @@
 								"executionRoot": {
 									"type": "string",
 									"default": "file path",
-									"oneOf": ["file path", "workspace root"],
+									"oneOf": [
+										"file path",
+										"workspace root"
+									],
 									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								},
 								"lint": {
@@ -361,7 +368,10 @@
 								"executionRoot": {
 									"type": "string",
 									"default": "file path",
-									"oneOf": ["file path", "workspace root"],
+									"oneOf": [
+										"file path",
+										"workspace root"
+									],
 									"description": "Working directory in which to execute the lint functionality. Defaults to the file's path."
 								},
 								"only": {

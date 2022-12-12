@@ -9,8 +9,7 @@
 		"commitizen": "^4.2.2",
 		"cz-conventional-changelog": "^3.3.0",
 		"husky": "^4.3.6",
-		"lerna": "^3.16.4",
-		"vsce": "^1.83.0"
+		"lerna": "^3.16.4"
 	},
 	"engines": {
 		"node": ">=16.13.1"
