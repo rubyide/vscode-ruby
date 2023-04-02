@@ -3,11 +3,13 @@
 <!-- [![CI](https://img.shields.io/github/workflow/status/rubyide/vscode-ruby/CI.svg?logo=github)](https://github.com/rubyide/vscode-ruby/actions?query=workflow%3ACI) -->
 <!-- [![codecov](https://codecov.io/gh/rubyide/vscode-ruby/branch/main/graph/badge.svg)](https://codecov.io/gh/rubyide/vscode-ruby) -->
 
-# LOOKING FOR MAINTAINERS
+# DEPRECATED
 
-I ([wingrunr21](https://github.com/wingrunr21)) unfortunately do not have enough time to maintain this extension. I am looking for folks with experience to step in and help.
+Shopify's [ruby-lsp](https://github.com/Shopify/ruby-lsp) and associated [vscode-ruby-lsp](https://github.com/Shopify/vscode-ruby-lsp) are recommended alternatives to this extension. It is substantially easier to produce a high-quality LSP implementation using Ruby itself vs relying on another language such as TypeScript.
 
-If you are interested, please send me an email. Contributors to the project are preferred.
+In addition, sponsorship of a project by a company like Shopify could help to ensure a high-quality developer experience going forward. Even with multiple people helping on this project, keeping up with Microsoft's development of VSCode plus the wide array of Ruby community tooling is a tall undertaking.
+
+As of 4/2/2023, the VSCode extensions are not marked deprecated. They will be within the next few weeks.
 
 ## Readme
 
